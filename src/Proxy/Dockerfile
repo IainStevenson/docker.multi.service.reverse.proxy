@@ -45,6 +45,7 @@ COPY --from=build /usr/local/nginx /usr/local/nginx
 COPY index.html /usr/local/nginx/html/
 COPY nginx.conf /usr/local/nginx/conf/
 
+
 # Change default stop signal from SIGTERM to SIGQUIT
 STOPSIGNAL SIGQUIT
 
