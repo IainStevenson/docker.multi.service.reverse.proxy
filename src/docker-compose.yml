@@ -25,10 +25,7 @@ services:
   proxy.mystore.local:
     container_name: proxy.mystore.local
     hostname: proxy.mystore.local
-    image: ${DOCKER_REGISTRY-}proxy.mystore.local
-    build:
-      context: ./Proxy
-      dockerfile: Dockerfile  
+    image: nginx:latest
     networks:      
       - mystore
 networks:  
