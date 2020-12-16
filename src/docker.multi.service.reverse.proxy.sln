@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497-6FA5-4B50-8749-9FA87F10385B}"
 	ProjectSection(SolutionItems) = preProject
 		Proxy\Dockerfile = Proxy\Dockerfile
+		Proxy\index.html = Proxy\index.html
 		Proxy\nginx.conf = Proxy\nginx.conf
 	EndProjectSection
 EndProject
@@ -52,16 +53,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}
-	EndGlobalSection
-	GlobalSection(AutomaticVersions) = postSolution
-		UpdateAssemblyVersion.Debug|Any CPU = True
-		UpdateAssemblyFileVersion.Debug|Any CPU = True
-		UpdateAssemblyInfoVersion.Debug|Any CPU = True
-		AssemblyVersionSettings.Debug|Any CPU = None.None.None.None
-		AssemblyFileVersionSettings.Debug|Any CPU = None.None.None.None
-		AssemblyInfoVersionSettings.Debug|Any CPU = None.None.None.None
-		UpdatePackageVersion.Debug|Any CPU = False
-		AssemblyInfoVersionType.Debug|Any CPU = SettingsVersion
-		InheritWinAppVersionFrom.Debug|Any CPU = None
 	EndGlobalSection
 EndGlobal
