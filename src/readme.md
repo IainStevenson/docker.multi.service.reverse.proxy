@@ -105,6 +105,10 @@ This dockerfile was developed from information leared in this [Pluralsight cours
 
 ## Addressing scheme 
 
+At this stage in the browsesr the certificate is coming back as 'localhost' so the browser does not trust it. however postman tests don't care as much!
+
+The certificates will be added when the proxy is finished being built that will solve the browser issues, and theoretically provide the possibility of smooth https container<->container cross-service httpClient request calls later on.
+
 Initially Https
 ```
 Store access via port		https://mystore.local:44302 is served direct from container 1 index view
