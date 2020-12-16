@@ -130,7 +130,8 @@ Import mystore.local.postman_collection.json into postman and it will create a c
 
 Te solution will be evovle along these lines, as we go each evolution will be tagged and its commit version published here.
 
-Add LetsEncrypt support to get a certificate for the domain in place to serve as a specifc domain
+Add certificate support to get a self-signed certificate for the domain in place to serve as a specifc domain from the proxy rather that 'localhost'
+
 
 Eventually - after adding and configuring proxy servgice
 Https
