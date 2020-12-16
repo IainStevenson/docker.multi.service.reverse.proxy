@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "eb8e0cf4-04de-40a6-8f9d-4ae1e0728cb2",
+		"name": "mystore.local",
+		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test secure access to Store specifying port",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e76c9cb5-b14b-4231-95c7-1994b10783ce",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mystore.local:44302/",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"port": "44302",
+					"path": [
+						""
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test secure access to Support specifying port",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6d168ba9-0ed5-442f-874a-6d9bb1905dad",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mystore.local:44303/",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"port": "44303",
+					"path": [
+						""
+					]
+				},
+				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test insecure access to Store specifying port",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d4a21304-b933-4d57-86ed-f24e70fe5630",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local:4302/",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"port": "4302",
+					"path": [
+						""
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test insecure access to Support specifying port",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52d4024f-bc5a-4eba-b49e-bf09231c9610",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local:4303/",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"port": "4303",
+					"path": [
+						""
+					]
+				},
+				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "161f43ec-975f-48e7-953e-c8a68a9371c8",
+			"key": "baseutrl",
+			"value": "https://mystore.local"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

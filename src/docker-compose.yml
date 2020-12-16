@@ -1,15 +1,26 @@
 version: '3.4'
 
 services:
-  webapp1:
-    image: ${DOCKER_REGISTRY-}webapp1
+  store.mystore.local:
+    container_name: store.mystore.local
+    hostname: store.mystore.local
+    image: ${DOCKER_REGISTRY-}store.mystore.local
+
     build:
       context: .
-      dockerfile: WebApp1/Dockerfile
+      dockerfile: WebApp1/Dockerfile  
+    networks:      
+      - mystore    
 
-  webapp2:
-    image: ${DOCKER_REGISTRY-}webapp2
+  support.mystore.local:
+    container_name: support.mystore.local
+    hostname: support.mystore.local
+    image: ${DOCKER_REGISTRY-}support.mystore.local
     build:
       context: .
-      dockerfile: WebApp2/Dockerfile
+      dockerfile: WebApp2/Dockerfile        
+    networks:      
+      - mystore
 
+networks:  
+    mystore:
