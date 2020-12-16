@@ -132,6 +132,8 @@ Te solution will be evovle along these lines, as we go each evolution will be ta
 
 Add certificate support to get a self-signed certificate for the domain in place to serve as a specifc domain from the proxy rather that 'localhost'
 
+[Possible solution](https://jamielinux.com/docs/openssl-certificate-authority/)
+
 
 Eventually - after adding and configuring proxy servgice
 Https
