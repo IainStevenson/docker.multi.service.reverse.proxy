@@ -145,6 +145,142 @@
 				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
 			},
 			"response": []
+		},
+		{
+			"name": "Test secure access to Store via proxy specifying uri Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6eadbb83-bc56-462f-a3f8-64bfc2bb0c4b",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mystore.local/store",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"store"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test secure access to Support via proxy specifying uri",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "49cb4231-1ef8-475c-8374-92563f6a949b",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mystore.local/support",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"support"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test insecure access to Store via proxy specifying uri",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "46ff5f60-bf40-4dd8-8262-f7dc0f1df0f1",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/store",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"store"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test insecure access to Support via proxy specifying uri",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c08a613-6041-42b0-a467-9a00315b0868",
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/support",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"support"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
 		}
 	],
 	"variable": [
