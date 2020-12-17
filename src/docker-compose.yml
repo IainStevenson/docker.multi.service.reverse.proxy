@@ -30,8 +30,8 @@ services:
       context: ./Proxy
       dockerfile: Dockerfile
     depends_on:
-     - 
-     - 
+     - store.mystore.local
+     - support.mystore.local
     networks:      
       - mystore
 networks:  

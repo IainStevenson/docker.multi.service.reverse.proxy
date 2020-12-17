@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497-6FA5-4B50-8749-9FA87F10385B}"
 	ProjectSection(SolutionItems) = preProject
+		Proxy\default.conf = Proxy\default.conf
 		Proxy\Dockerfile = Proxy\Dockerfile
 		Proxy\index.html = Proxy\index.html
-		Proxy\nginx.conf = Proxy\nginx.conf
 	EndProjectSection
 EndProject
 Global
