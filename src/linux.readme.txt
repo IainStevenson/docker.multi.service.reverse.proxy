@@ -1,4 +1,14 @@
-apt update
-apt-get install iputils-ping
-apt-get install net-tools 
+To add either ping (iputils-ping), or netstat (net-tools) to a linux container in this soluytion;
+
+Connect to the console (which is root)
+
+	apt update
+
+Then either;
+
+	apt-get install iputils-ping
+
+and/or;
+
+	apt-get install net-tools 
 
