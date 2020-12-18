@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497
 		nginx-readme.md = nginx-readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{C694F770-E674-4166-8F42-309FBEB0AD3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C694F770-E674-4166-8F42-309FBEB0AD3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,5 +61,16 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}
+	EndGlobalSection
+	GlobalSection(AutomaticVersions) = postSolution
+		UpdateAssemblyVersion.Debug|Any CPU = True
+		UpdateAssemblyFileVersion.Debug|Any CPU = True
+		UpdateAssemblyInfoVersion.Debug|Any CPU = True
+		AssemblyVersionSettings.Debug|Any CPU = None.None.None.None
+		AssemblyFileVersionSettings.Debug|Any CPU = None.None.None.None
+		AssemblyInfoVersionSettings.Debug|Any CPU = None.None.None.None
+		UpdatePackageVersion.Debug|Any CPU = False
+		AssemblyInfoVersionType.Debug|Any CPU = SettingsVersion
+		InheritWinAppVersionFrom.Debug|Any CPU = None
 	EndGlobalSection
 EndGlobal
