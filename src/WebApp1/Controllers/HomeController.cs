@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp1.Models;
@@ -20,11 +16,13 @@ namespace WebApp1.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Home View Called");
             return View();
         }
 
         public IActionResult Privacy()
         {
+            _logger.LogInformation("Privacy View Called");
             return View();
         }
 
