@@ -37,40 +37,7 @@
 			"response": []
 		},
 		{
-			"name": "Test access to Support specifying uri",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://mystore.local/support",
-					"protocol": "http",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"path": [
-						"support"
-					]
-				},
-				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Store specifying uri",
+			"name": "Test access to Store with /store",
 			"event": [
 				{
 					"listen": "test",
@@ -103,7 +70,143 @@
 			"response": []
 		},
 		{
-			"name": "Test access to Support privacy specifying uri",
+			"name": "Test access to Store with /store/home",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/store/home",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"store",
+						"home"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test access to Store with /store/home/privacy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/store/home/privacy",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"store",
+						"home",
+						"privacy"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test access to Support wwith /support",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/support",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"support"
+					]
+				},
+				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test access to Support wwith /support/home",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/support/home",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"support",
+						"home"
+					]
+				},
+				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+			},
+			"response": []
+		},
+		{
+			"name": "Test access to Support with /support/home/privacy",
 			"event": [
 				{
 					"listen": "test",
