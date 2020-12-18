@@ -37,6 +37,39 @@
 			"response": []
 		},
 		{
+			"name": "Test access to Store with /store",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://mystore.local/store",
+					"protocol": "http",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"store"
+					]
+				},
+				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+			},
+			"response": []
+		},
+		{
 			"name": "Test access to Support specifying uri",
 			"event": [
 				{
@@ -70,7 +103,7 @@
 			"response": []
 		},
 		{
-			"name": "Test access to Store specifying uri",
+			"name": "Test access to Store with /store/home",
 			"event": [
 				{
 					"listen": "test",
@@ -88,14 +121,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/store",
+					"raw": "http://mystore.local/store/home",
 					"protocol": "http",
 					"host": [
 						"mystore",
 						"local"
 					],
 					"path": [
-						"store"
+						"store",
+						"home"
 					]
 				},
 				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
