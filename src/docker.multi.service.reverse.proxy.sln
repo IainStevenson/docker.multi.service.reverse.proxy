@@ -11,17 +11,18 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7CF5B55-7B58-48DE-8E09-2406C7130FB9}"
 	ProjectSection(SolutionItems) = preProject
+		linux.readme.txt = linux.readme.txt
 		mystore.local.postman_collection.json = mystore.local.postman_collection.json
-		readme.md = readme.md
+		..\readme.md = ..\readme.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497-6FA5-4B50-8749-9FA87F10385B}"
 	ProjectSection(SolutionItems) = preProject
+		Proxy\default.conf = Proxy\default.conf
 		Proxy\Dockerfile = Proxy\Dockerfile
 		Proxy\index.html = Proxy\index.html
-		Proxy\nginx.conf = Proxy\nginx.conf
 	EndProjectSection
 EndProject
 Global
