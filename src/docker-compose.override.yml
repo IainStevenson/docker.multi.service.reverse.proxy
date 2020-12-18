@@ -6,8 +6,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "4302:80"
-      - "44302:443"
+      - "80"
+      #- "44302:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -16,8 +16,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "4303:80"
-      - "44303:443"
+      - "80"
+      #- "44303:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -25,7 +25,7 @@ services:
     #environment:
     ports:
       - "80:80"
-      - "443:443"
+      #- "443:443"
     ##volumes:
       ##- /Proxy/nginx.conf:/etc/nginx/conf.d/default.conf
       ##- /home/xx/Desktop/cust/xx/Docker/nginx/cert/star_xx_com.pem:/etc/nginx/cert/star_xx_com.pem
