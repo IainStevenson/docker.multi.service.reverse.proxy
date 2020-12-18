@@ -7,12 +7,11 @@
 	},
 	"item": [
 		{
-			"name": "Test secure access to Store specifying port",
+			"name": "Test access to Store by default",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "e76c9cb5-b14b-4231-95c7-1994b10783ce",
 						"exec": [
 							"pm.test(\"Status code is 200\", () => {\r",
 							"  pm.response.to.have.status(200);\r",
@@ -26,85 +25,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local:44302/",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"port": "44302",
-					"path": [
-						""
-					]
-				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test secure access to Support specifying port",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "6d168ba9-0ed5-442f-874a-6d9bb1905dad",
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://mystore.local:44303/",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"port": "44303",
-					"path": [
-						""
-					]
-				},
-				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test insecure access to Store specifying port",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "d4a21304-b933-4d57-86ed-f24e70fe5630",
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://mystore.local:4302/",
+					"raw": "http://mystore.local",
 					"protocol": "http",
 					"host": [
 						"mystore",
 						"local"
-					],
-					"port": "4302",
-					"path": [
-						""
 					]
 				},
 				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
@@ -112,12 +37,11 @@
 			"response": []
 		},
 		{
-			"name": "Test insecure access to Support specifying port",
+			"name": "Test access to Support specifying uri",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "52d4024f-bc5a-4eba-b49e-bf09231c9610",
 						"exec": [
 							"pm.test(\"Status code is 200\", () => {\r",
 							"  pm.response.to.have.status(200);\r",
@@ -131,77 +55,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local:4303/",
+					"raw": "http://mystore.local/support",
 					"protocol": "http",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"port": "4303",
-					"path": [
-						""
-					]
-				},
-				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test secure access to Store via proxy specifying uri Copy",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "6eadbb83-bc56-462f-a3f8-64bfc2bb0c4b",
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://mystore.local/store",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"path": [
-						"store"
-					]
-				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test secure access to Support via proxy specifying uri",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "49cb4231-1ef8-475c-8374-92563f6a949b",
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://mystore.local/support",
-					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -210,17 +65,16 @@
 						"support"
 					]
 				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
 			},
 			"response": []
 		},
 		{
-			"name": "Test insecure access to Store via proxy specifying uri",
+			"name": "Test access to Store specifying uri",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "46ff5f60-bf40-4dd8-8262-f7dc0f1df0f1",
 						"exec": [
 							"pm.test(\"Status code is 200\", () => {\r",
 							"  pm.response.to.have.status(200);\r",
@@ -249,12 +103,11 @@
 			"response": []
 		},
 		{
-			"name": "Test insecure access to Support via proxy specifying uri",
+			"name": "Test access to Support privacy specifying uri",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "0c08a613-6041-42b0-a467-9a00315b0868",
 						"exec": [
 							"pm.test(\"Status code is 200\", () => {\r",
 							"  pm.response.to.have.status(200);\r",
@@ -268,27 +121,27 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/support",
+					"raw": "http://mystore.local/support/home/privacy",
 					"protocol": "http",
 					"host": [
 						"mystore",
 						"local"
 					],
 					"path": [
-						"support"
+						"support",
+						"home",
+						"privacy"
 					]
 				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
 			},
 			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "161f43ec-975f-48e7-953e-c8a68a9371c8",
 			"key": "baseutrl",
 			"value": "https://mystore.local"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
