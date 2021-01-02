@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IO;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Logging
@@ -82,7 +85,7 @@ namespace Logging
         {
             var result = new RequestProfilerResponseModel();
             result.StatusCode = context.Response.StatusCode;
-            result.Headers = context.Request.Headers as HeaderDictionary;
+            result.Headers = context.Request.Headers;
             result.Body = await ReadStreamInChunksAsync(newResponseBody);
             return result;
         }
@@ -90,12 +93,13 @@ namespace Logging
         private async Task<RequestProfilerRequestModel> FormatRequestAsync(HttpContext context)
         {
             var result = new RequestProfilerRequestModel();
+            result.Method = context.Request.Method;
             result.Scheme = context.Request.Scheme;
             result.Host = context.Request.Host;
             result.PathBase = context.Request.PathBase;
             result.Path = context.Request.Path;
             result.QueryString = context.Request.QueryString;
-            result.Headers = context.Request.Headers as HeaderDictionary;
+            result.Headers = context.Request.Headers;
             result.Body = await GetRequestBodyAsync(context.Request);
             return result;
         }
