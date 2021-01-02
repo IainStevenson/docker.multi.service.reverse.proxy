@@ -25,8 +25,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local",
-					"protocol": "http",
+					"raw": "https://mystore.local",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -55,8 +55,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/store",
-					"protocol": "http",
+					"raw": "https://mystore.local/store",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -88,8 +88,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/store/home",
-					"protocol": "http",
+					"raw": "https://mystore.local/store/home",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -122,8 +122,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/store/home/privacy",
-					"protocol": "http",
+					"raw": "https://mystore.local/store/home/privacy",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -157,8 +157,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/support",
-					"protocol": "http",
+					"raw": "https://mystore.local/support",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -190,8 +190,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/support/home",
-					"protocol": "http",
+					"raw": "https://mystore.local/support/home",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
@@ -224,8 +224,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://mystore.local/support/home/privacy",
-					"protocol": "http",
+					"raw": "https://mystore.local/support/home/privacy",
+					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
