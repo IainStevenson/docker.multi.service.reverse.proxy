@@ -123,8 +123,8 @@ server {
 
     listen 443 ssl http2 default_server;
     listen [::]:443 ssl http2 default_server;
-    include snippets/self-signed.conf;
-    include snippets/ssl-params.conf;
+    include conf.d/self-signed.conf;
+    include conf.d/ssl-params.conf;
 
     #charset koi8-r;
     access_log  /var/log/nginx/host.access.log  main;
@@ -135,9 +135,9 @@ now to deliver the files to subsequent image builds, add these file copy command
 
 ```
 
-COPY nginx-selfsigned.crt /etc/nginx/certs/nginx-selfsigned.crt
-COPY nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
+COPY nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
 COPY dhparam.pem /etc/ssl/certs/dhparam.pem
+COPY nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
 COPY self-signed.conf /etc/nginx/conf.d/self-signed.conf
 COPY ssl-params.conf /etc/nginx/conf.d/ssl-params.conf
 ```
