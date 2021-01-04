@@ -55,7 +55,7 @@ TL;DR - details for refreshing my memory and maybe helping you.
 
 This solution is a windows hosted Visual Studio IDE providing an orchestrated docker solution for micro service based solutions behind a reverse proxy.
 
-This solution uses and explicit docker network to provide container-to-container DNS capabilities, the uses of which will become apparent once container to container network calls are made .Note: this does not refer to browser redirects, but HttpClient calls direct from one container to another inside the docker network subnet.
+This solution uses and explicit docker network to provide container-to-container DNS capabilities, the uses of which will become apparent once container to container network calls are made .Note: this does not refer to browser redirects, but HttpClient calls direct from one container to another inside the docker network subnet. the idea here is not to fix docker network subnet addresses and use them as numbers but to allow them to be different subnets for different developers, controlled by thier docker to avoid subnect collisions, and refer to other servidces by thier local subnet dns names instead.
 
 This solution is to provide an orchestrated docker container set of two micro services providing two sections of a fictitious web site.
 
@@ -117,6 +117,7 @@ Provides the commercial support landing area.
 
 
 # Network topology
+```
 .--------------------------------------------------------------------------.
 !                    .---------------------------------------------------. |
 | Development host   | Docker network                                    | |
@@ -134,7 +135,7 @@ Provides the commercial support landing area.
 |                    |                `-----------------'                ! |
 !                    .---------------------------------------------------' !
 `--------------------------------------------------------------------------'
-
+```
 # Self-Signing certificates for development use.
 
 Swithing to TLS for the NGINX proxy in local/development requires self signed certificates or deep pockets for no real benefit. This is an excercise in how, not why, this can be done. The following proecedure was developed to create and use self-signed SSL certificates in NGINX.
@@ -201,7 +202,7 @@ That completes the creation of the self-signed root certificate.
 
 
 This can be used as a parent certificate to create many self signed certificates for other projects. 
-It will, when installed on the local windows host machine under the 'Local Computer\Trusted Root Certification Authorities\Certificates' folder, automatically enable trust of those child certificates on your development machine, meaning the browser should not pose any certificate issues, not should there be problems in other tools like postman.
+It will, when installed on the local windows host machine under the 'Local Computer\Trusted Root Certification Authorities\Certificates' folder, automatically enable trust of those child certificates on your development machine, meaning the browser should not pose any certificate issues, nor should there be problems in other tools like postman.
 
 
 #### Now create the service certificate
@@ -414,7 +415,7 @@ COPY mystore.local.key /etc/ssl/private/mystore.local.key
 COPY index.html /usr/local/nginx/html/
 ```
 
-# Add the root Certificate to the windows development host
+### Add the root Certificate to the windows development host
 
 In file explorer, locate the Proxy/myRootCA.pfx file.
 Double click the file.
@@ -427,11 +428,11 @@ Click Next
 Click Finish.
 The certificate will be installed.
 
-# Clear down all existing containers and images
+### Clear down all existing containers and images
 Perform a Clean solution from the Build menu
 Remove all images made by the solution for a final rebuild from docker desktop or command line.
 
-# Start solution and test
+### Start solution and test
 Start solution.
 
 In a browser: Navigate to https://mystore.local and you will get an https session without any browser complaining.
@@ -443,7 +444,7 @@ If its switched on, which checks the certificate authority chain you must switch
 
 
 
-# Containers
+# Container notes
 
 For current details ples refer to the details in docker-compose project docker-compose.yml and docker-compose.override.yml
 
@@ -476,6 +477,8 @@ docker network inspect f0a6248031f4
 
 
 ## ASP.NET Core
+
+Applies to Container 1 and Container 2
 
 ## Path mapping
 In the ASP.NET Core web applications the application start ups are mapped to their appropriate application path in the startup method,
