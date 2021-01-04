@@ -33,9 +33,9 @@ Docker version 20.10.0, build 7287ab3
 Postman V7.36.1
 ```
 
-It will be tested with subsequent versions at intervals to try and prevent this repository becoming stale over time.
+Postman is set locally to switch off SSL verification but one additional goal is to find a way to switch it back on.
 
-It may work on earlier versions! It may not.
+It will be tested with subsequent versions at intervals to try and prevent this repository becoming stale over time. It may work on earlier versions! It may not.
 
 The container orchestration is provided using the Visual Studio docker orchestration support and the docker_compose project is the startup for docker debugging builds and runs.
 
@@ -93,8 +93,6 @@ ASP.NET Core MVC web site simply providing a basic site identifying index page a
 ```
 Container name: store.mystore.local
 hostname:		store.mystore.local
-Eventual Ports:	80
-Initial  Ports:	4302:80, 44302:443
 ```
 ### Container 2
 
@@ -102,8 +100,6 @@ ASP.NET Core MVC web site simply providing a basic site identifying index page a
 ```
 Container name: support.mystore.local
 hostname:		support.mystore.local
-Eventual Ports:	80
-Initial  Ports:	4303:80, 44303:443
 ```
 
 ## Container 3
@@ -111,31 +107,37 @@ NGINX - Configured as reverse proxy to serve containers 1 and 2 mapped via the /
 ```
 Container name: proxy.mystore.local
 hostname:		proxy.mystore.local
-Initiual Ports:			80, 443
-Eventual Ports:			443
+Ports:			80, 443
 ```
 
 
 ## Addressing scheme 
 
-At this stage in the browser the certificate from each microservice is coming back as 'localhost' so the browser does not trust it. however postman tests don't care as much!
 
-The certificates will be added when the proxy is finished being built that will solve the browser issues, and theoretically provide the possibility of smooth https container<->container cross-service httpClient request calls later on.
+```
+Default Store access 		https://mystore.local is served direct from container 1 index view
+Store access via path		https://mystore.local/store  is served direct from container 1 index view
+Support access via path		https://mystore.local/support is served direct from container 2 index view
+```
 
-Initially Https
+URL inter-site redirects from Container 1 to Container 2 and vis-a-versa work as expected and intra site urls using controller actions work as expected
+
+
+Example index.cshtml from WebApp1 shows a self referenceing controller action link and a standard domain relative ``` href="/support"``` link to the support site from the store;
+
 ```
-Store access via port		https://mystore.local:44302 is served direct from container 1 index view
-Support access via port		https://mystore.local:44303 is served direct from container 2 index view
-Store access via uri path	https://mystore.local/store receives connection refused
-Support access via uri		https://mystore.local/support receives connection refused
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Store</h1>
+    <p>Learn about <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">our privacy policy</a></p>
+
+    <p>Get some <a class="nav-link text-dark" href="/support">support</a></p>
+</div>
 ```
-Initially Http
-```
-Store access via port		http://mystore.local:4302 is served direct from container 1 index view
-Support access via port		http://mystore.local:4303 is served direct from container 2 index view
-Store access via uri path	http://mystore.local/store is proxied through to container 1 index view
-Support access via uri		http://mystore.local/support is proxied through to container 1 index view
-```
+
 
 # Testing
 
@@ -145,43 +147,6 @@ Import mystore.local.postman_collection.json into postman and it will create a c
 
 
 # Future changes
-
-
-Create self-signed certificate for the domain in place to serve as a specifc domain from the proxy rather that 'localhost'
-Add the certificates necessary to the proxy container build and configure serving on port 443.
-Test Access via SSL
-Remove external port mapping for micro services and allow only port 80 in internal container network.
-
-[Possible solution](https://jamielinux.com/docs/openssl-certificate-authority/)
-
-
-Eventually - after adding and configuring proxy servgice
-Https
-```
-Store access via port		https://mystore.local:44302 receives connection refused
-Support access via port		https://mystore.local:44303 receives connection refused
-Store access via uri path	https://mystore.local/store is served direct from container 1 index view
-Support access via uri		https://mystore.local/support is served direct from container 2 index view
-```
-Http
-```
-Store access via port		http://mystore.local:4302 receives connection refused
-Support access via port		http://mystore.local:4303 receives connection refused
-Store access via uri path	http://mystore.local/store is served direct from container 1 index view
-Support access via uri		http://mystore.local/support is served direct from container 2 index view
-```
-
-Force all access via https: so that external (to the container network, incoming to the proxy)  http calls are re-written to https.
-
-http://* -> https://*
-
-Http
-```
-Store access via port		http://mystore.local:4302 receives connection refused
-Support access via port		http://mystore.local:4303 receives connection refused
-Store access via uri path	http://mystore.local/store is re-written as  https://mystore.local/store and served direct from container 1 index view
-Support access via uri		http://mystore.local/support is re-written as https://mystore.local/support and served direct from container 2 index view
-```
 
 Split support into customer service (Customer) and Staff support (Staff) services
 Add an identity server micro service to provide sign on via social logins (google+) and local (staff) logins. 
