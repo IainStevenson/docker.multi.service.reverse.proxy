@@ -575,9 +575,9 @@ https://localhost                       http://store.mystore.local/store/
 https://localhost/store                 http://store.mystore.local/store/
 https://localhost/store/home            http://store.mystore.local/store/home
 https://localhost/store/home/privacy    http://store.mystore.local/store/home/privacy
-https://localhost/support               http://support.mysupport.local/support/
-https://localhost/support/home          http://support.mysupport.local/support/home
-https://localhost/support/home/privacy  http://support.mysupport.local/support/home/privacy
+https://localhost/support               http://support.mystore.local/support/
+https://localhost/support/home          http://support.mystore.local/support/home
+https://localhost/support/home/privacy  http://support.mystore.local/support/home/privacy
 ```
 
 With reference to  ```location  /store/ {```  the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
