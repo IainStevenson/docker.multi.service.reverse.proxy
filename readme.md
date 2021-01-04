@@ -570,14 +570,14 @@ With 3 defined location mappings of ```\```, ```\store``` and ```\support\```
 The following URL's are supported correctly. Also the self referencing links inside the views of the micro services behave properly.
 
 ```
-Request URLS 							Routes internall to
-https://localhost	 					http://store.mystore.local/store/
-https://localhost/store 				http://store.mystore.local/store/
-https://localhost/store/home 			http://store.mystore.local/store/home
-https://localhost/store/home/privacy 	http://store.mystore.local/store/home/privacy
-https://localhost/support 				http://support.mysupport.local/support/
-https://localhost/support/home 			http://support.mysupport.local/support/home
-https://localhost/support/home/privacy 	http://support.mysupport.local/support/home/privacy
+Request URLS                            Routes internall to
+https://localhost                       http://store.mystore.local/store/
+https://localhost/store                 http://store.mystore.local/store/
+https://localhost/store/home            http://store.mystore.local/store/home
+https://localhost/store/home/privacy    http://store.mystore.local/store/home/privacy
+https://localhost/support               http://support.mysupport.local/support/
+https://localhost/support/home          http://support.mysupport.local/support/home
+https://localhost/support/home/privacy  http://support.mysupport.local/support/home/privacy
 ```
 
 With reference to  ```location  /store/ {```  the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
@@ -587,10 +587,10 @@ With reference to  ```location  /store/ {```  the trailing "\\" is important as 
 
 
 ```
-Http access 		        http://*  redirects to https://*
-Default Store access 		https://mystore.local is served direct from container 1 index view
-Store access via path		https://mystore.local/store  is served direct from container 1 index view
-Support access via path		https://mystore.local/support is served direct from container 2 index view
+Http access                 http://*  redirects to https://*
+Default Store access        https://mystore.local is served direct from container 1 index view
+Store access via path       https://mystore.local/store  is served direct from container 1 index view
+Support access via path     https://mystore.local/support is served direct from container 2 index view
 ```
 
 URL inter-site redirects from Container 1 to Container 2 and vis-a-versa work as expected and intra site urls using controller actions work as expected
@@ -662,5 +662,3 @@ After which you can perform actions requiring root access by prefixing other com
 ```
 apt install nano
 ```
-
-
