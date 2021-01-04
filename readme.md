@@ -1,4 +1,4 @@
-# Purpose:
+# Purpose
 
 Document the detailed technical tasks necessary to set up a docker orchestrated set of back end micro services front ended by a reverse proxy operating over TLS (SSL).
 
@@ -76,7 +76,7 @@ The main tasks needed are;
 - configure NGINX to use and redirect to HTTPS to secure transmission from host network to NGINX Proxy.
 - expand on that base
 
-# Solution structure
+## Solution structure
 The solutions main file set is as follows;
 ```
 src
@@ -101,55 +101,18 @@ Solution Items
 docker-compose
 ```
 
-## Infrastructure
+### Infrastructure
 Provides Various libraries will be available for cross cutting concerns.
-### Logging
+#### Logging
 Provides Request/Response logging middle-ware to aid in request tracing and figuring out any routing problems.
-## Services
+### Services
 As specified in the docker-compose file; There are a number of discrete containers build to assemble a set of micro-services.
-### Proxy
+#### Proxy
 Provides an NGINX reverse proxy that front ends all other services.
-### Store
+#### Store
 Provides the primary commercial landing area.
-### Support
+#### Support
 Provides the commercial support landing area.
-
-
-# Notes on linux for newbies
-
-To temporarily add additional tooling to the container 
-
-Connect to the console (which is root) via the Containers panel.
-```
-	apt update
-```
-
-
-## To add IP tools
-
-Then either;
-
-```
-	apt-get install iputils-ping
-```
-
-and/or;
-
-```
-	apt-get install net-tools 
-```
-
-# For privileged access
-
-```
-apt install sudo
-```
-After which you can perform actions requiring root access by prefixing other commands with ```sudo```
-
-# For editing files
-```
-apt install nano
-```
 
 
 
@@ -184,7 +147,7 @@ Rather than find OpenSSL for windows and install it locally, this procedure leve
 
 ## Step 1: Create the SSL Certificate
 
-## Access console and prepare container
+### Access console and prepare container
 
 Start the project using docker-compose as the startup project.
 
@@ -241,12 +204,12 @@ This can be used as a parent certificate to create many self signed certificates
 It will, when installed on the local windows host machine under the 'Local Computer\Trusted Root Certification Authorities\Certificates' folder, automatically enable trust of those child certificates on your development machine, meaning the browser should not pose any certificate issues, not should there be problems in other tools like postman.
 
 
-### Now create the service certificate
-#### Create the key
+#### Now create the service certificate
+##### Create the key
 ```
 openssl genrsa -out /etc/ssl/private/mystore.local.key 2048
 ```
-#### Create a config file
+##### Create a config file
 Create a config file : /etc/ssl/certs/mystore.local.conf
 Containing;
 
@@ -287,12 +250,12 @@ DNS.2 = *.mystore.local
 
 In which there is a dependency in the signing section below.
 
-#### Create a certificate signing request
+##### Create a certificate signing request
 ```
 openssl req -new -out /etc/ssl/certs/mystore.local.csr -key /etc/ssl/private/mystore.local.key -config /etc/ssl/certs/mystore.local.conf
 ```
 
-#### Sign the certificate
+##### Sign the certificate
 ```
 openssl x509 -req -days 365 -CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:mystore.local,DNS:*.mystore.local")) -in /etc/ssl/certs/mystore.local.csr -out /etc/ssl/certs/mystore.local.crt
 ```
@@ -303,7 +266,9 @@ NOTE: When using printf the back tick  “ “ disables the \n make sure its " "
 
 The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:mystore.local,DNS:*.mystore.local"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
 
-### Create a strong Diffie-Hellman group, which is used in negotiating Perfect Forward Secrecy with clients
+#### Create a strong Diffie-Hellman group
+
+Which is used in negotiating Perfect Forward Secrecy with clients
 
 This isn't necessary to make TLS work in this context but when you dive into it its a good thing to know about and do anyway.
 
@@ -406,20 +371,9 @@ server {
 
 ```
 
-Now to deliver the files to subsequent image builds, add these file copy commands to the dockerfile after the existing copy commands.
+## Step 3:  Capture certificate files 
 
-```
-COPY default.conf /etc/nginx/conf.d/default.conf
-COPY self-signed.conf /etc/nginx/conf.d/self-signed.conf
-COPY ssl-params.conf /etc/nginx/conf.d/ssl-params.conf
-COPY dhparam.pem /etc/ssl/certs/dhparam.pem
-COPY mystore.local.crt /etc/ssl/certs/mystore.local.crt
-COPY mystore.local.key /etc/ssl/private/mystore.local.key
-COPY index.html /usr/local/nginx/html/
-```
-
-
-# Capture certificate files within solution folders for build operations.
+Download created SSL files from linux container and place within solution folders for build operations.
 
 The following files (with paths) were be created and will need to be downloaded to the windows development host inside the solution folder structure for use in future builds.;
 
@@ -446,6 +400,19 @@ They will be referenced in the Dockerfile with instructions following later to r
 
 The myRootCA files do not need to included in container images they are used to add to the Windows certificate hive.
 
+
+### Add file COPIES to dockerfile
+Now to deliver the files to subsequent image builds, add these file copy commands to the dockerfile after the existing copy commands.
+
+```
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY self-signed.conf /etc/nginx/conf.d/self-signed.conf
+COPY ssl-params.conf /etc/nginx/conf.d/ssl-params.conf
+COPY dhparam.pem /etc/ssl/certs/dhparam.pem
+COPY mystore.local.crt /etc/ssl/certs/mystore.local.crt
+COPY mystore.local.key /etc/ssl/private/mystore.local.key
+COPY index.html /usr/local/nginx/html/
+```
 
 # Add the root Certificate to the windows development host
 
@@ -476,7 +443,7 @@ If its switched on, which checks the certificate authority chain you must switch
 
 
 
-## Containers
+# Containers
 
 For current details ples refer to the details in docker-compose project docker-compose.yml and docker-compose.override.yml
 
@@ -508,7 +475,7 @@ docker network inspect f0a6248031f4
 ```
 
 
-# ASP.NET Core
+## ASP.NET Core
 
 ## Path mapping
 In the ASP.NET Core web applications the application start ups are mapped to their appropriate application path in the startup method,
@@ -536,7 +503,7 @@ The headers forwarded by the NGINX proxy are set up in the startup. e.g.
 	});
 ```
 
-### Container 1
+## Container 1
 
 ASP.NET Core MVC web site simply providing a basic site identifying index page as the store site
 
@@ -544,7 +511,7 @@ ASP.NET Core MVC web site simply providing a basic site identifying index page a
 Container name: store.mystore.local
 hostname:		store.mystore.local
 ```
-### Container 2
+## Container 2
 
 ASP.NET Core MVC web site simply providing a basic site identifying index page as the support site
 ```
@@ -567,14 +534,14 @@ The ```Dockerfile``` (case sensitive) is set to expose the required volumes usin
 
 It also copies into place the ```default.conf``` which maps the reverse proxy settings.
 
-##### docker-compose.yml
+#### docker-compose.yml
 
 ```hostname``` makes each container deterministically DNS addressable from its siblings inc NGINX.
 ```container_name``` ensures collisions with other projects unlikely.
 ```image``` ensures collisions with other projects unlikely.
 ```networks``` binds the container to the same network as its siblings and deterministically sets up a network name and  ensures collisions with other projects unlikely.
 
-##### docker-compose-override.yml
+#### docker-compose-override.yml
 
 Sets environment variables and exposed ports and volumes for the containers.
 
@@ -582,7 +549,7 @@ Sets environment variables and exposed ports and volumes for the containers.
 
 Initially sets to listen on port 80 and 443.
 
-##### Domain specification
+#### Domain specification
 
 ```
 server_name  localhost mystore.local;
@@ -613,7 +580,7 @@ https://localhost/support/home/privacy 	http://support.mysupport.local/support/h
 With reference to  ```location  /store/ {```  the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
 
 
-## Addressing scheme 
+##### Addressing scheme 
 
 
 ```
@@ -656,4 +623,41 @@ Import mystore.local.postman_collection.json into postman and it will create a c
 - Discriminate access to the staff and customer services.
 - Split support into customer service (Customer) and Staff support (Staff) services
 - Add a mongodb storage service for product and sales data persistence.
+
+# Notes on linux for newbies
+
+To temporarily add additional tooling to the container 
+
+Connect to the console (which is root) via the Containers panel.
+```
+	apt update
+```
+
+
+## To add IP tools
+
+Then either;
+
+```
+	apt-get install iputils-ping
+```
+
+and/or;
+
+```
+	apt-get install net-tools 
+```
+
+## For privileged access
+
+```
+apt install sudo
+```
+After which you can perform actions requiring root access by prefixing other commands with ```sudo```
+
+## For editing files
+```
+apt install nano
+```
+
 
