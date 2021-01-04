@@ -148,10 +148,10 @@ Import mystore.local.postman_collection.json into postman and it will create a c
 
 # Future changes
 
-Split support into customer service (Customer) and Staff support (Staff) services
-Add an identity server micro service to provide sign on via social logins (google+) and local (staff) logins. 
-Differentiate staff and customers through the token claims
-Discriminate access to the staff and customer services.
-Add a mongodb storage service for identity service.
-Add a mongodb storage service for product and sales data persistence.
+- Split support into customer service (Customer) and Staff support (Staff) services
+- Add an identity server micro service to provide sign on via social logins (google+) and local (staff) logins. 
+- Differentiate staff and customers through the token claims
+- Discriminate access to the staff and customer services.
+- Add a mongodb storage service for identity service.
+- Add a mongodb storage service for product and sales data persistence.
 
