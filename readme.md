@@ -1,6 +1,6 @@
 # Purpose:
 
-Document the detailed technical tasks necessary to set up a docker orchestrated set of back end microservices front ended by a reverse proxy operating over TLS (SSL).
+Document the detailed technical tasks necessary to set up a docker orchestrated set of back end micro services front ended by a reverse proxy operating over TLS (SSL).
 
 # Dependencies
 
@@ -19,7 +19,7 @@ The container orchestration is provided using the Visual Studio docker orchestra
 
 ## Notes on Postman testing
 
-Postman is (or should be, via File/Settingse) set locally to switch off SSL verification but one additional goal is to find a way to switch it back on.
+Postman is (or should be, via File/Settings) set locally to switch off SSL verification but one additional goal is to find a way to switch it back on.
 
 
 # Getting started
@@ -29,7 +29,7 @@ Postman is (or should be, via File/Settingse) set locally to switch off SSL veri
 - Edit your hosts file as described in 'Fictional Domain'. Once that change is saved its active immediately.
 - Press F5.
 
-If you get build issues perform one or maye more build / clean solution runs and try again before checking anything else.
+If you get build issues perform one or more build / clean solution runs and try again before checking anything else.
 
 Depending on your network speed, the first build run may take a while if none of the docker layer dependencies are not already in your docker cache. 
 
@@ -39,41 +39,41 @@ Subsequent re builds will be quicker.
 
 This solution assumes a fictional domain name of ```mystore.local``` which is locally simulated as a real DNS entry by spoofing local addressing via the hosts file.
 
-Add this domain to the development environment by adding the following entry to your drivers\etc\hosts file using any suitable text editor run as administator.
+Add this domain to the development environment by adding the following entry to your drivers\etc\hosts file using any suitable text editor run as administrator.
 
 ```
 127.0.0.1 mystore.local
 ```
 
-Having set that domain name we will need to generate configure and use self signed certificates to depart from using localhost as a default.
+Having set that domain name we will need to generate configure and use self signed certificates to depart from using ```localhost``` as a default.
 
-The overall intention of that is to provide environment (local / test / production) alternates of files and configurations to be used in parametereised builds and deployments.
+The overall intention of that is to provide environment (local / test / production) alternates of files and configurations to be used in parameterised builds and deployments.
 
 # Overview:
 
-TL;DR - detals for refreshing my memory and maybe helping you.
+TL;DR - details for refreshing my memory and maybe helping you.
 
-This solution is a windows hosted Visual Studio IDE providing an orchestrated docker solution for microservice based solutions behind a reverse proxy.
+This solution is a windows hosted Visual Studio IDE providing an orchestrated docker solution for micro service based solutions behind a reverse proxy.
 
-This solution uses and explicit docker network to provide container-to-container dns capabilities, the uses of which will become apparent once container to container network calls are made .Note: this does not refer to browser redirects, but HttpClient calls direct from one container to another inside the docker network subnet.
+This solution uses and explicit docker network to provide container-to-container DNS capabilities, the uses of which will become apparent once container to container network calls are made .Note: this does not refer to browser redirects, but HttpClient calls direct from one container to another inside the docker network subnet.
 
-This solution is to provide an orchestrated docker container set of two microservices providing two sections of a ficticious web site.
+This solution is to provide an orchestrated docker container set of two micro services providing two sections of a fictitious web site.
 
 - Store  - where customers would buy products and services.
 - Support - Where customer service and staff support can be provided.
 
-The services will then be fronted by a reverse proxy using NGINX to provide a reverse proxy through to the microservices.
+The services will then be fronted by a reverse proxy using NGINX to provide a reverse proxy through to the micro services.
 
-Then external port mapping of the payload microservices will be switched off and prevent direct access to the microservices from outside of the container network.
+Then external port mapping of the payload micro services will be switched off and prevent direct access to the micro services from outside of the container network.
 
 The main tasks needed are;
 
 - create the vanilla back end services
 - create a proxy NGIX front end service
 - setup the compose file to provide the necessary containers and network details
-- isolate the backend services from direct access from the host network
+- isolate the back end services from direct access from the host network
 - create self-signed certificates and root CA.
-- configure NGINX to use and redirect to HTTPS to secure transmission from host nework to NGINX Proxy.
+- configure NGINX to use and redirect to HTTPS to secure transmission from host network to NGINX Proxy.
 - expand on that base
 
 # Solution structure
@@ -102,11 +102,11 @@ docker-compose
 ```
 
 ## Infrastructure
-Provides Various libraries will be avaialble for cross cutting concerns.
+Provides Various libraries will be available for cross cutting concerns.
 ### Logging
-Provides Request/Response logging middleware to aid in request tracing and figuring out any routing problems.
+Provides Request/Response logging middle-ware to aid in request tracing and figuring out any routing problems.
 ## Services
-As spefified in the docker-compose file; There are a number of discrete containers build to assemble a set of micro-services.
+As specified in the docker-compose file; There are a number of discrete containers build to assemble a set of micro-services.
 ### Proxy
 Provides an NGINX reverse proxy that front ends all other services.
 ### Store
@@ -115,7 +115,7 @@ Provides the primary commercial landing area.
 Provides the commercial support landing area.
 
 
-# Notes on lunux for newbies
+# Notes on linux for newbies
 
 To temporarily add additional tooling to the container 
 
@@ -144,7 +144,7 @@ and/or;
 ```
 apt install sudo
 ```
-After which you can perform actions requireing root access by prefixing other commands with sudo
+After which you can perform actions requiring root access by prefixing other commands with ```sudo```
 
 # For editing files
 ```
@@ -159,7 +159,7 @@ apt install nano
 | Development host   | Docker network                                    | |
 | Network            |                                                   | |
 !                    !                .-----------------.                ! |
-|                 ---|-------------x  | Store   Service |                ! |
+|                 ---|--any port---x  | Store   Service |                ! |
 |                    |                `-----------------'                ! |
 |                    |                    ^                              | |
 |                    |                .--------.    .---------------.    ! |
@@ -167,7 +167,7 @@ apt install nano
 | Visual Studio      |                `--------'    `---------------'    ! |
 ! Browser            !                    v                              ! |
 ! Postman            !                .-----------------.                ! |
-|                 ---|-------------x  | Support Service |                ! |
+|                 ---|--any port---x  | Support Service |                ! |
 |                    |                `-----------------'                ! |
 !                    .---------------------------------------------------' !
 `--------------------------------------------------------------------------'
@@ -225,7 +225,7 @@ NOTE: These can pretty much be anything you like.
 openssl pkcs12 -export -inkey /etc/ssl/private/myRootCA.key -in /etc/ssl/certs/myRootCA.pem -out /etc/ssl/certs/myRootCA.pfx
 ```
 
-Again, this requries manual input;
+Again, this requires manual input;
 
 ```
 Enter Export Password: password
