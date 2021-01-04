@@ -570,7 +570,7 @@ With 3 defined location mappings of ```\```, ```\store``` and ```\support\```
 The following URL's are supported correctly. Also the self referencing links inside the views of the micro services behave properly.
 
 ```
-Request URLS                            Routes internall to
+Request URLS                            Routes internally to
 https://localhost                       http://store.mystore.local/store/
 https://localhost/store                 http://store.mystore.local/store/
 https://localhost/store/home            http://store.mystore.local/store/home
