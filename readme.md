@@ -14,14 +14,7 @@ This solution is to provide an orchestrated docker container set of two microser
 
 The services will then be fronted by a reverse proxy using NGINX to provide a reverse proxy through to the microservices.
 
-Then external port mapping of the payload microservices will be switched off later and prevent direct access to the microservices from outside of the container network.
-
-This will provide a number of advantages;
-
-- Reduce the ports expossed to consumers.
-- Reduce the attack surface to one external component (NGINX) and the micros service code.
-- Provide a means of upgrading with zero service downtime by managing NGINX configuration.
-- Provide a means of adding site feature additions.
+Then external port mapping of the payload microservices will be switched off and prevent direct access to the microservices from outside of the container network.
 
 This solution assumes a ficticious domain name of [mystore.local] which is simulated by spoofing local addressing via the hosts file.
 
@@ -37,6 +30,7 @@ This was developed using:
 ```
 Microsoft Visual Studio Professional 2019 Version 16.7.6
 Docker version 20.10.0, build 7287ab3
+Postman V7.36.1
 ```
 
 It will be tested with subsequent versions at intervals to try and prevent this repository becoming stale over time.
@@ -49,7 +43,7 @@ The container orchestration is provided using the Visual Studio docker orchestra
 
 Download this repository and load it into visual studio.
 
-Set the startup to docker_conpose using the right click menu on the solution to set startup project.
+Set the startup to docker_compose using the right click menu on the solution to set startup project.
 
 Edit your hosts file as described above. Once thta change is saved its active immediately.
 

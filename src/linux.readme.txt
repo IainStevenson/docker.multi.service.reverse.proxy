@@ -1,14 +1,29 @@
-To add either ping (iputils-ping), or netstat (net-tools) to a linux container in this soluytion;
+# To add IP tools
+To temporarily add additional tooling to the container 
 
-Connect to the console (which is root)
-
+Connect to the console (which is root) via the Containers panel.
+```
 	apt update
+```
 
 Then either;
 
+```
 	apt-get install iputils-ping
+```
 
 and/or;
 
+```
 	apt-get install net-tools 
+```
+
+# for privileged access
+
+```
+apt install sudo
+```
+
+# For editing files
+apt install nano
 

@@ -24,9 +24,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497
 		Proxy\dhparam.pem = Proxy\dhparam.pem
 		Proxy\Dockerfile = Proxy\Dockerfile
 		Proxy\index.html = Proxy\index.html
+		Proxy\myRootCA.key = Proxy\myRootCA.key
+		Proxy\myRootCA.pem = Proxy\myRootCA.pem
+		Proxy\myRootCA.pfx = Proxy\myRootCA.pfx
+		Proxy\myRootCA.srl = Proxy\myRootCA.srl
+		Proxy\mystore.local.conf = Proxy\mystore.local.conf
 		nginx-readme.md = nginx-readme.md
-		Proxy\nginx-selfsigned.crt = Proxy\nginx-selfsigned.crt
-		Proxy\nginx-selfsigned.key = Proxy\nginx-selfsigned.key
 		Proxy\self-signed.conf = Proxy\self-signed.conf
 		Proxy\self-signed.md = Proxy\self-signed.md
 		Proxy\ssl-params.conf = Proxy\ssl-params.conf
@@ -74,9 +77,9 @@ Global
 		UpdateAssemblyInfoVersion.Debug|Any CPU = True
 		AssemblyVersionSettings.Debug|Any CPU = None.None.None.None
 		AssemblyFileVersionSettings.Debug|Any CPU = None.None.None.None
+		AssemblyInfoVersionSettings.Debug|Any CPU = None.None.None.None
 		UpdatePackageVersion.Debug|Any CPU = False
-		AssemblyInfoVersionSemVerSettings.Debug|Any CPU = AssemblyVersion.IncrementWithAutoReset.None
-		AssemblyInfoVersionType.Debug|Any CPU = SemVer1
+		AssemblyInfoVersionType.Debug|Any CPU = SettingsVersion
 		InheritWinAppVersionFrom.Debug|Any CPU = None
 	EndGlobalSection
 EndGlobal

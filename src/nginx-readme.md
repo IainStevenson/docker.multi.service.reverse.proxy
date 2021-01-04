@@ -20,14 +20,14 @@ Sets environment variables and exposed ports and volumes for the containers.
 
 ## default.conf
 
-Sets to listen on port 80 only (443 comes later)
-
+Initially sets to listen on port 80 and 443.
 
 ### Domain specification
 
 ```
 server_name  localhost mystore.local;
 ```
+
 Sets a server name for thie NGINX proxy as either ```localhost``` or ```mystore.local```.
 
 Means that in the following URL table ```localhost``` can be replaced with ```mystore.local``` but requires adjustment to ```\Windows\system32\drivers\etc\hosts``` file to direct to 127.0.0.1
@@ -40,20 +40,17 @@ With 3 defined location mappings of ```\```, ```\store``` and ```\support\```
 The following URL's are supported correctly. Also the self referencing links inside the views of the micro services behave properly.
 
 ```
-Request URLS 							Routes to
-http://localhost	 					http://store.mystore.local/store/
-http://localhost/store 					http://store.mystore.local/store/
-http://localhost/store/home 			http://store.mystore.local/store/home
-http://localhost/store/home/privacy 	http://store.mystore.local/store/home/privacy
-http://localhost/support 				http://support.mysupport.local/support/
-http://localhost/support/home 			http://support.mysupport.local/support/home
-http://localhost/support/home/privacy 	http://support.mysupport.local/support/home/privacy
-
+Request URLS 							Routes internall to
+https://localhost	 					http://store.mystore.local/store/
+https://localhost/store 				http://store.mystore.local/store/
+https://localhost/store/home 			http://store.mystore.local/store/home
+https://localhost/store/home/privacy 	http://store.mystore.local/store/home/privacy
+https://localhost/support 				http://support.mysupport.local/support/
+https://localhost/support/home 			http://support.mysupport.local/support/home
+https://localhost/support/home/privacy 	http://support.mysupport.local/support/home/privacy
 ```
 
-With reference to 
-```location  /store/ {``` 
-the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
+With reference to  ```location  /store/ {```  the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
 
 # ASP.NET Core
 
