@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApp2
@@ -53,6 +54,7 @@ namespace WebApp2
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
+                    IdentityModelEventSource.ShowPII = true; // enable PII viewing in dev environment
                 }
                 else
                 {

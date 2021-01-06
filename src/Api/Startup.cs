@@ -32,10 +32,14 @@ namespace Api
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = "https://localhost:5001/identity";
+                    //var signingKey = Encoding.UTF8.GetBytes("SECRET_KEY");
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        //IssuerSigningKey = new SymmetricSecurityKey(signingKey)
+
                     };
                 });
             services.AddAuthorization(options =>
