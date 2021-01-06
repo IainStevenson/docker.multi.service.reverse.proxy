@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApp1
 {
@@ -22,6 +23,24 @@ namespace WebApp1
         {
 
             services.AddControllersWithViews();
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://localhost:5001/identity";
+
+                    options.ClientId = "mvc";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code";
+
+                    options.SaveTokens = true;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +73,7 @@ namespace WebApp1
                 app.UseStaticFiles();
 
                 app.UseRouting();
-
+                app.UseAuthentication();
                 app.UseAuthorization();
 
                 app.UseRequestResponseLogging();
@@ -63,7 +82,8 @@ namespace WebApp1
                 {
                     endpoints.MapControllerRoute(
                         name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                        pattern: "{controller=Home}/{action=Index}/{id?}")
+                        .RequireAuthorization();
                 });
             });
         }
