@@ -40,6 +40,9 @@ namespace WebApp1
                     options.ResponseType = "code";
 
                     options.SaveTokens = true;
+
+                    options.Scope.Add("profile");
+                    options.GetClaimsFromUserInfoEndpoint = true;
                 });
         }
 
