@@ -36,7 +36,7 @@ namespace Api
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         ValidateAudience = false,
                         //IssuerSigningKey = new SymmetricSecurityKey(signingKey)
 
