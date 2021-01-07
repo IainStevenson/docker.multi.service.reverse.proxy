@@ -5,8 +5,8 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>a2335a74-d681-439e-9a74-2f549e4b50af</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://mystore.local</DockerServiceUrl>
-    <DockerServiceName>proxy.mystore.local</DockerServiceName>
+    <DockerServiceUrl>Scheme}://{ServiceHost}:{ServicePort}/identity/.well-known/openif-configuration</DockerServiceUrl>
+    <DockerServiceName>identity.mystore.local</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
