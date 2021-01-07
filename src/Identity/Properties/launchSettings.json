@@ -11,7 +11,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/identity/.well-known/openif-configuration",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/identity/.well-known/openid-configuration",
       "publishAllPorts": true,
       "useSSL": true
     }
