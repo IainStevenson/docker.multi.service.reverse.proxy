@@ -27,7 +27,7 @@ namespace Identity
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
-                options.IssuerUri = "mystore";
+                options.IssuerUri = "mystore";                
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
@@ -52,7 +52,7 @@ namespace Identity
                 app.UseRouting();
                 app.UseCors(policy =>
                 {
-                    policy.WithOrigins("https://localhost:44302", "https://localhost:44303")
+                    policy.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });

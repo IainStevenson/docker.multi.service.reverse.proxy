@@ -34,15 +34,18 @@ namespace WebApp1
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://localhost:5001/identity";
-
+                    options.Authority = "https://identity.mystore.local/identity";
+                    options.RequireHttpsMetadata = true;
                     options.ClientId = "mvc";
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
 
                     options.SaveTokens = true;
 
+                    options.Scope.Add("openid");
                     options.Scope.Add("profile");
+                    options.Scope.Add("email");
+                    options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
                 });
         }
@@ -62,7 +65,7 @@ namespace WebApp1
                 {
                     app.UseExceptionHandler("/Home/Error");
                     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                    //app.UseHsts();
+                    app.UseHsts();
                 }
 
                 app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -70,15 +73,14 @@ namespace WebApp1
                     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                 });
 
-                //if (env.IsDevelopment())
-                //{
-                //    app.UseHttpsRedirection();
-                //}
+                app.UseHttpsRedirection();
 
                 app.UseStaticFiles();
 
                 app.UseRouting();
+
                 app.UseAuthentication();
+
                 app.UseAuthorization();
 
                 app.UseRequestResponseLogging();
@@ -90,6 +92,8 @@ namespace WebApp1
                         pattern: "{controller=Home}/{action=Index}/{id?}")
                         .RequireAuthorization();
                 });
+                // `.RequireAuthorization()` sets all controllers to [Authorize] 
+                // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             });
         }
     }

@@ -2,41 +2,60 @@
 
 The docker subnet network is agnostic about its actual run time IP Addresses and this solution leverages the aautomatic DNS feature of docker to provide container to container communications through thier hostnames.
 
-# Network topology
+## Network topology
 ```
 .-------------------------------------------------------------------------------------------.
 |                                                                                           |
 |                    .-------------------------------------------------------------------.  |
-| Development host   | Docker                                                            |  |
-| Network            | sub-network                                                       |  |
-|                    |                                                                   |  |
-|                    |                .--------.                                         |  |
-|                 ---|--any port---x  | store  |--http--------------------------.        |  |
-|                    |                `--------'             |                  |        |  |
-|                    |                    ^ http             v                  v        |  |
-|                    |                .--------.        .-----------.     .-----------.  |  |
-|                 ---|-http/https---->| proxy  |--http->| identity  |     |   api     |  |  |
-| Visual Studio      |                `--------'        `-----------'     `-----------'  |  |
-| Browser            |                    v http             ^                  ^        |  |
-| Postman            |                .---------.            |                  |        |  |
-|                 ---|--any port---x  | support |--http-------------------------'        |  |
-|                    |                `---------'                                        |  |
-|                    |                                                                   |  |
-|                    |                                                                   |  |
-|                    |                                                                   |  |
-|                    .-------------------------------------------------------------------'  |
-|                                                                                           |
+| Development host   | Docker        Front End             Back End                      |  |
+| Network            | sub-network  .-------------.       .-------------------------.    |  |
+|                    |              |             |       |                   =     |    |  |
+| Visual Studio      |              |             |       |  .-----------.    |     |    |  |
+| Browser            |              |             |       |->| store     |<-->|     |    |  |
+| Postman            |              |             |       |  `-----------'    |     |    |  |
+| Console            |              |             |       |                   |     |    |  |
+|                    |              | .--------.  |       |  .-----------.    |     |    |  |
+|         https   ---|--------------->| proxy  |--https-->|->| identity  |<-->|     |    |  |
+|                    |        ^     | `--------'  |       |  `-----------'    |     |    |  |
+|         http    ------------'     |             |       |             https-|     |    |  |
+|                    | 301 redirect |             |       |  .-----------.    |     |    |  |
+|                    |              |             |       |->| support   |<-->|     |    |  |
+|                    |              |             |       |  `-----------'    |     |    |  |
+|                    |              `-------------'       |                   |     |    |  |
+|                    |                                    |  .-----------.    |     |    |  |
+|  All protocols  ---|--any port--------------------x     |->| api       |<-->|     |    |  |
+|                    |                                    |  `-----------'    =     |    |  |
+|                    |                                    `-------------------------'    |  |
+|                    `-------------------------------------------------------------------'  |
 `-------------------------------------------------------------------------------------------'
 ```
 
-#### location
+The docker network is a subnet set apart from its host, and can vary on each development host therefore ip addresses are non-deterministic.
+Dockers DNS capability is used by giving each container a deterministic dns name taht can be used inside the docker subnet.
+All services are provided with a discrete service certificate with the service host name as the CN.
+All transport is encrypted. 
+Performance is traded for security on the basis that security should never be undermined by performance considerations.
+Any inadvertent exposure of backend services to the outside world can therefore fall back on TLS. (Strength in depth)
 
-With 4 defined location mappings of ```\```, ```\store``` , ```\support\``` and ```\identity\```
+Outside world can only access the proxy at mystore.local where port 80 (http) redirects to port 443 (https)
+Proxy can access all backend services only on port 443
+All backend services can access all services only via port 443 (https) 
+Certificates provided for each service and each has the development root CA certificate available to trust those services certificates.
 
-The following URL's are supported correctly. Also the self referencing links inside the views of the micro services behave properly.
+# Application mapping in proxy configuration
+
+With 4 defined externally useful application mappings of ```\```, ```\store\``` , ```\support\``` and ```\identity\```
+
+With reference to  ```location  /store/ {``` in the proxy ```default.conf``` file, the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
+
+
+The following URL's are supported correctly. 
+The self referencing links inside the views of the micro services behave properly.
+The following URL's are tested in this order.
 
 ```
 Request URLS                                                    Routes internally to
+https://mystore.local/identity/.well-lnown/openid-configuration http://identity.mystore.local/identity/.well-lnown/openid-configuration
 https://mystore.local                                           http://store.mystore.local/store/
 https://mystore.local/store                                     http://store.mystore.local/store/
 https://mystore.local/store/home                                http://store.mystore.local/store/home
@@ -45,13 +64,9 @@ https://mystore.local/support                                   http://support.m
 https://mystore.local/support/home                              http://support.mystore.local/support/home
 https://mystore.local/support/home/privacy                      http://support.mystore.local/support/home/privacy
 https://mystore.local/support/home/privacy                      http://support.mystore.local/support/home/privacy
-https://mystore.local/identity/.well-lnown/openid-configuration http://identity.mystore.local/identity/.well-lnown/openid-configuration
 ```
 
-With reference to  ```location  /store/ {```  the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
-
-
-##### Addressing scheme 
+# Addressing scheme 
 
 
 ```

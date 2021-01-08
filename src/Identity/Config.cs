@@ -56,20 +56,21 @@ namespace Identity
                     
                     // where to redirect to after login
                     RedirectUris = {
-                        "https://localhost:44302/store/signin-oidc" ,
-                        "https://localhost:44303/support/signin-oidc"
+                        "https://mystore.local/store/signin-oidc" ,
+                        "https://mystore.local/support/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = {
-                        "https://localhost:44302/store/signout-callback-oidc",
-                        "https://localhost:44303/support/signout-callback-oidc"
+                        "https://mystore.local/store/signout-callback-oidc",
+                        "https://mystore.local/support/signout-callback-oidc"
                     },
 
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
                         "api1"
                     }
                 }

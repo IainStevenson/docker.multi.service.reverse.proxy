@@ -1,31 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@using Microsoft.AspNetCore.Authentication
+<div >
+    <h1 class="display-4 text-center">Welcome to the Store</h1>
+    <div>Learn about <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">our privacy policy</a></div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to the Store</h1>
-    <p>Learn about <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">our privacy policy</a></p>
-
-    <p>Get some <a class="nav-link text-dark" href="/support">support</a></p>
+    <div>If you need it, get some <a href="/support">support</a></div>
 </div>
-
-<h2>Claims</h2>
-
-<dl>
-    @foreach (var claim in User.Claims)
-    {
-        <dt>@claim.Type</dt>
-        <dd>@claim.Value</dd>
-    }
-</dl>
-
-<h2>Properties</h2>
-
-<dl>
-    @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
-    {
-        <dt>@prop.Key</dt>
-        <dd>@prop.Value</dd>
-    }
-</dl>
