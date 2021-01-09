@@ -24,7 +24,7 @@ namespace Api
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://identity.mystore.local/identity";
+                    options.Authority = "https://mystore.local/identity";
                     options.RequireHttpsMetadata = true;
                     //var signingKey = Encoding.UTF8.GetBytes("SECRET_KEY");
 

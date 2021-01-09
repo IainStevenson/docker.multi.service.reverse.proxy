@@ -33,7 +33,7 @@ namespace WebApp2
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://identity.mystore.local/identity";
+                    options.Authority = "https://mystore.local/identity";
                     options.RequireHttpsMetadata = true;
                     options.ClientId = "mvc";
                     options.ClientSecret = "secret";
