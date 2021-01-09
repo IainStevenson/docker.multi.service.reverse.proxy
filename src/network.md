@@ -23,7 +23,7 @@ The docker subnet network is agnostic about its actual run time IP Addresses and
 |                    |              |             |       |  `-----------'    |     |    |  |
 |                    |              `-------------'       |                   |     |    |  |
 |                    |                                    |  .-----------.    |     |    |  |
-|  All protocols  ---|--any port--------------------x     |->| api       |<-->|     |    |  |
+|  All protocols  ---|-- all ports -----------------x  -->|->| api       |<-->|     |    |  |
 |                    |                                    |  `-----------'    =     |    |  |
 |                    |                                    `-------------------------'    |  |
 |                    `-------------------------------------------------------------------'  |
@@ -31,7 +31,7 @@ The docker subnet network is agnostic about its actual run time IP Addresses and
 ```
 
 The docker network is a subnet set apart from its host, and can vary on each development host therefore ip addresses are non-deterministic.
-Dockers DNS capability is used by giving each container a deterministic dns name taht can be used inside the docker subnet.
+Dockers DNS capability is used by giving each container a deterministic dns name that can be used inside the docker subnet.
 All services are provided with a discrete service certificate with the service host name as the CN.
 All transport is encrypted. 
 Performance is traded for security on the basis that security should never be undermined by performance considerations.

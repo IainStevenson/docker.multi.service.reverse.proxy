@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,7 +57,7 @@ namespace Identity
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
-                app.UseIdentityServer();
+
 
                 //uncomment, if you want to add MVC
                 app.UseAuthorization();
@@ -64,6 +65,12 @@ namespace Identity
                 {
                     endpoints.MapDefaultControllerRoute();
                 });
+
+
+                app.UseRequestResponseLogging();
+
+                app.UseIdentityServer();
+
             });
         }
     }
