@@ -56,12 +56,14 @@ namespace Identity
                     AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login
                     RedirectUris = {
+                        "https://mystore.local/signin-oidc" ,
                         "https://mystore.local/store/signin-oidc" ,
                         "https://mystore.local/support/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = {
+                        "https://mystore.local/signout-callback-oidc",
                         "https://mystore.local/store/signout-callback-oidc",
                         "https://mystore.local/support/signout-callback-oidc"
                     },

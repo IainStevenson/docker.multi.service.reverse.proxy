@@ -1,3 +1,4 @@
+using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,8 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Api"; });
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
@@ -61,6 +64,7 @@ namespace Api
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseRequestResponseLogging();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()

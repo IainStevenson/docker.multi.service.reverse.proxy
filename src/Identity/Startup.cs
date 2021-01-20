@@ -23,6 +23,8 @@ namespace Identity
         {
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
+            
+            services.AddRequestResponseLoggingMiddlewareWithOptions( options => {options.LogSource = "Identity"; });
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -67,7 +69,7 @@ namespace Identity
                 });
 
 
-                app.UseRequestResponseLogging();
+                app.UseRequestResponseLogging( );
 
                 app.UseIdentityServer();
 

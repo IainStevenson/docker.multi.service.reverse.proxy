@@ -24,7 +24,7 @@ namespace WebApp2
         {
             services.AddControllersWithViews();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Support"; });
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";

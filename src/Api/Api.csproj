@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.0.23.7690</AssemblyVersion>
-    <FileVersion>1.0.23.7690</FileVersion>
+    <AssemblyVersion>1.0.26.7690</AssemblyVersion>
+    <FileVersion>1.0.26.7690</FileVersion>
     <UserSecretsId>5151c092-27d2-4f8a-a445-ea3ae9b6e786</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -12,6 +12,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
 
 

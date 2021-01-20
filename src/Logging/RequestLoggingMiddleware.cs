@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IO;
 using Newtonsoft.Json;
 using System;
@@ -14,12 +15,15 @@ namespace Logging
         private readonly ILogger<RequestResponseLoggingMiddleware> _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private const int ReadChunkBufferLength = 4096;
-
-        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger)
+        private RequestLoggingMiddlewareOptions _options;
+        
+        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger, IOptions<RequestLoggingMiddlewareOptions> options)
         {
             _next = next;
             _logger = logger;
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
+            _options = options.Value;
+
         }
 
         public async Task Invoke(HttpContext context)
@@ -33,6 +37,7 @@ namespace Logging
 
             var requestProfilerModel = new RequestProfilerModel
             {
+                Source = _options.LogSource,
                 SessionId = sessionId,
                 TraceIdentifier = context?.TraceIdentifier ?? null,
                 TimeOfRequest = DateTimeOffset.UtcNow,
