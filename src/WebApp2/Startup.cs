@@ -24,7 +24,7 @@ namespace WebApp2
         {
             services.AddControllersWithViews();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Support"; });
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Identity"; });
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -46,14 +46,19 @@ namespace WebApp2
                     options.Scope.Add("email");
                     options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
+
+                    options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signin-oidc");
+                    options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signout-callback-oidc");
+
                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.Map("/support", (app) =>
-            {
+            app.UsePathBase("/support");
+            //app.Map("/support", (app) =>
+            //{
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
@@ -91,7 +96,7 @@ namespace WebApp2
                 });
                 // `.RequireAuthorization()` sets all controllers to [Authorize] 
                 // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
-            });
+            //});
         }
     }
 }

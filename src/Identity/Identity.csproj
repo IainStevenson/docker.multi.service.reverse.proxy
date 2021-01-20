@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.0.35.7690</AssemblyVersion>
-    <FileVersion>1.0.35.7690</FileVersion>
+    <AssemblyVersion>1.0.41.7690</AssemblyVersion>
+    <FileVersion>1.0.41.7690</FileVersion>
     <UserSecretsId>70be3d3e-27d5-4fa3-8870-f933385a83e2</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>

@@ -47,14 +47,20 @@ namespace WebApp1
                     options.Scope.Add("email");
                     options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
+
+
+
+                    options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signin-oidc");
+                    options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signout-callback-oidc");
                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.Map("/store", (app) =>
-            {
+            app.UsePathBase( "/store");
+            //app.Map("/store", (app) =>
+            //{
 
                 if (env.IsDevelopment())
                 {
@@ -94,7 +100,7 @@ namespace WebApp1
                 });
                 // `.RequireAuthorization()` sets all controllers to [Authorize] 
                 // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
-            });
+            //});
         }
     }
 }
