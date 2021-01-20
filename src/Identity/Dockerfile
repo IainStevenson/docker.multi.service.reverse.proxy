@@ -5,6 +5,13 @@ WORKDIR /app
 #EXPOSE 80
 EXPOSE 443
 
+# Allow trust of certificates from other services
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y ca-certificates
+COPY Proxy/certificates/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
+RUN update-ca-certificates
+
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Identity/Identity.csproj", "Identity/"]
@@ -16,17 +23,9 @@ RUN dotnet build "Identity.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "Identity.csproj" -c Release -o /app/publish
 
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# COPY root CA Certificate
-COPY --from=build /src/Proxy/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
-# COPY local service certificate
-COPY --from=build /src/Proxy/identity.mystore.local.crt /etc/ssl/certs/identity.mystore.local.crt
-COPY --from=build /src/Proxy/identity.mystore.local.key /etc/ssl/private/identity.mystore.local.key
-# Update CA root certificates
-RUN apt-get update
-RUN apt-get install -y curl
-RUN apt-get install -y ca-certificates
-RUN update-ca-certificates
+
 ENTRYPOINT ["dotnet", "Identity.dll"]

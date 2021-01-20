@@ -53,7 +53,7 @@ namespace Identity
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    
+                    AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login
                     RedirectUris = {
                         "https://mystore.local/store/signin-oidc" ,

@@ -68,7 +68,8 @@ Start a container console and run these commands
 ```
 apt update
 apt-get install -y curl
-openssl x509 -text -noout -in /etc/ssl/certs/identity.mystore.local.crt 
+awk -v cmd='openssl x509 -noout -subject' ' /BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
+
 ```
 
 
@@ -79,9 +80,7 @@ Start a container console and run these commands
 ```
 apt update
 apt-get install -y curl
-openssl x509 -text -noout -in /etc/ssl/certs/api.mystore.local.crt 
-curl -k https://identity.mystore.local/identity/.well-known/openid-configuration
-curl https://identity.mystore.local/identity/.well-known/openid-configuration
 awk -v cmd='openssl x509 -noout -subject' ' /BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
+curl https://identity.mystore.local/identity/.well-known/openid-configuration
 
 ```
