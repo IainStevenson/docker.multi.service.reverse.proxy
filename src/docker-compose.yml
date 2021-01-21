@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+
   store.mystore.local:
     container_name: store.mystore.local
     hostname: store.mystore.local
@@ -9,6 +10,9 @@ services:
     build:
       context: .
       dockerfile: WebApp1/Dockerfile  
+    depends_on:
+     - api.mystore.local
+     - identity.mystore.local    
     networks:      
       - mystore    
 
@@ -18,21 +22,51 @@ services:
     image: ${DOCKER_REGISTRY-}support.mystore.local
     build:
       context: .
-      dockerfile: WebApp2/Dockerfile        
+      dockerfile: WebApp2/Dockerfile    
+    depends_on:
+     - api.mystore.local    
+     - identity.mystore.local    
     networks:      
       - mystore
 
   proxy.mystore.local:
     container_name: proxy.mystore.local
-    hostname: proxy.mystore.local    
+    hostname: mystore.local    
     image: ${DOCKER_REGISTRY-}proxy.mystore.local
     build:
-      context: ./Proxy
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Proxy/Dockerfile
     depends_on:
      - store.mystore.local
      - support.mystore.local
+     - identity.mystore.local
+     - api.mystore.local
     networks:      
       - mystore
+
+  identity.mystore.local:
+    container_name: identity.mystore.local
+    hostname: identity.mystore.local
+    image: ${DOCKER_REGISTRY-}identity.mystore.local
+    build:
+      context: .
+      dockerfile: Identity/Dockerfile
+    networks:      
+      - mystore
+
+  api.mystore.local:
+    container_name: api.mystore.local
+    hostname: api.mystore.local
+    image: ${DOCKER_REGISTRY-}api.mystore.local
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    depends_on:
+     - identity.mystore.local
+    networks:      
+      - mystore
+
+
 networks:  
     mystore:
+

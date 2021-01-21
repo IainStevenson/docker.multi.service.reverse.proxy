@@ -11,8 +11,15 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7CF5B55-7B58-48DE-8E09-2406C7130FB9}"
 	ProjectSection(SolutionItems) = preProject
+		certificates.md = certificates.md
+		docker.md = docker.md
+		identity.md = identity.md
+		issues.md = issues.md
+		linux.md = linux.md
 		mystore.local.postman_collection.json = mystore.local.postman_collection.json
+		network.md = network.md
 		..\readme.md = ..\readme.md
+		solution.md = solution.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}"
@@ -20,17 +27,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497-6FA5-4B50-8749-9FA87F10385B}"
 	ProjectSection(SolutionItems) = preProject
 		Proxy\default.conf = Proxy\default.conf
-		Proxy\dhparam.pem = Proxy\dhparam.pem
 		Proxy\Dockerfile = Proxy\Dockerfile
+		Proxy\Gen-Host.cmd = Proxy\Gen-Host.cmd
+		Proxy\Gen-Root.cmd = Proxy\Gen-Root.cmd
+		Proxy\Gen-Vars.CMD = Proxy\Gen-Vars.CMD
+		Proxy\ImportRootCA.txt = Proxy\ImportRootCA.txt
 		Proxy\index.html = Proxy\index.html
-		Proxy\myRootCA.key = Proxy\myRootCA.key
-		Proxy\myRootCA.pem = Proxy\myRootCA.pem
-		Proxy\myRootCA.pfx = Proxy\myRootCA.pfx
-		Proxy\myRootCA.srl = Proxy\myRootCA.srl
-		Proxy\mystore.local.conf = Proxy\mystore.local.conf
-		Proxy\mystore.local.crt = Proxy\mystore.local.crt
-		Proxy\mystore.local.csr = Proxy\mystore.local.csr
-		Proxy\mystore.local.key = Proxy\mystore.local.key
 		Proxy\self-signed.conf = Proxy\self-signed.conf
 		Proxy\ssl-params.conf = Proxy\ssl-params.conf
 	EndProjectSection
@@ -38,6 +40,23 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C694F770-E674-4166-8F42-309FBEB0AD3C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{384B583C-DF84-4C25-88B0-FF28D73A8839}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{00792EB5-290D-4D73-A1AE-C35C45918F6B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{9F5491B1-96A2-4F48-96C0-8DA262FE802E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTestClient", "ApiTestClient\ApiTestClient.csproj", "{A60791A0-D768-4CEC-BB9B-4993CF782814}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "Identity\Identity.csproj", "{B7F3EA8E-504A-4CF4-9F69-8E37F0BEFC6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certificates", "certificates", "{5A4DDCD8-A2E5-421A-9EB8-557D73E69F19}"
+	ProjectSection(SolutionItems) = preProject
+		Proxy\certificates\api.mystore.local.conf = Proxy\certificates\api.mystore.local.conf
+		Proxy\certificates\dhparam.pem = Proxy\certificates\dhparam.pem
+		Proxy\certificates\domains.conf = Proxy\certificates\domains.conf
+		Proxy\certificates\identity.mystore.local.conf = Proxy\certificates\identity.mystore.local.conf
+		Proxy\certificates\mystore.local.conf = Proxy\certificates\mystore.local.conf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +80,18 @@ Global
 		{C694F770-E674-4166-8F42-309FBEB0AD3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C694F770-E674-4166-8F42-309FBEB0AD3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C694F770-E674-4166-8F42-309FBEB0AD3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00792EB5-290D-4D73-A1AE-C35C45918F6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00792EB5-290D-4D73-A1AE-C35C45918F6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00792EB5-290D-4D73-A1AE-C35C45918F6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00792EB5-290D-4D73-A1AE-C35C45918F6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60791A0-D768-4CEC-BB9B-4993CF782814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A60791A0-D768-4CEC-BB9B-4993CF782814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A60791A0-D768-4CEC-BB9B-4993CF782814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A60791A0-D768-4CEC-BB9B-4993CF782814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F3EA8E-504A-4CF4-9F69-8E37F0BEFC6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F3EA8E-504A-4CF4-9F69-8E37F0BEFC6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F3EA8E-504A-4CF4-9F69-8E37F0BEFC6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F3EA8E-504A-4CF4-9F69-8E37F0BEFC6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +101,10 @@ Global
 		{5AC84196-43B1-4DB1-BA76-0B63228F44AD} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{48FF9497-6FA5-4B50-8749-9FA87F10385B} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{C694F770-E674-4166-8F42-309FBEB0AD3C} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
+		{00792EB5-290D-4D73-A1AE-C35C45918F6B} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{A60791A0-D768-4CEC-BB9B-4993CF782814} = {9F5491B1-96A2-4F48-96C0-8DA262FE802E}
+		{B7F3EA8E-504A-4CF4-9F69-8E37F0BEFC6F} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{5A4DDCD8-A2E5-421A-9EB8-557D73E69F19} = {48FF9497-6FA5-4B50-8749-9FA87F10385B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}

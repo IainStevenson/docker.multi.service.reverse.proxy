@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Options;
 using Microsoft.IO;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net.Http.Headers;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Logging
@@ -17,15 +17,18 @@ namespace Logging
         private readonly ILogger<RequestResponseLoggingMiddleware> _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private const int ReadChunkBufferLength = 4096;
+        private RequestLoggingMiddlewareOptions _options;
 
-        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger)
+        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger, IOptions<RequestLoggingMiddlewareOptions> options)
         {
             _next = next;
             _logger = logger;
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
+            _options = options.Value;
+
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IActionDescriptorCollectionProvider provider = null)
         {
             string sessionId = null;
             try
@@ -33,13 +36,18 @@ namespace Logging
                 sessionId = context?.Session?.Id ?? null;
             }
             catch { } // sessions may or may not be enabled , if not it blows up
+          
+
 
             var requestProfilerModel = new RequestProfilerModel
             {
+                Source = _options.LogSource,
                 SessionId = sessionId,
                 TraceIdentifier = context?.TraceIdentifier ?? null,
                 TimeOfRequest = DateTimeOffset.UtcNow,
                 Request = await FormatRequestAsync(context)
+               
+
             };
 
             var originalBody = context.Response.Body;
@@ -52,6 +60,9 @@ namespace Logging
                 {
                     context.Response.Body = newResponseBody;
                     await _next(context);
+
+
+                   
                 }
                 catch (Exception ex)
                 {
@@ -66,6 +77,27 @@ namespace Logging
                         await newResponseBody.CopyToAsync(originalBody);
                         newResponseBody.Seek(0, SeekOrigin.Begin);
                         requestProfilerModel.Response = await FormatResponseAsync(context, newResponseBody);
+
+                    }
+                    else
+                    {
+                        // there was an excption so populate the more detailed information
+                        object routes = null;
+                        if (provider != null)
+                        {
+                            routes = provider.ActionDescriptors.Items.Select(x => new
+                            {
+                                Action = x.RouteValues.ContainsKey("Action") ? x.RouteValues["Action"] : null,
+                                Controller = x.RouteValues.ContainsKey("Controller") ? x.RouteValues["Controller"] : null,
+                                Page = x.RouteValues.ContainsKey("Page") ? x.RouteValues["Page"] : null,
+                                x.AttributeRouteInfo?.Name,
+                                x.AttributeRouteInfo?.Template,
+                                Contraint = JsonConvert.SerializeObject(x.ActionConstraints)
+                            }).ToArray();
+
+                            //routesJson = JsonConvert.SerializeObject(routes, new JsonSerializerSettings() { Formatting = Formatting.Indented });
+                        }
+                        requestProfilerModel.Routes = routes ?? new object[] { };
 
                     }
                     requestProfilerModel.TimeOfResponse = DateTimeOffset.UtcNow;
@@ -87,6 +119,7 @@ namespace Logging
             result.StatusCode = context.Response.StatusCode;
             result.Headers = context.Request.Headers;
             result.Body = await ReadStreamInChunksAsync(newResponseBody);
+            
             return result;
         }
 

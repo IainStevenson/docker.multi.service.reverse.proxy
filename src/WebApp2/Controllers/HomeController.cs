@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp2.Models;
 
 namespace WebApp2.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,11 +18,13 @@ namespace WebApp2.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Home View Called");
             return View();
         }
 
         public IActionResult Privacy()
         {
+            _logger.LogInformation("Privacy View Called");
             return View();
         }
 
@@ -29,5 +33,10 @@ namespace WebApp2.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public IActionResult Logout()
+        {
+            return SignOut("Cookies", "oidc");
+        }
+
     }
 }

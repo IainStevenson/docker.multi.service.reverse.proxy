@@ -7,6 +7,28 @@
 	},
 	"item": [
 		{
+			"name": "Check well known openid Identity is accessible via proxy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mystore.local/identity/.well-known/openid-configuration",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"identity",
+						".well-known",
+						"openid-configuration"
+					]
+				},
+				"description": "Checks that the identity service well known openid configuration is accessible"
+			},
+			"response": []
+		},
+		{
 			"name": "Test access to Store by default",
 			"event": [
 				{

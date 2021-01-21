@@ -18,6 +18,7 @@
     "WebApp1": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "store",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
