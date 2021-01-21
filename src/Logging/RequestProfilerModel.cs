@@ -12,5 +12,7 @@ namespace Logging
         public string SessionId { get; internal set; }
         public string TraceIdentifier { get; internal set; }
         public Exception Exception { get; internal set; }
+        public object Routes {  get;set; }
+       
     }
 }

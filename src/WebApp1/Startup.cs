@@ -48,59 +48,59 @@ namespace WebApp1
                     options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-
-
-                    options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signin-oidc");
-                    options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signout-callback-oidc");
+                    //options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signin-oidc");
+                    //options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signout-callback-oidc");
                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UsePathBase( "/store");
+            app.UsePathBase("/store");
             //app.Map("/store", (app) =>
             //{
 
-                if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                    IdentityModelEventSource.ShowPII = true; // enable PII viewing in dev environment
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Home/Error");
-                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                    app.UseHsts();
-                }
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true; // enable PII viewing in dev environment
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-                app.UseForwardedHeaders(new ForwardedHeadersOptions
-                {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                });
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
-                app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-                app.UseStaticFiles();
+            app.UseStaticFiles();
 
-                app.UseRouting();
+            app.UseRouting();
 
-                app.UseAuthentication();
+            app.UseAuthentication();
 
-                app.UseAuthorization();
+            app.UseAuthorization();
 
-                app.UseRequestResponseLogging();
+            app.UseRequestResponseLogging();
 
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}")
-                        .RequireAuthorization();
-                });
-                // `.RequireAuthorization()` sets all controllers to [Authorize] 
-                // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}")
+                    .RequireAuthorization();
+            });
+            // `.RequireAuthorization()` sets all controllers to [Authorize] 
+            // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             //});
+
+
         }
     }
 }

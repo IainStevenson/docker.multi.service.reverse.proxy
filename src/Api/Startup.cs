@@ -61,10 +61,13 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseRequestResponseLogging();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()

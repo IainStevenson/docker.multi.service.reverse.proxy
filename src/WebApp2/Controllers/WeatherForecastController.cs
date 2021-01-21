@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,10 +21,13 @@ namespace WebApp2.Controllers
         public async Task<IActionResult> Index()
         {
             var apiClient = new HttpClient();
-            var tokenSB = new StringBuilder(HttpContext.Request.Headers["access-token"]);
-            tokenSB.Remove(0, "bearer ".Length);
-            apiClient.SetBearerToken(tokenSB.ToString());
-            
+
+            string accessToken = await HttpContext.GetTokenAsync("access_token");
+            string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+
+            apiClient.SetBearerToken(accessToken);
+
+
             var apiUri = new Uri("https://api.mystore.local/weatherforecast"); // TODO: Add to configuration
             
             var response = await apiClient.GetAsync(apiUri);

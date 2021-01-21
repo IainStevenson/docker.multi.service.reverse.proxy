@@ -47,8 +47,8 @@ namespace WebApp2
                     options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signin-oidc");
-                    options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signout-callback-oidc");
+                    //options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signin-oidc");
+                    //options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signout-callback-oidc");
 
                 });
         }
@@ -59,43 +59,45 @@ namespace WebApp2
             app.UsePathBase("/support");
             //app.Map("/support", (app) =>
             //{
-                if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                    IdentityModelEventSource.ShowPII = true; // enable PII viewing in dev environment
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Home/Error");
-                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                    app.UseHsts();
-                }
-                app.UseForwardedHeaders(new ForwardedHeadersOptions
-                {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                });
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true; // enable PII viewing in dev environment
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
-                app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-                app.UseStaticFiles();
+            app.UseStaticFiles();
 
-                app.UseRouting();
+            app.UseRouting();
 
-                app.UseAuthentication();
+            app.UseAuthentication();
 
-                app.UseAuthorization();
+            app.UseAuthorization();
 
-                app.UseRequestResponseLogging();
+            app.UseRequestResponseLogging();
+            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}")
+                    .RequireAuthorization();
+            });
 
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}")
-                        .RequireAuthorization();
-                });
-                // `.RequireAuthorization()` sets all controllers to [Authorize] 
-                // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
+
+            // `.RequireAuthorization()` sets all controllers to [Authorize] 
+            // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             //});
         }
     }
