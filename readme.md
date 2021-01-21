@@ -1,39 +1,55 @@
 # Purpose
 
-Document the detailed technical tasks necessary to set up a docker orchestrated set of back end micro services front ended by a reverse proxy operating over TLS (SSL).
+Document the research of technical tasks necessary to develop an orchestrated set of docker hosted micro services providing and front end NGINX service, that acts as a reverse proxy over TLS to multiple inter-connected back end services.
+
+The key elements of the configuration is documented in the [issues document](file://issues.md) which lists the isues encountered and how to resolve them.
 
 # Dependencies
 
-This was developed using:
+This solution was developed using:
 
 ```
 Microsoft Visual Studio Professional 2019 Version 16.7.6
+Microsoft Visual Studio Professional 2019 Version 16.8.4
 Docker version 20.10.0, build 7287ab3
-Postman V7.36.1 (optional)
+Docker version 20.10.2, build 2291f61
+git version 2.26.2.windows.1
 ```
 
-It will be tested with subsequent versions at future intervals to try and prevent this repository becoming stale over time. It may work on earlier versions! It may not.
+Optional tools and resources that were used to diagnose and fix problems include;
 
+```
+Fildder anywhere
+docker desktop
+stackoverflow
+nginx documentation
+docker documentation
+Postman V7.36.1
+```
 The container orchestration is provided using the Visual Studio docker orchestration support and the docker_compose project is the startup for docker debugging builds and runs.
 
 # Getting started
 
 - Download this repository and load it into visual studio.
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
-- Edit your hosts file as described in 'Fictional Domain'. Once that change is saved its active immediately.
+- Edit your hosts file as described in 'Fictional Domain' below. Once that change is saved its active immediately.
+- to install the domain trusted certificate to your dev host, open a powershell or command window in the ```src/Proxy``` folder and execute ```./gen-root.cmd``` and follow instructions \* 
+- to generate default certificates for each microservice execute the ```gen-host.cmd``` and follow instructions.
 - Press F5.
 
-If you get build issues perform one or more build / clean solution runs and try again before checking anything else.
+\* yes I am an old school command shell scripter.
 
 Depending on your network speed, the first build run may take a while if none of the docker layer dependencies are not already in your docker cache. 
 
 Subsequent re builds will be quicker.
 
+If you get build issues perform one or more build / clean solution runs and try again before checking anything else. if in doubt use docker desktop to remove any failed container builds via the 'cleanup' button
+
 ## Fictional Domain
 
 This solution assumes a fictional domain name of ```mystore.local``` which is locally simulated as a real DNS entry by spoofing local addressing via the hosts file.
 
-Add this domain to the development environment by adding the following entry to your drivers\etc\hosts file using any suitable text editor run as administrator.
+Add this domain to the development environment by adding the following entry to your ```%SystemRoot%\system32\drivers\etc\hosts``` file using any suitable text editor run as administrator.
 
 ```
 127.0.0.1 mystore.local
@@ -51,12 +67,12 @@ This solution is a windows hosted Visual Studio IDE providing an orchestrated do
 
 This solution uses and explicit docker network to provide container-to-container DNS capabilities, the uses of which will become apparent once container to container network calls are made .Note: this does not refer to browser redirects, but HttpClient calls direct from one container to another inside the docker network subnet. the idea here is not to fix docker network subnet addresses and use them as numbers but to allow them to be different subnets for different developers, controlled by thier docker to avoid subnect collisions, and refer to other servidces by thier local subnet dns names instead.
 
-This solution is to provide an orchestrated docker container set of two micro services providing two sections of a fictitious web site.
+This solution is to provide an orchestrated docker container set of two micro services providing two sections of a fictitious web site taht both consume a private API (not exposed to the public), and are authenticated via an identity server domain which is exposed to the public.
 
 - Store  - where customers would buy products and services.
 - Support - Where customer service and staff support can be provided.
 
-The services is fronted by NGINX to provide a reverse proxy through to the micro services.
+The services is fronted by NGINX to provide a reverse proxy through to the micro services. the NGIX cconfiguration does not expose the API.
 
 Then external port mapping of the payload micro services are switched off and prevent direct access to the micro services from outside of the container network.
 

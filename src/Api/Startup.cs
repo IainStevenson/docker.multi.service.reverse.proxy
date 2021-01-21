@@ -29,14 +29,11 @@ namespace Api
                 {
                     options.Authority = "https://mystore.local/identity";
                     options.RequireHttpsMetadata = true;
-                    //var signingKey = Encoding.UTF8.GetBytes("SECRET_KEY");
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = false,
-                        //IssuerSigningKey = new SymmetricSecurityKey(signingKey)
-
                     };
                 });
             services.AddAuthorization(options =>
@@ -53,6 +50,8 @@ namespace Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UsePathBase("/api");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -73,6 +72,8 @@ namespace Api
                 endpoints.MapControllers()
                     .RequireAuthorization("ApiScope")
                     ;
+                // `.RequireAuthorization()` sets all controllers to [Authorize] 
+                // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             });
         }
     }

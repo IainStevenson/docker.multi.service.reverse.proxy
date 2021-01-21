@@ -47,9 +47,6 @@ namespace WebApp2
                     options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    //options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signin-oidc");
-                    //options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/support/signout-callback-oidc");
-
                 });
         }
 
@@ -57,8 +54,7 @@ namespace WebApp2
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UsePathBase("/support");
-            //app.Map("/support", (app) =>
-            //{
+         
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -93,12 +89,9 @@ namespace WebApp2
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}")
                     .RequireAuthorization();
+                    // `.RequireAuthorization()` sets all controllers to [Authorize] 
+                    // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             });
-
-
-            // `.RequireAuthorization()` sets all controllers to [Authorize] 
-            // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
-            //});
         }
     }
 }

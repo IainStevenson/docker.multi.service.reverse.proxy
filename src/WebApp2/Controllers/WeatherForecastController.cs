@@ -28,7 +28,7 @@ namespace WebApp2.Controllers
             apiClient.SetBearerToken(accessToken);
 
 
-            var apiUri = new Uri("https://api.mystore.local/weatherforecast"); // TODO: Add to configuration
+            var apiUri = new Uri("https://api.mystore.local/api/weatherforecast"); // TODO: Add to configuration
             
             var response = await apiClient.GetAsync(apiUri);
             if (!response.IsSuccessStatusCode)

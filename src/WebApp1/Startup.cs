@@ -47,9 +47,6 @@ namespace WebApp1
                     options.Scope.Add("email");
                     options.Scope.Add("api1");
                     options.GetClaimsFromUserInfoEndpoint = true;
-
-                    //options.CallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signin-oidc");
-                    //options.SignedOutCallbackPath = new Microsoft.AspNetCore.Http.PathString("/store/signout-callback-oidc");
                 });
         }
 
@@ -57,9 +54,7 @@ namespace WebApp1
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UsePathBase("/store");
-            //app.Map("/store", (app) =>
-            //{
-
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -95,12 +90,9 @@ namespace WebApp1
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}")
                     .RequireAuthorization();
+                // `.RequireAuthorization()` sets all controllers to [Authorize] 
+                // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             });
-            // `.RequireAuthorization()` sets all controllers to [Authorize] 
-            // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
-            //});
-
-
         }
     }
 }

@@ -21,16 +21,15 @@ namespace Identity
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
-            
-            services.AddRequestResponseLoggingMiddlewareWithOptions( options => {options.LogSource = "Identity"; });
+
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Identity"; });
 
             var builder = services.AddIdentityServer(options =>
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
-                options.IssuerUri = "mystore";                
+                options.IssuerUri = "mystore";
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
@@ -43,37 +42,34 @@ namespace Identity
 
         public void Configure(IApplicationBuilder app)
         {
-            app.Map("/identity", (app) =>
+            app.UsePathBase("/identity");
+          
+            if (Environment.IsDevelopment())
             {
-                if (Environment.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                }
+                app.UseDeveloperExceptionPage();
+            }
+            
+            app.UseStaticFiles();
 
-                // uncomment if you want to add MVC
-                app.UseStaticFiles();
-                app.UseRouting();
-                app.UseCors(policy =>
-                {
-                    policy.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
+            app.UseRouting();
 
-
-                //uncomment, if you want to add MVC
-                app.UseAuthorization();
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapDefaultControllerRoute();
-                });
-
-
-                app.UseRequestResponseLogging( );
-
-                app.UseIdentityServer();
-
+            app.UseCors(policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
+
+            app.UseAuthorization();
+
+            app.UseRequestResponseLogging();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
+
+            app.UseIdentityServer();
         }
     }
 }

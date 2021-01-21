@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+
   store.mystore.local:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -8,6 +9,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   support.mystore.local:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -25,9 +27,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-    #ports:
-      #- "8080:80"
-      #- "44300:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -36,9 +35,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-    #ports:
-      #- "8081:80"
-      #- "44301:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
