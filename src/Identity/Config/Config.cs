@@ -51,7 +51,7 @@ namespace Identity
                 {
                     ClientId = "mvc",
                     ClientSecrets = { new Secret("secret".Sha256()) },
-
+                    
                     AllowedGrantTypes = GrantTypes.Code,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login

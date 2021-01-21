@@ -20,11 +20,11 @@ Note: Microsoft.AspNetCore.Authentication.JwtBearer must be set to version 3.1.1
 Note: Tehre are various differences in teh Api: Statup.cs such as the following which were left in place.
 ```
 if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+{
+    app.UseDeveloperExceptionPage();
+}
 
-            app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 ```
 Api Test Client uses enhanced colours, Green for headings, yellow for Input, White for output Grey for Information on program activity, red for errors.
 

@@ -28,12 +28,13 @@ namespace Api
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = "https://mystore.local/identity";
+                    options.Audience = "https://mystore.local/identity/resources";
                     options.RequireHttpsMetadata = true;
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateAudience = false,
+                        ValidateAudience = true,
                     };
                 });
             services.AddAuthorization(options =>

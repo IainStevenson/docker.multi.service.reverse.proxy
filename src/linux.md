@@ -4,7 +4,7 @@ To temporarily add additional tooling to the container
 
 Connect to the console (which is root) via the Containers panel.
 ```
-	apt update
+apt update
 ```
 
 
@@ -13,13 +13,13 @@ Connect to the console (which is root) via the Containers panel.
 Then either (for ping);
 
 ```
-	apt-get install iputils-ping
+apt-get install iputils-ping
 ```
 
 and/or (for netstat ifconfig, hostname dnsdomainname etc );
 
 ```
-	apt-get install net-tools 
+apt-get install net-tools 
 ```
 
 ## For privileged access
@@ -30,10 +30,12 @@ apt install sudo
 After which you can perform actions requiring root access by prefixing other commands with ```sudo```
 
 ## For editing files
+
+I recommend Nano for devs having a hard time with linux tools.
+
 ```
 apt install nano
 ```
-
 
 # List CA certificates
 
@@ -44,10 +46,13 @@ awk -v cmd='openssl x509 -noout -subject' ' /BEGIN/{close(cmd)};{print | cmd}' <
 # Verify certificate 
 
 ```
-openssl x509 -text -noout -in /etc/ssl/certs/mystore.local.crt 
+openssl x509 -text -noout -in /etc/ssl/certs/whatever.crt 
 ```
 
 # Verify intra-container communication via SSL
+
+NOTE: This does not travel through the revrse-proxy.
+
 ```
 apt update
 apt-get install -y curl
@@ -62,25 +67,18 @@ curl -k https://identity.mystore.local/identity/.well-known/openid-configuration
 ```
 
 
-# Verify identity.mystore.local
-Start a container console and run these commands
+# Install a root certificate in a linux host
+
+# Allow trust of certificates from other services
+
+To allow the host default certificates to be trusted on each service that needs to do that.
+
+Add this to the build (early) as needed.
 
 ```
-apt update
-apt-get install -y curl
-awk -v cmd='openssl x509 -noout -subject' ' /BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
-
-```
-
-
-
-# Verify api.mystore.local
-Start a container console and run these commands
-
-```
-apt update
-apt-get install -y curl
-awk -v cmd='openssl x509 -noout -subject' ' /BEGIN/{close(cmd)};{print | cmd}' < /etc/ssl/certs/ca-certificates.crt
-curl https://identity.mystore.local/identity/.well-known/openid-configuration
-
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y ca-certificates
+COPY Proxy/certificates/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
+RUN update-ca-certificates
 ```

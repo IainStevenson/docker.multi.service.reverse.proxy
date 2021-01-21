@@ -1,3 +1,11 @@
+# Overview
+
+Most of this is historically correct during development but has been superceeded by events.
+
+I am leaving it intact to provide historical information and ways of doing things that may be of use in future.
+
+The processes described here are superceeded by the Gen-Root.cmd and Gen-host.cmd in the Proxy project.
+
 # Certificate and SSL configuration notes
 
 The self-signed certificates are organised into a root CA to authorise many service certificates.
@@ -5,7 +13,6 @@ The self-signed certificates are organised into a root CA to authorise many serv
 The root CA is installed in any trusting host, including the development host for the docker network.
 
 The trusted host recieves its host identification certificate as required during the build via dockerfile instructions.
-
 
 The certificate generation, configuration and consumption is split into the following cases.
 
@@ -373,6 +380,3 @@ Click Next
 Click Finish.
 The certificate will be installed.
 
-# Clear down all existing containers and images
-Perform a Clean solution from the Build menu
-Remove all images made by the solution for a final rebuild from docker desktop or command line.

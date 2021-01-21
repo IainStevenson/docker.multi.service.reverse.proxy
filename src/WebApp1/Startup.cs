@@ -39,6 +39,7 @@ namespace WebApp1
                     options.ClientId = "mvc";
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
+                    
 
                     options.SaveTokens = true;
 
