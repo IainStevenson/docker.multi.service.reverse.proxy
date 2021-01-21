@@ -1,3 +1,6 @@
+
+To Import the certificate into the correct store;
+
 Select
 Local MACHINE
 Next
@@ -13,3 +16,4 @@ Next
 Finish
 Import Successful
 OK
+

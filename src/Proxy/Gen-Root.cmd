@@ -1,7 +1,7 @@
 ::
 :: Gen-Root.CMS
 ::
-:: Create a root certificate to provide a self signed Trusted root Certificate 
+:: Create a root certificate to provide a self signed Trusted root Certificate for development host and microservices
 ::
 @ECHO off
 setlocal

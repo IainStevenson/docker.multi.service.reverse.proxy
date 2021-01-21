@@ -23,7 +23,7 @@ namespace ApiTestClient
             Console.WriteLine("\n\nRequesting Token from Identity Server: ...");
             // discover endpoints from metadata
             var client = new HttpClient();
-            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001/identity");
+            var disco = await client.GetDiscoveryDocumentAsync("https://mystore.local/identity");
             if (disco.IsError)
             {
                 Output(ConsoleColor.Red, () => { Console.WriteLine(disco.Error); });
@@ -58,16 +58,30 @@ namespace ApiTestClient
 
             Console.ReadKey(true);
 
-            Console.WriteLine("\n\nCalling API with token: ...");
-            // call api
+            //Console.WriteLine("\n\nCalling API with token: ...");
+            //// call api
             var apiClient = new HttpClient();
             apiClient.SetBearerToken(tokenResponse.AccessToken);
+            //// api is not exposed directly
+            //var response = await apiClient.GetAsync("https://mystore.local/api/weatherforecast");
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    Output(ConsoleColor.Red, () => { Console.WriteLine(response.StatusCode); });
+            //}
+            //else
+            //{
+            //    var content = await response.Content.ReadAsStringAsync();
+            //    Output(ConsoleColor.White, () =>
+            //    {
+            //        Output(ConsoleColor.White, () => { Console.WriteLine($"\n\n[{JArray.Parse(content)}]"); });
+            //        Console.WriteLine($"\n\nSecure access Response recieved.");
+            //    });
+            //}
 
-            var response = await apiClient.GetAsync("https://localhost:6001/identity");
+            var response = await apiClient.GetAsync("https://mystore.local/store/weatherforecast");
             if (!response.IsSuccessStatusCode)
             {
                 Output(ConsoleColor.Red, () => { Console.WriteLine(response.StatusCode); });
-
             }
             else
             {
@@ -75,48 +89,29 @@ namespace ApiTestClient
                 Output(ConsoleColor.White, () =>
                 {
                     Output(ConsoleColor.White, () => { Console.WriteLine($"\n\n[{JArray.Parse(content)}]"); });
-                    Console.WriteLine($"\n\nAPI Identity Response recieved.");
+                    Console.WriteLine($"\n\nSite Weather Forecast Response recieved.");
                 });
             }
 
-
-
-
-            response = await apiClient.GetAsync("https://localhost:6001/weatherforecast");
-            if (!response.IsSuccessStatusCode)
-            {
-                Output(ConsoleColor.Red, () => { Console.WriteLine(response.StatusCode); });
-
-            }
-            else
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Output(ConsoleColor.White, () =>
-                {
-                    Output(ConsoleColor.White, () => { Console.WriteLine($"\n\n[{JArray.Parse(content)}]"); });
-                    Console.WriteLine($"\n\nAPI Weather Forecast Response recieved.");
-                });
-            }
-
-            Console.WriteLine("\n\nCalling API without the token: ...");
-            apiClient.SetBearerToken(null);
+            //Console.WriteLine("\n\nCalling API without the token: ...");
+            //apiClient.SetBearerToken(null);
             
-            Console.WriteLine($"\n\nExpecting an error on next call");
+            //Console.WriteLine($"\n\nExpecting an error on next call");
  
-            response = await apiClient.GetAsync("https://localhost:6001/weatherforecast");
-            if (!response.IsSuccessStatusCode)
-            {
-                Output(ConsoleColor.White, () => { Console.WriteLine($"\n\nAs expected the response was : [{response.StatusCode}]"); });
-            }
-            else
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Output(ConsoleColor.White, () =>
-                {
-                    Output(ConsoleColor.Red, () => { Console.WriteLine($"\n\n[{JArray.Parse(content)}]"); });
-                    Console.WriteLine($"\n\nAPI Weather Forecast Response recieved.");
-                });
-            }
+            //response = await apiClient.GetAsync("https://localhost:6001/weatherforecast");
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    Output(ConsoleColor.White, () => { Console.WriteLine($"\n\nAs expected the response was : [{response.StatusCode}]"); });
+            //}
+            //else
+            //{
+            //    var content = await response.Content.ReadAsStringAsync();
+            //    Output(ConsoleColor.White, () =>
+            //    {
+            //        Output(ConsoleColor.Red, () => { Console.WriteLine($"\n\n[{JArray.Parse(content)}]"); });
+            //        Console.WriteLine($"\n\nAPI Weather Forecast Response recieved.");
+            //    });
+            //}
 
 
 

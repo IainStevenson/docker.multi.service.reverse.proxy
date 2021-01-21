@@ -1,5 +1,7 @@
 ::
 :: Create a host default certificate for ASP.NET (Kestrel) applications signed by the root CA 
+:: Add the certificate to the certificates folder and add settings to the suer secrets for these projects
+:: Note the Project secrets id's should be same for whoever runs this solution as they are set in the .csproj files
 ::
 @ECHO off
 setlocal
@@ -15,9 +17,7 @@ IF EXIST certificates/default.pfx GOTO ConfigureSecrets
 @ECHO These settings will be applied (from domains.ext).
 @ECHO Please pay check the 'DNS.x values' as correct.
 @ECHO.
-COLOR 0E
 TYPE certificates\domains.conf
-COLOR
 @ECHO.
 @ECHO If these settings are not correct please cancel (Control-C) and edit the 
 @ECHO domains.ext file and try again.
@@ -34,7 +34,7 @@ openssl pkcs12 -export -inkey certificates/default.key -in certificates/default.
 @ECHO Host certificate created.
 GOTO ConfigureSecrets
 ::
-:: Configure User Secrets so taht Kestrel picks the default.pfx as its default and serves all of the DNS via SNI
+:: Configure User Secrets so that Kestrel picks the default.pfx as its default and serves all of the DNS via SNI
 ::
 :ConfigureSecrets
 @ECHO.
