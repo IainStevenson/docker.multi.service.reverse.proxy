@@ -54,9 +54,17 @@ Certificates provided for each service and each has the development root CA cert
 
 # Application mapping in proxy configuration
 
-With 4 defined externally useful application mappings of ```\```, ```\store\``` , ```\support\``` and ```\identity\```
+With 5 defined externally useful application mappings of;
+```
+/
+/store/
+/support/
+/identity/
+/api/
+```
 
-With reference to  ```location  /store/ {``` in the proxy ```default.conf``` file, the trailing "\\" is important as it means the application path of ```\store``` is mapped along with all of its sub URL's.
+With reference to  the above locations, the trailing "/" is important as it means that 
+for example the application path of ```/store``` is mapped along with all of its sub URL's.
 
 
 The following URL's are supported correctly. 
