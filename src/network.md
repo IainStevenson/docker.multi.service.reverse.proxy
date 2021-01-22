@@ -5,8 +5,8 @@ solution leverages the automatic DNS feature of docker to provide
 container-to-container communications through thier deterministic hostnames.
 
 Container-to-container communications;
-* (A) are (mediated) proxied by the proxy service if address configurations use the the domain name mystore.local and application base paths.
-* (B) are direct if the address configurations use the actual host name for the service e.b. api.miconsent.local
+* (A) are (mediated) proxied by the proxy service if addresses use the the main domain  ```mystore.local``` and application base paths. e,g, https://mystore.local/api
+* (B) are direct if the addresses use the actual sub-domain host name for the service e.b. https://api.mystore.local/api
 
 
 ## Network topology
@@ -27,7 +27,7 @@ This diagram illustrates the host and docker network setup.
 |                    |              | .________.  |       |  .___________.    |     |    |  |
 |         https   ------------------->| proxy  |--https-->|->| identity  |<-->|     |    |  |
 |                    |        ^     | `________'  |       |  `___________'    |     |    |  |
-|         http    ------------'     |             |       |             http--|     |    |  |
+|         http    ------------'     |             |       |             https-|     |    |  |
 |                    | 301 redirect |             |       |  .___________.    |     |    |  |
 |                    |              |             |       |->| support   |<-->|     |    |  |
 |                    |              |             |       |  `___________'    |     |    |  |
@@ -40,19 +40,22 @@ This diagram illustrates the host and docker network setup.
 `___________________________________________________________________________________________'
 ```
 
-The docker network is a subnet set apart from its host, and can vary on each development host therefore ip addresses are non_deterministic.
-Dockers DNS capability is used by giving each container a deterministic dns name that can be used inside the docker subnet.
-All services are provided with a discrete service certificate with the service host name as the CN.
+All services are provided with a discrete service certificate with ```localhost```  as the CN and all the requried domain and sub-domains as SAN (Subject Alternative Names) names. the default of ```localhost``` stops ASP.NET debuging from complaining about a localhost trusted certificate on startup.
 
 All transport is encrypted. 
 
-Performance is traded somewhat for security on the basis that security should never be undermined by performance considerations.
+Clearly here, network transmission performance is reduced over a Front end TLS and backed http only scenario, due to increased TLS handshaking.
+
+The decision here was to trade that performance drop for increased transport security on the basis that ```security should never be undermined by performance considerations```.
 
 Any inadvertent exposure of backend services to the outside world can therefore fall back on TLS. (Strength in depth)
 
 Outside world can only access the proxy at mystore.local where port 80 (http) redirects to port 443 (https)
+
 Proxy can access all backend services only on port 443
+
 All backend services can access all services only via port 443 (https) 
+
 Certificates provided for each service and each has the development root CA certificate available to trust those services certificates.
 
 # Application mapping in proxy configuration
