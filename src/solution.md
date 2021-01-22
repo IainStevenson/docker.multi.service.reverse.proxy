@@ -2,6 +2,8 @@
 
 Memory refresh on how this solution is organised.
 
+Some of this data in examples is out of date. Beware: Check the actual values in the code!
+
 ## Solution structure
 The solutions main file set is as follows;
 ```
