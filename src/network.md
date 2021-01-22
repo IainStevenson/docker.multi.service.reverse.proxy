@@ -2,10 +2,12 @@
 
 The docker subnet network is agnostic about its actual run time IP Addresses and this 
 solution leverages the automatic DNS feature of docker to provide 
-container_to_container communications through thier deterministic hostnames.
+container-to-container communications through thier deterministic hostnames.
 
-Of course this does not help if kubernetes is in play which would require a more 
-sophisticated service discovery technique.
+Container-to-container communications;
+* (A) are (mediated) proxied by the proxy service if address configurations use the the domain name mystore.local and application base paths.
+* (B) are direct if the address configurations use the actual host name for the service e.b. api.miconsent.local
+
 
 ## Network topology
 
@@ -17,11 +19,11 @@ This diagram illustrates the host and docker network setup.
 |                    .___________________________________________________________________.  |
 | Development host   | Docker        Front End             Back End                      |  |
 | Network            | sub_network  ._____________.       ._________________________.    |  |
-|                    |              |             |       |                   =     |    |  |
+|                    |              |             |       |                B  =     |    |  |
 | Visual Studio      |              |             |       |  .___________.    |     |    |  |
-| Browser            |              |             |       |->| store     |<-->|     |    |  |
-| Postman            |              |             |       |  `___________'    |     |    |  |
-| Console            |              |             |       |                   |     |    |  |
+| Browser            |              |             |   A   |->| store     |<-->|     |    |  |
+| Postman            |              |             | https |  `___________'    |     |    |  |
+| Console            |              |             |<------|                   |     |    |  |
 |                    |              | .________.  |       |  .___________.    |     |    |  |
 |         https   ------------------->| proxy  |--https-->|->| identity  |<-->|     |    |  |
 |                    |        ^     | `________'  |       |  `___________'    |     |    |  |
@@ -44,7 +46,8 @@ All services are provided with a discrete service certificate with the service h
 
 All transport is encrypted. 
 
-Performance is traded for security on the basis that security should never be undermined by performance considerations.
+Performance is traded somewhat for security on the basis that security should never be undermined by performance considerations.
+
 Any inadvertent exposure of backend services to the outside world can therefore fall back on TLS. (Strength in depth)
 
 Outside world can only access the proxy at mystore.local where port 80 (http) redirects to port 443 (https)
