@@ -151,6 +151,10 @@ RUN update-ca-certificates
 
 For some as yet unexplained reason adding the above snippet to the final section prior to the Entrypoint the certificates were not copied!
 
+UPDATE: The reaons behind this is now clear after reading [this](https://docs.microsoft.com/en-us/visualstudio/containers/container-build?view=vs-2019)
+
+The COPY commands, if placed later on, are applied to an intermediate image that is not used and effectively lost or outside the final image.
+
 # SSO issues with NGINX
 
 Not finding the signin-oidc endpoint on return from a login was solved by correctly setting the Base path AND fixing the 500 series errors as below.
