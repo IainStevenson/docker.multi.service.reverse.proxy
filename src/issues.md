@@ -155,6 +155,11 @@ UPDATE: The reaons behind this is now clear after reading [this](https://docs.mi
 
 The COPY commands, if placed later on, are applied to an intermediate image that is not used and effectively lost or outside the final image.
 
+I think this can be finessed to exclude the curl and ca-certificates install's later, by performing the necessary COPY commands in base for adding the custom root CA cert
+then moving the APT and RUN commands to the build phase, then COPY the modified /etc/ssl/certs/ca-certificates.crt result from build to final image. 
+
+TO DO: try that out later but the size reduction will be minimal. This would be a production optimisation as curl is realy useful o have on teh image for debugging inter-container networking.
+
 # SSO issues with NGINX
 
 Not finding the signin-oidc endpoint on return from a login was solved by correctly setting the Base path AND fixing the 500 series errors as below.
