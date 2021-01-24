@@ -28,8 +28,8 @@ RUN update-ca-certificates
 # Copy Diffie-Hellman file
 COPY Proxy/certificates/dhparam.pem /etc/ssl/certs/dhparam.pem
 # Copy local service certificate
-COPY Proxy/certificates/default.crt /etc/ssl/certs/default.crt
-COPY Proxy/certificates/default.key /etc/ssl/private/default.key
+COPY Proxy/certificates/mystore.local.crt /etc/ssl/certs/mystore.local.crt
+COPY Proxy/certificates/mystore.local.key /etc/ssl/private/mystore.local.key
 
 # use these to enable regenerating or adding any service certificate on the proxy host during development
 #COPY Proxy/certificates/myRootCA.crt /etc/ssl/certs/myRootCA.crt
