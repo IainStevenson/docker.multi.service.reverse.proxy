@@ -11,7 +11,7 @@ CALL Gen-Vars.CMD
 ::
 :GenHostCert
 IF NOT EXIST certificates/myRootCA.pfx GOTO RunGenRoot
-IF EXIST certificates/default.pfx GOTO ConfigureSecrets
+IF EXIST certificates/mystore.local.pfx GOTO ConfigureSecrets
 @ECHO -------------------------------------------------------------------------------
 @ECHO.
 @ECHO These settings will be applied (from domains.ext).
@@ -27,14 +27,14 @@ PAUSE
 @ECHO.
 @ECHO Generating the Self-Signed Host Certificate- * NOT FOR PRODUCTION USE * ...
 @ECHO.
-openssl req -new -nodes -newkey rsa:2048 -keyout certificates/default.key -out certificates/default.csr -subj "/CN=localhost"
-openssl x509 -req -sha256 -days 1024 -in certificates/default.csr -CA certificates/myRootCA.pem -CAkey certificates/myRootCA.key -CAcreateserial -extfile certificates\domains.conf -out certificates/default.crt
-openssl pkcs12 -export -inkey certificates/default.key -in certificates/default.crt -certfile certificates/myRootCA.crt -out certificates/default.pfx 
+openssl req -new -nodes -newkey rsa:2048 -keyout certificates/mystore.local.key -out certificates/mystore.local.csr -subj "/CN=localhost"
+openssl x509 -req -sha256 -days 1024 -in certificates/mystore.local.csr -CA certificates/myRootCA.pem -CAkey certificates/myRootCA.key -CAcreateserial -extfile certificates\domains.conf -out certificates/mystore.local.crt
+openssl pkcs12 -export -inkey certificates/mystore.local.key -in certificates/mystore.local.crt -certfile certificates/myRootCA.crt -out certificates/mystore.local.pfx 
 @ECHO.
 @ECHO Host certificate created.
 GOTO ConfigureSecrets
 ::
-:: Configure User Secrets so that Kestrel picks the default.pfx as its default and serves all of the DNS via SNI
+:: Configure User Secrets so that Kestrel picks the mystore.local.pfx as its default and serves all of the DNS via SNI
 ::
 :ConfigureSecrets
 @ECHO.
@@ -45,30 +45,30 @@ GOTO ConfigureSecrets
 ::
 dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 remove Kestrel:Certificates:Default:Path
 dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 remove Kestrel:Certificates:Default:Password
-dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 set Kestrel:Certificates:Default:Path /root/.aspnet/https/default.pfx
+dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 set Kestrel:Certificates:Default:Path /root/.aspnet/https/mystore.local.pfx
 dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 set Kestrel:Certificates:Default:Password %PASSWORD%
 ::
 :: Identity
 ::
 dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 remove Kestrel:Certificates:Default:Path
 dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 remove Kestrel:Certificates:Default:Password
-dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 set Kestrel:Certificates:Default:Path /root/.aspnet/https/default.pfx
+dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 set Kestrel:Certificates:Default:Path /root/.aspnet/https/mystore.local.pfx
 dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 set Kestrel:Certificates:Default:Password %PASSWORD%
 ::
 :: WebApp1
 ::
 dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 remove Kestrel:Certificates:Default:Path
 dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 remove Kestrel:Certificates:Default:Password
-dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 set Kestrel:Certificates:Default:Path /root/.aspnet/https/default.pfx
+dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 set Kestrel:Certificates:Default:Path /root/.aspnet/https/mystore.local.pfx
 dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 set Kestrel:Certificates:Default:Password %PASSWORD%
 ::
 :: WebApp2
 ::
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Path
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Password
-dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Path /root/.aspnet/https/default.pfx
+dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Path /root/.aspnet/https/mystore.local.pfx
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Password %PASSWORD%
-COPY /Y certificates\default.pfx %APPDATA%\ASP.NET\https\default.pfx
+COPY /Y certificates\mystore.local.pfx %APPDATA%\ASP.NET\https\mystore.local.pfx
 @ECHO.
 @ECHO Secrets configured.
 @ECHO.
