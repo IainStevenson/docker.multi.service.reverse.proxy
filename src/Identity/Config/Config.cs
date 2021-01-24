@@ -23,7 +23,7 @@ namespace Identity
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("api1", "My API")
+                new ApiScope("api1", "My API") 
             };
 
         public static IEnumerable<Client> Clients =>
@@ -56,6 +56,8 @@ namespace Identity
                     AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login
                     RedirectUris = {
+                        "https://localhost/store/signin-oidc" ,
+                        "https://localhost/support/signin-oidc" ,
                         "https://mystore.local/signin-oidc" ,
                         "https://mystore.local/store/signin-oidc" ,
                         "https://mystore.local/support/signin-oidc"
@@ -63,6 +65,8 @@ namespace Identity
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = {
+                        "https://localhost/store/signout-callback-oidc",
+                        "https://localhost/support/signout-callback-oidc",
                         "https://mystore.local/signout-callback-oidc",
                         "https://mystore.local/store/signout-callback-oidc",
                         "https://mystore.local/support/signout-callback-oidc"
