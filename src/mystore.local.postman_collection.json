@@ -353,6 +353,100 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "POST Data to the secured API",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessTokenUrl",
+							"value": "https://mystore.local/identity/connect/token",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "api1",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "client",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "bob",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://miconsent.com/identity/connect/authorize",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://www.getpostman.com/oauth2/callback",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "API-Test",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"temperatureF\": 98,\r\n    \"summary\": \"Balmy\"\r\n}"
+				},
+				"url": {
+					"raw": "https://mystore.local/api/weatherforecast",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"api",
+						"weatherforecast"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [

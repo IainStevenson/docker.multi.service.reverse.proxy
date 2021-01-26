@@ -25,5 +25,26 @@ namespace Api.Controllers
         {
             return Ok(_forecasts);
         }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            return Ok(_forecasts.FirstOrDefault(x=>x.Id == id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] WeatherForecast model)
+        {
+            if (ModelState.IsValid)
+            {
+                _forecasts.Add(model);
+                return CreatedAtRoute(nameof(Get), new { id = model.Id }, null);
+            }
+            else
+            { 
+                return BadRequest(model);
+            }
+        }
     }
 }
