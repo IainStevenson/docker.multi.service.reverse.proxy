@@ -19,27 +19,41 @@ namespace Api.Controllers
             _logger = logger;
             _forecasts = forecasts;
         }
-
+        /// <summary>
+        ///  Get them all
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             return Ok(_forecasts);
         }
 
+        /// <summary>
+        /// Get just one, if that!
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("{id:guid}")]
+        [Route("{id:guid}", Name = "GetById", Order =1)]
         public async Task<IActionResult> Get(Guid id)
         {
             return Ok(_forecasts.FirstOrDefault(x=>x.Id == id));
         }
 
+
+        /// <summary>
+        /// Add one
+        /// </summary>
+        /// <param name="model">The data as Json body content</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] WeatherForecast model)
         {
             if (ModelState.IsValid)
             {
                 _forecasts.Add(model);
-                return CreatedAtRoute(nameof(Get), new { id = model.Id }, null);
+                return CreatedAtRoute("GetById", new { id = model.Id }, null);
             }
             else
             { 

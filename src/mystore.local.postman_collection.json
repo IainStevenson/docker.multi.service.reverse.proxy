@@ -356,6 +356,11 @@
 		},
 		{
 			"name": "POST Data to the secured API",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
 			"request": {
 				"auth": {
 					"type": "oauth2",
@@ -428,7 +433,13 @@
 					]
 				},
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"temperatureF\": 98,\r\n    \"summary\": \"Balmy\"\r\n}"
