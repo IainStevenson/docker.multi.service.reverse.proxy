@@ -267,76 +267,6 @@
 		{
 			"name": "Retrieve Data from the secured API",
 			"request": {
-				"auth": {
-					"type": "oauth2",
-					"oauth2": [
-						{
-							"key": "accessTokenUrl",
-							"value": "https://mystore.local/identity/connect/token",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "api1",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "client",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "bob",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "https://miconsent.com/identity/connect/authorize",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "secret",
-							"type": "string"
-						},
-						{
-							"key": "useBrowser",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "https://www.getpostman.com/oauth2/callback",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "API-Test",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -362,76 +292,6 @@
 				}
 			},
 			"request": {
-				"auth": {
-					"type": "oauth2",
-					"oauth2": [
-						{
-							"key": "accessTokenUrl",
-							"value": "https://mystore.local/identity/connect/token",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "api1",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "client",
-							"type": "string"
-						},
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "bob",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "https://miconsent.com/identity/connect/authorize",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "secret",
-							"type": "string"
-						},
-						{
-							"key": "useBrowser",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "https://www.getpostman.com/oauth2/callback",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "API-Test",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [
 					{
@@ -458,6 +318,137 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessTokenUrl",
+				"value": "https://mystore.local/identity/connect/token",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "api1",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "client",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "client_credentials",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "bob",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://miconsent.com/identity/connect/authorize",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "secret",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": true,
+				"type": "boolean"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://www.getpostman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "API-Test",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const echoPostRequest = {",
+					"  url: 'https://mystore.local/identity/connect/token',",
+					"  method: 'POST',",
+					"  header: 'Content-Type:application/json',",
+					"  body: {",
+					"    mode: 'application/json',",
+					"    raw: JSON.stringify(",
+					"        {",
+					"        \tclient_id:'client',",
+					"        \tclient_secret:'secret',",
+					"        \taudience:'https://mystore.local',",
+					"        \tgrant_type:'client_credentials'",
+					"        })",
+					"  }",
+					"};",
+					"",
+					"var getToken = true;",
+					"",
+					"if (!pm.environment.get('accessTokenExpiry') || ",
+					"    !pm.environment.get('currentAccessToken')) {",
+					"    console.log('Token or expiry date are missing')",
+					"} else if (pm.environment.get('accessTokenExpiry') <= (new Date()).getTime()) {",
+					"    console.log('Token is expired')",
+					"} else {",
+					"    getToken = false;",
+					"    console.log('Token and expiry date are all good');",
+					"}",
+					"",
+					"if (getToken === true) {",
+					"    pm.sendRequest(echoPostRequest, function (err, res) {",
+					"    console.log(err ? err : res.json());",
+					"        if (err === null) {",
+					"            console.log('Saving the token and expiry date')",
+					"            var responseJson = res.json();",
+					"            pm.environment.set('currentAccessToken', responseJson.access_token)",
+					"    ",
+					"            var expiryDate = new Date();",
+					"            expiryDate.setSeconds(expiryDate.getSeconds() + responseJson.expires_in);",
+					"            pm.environment.set('accessTokenExpiry', expiryDate.getTime());",
+					"        }",
+					"    });",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
