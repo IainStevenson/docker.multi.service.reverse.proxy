@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Check well known openid Identity is accessible via proxy",
+			"name": "https://mystore.local/identity/.well-known/openid-configuration",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -23,8 +23,7 @@
 						".well-known",
 						"openid-configuration"
 					]
-				},
-				"description": "Checks that the identity service well known openid configuration is accessible"
+				}
 			},
 			"response": []
 		},
@@ -47,11 +46,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local",
+					"raw": "https://mystore.local/store",
 					"protocol": "https",
 					"host": [
 						"mystore",
 						"local"
+					],
+					"path": [
+						"store"
 					]
 				},
 				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
@@ -161,7 +163,7 @@
 			"response": []
 		},
 		{
-			"name": "Test access to Support wwith /support",
+			"name": "Test access to Support with /support",
 			"event": [
 				{
 					"listen": "test",
@@ -194,7 +196,7 @@
 			"response": []
 		},
 		{
-			"name": "Test access to Support wwith /support/home",
+			"name": "Test access to Support with /support/home",
 			"event": [
 				{
 					"listen": "test",
@@ -259,6 +261,96 @@
 					]
 				},
 				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Data from the secured API",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessTokenUrl",
+							"value": "https://mystore.local/identity/connect/token",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "api1",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "client",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "bob",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://miconsent.com/identity/connect/authorize",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://www.getpostman.com/oauth2/callback",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "API-Test",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mystore.local/api/weatherforecast",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"api",
+						"weatherforecast"
+					]
+				}
 			},
 			"response": []
 		}

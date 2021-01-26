@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Api
 {
@@ -17,10 +20,24 @@ namespace Api
         }
 
         public IConfiguration Configuration { get; }
+        private static readonly string[] Summaries = new[]
+       {
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var rng = new Random();
+            var forecasts = Enumerable.Range(0, Summaries.Length - 1).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            }).ToList();
+
+            services.AddSingleton(forecasts);
+
             services.AddControllers();
 
             services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Api"; });
