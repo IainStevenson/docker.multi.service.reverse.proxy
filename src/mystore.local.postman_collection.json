@@ -265,27 +265,28 @@
 			"response": []
 		},
 		{
-			"name": "Retrieve Data from the secured API",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://mystore.local/api/weatherforecast",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"path": [
-						"api",
-						"weatherforecast"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "POST Data to the secured API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);  \r",
+							"});\r",
+							"pm.test(\"Location header is present\", function () {\r",
+							"    pm.response.to.have.header(\"Location\");\r",
+							"});\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {
 					"content-type": true
@@ -304,6 +305,26 @@
 					"mode": "raw",
 					"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"temperatureF\": 98,\r\n    \"summary\": \"Balmy\"\r\n}"
 				},
+				"url": {
+					"raw": "https://mystore.local/api/weatherforecast",
+					"protocol": "https",
+					"host": [
+						"mystore",
+						"local"
+					],
+					"path": [
+						"api",
+						"weatherforecast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Data from the secured API",
+			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "https://mystore.local/api/weatherforecast",
 					"protocol": "https",
@@ -399,16 +420,10 @@
 					"const echoPostRequest = {",
 					"  url: 'https://mystore.local/identity/connect/token',",
 					"  method: 'POST',",
-					"  header: 'Content-Type:application/json',",
+					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
 					"    mode: 'application/json',",
-					"    raw: JSON.stringify(",
-					"        {",
-					"        \tclient_id:'client',",
-					"        \tclient_secret:'secret',",
-					"        \taudience:'https://mystore.local',",
-					"        \tgrant_type:'client_credentials'",
-					"        })",
+					"    raw: 'grant_type=client_credentials&scope=api1&client_id=client&client_secret=secret'",
 					"  }",
 					"};",
 					"",
