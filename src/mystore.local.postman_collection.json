@@ -7,12 +7,12 @@
 	},
 	"item": [
 		{
-			"name": "https://mystore.local/identity/.well-known/openid-configuration",
+			"name": "{{baseUri}}/identity/.well-known/openid-configuration",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/identity/.well-known/openid-configuration",
+					"raw": "{{baseUri}}/identity/.well-known/openid-configuration",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -46,7 +46,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/store",
+					"raw": "{{baseUri}}/store",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -79,7 +79,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/store",
+					"raw": "{{baseUri}}/store",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -112,7 +112,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/store/home",
+					"raw": "{{baseUri}}/store/home",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -146,7 +146,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/store/home/privacy",
+					"raw": "{{baseUri}}/store/home/privacy",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -181,7 +181,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/support",
+					"raw": "{{baseUri}}/support",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -214,7 +214,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/support/home",
+					"raw": "{{baseUri}}/support/home",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -248,7 +248,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/support/home/privacy",
+					"raw": "{{baseUri}}/support/home/privacy",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -306,7 +306,7 @@
 					"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
 				},
 				"url": {
-					"raw": "https://mystore.local/api/weatherforecast",
+					"raw": "{{baseUri}}/api/weatherforecast",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -326,7 +326,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://mystore.local/api/weatherforecast",
+					"raw": "{{baseUri}}/api/weatherforecast",
 					"protocol": "https",
 					"host": [
 						"mystore",
@@ -418,7 +418,7 @@
 				"type": "text/javascript",
 				"exec": [
 					"const echoPostRequest = {",
-					"  url: '{{baseutrl}}}}/identity/connect/token',",
+					"  url: '{{baseUri}}}}/identity/connect/token',",
 					"  method: 'POST',",
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
@@ -468,7 +468,7 @@
 	],
 	"variable": [
 		{
-			"key": "baseutrl",
+			"key": "baseUri",
 			"value": "https://mystore.local"
 		}
 	]
