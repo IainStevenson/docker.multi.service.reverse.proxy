@@ -1,344 +1,432 @@
 {
 	"info": {
-		"_postman_id": "eb8e0cf4-04de-40a6-8f9d-4ae1e0728cb2",
+		"_postman_id": "6807b355-9745-4f93-bd1a-3fe92d3b0b49",
 		"name": "mystore.local",
 		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "{{baseUri}}/identity/.well-known/openid-configuration",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/identity/.well-known/openid-configuration",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"path": [
-						"identity",
-						".well-known",
-						"openid-configuration"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Store by default",
-			"event": [
+			"name": "Mvc",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/store",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
-					],
-					"path": [
-						"store"
-					]
+					"name": "Get Identity Server Well known openid configuration",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/identity/.well-known/openid-configuration",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"identity",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Store with /store",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/store",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Support with /support/home/privacy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"store"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/support/home/privacy",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"support",
+								"home",
+								"privacy"
+							]
+						},
+						"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Store with /store/home",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/store/home",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Store by default",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"store",
-						"home"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Store with /store/home/privacy",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/store/home/privacy",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Store with /store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"store",
-						"home",
-						"privacy"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 1 (WebApp1) (store) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Support with /support",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/support",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Store with /store/home",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"support"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/home",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"home"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Support with /support/home",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/support/home",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Store with /store/home/privacy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"support",
-						"home"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/home/privacy",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"home",
+								"privacy"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
-			},
-			"response": []
-		},
-		{
-			"name": "Test access to Support with /support/home/privacy",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", () => {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/support/home/privacy",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Support with /support/home",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"support",
-						"home",
-						"privacy"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/support/home",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"support",
+								"home"
+							]
+						},
+						"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+					},
+					"response": []
 				},
-				"description": "Test required  direct access to Container 2 (WebApp2) (support) "
-			},
-			"response": []
-		},
-		{
-			"name": "POST Data to the secured API",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);  \r",
-							"});\r",
-							"pm.test(\"Location header is present\", function () {\r",
-							"    pm.response.to.have.header(\"Location\");\r",
-							"});\r",
-							"pm.test(\"Response time is less than 200ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
-							"});\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {
-					"content-type": true
-				}
-			},
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
-				},
-				"url": {
-					"raw": "{{baseUri}}/api/weatherforecast",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+					"name": "Test access to Support with /support",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"api",
-						"weatherforecast"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/support",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"support"
+							]
+						},
+						"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Retrieve Data from the secured API",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUri}}/api/weatherforecast",
-					"protocol": "https",
-					"host": [
-						"mystore",
-						"local"
+			"name": "Api",
+			"item": [
+				{
+					"name": "POST Data to the secured API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);  \r",
+									"    var crudId = pm.response.headers.get(\"Location\").split('WeatherForecast/')[1];\r",
+									"    console.log(\"Location header: \", crudId)\r",
+									"\r",
+									"    pm.environment.set('crudId', crudId);\r",
+									"\r",
+									"});\r",
+									"pm.test(\"Location header is present\", function () {\r",
+									"    pm.response.to.have.header(\"Location\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"api",
-						"weatherforecast"
-					]
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUri}}/api/weatherforecast",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"api",
+								"weatherforecast"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Data from the secured API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/api/weatherforecast/{{crudId}}",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"api",
+								"weatherforecast",
+								"{{crudId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Data from the secured API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUri}}/api/weatherforecast/{{crudId}}",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"api",
+								"weatherforecast",
+								"{{crudId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Data from the secured API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/api/weatherforecast/{{crudId}}",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"api",
+								"weatherforecast",
+								"{{crudId}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"auth": {
@@ -418,7 +506,7 @@
 				"type": "text/javascript",
 				"exec": [
 					"const echoPostRequest = {",
-					"  url: '{{baseUri}}}}/identity/connect/token',",
+					"  url: 'https://mystore.local/identity/connect/token',",
 					"  method: 'POST',",
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
@@ -470,6 +558,14 @@
 		{
 			"key": "baseUri",
 			"value": "https://mystore.local"
+		},
+		{
+			"key": "currentAccessToken",
+			"value": ""
+		},
+		{
+			"key": "crudId",
+			"value": ""
 		}
 	]
 }
