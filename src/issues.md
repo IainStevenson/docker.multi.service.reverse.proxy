@@ -2,6 +2,16 @@
 
 Many problems occured in attempting this scenario the more difficult ones that held up progress are mentioned below.
 
+There is a desire;
+* to conform the domain URL scheme segemented by function.
+* url addressing within MVC or Razor projects to work without fuss or any additional fiddling or configuration.
+* to provide a single catch all development certificate for localhost AND the a wild card domain.
+* for a single authentication and authorisation domain allowing for federation.
+* to provide containerisation and orcehstrating multiple micro-services dedicated to one conceptual organisation task.
+
+
+The following issues cropped up in providing those capabilities.
+
 
 # Conformed address space
 
