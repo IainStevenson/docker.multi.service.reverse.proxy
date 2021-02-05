@@ -1,3 +1,4 @@
+using Api.Storage;
 using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,8 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Storage;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Api
@@ -28,15 +29,19 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Gerneate some forecasts to display straight away
             var rng = new Random();
             var forecasts = Enumerable.Range(0, Summaries.Length - 1).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
-            }).ToList();
+            }).ToDictionary( x => x.Id, x=> x );
 
+            // add them to the services for the controller repository
             services.AddSingleton(forecasts);
+
+            services.AddScoped<IRepository<WeatherForecast>, InMemoryWeatherForecastRepository>();
 
             services.AddControllers();
 
