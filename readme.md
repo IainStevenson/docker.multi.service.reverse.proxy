@@ -1,8 +1,13 @@
 # Purpose
 
-Document the research of technical tasks necessary to develop an orchestrated set of docker hosted micro services providing and front end NGINX service, that acts as a reverse proxy over TLS to multiple inter-connected back end services.
+To document the research needed to produce;
 
-The key elements of the configuration is documented in the [issues document](file://issues.md) which lists the isues encountered and how to resolve them.
+* Docker orcestration of a set of microservices
+* A common domain URL scheme with different services sserving different url paths
+* A Secure API service an /api url path
+* A common security domain allowing social identities and role based access
+
+The key elements of the configuration is documented in the [issues document](file://issues.md) which lists the isues encountered during development and how they were resolved.
 
 # Dependencies
 
@@ -25,28 +30,31 @@ stackoverflow
 nginx documentation
 docker documentation
 Postman V7.36.1
+Postman V8.0.3
 ```
-The container orchestration is provided using the Visual Studio docker orchestration support and the docker_compose project is the startup for docker debugging builds and runs.
+The container orchestration is provided using the Visual Studio docker orchestration support and the docker_compose project is the startup for solution debugging builds and runs.
 
 # Getting started
 
-- Edit your hosts file as described in 'Fictional Domain' below. Once that change is saved its active immediately.
-- Download this repository and load it into visual studio.
 - Install git for windows in its default location if you have not done so, or modify src/Proxy/gen-vars.cmd to find the openssl.exe elsewhere
+- Download this repository and load it into visual studio.
 - to install the domain trusted certificate to your dev host, open a powershell or command window in the ```src/Proxy``` folder and execute ```./gen-root.cmd``` and follow instructions \* 
 - to generate default certificates for each microservice execute the ```gen-host.cmd``` and follow instructions.
+- Edit your hosts file as described in 'Fictional Domain' below. Once that change is saved it is active immediately.
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
 - Press F5.
-- If no browser apears start one and navigate to https://mystore.local and you will see the store site.
+- If no browser appears start one and navigate to https://mystore.local and you will see the store site.
 - Navigate around, when you click Weather Forecast you will need to login, use username: bob Password: bob
+- Alternatively or as well, import the mystore.local.postman_collection.json file into postman and run the tests in the mystore.local collection.
 
-\* yes I am an old school command shell scripter.
+\* yes I am an old school command shell scripter. I will convert this, side by side, as powershell later.
 
 Depending on your network speed, the first build run may take a while if none of the docker layer dependencies are not already in your docker cache. 
 
 Subsequent re builds will be quicker.
 
-If you get build issues perform one or more build / clean solution runs and try again before checking anything else. if in doubt use docker desktop to remove any failed container builds via the 'cleanup' button
+If you get build issues perform one or more build / clean solution runs and try again before checking anything else. 
+If in doubt use docker desktop to remove any failed container builds via the 'cleanup' button
 
 ## Fictional Domain
 

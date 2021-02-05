@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>a2335a74-d681-439e-9a74-2f549e4b50af</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>Scheme}://{ServiceHost}:{ServicePort}</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://{ServiceHost}:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>proxy.mystore.local</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
