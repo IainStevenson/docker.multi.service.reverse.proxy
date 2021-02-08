@@ -24,7 +24,7 @@ namespace WebApp2
         {
             services.AddControllersWithViews();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Identity"; });
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Identity"; });// TODO: Add to configuration
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -33,7 +33,7 @@ namespace WebApp2
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://mystore.local/identity";
+                    options.Authority = "https://mystore.local/identity";// TODO: Add to configuration
                     options.RequireHttpsMetadata = true;
                     options.ClientId = "mvc";
                     options.ClientSecret = "secret";
@@ -53,8 +53,8 @@ namespace WebApp2
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UsePathBase("/support");
-         
+            app.UsePathBase("/support");// TODO: Add to configuration
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -23,7 +22,7 @@ namespace WebApp2.Controllers
             var apiClient = new HttpClient();
 
             string accessToken = await HttpContext.GetTokenAsync("access_token");
-            string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+            //string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
             apiClient.SetBearerToken(accessToken);
 

@@ -1,45 +1,110 @@
-﻿using System;
+﻿using Data.Model.Storage;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Storage
+namespace Storage.MongoDb
 {
-    /// <summary>
-    /// Abstracts the storage and retrievel operations to persist addressible information for a client.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public interface IRepository<T> where T : IStorageItem
     {
         /// <summary>
-        /// Create or udpate an item
+        ///     Retrieve a queryasble collection of <see cref="Resource" /> items using teh specified expression
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        Task<T> Store(T item);
+        /// <param name="query">The retireval expression</param>
+        /// <param name="orderBy">An optional filtering order by</param>
+        /// <param name="skip">An optional filtering skip value</param>
+        /// <param name="take">An optional filtering take value</param>
+        /// <returns>A Collection of retrieved <see cref="Resource" /></returns>
+        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> query, string orderBy, int skip = 0,
+            int take = int.MaxValue);
+
         /// <summary>
-        /// Delete an item
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="ownerId"></param>
+        /// <param name="namespaceFilter"></param>
+        /// <param name="resourceIdFilter"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
         /// <returns></returns>
-        Task<bool> Discard(T item);
+        Task<IEnumerable<T>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter,
+            string orderBy, int skip = 0,
+            int take = int.MaxValue);
+
         /// <summary>
-        /// Delete an item
+        ///     Retrieve a collection of <see cref="Resource" /> items using the specified expression
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<bool> Discard(Guid id);
+        /// <param name="query">The retireval expression</param>
+        /// <returns>A Collection of retrieved <see cref="Resource" /></returns>
+        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> query);
+
         /// <summary>
-        /// Retrieve an item
+        ///     Retrieve a collection of <see cref="Resource" /> items using a collection of identifiers
         /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        Task<T> Retrieve(Guid Id);
+        /// <param name="ids">The retireval identifiers</param>
+        /// <returns>A Collection of retrieved <see cref="Resource" /></returns>
+        Task<IEnumerable<T>> GetAsync(IEnumerable<Guid> ids);
+
+
         /// <summary>
-        /// Retrieve items
+        ///     REtrieve a single <see cref="Resource" /> by is Id value
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        Task<IEnumerable<T>> Retrieve(Func<T, bool> query);
+        /// <param name="id">The <see cref="Resource" /> Id value</param>
+        /// <returns>The existing Resource or Null</returns>
+        Task<T> GetAsync(Guid id);
+
+        /// <summary>
+        ///     Stores a single <see cref="Resource" /> Item
+        /// </summary>
+        /// <param name="item">The item to store</param>
+        /// <remarks>The <see cref="Resource" /> is upserted</remarks>
+        /// <returns>The item with an added Etag (void)</returns>
+        Task<T> CreateAsync(T item);
+
+        /// <summary>
+        ///     Stores one or more <see cref="Resource" /> items
+        /// </summary>
+        /// <param name="items">the collection of <see cref="Resource" /> items to store.</param>
+        /// <remarks>The <see cref="Resource" /> items are all upserted</remarks>
+        /// <returns>The item collection with each item with an added Etag</returns>
+        Task<IEnumerable<T>> CreateAsync(IEnumerable<T> items);
+
+        /// <summary>
+        ///     Deletes none, one or more <see cref="Resource" /> items taht match the query
+        /// </summary>
+        /// <param name="query">The match expression</param>
+        /// <returns>The number of deleted items</returns>
+        Task<long> DeleteAsync(Expression<Func<T, bool>> query);
+
+        /// <summary>
+        ///     Deletes a single <see cref="Resource" /> by its Id value
+        /// </summary>
+        /// <param name="id">The <see cref="Resource" /> identifier value</param>
+        /// <returns>The number of deleted items</returns>
+        Task<long> DeleteAsync(Guid id);
+
+        /// <summary>
+        ///     Deletes a collection of <see cref="Resource" /> using a collection of  Id values
+        /// </summary>
+        /// <param name="ids">The collction of <see cref="Resource" /> identifier values</param>
+        /// <returns>The number of deleted items</returns>
+        Task<long> DeleteAsync(IEnumerable<Guid> ids);
+
+        /// <summary>
+        ///     Updates a single <see cref="Resource" /> Item
+        /// </summary>
+        /// <param name="item">The item to store</param>
+        /// <remarks>The <see cref="Resource" /> is upserted</remarks>
+        /// <returns>The item with an added Etag (void)</returns>
+        Task<T> UpdateAsync(T item);
+
+        /// <summary>
+        ///     Updates one or more <see cref="Resource" /> items
+        /// </summary>
+        /// <param name="items">the collection of <see cref="Resource" /> items to store.</param>
+        /// <remarks>The <see cref="Resource" /> items are all upserted</remarks>
+        /// <returns>The item collection with each item with an added Etag</returns>
+        Task<IEnumerable<T>> UpdateAsync(IEnumerable<T> items);
     }
 }
-

@@ -1,4 +1,5 @@
 using Api.Storage;
+using AutoMapper;
 using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Storage;
+using Storage.MongoDb;
 using System;
 using System.Linq;
 
@@ -31,23 +32,34 @@ namespace Api
         {
             // Gerneate some forecasts to display straight away
             var rng = new Random();
-            var forecasts = Enumerable.Range(0, Summaries.Length - 1).Select(index => new WeatherForecast
+            var forecasts = Enumerable.Range(0, Summaries.Length - 1).Select(index => new ItemStorageModel<WeatherForecastModel>
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                Item = new WeatherForecastModel () { 
+                        Date = DateTime.Now.AddDays(index),
+                    TemperatureC = rng.Next(-20, 55),
+                    Summary = Summaries[rng.Next(Summaries.Length)]
+                }
             }).ToDictionary( x => x.Id, x=> x );
 
             // add them to the services for the controller repository
             services.AddSingleton(forecasts);
 
-            services.AddScoped<IRepository<WeatherForecast>, InMemoryWeatherForecastRepository>();
+            IMapper mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ItemStorageModel<WeatherForecastModel>, ItemResponseModel<WeatherForecastModel>>();
+
+            }).CreateMapper();
+
+            services.AddSingleton(x => mapper);
+
+
+            services.AddScoped<IRepository<ItemStorageModel<WeatherForecastModel>>, InMemoryWeatherForecastRepository>();
 
             services.AddControllers();
 
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Api"; });
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Api"; });// TODO: Add to configuration
 
-            services.AddAuthentication("Bearer")
+            services.AddAuthentication("Bearer")// TODO: Add to configuration
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = "https://mystore.local/identity";
@@ -65,7 +77,7 @@ namespace Api
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "api1");
+                    policy.RequireClaim("scope", "api1");// TODO: Add to configuration
                 });
             });
 
@@ -74,7 +86,7 @@ namespace Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UsePathBase("/api");
+            app.UsePathBase("/api");// TODO: Add to configuration
 
             if (env.IsDevelopment())
             {

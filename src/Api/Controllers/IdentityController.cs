@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
-{
-    [Route("identity")]
+{    
     public class IdentityController : ControllerBase
     {
         [HttpGet]

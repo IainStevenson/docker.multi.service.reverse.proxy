@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyVersion>1.0.4.7651</AssemblyVersion>
+    <FileVersion>1.0.5.7651</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Storage;
+using Response.Formater;
+using Storage.MongoDb;
 
 namespace Api.Controllers
 {
@@ -10,12 +14,19 @@ namespace Api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-
+        private readonly IResponseLinksProvider<ItemResponseModel<WeatherForecastModel>> _responseLinksProvider;
+        private static Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
+        private readonly IMapper _mapper;
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IRepository<WeatherForecast> _forecasts;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository<WeatherForecast> forecasts)
+        private readonly IRepository<ItemStorageModel<WeatherForecastModel>> _forecasts;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            IMapper mapper,
+            IResponseLinksProvider<ItemResponseModel<WeatherForecastModel>> responseLinksProvider,
+        IRepository<ItemStorageModel<WeatherForecastModel>> forecasts)
         {
             _logger = logger;
+            _mapper = mapper;
+            _responseLinksProvider = responseLinksProvider;
             _forecasts = forecasts;
         }
         /// <summary>
@@ -26,7 +37,8 @@ namespace Api.Controllers
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation("Retrieving all forecasts");
-            return Ok(await _forecasts.Retrieve(x=> true));
+            var documents = await _forecasts.GetAsync(x => true);
+            return Ok(documents);
         }
 
         /// <summary>
@@ -39,7 +51,8 @@ namespace Api.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             _logger.LogInformation($"Retrieving a forecast by id {id}");
-            return Ok(await _forecasts.Retrieve( id));
+            var document = await _forecasts.GetAsync(id);
+            return Ok(document);
         }
 
 
@@ -57,18 +70,35 @@ namespace Api.Controllers
         /// <param name="model">The data as Json body content</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] WeatherForecast model)
+        public async Task<IActionResult> Post([FromBody] ItemResponseModel<WeatherForecastModel> model)
         {
-            _logger.LogInformation($"Adding a forecast by id {model.Id}");
+            _logger.LogInformation($"Adding a forecast ");
             if (ModelState.IsValid)
             {
-                var item = await _forecasts.Store(model);
-                _logger.LogInformation($"Added a forecast by id {item.Id}");
-                return CreatedAtRoute("GetById", new { id = item.Id }, item);
+
+                var storageItem = _mapper.Map<ItemResponseModel<WeatherForecastModel>, ItemStorageModel<WeatherForecastModel>>(model);
+
+                var itemStored = await _forecasts.CreateAsync(storageItem);
+
+                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{itemStored.Id}" } };
+
+                var relatedEntities = EmptyEntityList;
+
+                var itemResponse = _mapper.Map<ItemStorageModel<WeatherForecastModel>, ItemResponseModel<WeatherForecastModel>>(itemStored);
+
+                itemResponse = await _responseLinksProvider.AddLinks(itemResponse,
+                                                            Request.Scheme,
+                                                            Request.Host.Value,
+                                                            Request.Path.Value.TrimEnd('/'),
+                                                            systemKeys,
+                                                            relatedEntities);
+
+                _logger.LogInformation($"Added a forecast with id {itemResponse.Id} and Etag {itemResponse.Etag }");
+                return CreatedAtRoute("GetById", new { id = itemResponse.Id }, itemResponse);
             }
             else
             {
-                _logger.LogInformation($"Failed to add a forecast by id {model.Id}");
+                _logger.LogInformation($"Failed to add a forecast");
                 return BadRequest(model);
             }
         }
@@ -82,28 +112,39 @@ namespace Api.Controllers
         /// <returns>204 NoContent, otherwise 400 BadRequest</returns>
         [HttpPut]
         [Route("{id:guid}", Name = "PutById", Order = 2)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] WeatherForecast model)
+        public async Task<IActionResult> Put(Guid id, [FromBody] ItemResponseModel<WeatherForecastModel> model)
         {
             _logger.LogInformation($"Updating a forecast by id {id}");
             if (ModelState.IsValid)
             {
-                var item = await _forecasts.Retrieve(id);
+                var item = (await _forecasts.GetAsync(x => x.Id == id && x.Etag == model.Etag)).FirstOrDefault();
                 if (item != null)
                 {
-                    item.Date = model.Date;
-                    item.TemperatureC = model.TemperatureC;
-                    item.Summary = model.Summary;
-                    await _forecasts.Store(item);
+                    item.Item.Date = model.Item.Date;
+                    item.Item.TemperatureC = model.Item.TemperatureC;
+                    item.Item.Summary = model.Item.Summary;
+                    await _forecasts.UpdateAsync(item);
                     _logger.LogInformation($"Updated a forecast by id {id}");
                     return Ok(item);
                 }
-                _logger.LogError($"Failed to update a forecast by id {id}");
-                return BadRequest(ModelState);
+                item = (await _forecasts.GetAsync(x => x.Id == id)).FirstOrDefault();
+                if (item != null)
+                {
+                    _logger.LogError($"Failed to update a forecast by id {id} as item has changed.");
+                    ModelState.AddModelError("Item Changed", "The item has changed. Latest item provided.");
+                    return BadRequest(item);
+                }
+                else
+                {
+                    _logger.LogError($"Failed to update a forecast by id {id} as item not found.");
+                    ModelState.AddModelError("Not Found", "The item was not found. It may have been deleted. please redresh your view.");
+                    return BadRequest(ModelState);
+                }
             }
             else
             {
                 _logger.LogError($"Failed to update a forecast by id {id}");
-                return BadRequest(model);
+                return BadRequest(ModelState);
             }
         }
         /// <summary>
@@ -118,15 +159,11 @@ namespace Api.Controllers
             _logger.LogInformation($"Deleting a forecast by id {id}");
             if (Guid.Empty != id)
             {
-                var item = await _forecasts.Retrieve(id);
-                if (item != null)
-                {
-                    await _forecasts.Discard(item);
-                    _logger.LogInformation($"Deleted a forecast by id {id}");
-                    return NoContent();
-                }
-                _logger.LogError($"Failed to delete a forecast by id {id}");
-                return BadRequest(ModelState);
+
+                await _forecasts.DeleteAsync(id);
+                _logger.LogInformation($"Deleted a forecast by id {id}");
+                return NoContent();
+
             }
             else
             {

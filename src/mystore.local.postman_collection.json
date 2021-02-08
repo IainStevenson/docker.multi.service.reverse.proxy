@@ -464,7 +464,7 @@
 			},
 			{
 				"key": "authUrl",
-				"value": "https://miconsent.com/identity/connect/authorize",
+				"value": "https://com/identity/connect/authorize",
 				"type": "string"
 			},
 			{
