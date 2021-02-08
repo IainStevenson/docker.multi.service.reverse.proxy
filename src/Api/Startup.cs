@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Pluralizer;
 using Storage.MongoDb;
 using System;
 using System.Linq;
@@ -52,6 +53,7 @@ namespace Api
 
             services.AddSingleton(x => mapper);
 
+            services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
 
             services.AddScoped<IRepository<ItemStorageModel<WeatherForecastModel>>, InMemoryWeatherForecastRepository>();
 
