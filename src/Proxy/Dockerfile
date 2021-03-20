@@ -7,16 +7,18 @@
 FROM nginx:latest
 
 # Define mountable directories.
-VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/private", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html", "/usr/local/nginx/html"]
+VOLUME ["/etc/nginx", "/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/private", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html", "/usr/local/nginx/html"]
 
 # Expose these ports to the outside network
 EXPOSE 80 443
 
 # Provide NGINX config files
 COPY Proxy/default.conf /etc/nginx/conf.d/default.conf
+COPY Proxy/stream.conf /etc/nginx/sites-enabled/stream.conf
 COPY Proxy/self-signed.conf /etc/nginx/conf.d/self-signed.conf
 COPY Proxy/ssl-params.conf /etc/nginx/conf.d/ssl-params.conf
 COPY Proxy/index.html /usr/local/nginx/html/
+COPY Proxy/nginx.conf /etc/nginx/nginx.conf
 
 # Allow trust of certificates from other services
 RUN apt-get update
