@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Api
@@ -45,14 +44,14 @@ namespace Api
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://mystore.local/identity";
-                    options.Audience = "https://mystore.local/identity/resources";
+                    options.Authority = "https://mystore.local/identity"; //TODO: CONFIG
+                    options.Audience = "https://mystore.local/identity/resources"; //TODO: CONFIG
                     options.RequireHttpsMetadata = true;
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = true, //TODO: CONFIG
+                        ValidateAudience = true, //TODO: CONFIG
                     };
                 });
             services.AddAuthorization(options =>

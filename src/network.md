@@ -2,9 +2,9 @@
 
 The docker subnet network is agnostic about its actual run time IP Addresses and this 
 solution leverages the automatic DNS feature of docker to provide 
-container-to-container communications through thier deterministic hostnames.
+container-to-container communications through their deterministic hostnames.
 
-Container-to-container communications;
+Container-to-container communications:
 * (A) are (mediated) proxied by the proxy service if addresses use the the main domain  ```mystore.local``` and application base paths. e,g, https://mystore.local/api
 * (B) are direct if the addresses use the actual sub-domain host name for the service e.b. https://api.mystore.local/api
 
@@ -32,9 +32,13 @@ This diagram illustrates the host and docker network setup.
 |                    |              |             |       |->| support   |<-->|     |    |  |
 |                    |              |             |       |  `___________'    |     |    |  |
 |                    |              `_____________'       |                   |     |    |  |
-|                    |                                    |  .___________.    |     |    |  |
-|  All protocols  ------ all ports -----------------x  -->|->| api       |<-->|     |    |  |
-|                    |                                    |  `___________'    =     |    |  |
+|                    |                         |          |  .___________.    |     |    |  |
+|  Other protocols------ and ports disabled-x  |       -->|->| api       |<-->|     |    |  |
+|  Disabled          |                         |          |  `___________'    |     |    |  |
+|                    |                         |          |                   |     |    |  |
+|                    |                         |          |  .___________.    |     |    |  |
+|  Except mongodb    |   Port   27017          `--------->|->| MongoDB   |<-->|     |    |  |
+|                    |   For debugging only               |  `___________'    =     |    |  |
 |                    |                                    `_________________________'    |  |
 |                    `___________________________________________________________________'  |
 `___________________________________________________________________________________________'

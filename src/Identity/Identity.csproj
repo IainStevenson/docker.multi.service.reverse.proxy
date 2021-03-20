@@ -8,6 +8,10 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="identity-log.txt" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.0.0" />
