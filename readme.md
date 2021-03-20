@@ -3,7 +3,7 @@
 To document the research needed to produce;
 
 * Docker orcestration of a set of microservices
-* A common domain URL scheme with different services sserving different url paths
+* A common domain URL scheme with different services serving different url paths
 * A Secure API service an /api url path
 * A common security domain allowing social identities and role based access
 
