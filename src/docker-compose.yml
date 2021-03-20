@@ -11,6 +11,7 @@ services:
       context: .
       dockerfile: WebApp1/Dockerfile  
     depends_on:
+     - mongo.mystore.local
      - api.mystore.local
      - identity.mystore.local    
     networks:      
@@ -24,6 +25,7 @@ services:
       context: .
       dockerfile: WebApp2/Dockerfile    
     depends_on:
+     - mongo.mystore.local
      - api.mystore.local    
      - identity.mystore.local    
     networks:      
@@ -51,6 +53,8 @@ services:
     build:
       context: .
       dockerfile: Identity/Dockerfile
+    depends_on:
+     - mongo.mystore.local
     networks:      
       - mystore
 
@@ -63,9 +67,28 @@ services:
       dockerfile: Api/Dockerfile
     depends_on:
      - identity.mystore.local
-    networks:      
+     - mongo.mystore.local
+    networks:
       - mystore
 
+  mongo.mystore.local:
+    container_name: ${DOCKER_REGISTRY-}mongo.mystore.local
+    hostname: mongo.mystore.local
+    image: ${DOCKER_REGISTRY-}mongo.mystore.local
+    build:
+      context: .
+      dockerfile: MongoDB/Dockerfile
+    restart: always
+    environment: 
+        - MONGO_INITDB_USERNAME=admin
+        - MONGO_INITDB_PASSWORD=admin
+        - MONGO_INITDB_DATABASE=admin        
+    volumes:
+        - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+        - ${APPDATA}/MongoDb/Data:/data/db
+        - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/
+    networks: 
+      - mystore
 
 networks:  
     mystore:

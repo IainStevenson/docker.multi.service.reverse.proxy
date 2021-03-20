@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Pluralizer;
+using Response.Formater;
 using Storage.MongoDb;
 using System;
 using System.Linq;
@@ -54,7 +55,9 @@ namespace Api
             services.AddSingleton(x => mapper);
 
             services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
-
+            
+            services.AddSingleton<IResponseLinksProvider<ItemStorageModel<WeatherForecastModel>>, ResponseLinksProvider<ItemStorageModel<WeatherForecastModel>>>();
+            
             services.AddScoped<IRepository<ItemStorageModel<WeatherForecastModel>>, InMemoryWeatherForecastRepository>();
 
             services.AddControllers();
@@ -64,14 +67,14 @@ namespace Api
             services.AddAuthentication("Bearer")// TODO: Add to configuration
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://mystore.local/identity";
-                    options.Audience = "https://mystore.local/identity/resources";
+                    options.Authority = "https://mystore.local/identity"; //TODO: CONFIG
+                    options.Audience = "https://mystore.local/identity/resources"; //TODO: CONFIG
                     options.RequireHttpsMetadata = true;
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = true, //TODO: CONFIG
+                        ValidateAudience = true, //TODO: CONFIG
                     };
                 });
             services.AddAuthorization(options =>

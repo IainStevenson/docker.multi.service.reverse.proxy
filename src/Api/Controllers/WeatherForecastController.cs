@@ -125,7 +125,8 @@ namespace Api.Controllers
                     item.Item.Summary = model.Item.Summary;
                     await _forecasts.UpdateAsync(item);
                     _logger.LogInformation($"Updated a forecast by id {id}");
-                    return Ok(item);
+                    //TODO: Return ETAG as header also add to test
+                    return NoContent(); 
                 }
                 item = (await _forecasts.GetAsync(x => x.Id == id)).FirstOrDefault();
                 if (item != null)

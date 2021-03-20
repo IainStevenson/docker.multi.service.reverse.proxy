@@ -33,8 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497
 		Proxy\Gen-Vars.CMD = Proxy\Gen-Vars.CMD
 		Proxy\ImportRootCA.txt = Proxy\ImportRootCA.txt
 		Proxy\index.html = Proxy\index.html
+		Proxy\nginx.conf = Proxy\nginx.conf
 		Proxy\self-signed.conf = Proxy\self-signed.conf
 		Proxy\ssl-params.conf = Proxy\ssl-params.conf
+		Proxy\stream.conf = Proxy\stream.conf
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C694F770-E674-4166-8F42-309FBEB0AD3C}"
@@ -60,9 +62,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certificates", "certificate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage", "Storage\Storage.csproj", "{FC63D81E-8151-4F72-B512-48D83B3671A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.MongoDb", "Storage.MongoDb\Storage.MongoDb.csproj", "{4BB4F809-BEBC-4A52-A62D-AA4734342187}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage.MongoDb", "Storage.MongoDb\Storage.MongoDb.csproj", "{4BB4F809-BEBC-4A52-A62D-AA4734342187}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{C03D15B1-C40C-4BA6-BC11-F797927CDE9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{C03D15B1-C40C-4BA6-BC11-F797927CDE9F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.csproj", "{12F4E923-B314-42DC-A0D7-67D9503F92BF}"
 EndProject
@@ -75,6 +77,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pluralizer", "Pluralizer\Pluralizer.csproj", "{E3AC9044-6710-44F9-A0E8-44E4808B3B7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Response.Formater", "Response.Formater\Response.Formater.csproj", "{3F282EBB-7F5E-4062-BC3A-3CD9597554D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB", "MongoDB", "{1E9975DA-67DB-48D2-A619-F2BA44881DA8}"
+	ProjectSection(SolutionItems) = preProject
+		MongoDB\Dockerfile = MongoDB\Dockerfile
+		MongoDB\mongo-init.js = MongoDB\mongo-init.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,6 +176,7 @@ Global
 		{91F9EFA2-82C0-4239-B7F9-C407F236FA2D} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
 		{E3AC9044-6710-44F9-A0E8-44E4808B3B7F} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
 		{3F282EBB-7F5E-4062-BC3A-3CD9597554D4} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
+		{1E9975DA-67DB-48D2-A619-F2BA44881DA8} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}

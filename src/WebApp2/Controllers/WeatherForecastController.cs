@@ -19,7 +19,7 @@ namespace WebApp2.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var apiClient = new HttpClient();
+            var apiClient = new HttpClient();//TODO: Inject HttpClientFactory and create here
 
             string accessToken = await HttpContext.GetTokenAsync("access_token");
             //string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
@@ -27,8 +27,8 @@ namespace WebApp2.Controllers
             apiClient.SetBearerToken(accessToken);
 
 
-            var apiUri = new Uri("https://api.mystore.local/api/weatherforecast"); // TODO: Add to configuration
-            
+            var apiUri = new Uri("https://api.mystore.local/api/weatherforecast"); //TODO: CONFIG
+
             var response = await apiClient.GetAsync(apiUri);
             if (!response.IsSuccessStatusCode)
             {

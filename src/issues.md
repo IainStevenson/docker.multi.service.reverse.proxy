@@ -17,7 +17,7 @@ The following issues cropped up in providing those capabilities.
 
 Intention: Every url should have a bse of; https://mystore.local/
 
-Each service should have an additional base path added that should cope with internal relative Urls and respect eternal references across services.
+Each service should have an additional base path added that should cope with internal relative Urls and respect external references across services.
 
 Service  |   Base Path
 _________|____________
@@ -26,7 +26,7 @@ WebApp1  | /store
 WebApp2  | /support
 Api      | /api
 
-All of these were achieved by using app.UsePathBase("whatever"); in the Startup classes Configure method.
+All of these were achieved by using app.UsePathBase("/subdomain"); in the Startup classes Configure method.
 ```
 public void Configure(IApplicationBuilder app)
 {
@@ -168,7 +168,7 @@ The COPY commands, if placed later on, are applied to an intermediate image that
 I think this can be finessed to exclude the curl and ca-certificates install's later, by performing the necessary COPY commands in base for adding the custom root CA cert
 then moving the APT and RUN commands to the build phase, then COPY the modified /etc/ssl/certs/ca-certificates.crt result from build to final image. 
 
-TO DO: try that out later but the size reduction will be minimal. This would be a production optimisation as curl is realy useful o have on teh image for debugging inter-container networking.
+TO DO: try that out later but the size reduction will be minimal. This would be a production optimisation as curl is realy useful to have on the image for debugging inter-container networking.
 
 # SSO issues with NGINX
 
@@ -178,7 +178,7 @@ Not finding the signin-oidc endpoint on return from a login was solved by correc
 
 Basically the Identity server headers coming back from a login are bigger than NGINX accepts, by default, and as additional claims are added over time, the header grows and needs to be accomodated by the NGINX configuration setup.
 
-The following changes were made to the Proxy project  default.conf file.
+The following changes were made to the Proxy project default.conf file.
 
 ```
 
