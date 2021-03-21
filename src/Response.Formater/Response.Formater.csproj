@@ -9,11 +9,12 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
    
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data.Model\Data.Model.csproj" />
+    <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,11 @@
 ﻿using Data.Model.Storage;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Storage.MongoDb
+namespace Storage
 {
     public interface IRepository<T> where T : IStorageItem
     {
@@ -106,5 +107,106 @@ namespace Storage.MongoDb
         /// <remarks>The <see cref="Resource" /> items are all upserted</remarks>
         /// <returns>The item collection with each item with an added Etag</returns>
         Task<IEnumerable<T>> UpdateAsync(IEnumerable<T> items);
+    }
+
+
+    /// <summary>
+    /// Provides a simple in memory dictinonary based storage repository for <see cref="WeatherForecast"/> instances.
+    /// </summary>
+    public class InMemoryResourceRepository : IRepository<Data.Model.Storage.Resource>
+    {
+        private readonly Dictionary<Guid, Data.Model.Storage.Resource> _storage;
+        public InMemoryResourceRepository(Dictionary<Guid, Data.Model.Storage.Resource> storage)
+        {
+            _storage = storage;
+        }
+
+        public Task<Data.Model.Storage.Resource> CreateAsync(Data.Model.Storage.Resource item)
+        {
+            item.Etag = Guid.NewGuid().ToString();
+            item.Created = DateTimeOffset.UtcNow;
+            _storage.Add(item.Id, item);
+            return Task.FromResult(item);
+        }
+
+        public Task<IEnumerable<Data.Model.Storage.Resource>> CreateAsync(IEnumerable<Data.Model.Storage.Resource> items)
+        {
+            foreach (var item in items)
+            {
+                item.Etag = Guid.NewGuid().ToString();
+                item.Created = DateTimeOffset.UtcNow;
+                _storage.Add(item.Id, item);
+            }
+            return Task.FromResult(items);
+        }
+
+        public Task<long> DeleteAsync(Expression<Func<Data.Model.Storage.Resource, bool>> query)
+        {
+            var items = _storage.Values.AsQueryable().Where(query);
+            long count = 0;
+            foreach (var item in items)
+            {
+                _storage.Remove(item.Id);
+                count++;
+            }
+            return Task.FromResult(count);
+        }
+
+        public Task<long> DeleteAsync(Guid id)
+        {
+            if (_storage.ContainsKey(id))
+            {
+                _storage.Remove(id);
+                return Task.FromResult(1L);
+            }
+            return Task.FromResult(0L);
+        }
+
+        public Task<long> DeleteAsync(IEnumerable<Guid> ids)
+        {
+            long count = 0;
+            foreach (var id in ids)
+            {
+                _storage.Remove(id);
+                count++;
+            }
+            return Task.FromResult(count);
+        }
+
+        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(Expression<Func<Data.Model.Storage.Resource, bool>> query, string orderBy, int skip = 0, int take = int.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter, string orderBy, int skip = 0, int take = int.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(Expression<Func<Data.Model.Storage.Resource, bool>> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(IEnumerable<Guid> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Data.Model.Storage.Resource> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Data.Model.Storage.Resource> UpdateAsync(Data.Model.Storage.Resource item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Data.Model.Storage.Resource>> UpdateAsync(IEnumerable<Data.Model.Storage.Resource> items)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

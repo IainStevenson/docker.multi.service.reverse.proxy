@@ -1,4 +1,5 @@
-﻿using Data.Model.Response;
+﻿
+using Data.Model.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

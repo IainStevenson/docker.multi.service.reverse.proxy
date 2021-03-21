@@ -1,4 +1,4 @@
-using Api.Storage;
+using Api.Models;
 using AutoMapper;
 using Logging;
 using Microsoft.AspNetCore.Builder;
@@ -8,9 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Pluralizer;
 using Response.Formater;
-using Storage.MongoDb;
+using Storage;
 using System;
 using System.Linq;
 
@@ -34,21 +35,23 @@ namespace Api
         {
             // Gerneate some forecasts to display straight away
             var rng = new Random();
-            var forecasts = Enumerable.Range(0, Summaries.Length - 1).Select(index => new ItemStorageModel<WeatherForecastModel>
+            var forecasts = Enumerable.Range(0, Summaries.Length - 1).Select(index =>
+
+            new Data.Model.Storage.Resource() {  Content = JsonConvert.SerializeObject(new WeatherForecastModel()
             {
-                Item = new WeatherForecastModel () { 
-                        Date = DateTime.Now.AddDays(index),
-                    TemperatureC = rng.Next(-20, 55),
-                    Summary = Summaries[rng.Next(Summaries.Length)]
-                }
-            }).ToDictionary( x => x.Id, x=> x );
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            })
+            }
+            ).ToDictionary( x => x.Id, x=> x );
 
             // add them to the services for the controller repository
             services.AddSingleton(forecasts);
 
             IMapper mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ItemStorageModel<WeatherForecastModel>, ItemResponseModel<WeatherForecastModel>>();
+                cfg.CreateMap<Data.Model.Storage.Resource, Data.Model.Response.Resource>();
 
             }).CreateMapper();
 
@@ -56,11 +59,18 @@ namespace Api
 
             services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
             
-            services.AddSingleton<IResponseLinksProvider<ItemStorageModel<WeatherForecastModel>>, ResponseLinksProvider<ItemStorageModel<WeatherForecastModel>>>();
+            services.AddSingleton<IResponseLinksProvider<Data.Model.Response.Resource>, ResponseLinksProvider<Data.Model.Response.Resource>>();
             
-            services.AddScoped<IRepository<ItemStorageModel<WeatherForecastModel>>, InMemoryWeatherForecastRepository>();
+            services.AddScoped<IRepository<Data.Model.Storage.Resource>, InMemoryResourceRepository>();
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddNewtonsoftJson(options =>
+                    {
+                        // Use the default property (Pascal) casing
+                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                    });
 
             services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Api"; });// TODO: Add to configuration
 

@@ -4,17 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CSharpVitamins;
-using Data.Model.Storage;
 using Pluralizer;
-using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Microsoft.Extensions.Logging;
+using Storage;
 
-namespace Storage.MongoDb
+namespace Data.Model.Storage.MongoDB
 {
     /// <summary>
     ///     Implements <see cref="IStorageContent{T}" /> Content Storage for a the <see cref="Resource" /> type.
-   /// </summary>
+    /// </summary>
     public class ResourceRepository : IRepository<Resource>
     {
         private readonly bool? _byPassDocumentValidation = true;

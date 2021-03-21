@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Storage.MongoDb
+namespace Storage
 {
     /// <summary>
     /// Basic interface with a few methods for adding, deleting, and querying data. NOTE: Updates not required at this time

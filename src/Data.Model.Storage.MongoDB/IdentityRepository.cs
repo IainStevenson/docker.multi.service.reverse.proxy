@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Storage;
 
-namespace Storage.MongoDb
+namespace Data.Model.Storage.MongoDB
 {
     /// <summary>
     /// Provides functionality  to persist "IdentityServer4.Models" into a given MongoDB

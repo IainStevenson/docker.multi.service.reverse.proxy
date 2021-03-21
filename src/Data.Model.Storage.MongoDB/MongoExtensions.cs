@@ -1,4 +1,4 @@
-namespace Storage.MongoDb
+namespace Data.Model.Storage.MongoDB
 {
     public static class MongoExtensions
     {

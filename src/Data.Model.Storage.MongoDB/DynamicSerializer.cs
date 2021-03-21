@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using Newtonsoft.Json;
 
-namespace Storage.MongoDb
+namespace Data.Model.Storage.MongoDB
 {
     public class DynamicSerializer : SerializerBase<dynamic>
     {
