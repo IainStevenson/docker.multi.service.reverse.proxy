@@ -15,7 +15,7 @@ namespace Api.Controllers
     public partial class ResourcesController : ControllerBase
     {
 
-        private static Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
+        private static readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
         private readonly ILogger<ResourcesController> _logger;
         private readonly IResponseLinksProvider<Data.Model.Response.Resource> _responseLinksProvider;
         private readonly IRepository<Data.Model.Storage.Resource> _storage;

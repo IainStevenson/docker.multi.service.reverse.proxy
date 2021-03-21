@@ -40,6 +40,8 @@ namespace Api.Controllers
                                       r.Id == id
                                       )).FirstOrDefault();
 
+
+
             if (resource == null)
             {
                 return NotFound();

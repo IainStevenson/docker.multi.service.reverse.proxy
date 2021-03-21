@@ -8,7 +8,7 @@ namespace Logging
     {
         public static IServiceCollection AddRequestResponseLoggingMiddlewareWithOptions(this IServiceCollection service, Action<RequestLoggingMiddlewareOptions> options = default)
         {
-            options = options ?? (opts => { });
+            options ??= (opts => { });
 
             service.Configure(options);
             return service;

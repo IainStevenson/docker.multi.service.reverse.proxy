@@ -13,7 +13,7 @@ using Storage;
 namespace Data.Model.Storage.MongoDB
 {
     /// <summary>
-    ///     Implements <see cref="IStorageContent{T}" /> Content Storage for a the <see cref="Resource" /> type.
+    ///     Implements <see cref="IRepository{T}" /> Content Storage for a the <see cref="Resource" /> type.
     /// </summary>
     public class ResourceRepository : IRepository<Resource>
     {
@@ -99,7 +99,7 @@ namespace Data.Model.Storage.MongoDB
 
             return item;
         }
-       public async Task<IEnumerable<Resource>> CreateAsync(IEnumerable<Resource> items)
+        public async Task<IEnumerable<Resource>> CreateAsync(IEnumerable<Resource> items)
         {
             var index = 0;
             foreach (var item in items)
