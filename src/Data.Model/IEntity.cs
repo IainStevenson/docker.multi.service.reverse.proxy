@@ -12,7 +12,7 @@ namespace Data.Model
         DateTimeOffset Created { get; set; }
 
         /// <summary>
-        ///     When in UTC time this entity was last modified
+        ///     When in UTC time this entity was last modified, null if never modified
         /// </summary>
         DateTimeOffset? Modified { get; set; }
 
