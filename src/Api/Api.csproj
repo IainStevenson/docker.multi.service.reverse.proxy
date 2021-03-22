@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
     <ProjectReference Include="..\Data.Model.Storage.MongoDB\Data.Model.Storage.MongoDB.csproj" />
     <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />
+    <ProjectReference Include="..\Handlers\Handlers.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
     <ProjectReference Include="..\Response.Formater\Response.Formater.csproj" />
