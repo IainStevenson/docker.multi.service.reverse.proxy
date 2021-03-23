@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Handlers;
+using Handlers.Resource;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -34,21 +34,26 @@ namespace Api.Controllers
             [FromBody] dynamic content)
         {
 
-            var requestResult = await _requestHandler.Handle(
-                                                new RequestMessage<dynamic>()
-                                                {
-                                                    Caller = typeof(ResourcesController),
-                                                    RequestType = Request.Method,
-                                                    Headers = Request.Headers,
-                                                    Query = Request.Query,
-                                                    Parameters = new {Id = id, Namespeace = @namespace },
-                                                    Model = content,
-                                                    Owner = _ownerId,
-                                                    RequestId = _requestId
+            var request = new ResourcePutRequest()
+            {
+                Id = id,
+                Namespace = @namespace,
+                Model = content,
+                
+                Headers = Request.Headers,
+                Query = Request.Query,
+                Scheme = Request.Scheme,
+                Host = Request.Host.Value,
+                Path = Request.Path.Value,
+                
+                Owner = _ownerId,
+                RequestId = _requestId
+            };
 
-                                                }); 
+            var response = await _mediator.Send(request);
 
-            return await _responseHandler.Handle(requestResult);
+            return response.Handle(this);
+
         }
     }
 }

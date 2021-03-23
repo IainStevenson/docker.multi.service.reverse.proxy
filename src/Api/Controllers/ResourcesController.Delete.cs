@@ -27,45 +27,46 @@ namespace Api.Controllers
         {
 
 
-            Data.Model.Storage.Resource resource = (await _storage.GetAsync(r =>
-                               r.Id == id
-                               )).FirstOrDefault();
+            //Data.Model.Storage.Resource resource = (await _storage.GetAsync(r =>
+            //                   r.Id == id
+            //                   )).FirstOrDefault();
 
-            if (resource == null)
-            {
-                return NotFound();
-            }
+            //if (resource == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(Request.Headers);
-            var etags = await _requestHeadersProvider.IfMatch(Request.Headers);
+            //var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(Request.Headers);
+            //var etags = await _requestHeadersProvider.IfMatch(Request.Headers);
 
-            // only proceed if resource is unmodified since and is one of the etags
-            if (
-                    (resource.Modified.HasValue ? resource.Modified.Value <= unmodifiedSince : resource.Created <= unmodifiedSince) ||
-                    (etags.Contains(resource.Etag))
-                    )
-            {
+            //// only proceed if resource is unmodified since and is one of the etags
+            //if (
+            //        (resource.Modified.HasValue ? resource.Modified.Value <= unmodifiedSince : resource.Created <= unmodifiedSince) ||
+            //        (etags.Contains(resource.Etag))
+            //        )
+            //{
 
-                dynamic error = new { Error = "" };
-                if (etags.Any())
-                {
-                    error.Error += $"The resource has None of the specified ETags {string.Join(',', etags)}/r/n";
-                }
-                if (unmodifiedSince != DateTimeOffset.MinValue)
-                {
-                    error.Error += $"The resource has been modified since {unmodifiedSince}";
-                }
-                await _responseHeadersProvider.AddHeadersFromItem(Response.Headers, _mapper.Map<Data.Model.Response.Resource>(resource));
+            //    dynamic error = new { Error = "" };
+            //    if (etags.Any())
+            //    {
+            //        error.Error += $"The resource has None of the specified ETags {string.Join(',', etags)}/r/n";
+            //    }
+            //    if (unmodifiedSince != DateTimeOffset.MinValue)
+            //    {
+            //        error.Error += $"The resource has been modified since {unmodifiedSince}";
+            //    }
+            //    await _responseHeadersProvider.AddHeadersFromItem(Response.Headers, _mapper.Map<Data.Model.Response.Resource>(resource));
 
-                return StatusCode(412, error);
-            }
+            //    return StatusCode(412, error);
+            //}
 
 
-            var count = await _storage.DeleteAsync(id);
-            if (count == 1)
-                return Ok();
+            //var count = await _storage.DeleteAsync(id);
+            //if (count == 1)
+            //    return Ok();
 
-            return BadRequest(new { Error = $"Delete operation expected 1 record to be deleted but was: {count}" });
+            //return BadRequest(new { Error = $"Delete operation expected 1 record to be deleted but was: {count}" });
+            return Ok();
         }
     }
 }

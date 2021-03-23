@@ -16,6 +16,8 @@ namespace Response.Formater
         /// An <see cref="List"/> set of <see cref="String"/>
         /// </returns>
         Task<List<string>> IfMatch(IHeaderDictionary headers);
+        
+
         /// <summary>
         /// The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, 
         /// the server will send back the requested resource, 

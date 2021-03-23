@@ -5,8 +5,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IHttpActionRequestHandler.cs" />
+    <Compile Remove="IHttpStatusCodeResponseHandler.cs" />
+    <Compile Remove="IRequestParameters.cs" />
+    <Compile Remove="IResponseHander.cs" />
+    <Compile Remove="PutResourceParametersModel.cs" />
+    <Compile Remove="PutResourceRequestHandler.cs" />
+    <Compile Remove="RequestActions.cs" />
+    <Compile Remove="RequestHandler.cs" />
+    <Compile Remove="RequestMessage.cs" />
+    <Compile Remove="ResponseHander.cs" />
+    <Compile Remove="ResponseMessage.cs" />
+    <Compile Remove="ServicesSetupException.cs" />
+    <Compile Remove="ServicesSetupException1.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.5.3" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Dynamic\Data.Dynamic.csproj" />
+    <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
+    <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+    <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
+    <ProjectReference Include="..\Response.Formater\Response.Formater.csproj" />
+    <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 
 </Project>

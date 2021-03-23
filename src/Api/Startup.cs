@@ -1,5 +1,7 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Logging;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -34,31 +36,20 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "mystore.api"; });
+            var excludedHeaders = new List<string>() { "X-Powered-By" };
 
             if (HostEnvironment.IsDevelopment())
             {
                 IdentityModelEventSource.ShowPII = true; //Add this line to expose better debugging when token validation fails
 
             }
-            services.AddHttpClient("");
-
-
-            var identityServiceSettings = new
-            {
-                Authority = "https://mystore.local/identity",
-                RequireHttpsMetadata = true,
-                ApiName = "mystore.api"
-            };
-
 
             IMongoClient NewMongoClient(IServiceProvider services)
             {
                 var connectionString = $"mongodb://storage:storagepass@mongo.mystore.local:27017";
                 return new MongoClient(new MongoUrl(connectionString));
             }
-
+            
             IRepository<Data.Model.Storage.Resource> NewResourceStorageClient(IServiceProvider services)
             {
                 var databaseName = "myStoreData";
@@ -69,39 +60,24 @@ namespace Api
                             databaseName
                             );
             }
-
-            services.AddCors();
-
-            services.AddDistributedMemoryCache();
-
-            services.AddSingleton<IRequestHeadersProvider>((services) => new RequestHeadersProvider());
-            services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(new List<string>() { "X-Powered-By" }));
-
-
             IMapper mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Model.Storage.Resource, Data.Model.Response.Resource>();
-
             }).CreateMapper();
 
-            services.AddSingleton(x => mapper);
-
-            services.AddSingleton<IPathResolver, PathResolver>();
-
-            services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
-
-            services.AddSingleton<IResponseLinksProvider<Data.Model.Response.Resource>>((p) => new ResponseLinksProvider<Data.Model.Response.Resource>());
-
-            services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
-
-            services.AddSingleton<IPathResolver, PathResolver>();
-
-            services.AddScoped<IResourceContentModifier<Data.Model.Response.Resource>, ResourceContentModifier<Data.Model.Response.Resource>>();
-
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "mystore.api"; });
+            services.AddHttpClient("");
             services.AddScoped(NewMongoClient);
-
             services.AddScoped(NewResourceStorageClient);
-
+            services.AddCors();
+            services.AddDistributedMemoryCache();
+            services.AddSingleton<IRequestHeadersProvider>((services) => new RequestHeadersProvider());
+            services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(excludedHeaders));
+            services.AddSingleton<IPathResolver, PathResolver>();
+            services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
+            services.AddSingleton<IResponseLinksProvider>((p) => new ResponseLinksProvider());
+            services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
+            services.AddSingleton(x => mapper);
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
@@ -109,7 +85,14 @@ namespace Api
                         options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
                         options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                    })
+                    .AddFluentValidation(config => { 
+                    
+                        config.AutomaticValidationEnabled = true;
+                        config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
                     });
+
+            services.AddMediatR(typeof(Handlers.RequestExceptionModel));
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>
@@ -141,7 +124,7 @@ namespace Api
                 });
             });
 
-
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

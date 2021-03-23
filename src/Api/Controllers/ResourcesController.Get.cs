@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
+using Handlers.Resource;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -30,51 +29,16 @@ namespace Api.Controllers
             [Required][FromRoute] Guid id)
         {
             
-            Data.Model.Storage.Resource resource = (
-                                                    await _storage.GetAsync(r => r.Id == id
-                                                    )
-                                                    ).FirstOrDefault();
-
-            if (resource == null)
+            var request = new ResourceGetOneRequest()
             {
-                return NotFound();
-            }
+                Id = id,
+                Headers = Request.Headers
+            };
 
-            var ifNoneMatch = await _requestHeadersProvider.IfNoneMatch(Request.Headers);
+            var response = await _mediator.Send(request);
 
-
-            if (ifNoneMatch.Contains(resource.Etag))
-            {
-
-                await _responseHeadersProvider.AddHeadersFromItem(Response.Headers,
-                                                _mapper.Map<Data.Model.Response.Resource>(resource));
-
-                return StatusCode(304);
-            }
-
-            var ifModifiedSince = await _requestHeadersProvider.IfModifiedSince(Request.Headers);
-
-            if (ifModifiedSince.HasValue)
-            {
-                var resourceHasNotBeenModifiedSince = !(resource.Modified.HasValue ?
-                                                            resource.Modified > ifModifiedSince.Value :
-                                                            resource.Created > ifModifiedSince.Value);
-                if (resourceHasNotBeenModifiedSince)
-                {
-
-                    await _responseHeadersProvider.AddHeadersFromItem(Response.Headers,
-                                                    _mapper.Map<Data.Model.Response.Resource>(resource));
-
-                    return StatusCode(304);
-                }
-
-            }
-
-            var response = _mapper.Map<Data.Model.Response.Resource>(resource);
-
-            await _responseHeadersProvider.AddHeadersFromItem(Response.Headers, response);
-
-            return Ok(response);
+            return response.Handle(this);
+            
         }
 
 
@@ -96,31 +60,16 @@ namespace Api.Controllers
             [Required][FromRoute] string @namespace)
         {
 
-           
-            IEnumerable<Data.Model.Storage.Resource> resources = new List<Data.Model.Storage.Resource>();
-
-            var ifModifiedSince = await _requestHeadersProvider.IfModifiedSince(Request.Headers);
-
-            if (ifModifiedSince.HasValue)
+            var request = new ResourceGetManyRequest()
             {
+                Namespace = @namespace,
+                Headers = Request.Headers,
+                OwnerId = _ownerId
+            };
 
-                resources = await _storage.GetAsync(
-                    r => r.OwnerId == _ownerId &&
-                    r.Namespace == @namespace &&
-                    r.Modified.HasValue ? r.Modified > ifModifiedSince.Value : r.Created > ifModifiedSince.Value);
+            var response = await _mediator.Send(request);
 
-                if (!resources.Any())
-                {
-                    return StatusCode(304); 
-                }
-            }
-            else
-            {
-                resources = await _storage.GetAsync(r => r.OwnerId == _ownerId && r.Namespace == @namespace);
-            }
-
-            return Ok(_mapper.Map<IEnumerable<Data.Model.Response.Resource>>(resources));
-
+            return response.Handle(this);           
         }
     }
 }
