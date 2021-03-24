@@ -44,12 +44,18 @@ namespace Handlers.Resource
         {
             switch (StatusCode)
             {
+               
                 case HttpStatusCode.Created:
                     foreach (var item in Headers)
                     {
                         source.Response.Headers.Add(item.Key, item.Value);
                     }
                     return source.Created(ResourceUri, Model);
+
+                case HttpStatusCode.BadRequest:
+                   
+                    return source.BadRequest(new RequestExceptionModel(RequestValidationErrors));
+                
                 default:
                     RequestValidationErrors.Add($"Unhandled condition set in {nameof(ResourcePostHandler)} for {nameof(ResourcePostResponse)}");
                     return source.StatusCode(500, new RequestExceptionModel(RequestValidationErrors));

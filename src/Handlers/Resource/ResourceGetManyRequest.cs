@@ -9,5 +9,6 @@ namespace Handlers.Resource
         public string Namespace { get; set; }
         public IHeaderDictionary Headers { get; set; }
         public Guid OwnerId { get; set; }
+        public Guid RequestId { get; set; }
     }
 }

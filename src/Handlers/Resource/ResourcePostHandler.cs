@@ -42,14 +42,10 @@ namespace Handlers.Resource
         {
             var response = new ResourcePostResponse();
 
-
-            // validate
-
             var validationResult = _validator.Validate(request);
 
             if (validationResult.IsValid)
             {
-                // generate
                 var resource = new Data.Model.Storage.Resource()
                 {
                     Namespace = request.Namespace,
@@ -61,11 +57,9 @@ namespace Handlers.Resource
                     },
                 };
 
-                // store
                 resource = await _storage.CreateAsync(resource);
 
-                // prepare       
-
+                
                 var systemKeys = new Dictionary<string, string>() { { "{id}", $"{resource.Id}" } };
 
                 var relatedEntities = EmptyEntityList;
@@ -86,7 +80,6 @@ namespace Handlers.Resource
                     responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
                 }
 
-                // set result
                 response.Model = responseModel;
                 response.ResourceUri = new Uri(responseModel.Links?.SingleOrDefault(x => x.Action == "get" && x.Rel == "self")?.Href ?? "\\");
                 response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);

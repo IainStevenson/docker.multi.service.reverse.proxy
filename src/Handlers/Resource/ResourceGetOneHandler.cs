@@ -64,7 +64,7 @@ namespace Handlers.Resource
 
             }
 
-            response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);
+            //response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);
             response.Model = responseModel;
             response.StatusCode = System.Net.HttpStatusCode.OK;
             return response;

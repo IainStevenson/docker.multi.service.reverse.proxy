@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Handlers.Resource;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Api.Controllers
@@ -10,7 +11,6 @@ namespace Api.Controllers
 
     public partial class ResourcesController
     {
-
         /// <summary>
         /// GET: api/resources/{identity}/{id:guid}
         /// </summary>
@@ -25,10 +25,10 @@ namespace Api.Controllers
         /// </returns>
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> Get(
-            [Required][FromRoute] Guid id)
+        public async Task<IActionResult> Get([Required][FromRoute] Guid id)
         {
-            
+
+            _logger.LogTrace($"{nameof(ResourcesController)}:GET (One). Sending request.");
             var request = new ResourceGetOneRequest()
             {
                 Id = id,
@@ -37,8 +37,9 @@ namespace Api.Controllers
 
             var response = await _mediator.Send(request);
 
+            _logger.LogTrace($"{nameof(ResourcesController)}:GET (One). Processing rsponse.");
+
             return response.Handle(this);
-            
         }
 
 
@@ -48,7 +49,9 @@ namespace Api.Controllers
         /// <remarks>
         /// Supports Headers: If-Modified-Since, which is interpreted as New or changed since
         /// </remarks>
-        /// <param name="namespace">The collective storage name space of the resources.</param>
+        /// <param name="namespace">
+        /// The collective storage name space of the resources.
+        /// </param>
         /// <returns>
         /// An array of all of the <see cref="Data.Model.Response.Resource"/> wrapping the existing <see cref="Data.Model.Response.Resource"/> of that namespace. 
         /// When If-Modified-Since is not specified all of the existing resources are returned with status code 200.
@@ -56,20 +59,24 @@ namespace Api.Controllers
         /// </returns>
         [HttpGet]
         [Route("{*namespace}")]
-        public async Task<IActionResult> Get(
-            [Required][FromRoute] string @namespace)
+        public async Task<IActionResult> Get([Required][FromRoute] string @namespace)
         {
+
+            _logger.LogTrace($"{nameof(ResourcesController)}:GET (Many). Sending request.");
 
             var request = new ResourceGetManyRequest()
             {
                 Namespace = @namespace,
                 Headers = Request.Headers,
-                OwnerId = _ownerId
+                OwnerId = _ownerId,
+                RequestId = _requestId
             };
 
             var response = await _mediator.Send(request);
 
-            return response.Handle(this);           
+            _logger.LogTrace($"{nameof(ResourcesController)}:GET (Many). Processing rsponse.");
+
+            return response.Handle(this);
         }
     }
 }

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Handlers.Resource;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {
-
     public partial class ResourcesController 
     {
-
         /// <summary>
-        /// DELETE: api/resources/CEC71C39-6D38-404D-88EB-BD9479F004CA
+        /// DELETE: api/resources/{id}
         /// </summary>
         /// <remarks>
         /// Supports Headers: If-Unmodified-Since, If-Match
         /// </remarks>
-        /// <param name="id">The identifier of the resource</param>
+        /// <param name="id">The identifier of the resource that is to be deleted.</param>
         /// <returns>
         /// 400 BadRequest
         /// 404 NotFound
@@ -24,48 +24,20 @@ namespace Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            _logger.LogTrace($"{nameof(ResourcesController)}:DELETE. Sending request.");
 
+            var request = new ResourceDeleteRequest() {
+                Id = id,
+                OwnerId = _ownerId,
+                RequestId = _requestId,
+                Headers = Request.Headers               
+            };
 
-            //Data.Model.Storage.Resource resource = (await _storage.GetAsync(r =>
-            //                   r.Id == id
-            //                   )).FirstOrDefault();
+            var response = await _mediator.Send(request);
 
-            //if (resource == null)
-            //{
-            //    return NotFound();
-            //}
+            _logger.LogTrace($"{nameof(ResourcesController)}DELETE. Processing response.");
 
-            //var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(Request.Headers);
-            //var etags = await _requestHeadersProvider.IfMatch(Request.Headers);
-
-            //// only proceed if resource is unmodified since and is one of the etags
-            //if (
-            //        (resource.Modified.HasValue ? resource.Modified.Value <= unmodifiedSince : resource.Created <= unmodifiedSince) ||
-            //        (etags.Contains(resource.Etag))
-            //        )
-            //{
-
-            //    dynamic error = new { Error = "" };
-            //    if (etags.Any())
-            //    {
-            //        error.Error += $"The resource has None of the specified ETags {string.Join(',', etags)}/r/n";
-            //    }
-            //    if (unmodifiedSince != DateTimeOffset.MinValue)
-            //    {
-            //        error.Error += $"The resource has been modified since {unmodifiedSince}";
-            //    }
-            //    await _responseHeadersProvider.AddHeadersFromItem(Response.Headers, _mapper.Map<Data.Model.Response.Resource>(resource));
-
-            //    return StatusCode(412, error);
-            //}
-
-
-            //var count = await _storage.DeleteAsync(id);
-            //if (count == 1)
-            //    return Ok();
-
-            //return BadRequest(new { Error = $"Delete operation expected 1 record to be deleted but was: {count}" });
-            return Ok();
+            return response.Handle(this);            
         }
     }
 }

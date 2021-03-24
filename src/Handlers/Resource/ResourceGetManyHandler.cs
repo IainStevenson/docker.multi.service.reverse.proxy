@@ -34,7 +34,6 @@ namespace Handlers.Resource
 
             if (ifModifiedSince.HasValue)
             {
-
                 resources = await _storage.GetAsync(
                     r => r.OwnerId == request.OwnerId &&
                     r.Namespace == request.Namespace &&

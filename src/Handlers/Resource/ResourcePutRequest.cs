@@ -16,5 +16,6 @@ namespace Handlers.Resource
         public dynamic Model { get; set; }
         public Guid Owner { get; set; }
         public IQueryCollection Query { get; set; }
+        public string Keys { get; set; }
     }
 }

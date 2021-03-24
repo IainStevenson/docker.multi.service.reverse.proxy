@@ -18,18 +18,21 @@ namespace Handlers.Resource
         private readonly IMapper _mapper;
         private readonly IResponseHeadersProvider _responseHeadersProvider;
         private readonly IResponseLinksProvider _responseLinksProvider;
+        private readonly IResourceContentModifier<Data.Model.Response.Resource> _resourceModifier;
         private static readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
         public ResourcePutHandler(IRepository<Data.Model.Storage.Resource> storage,
             IRequestHeadersProvider requestHeadersProvider,
             IMapper mapper,
             IResponseHeadersProvider responseHeadersProvider,
-            IResponseLinksProvider responseLinksProvider)
+            IResponseLinksProvider responseLinksProvider,
+            IResourceContentModifier<Data.Model.Response.Resource> resourceModifier)
         {
             _storage = storage;
             _requestHeadersProvider = requestHeadersProvider;
             _mapper = mapper;
             _responseHeadersProvider = responseHeadersProvider;
             _responseLinksProvider = responseLinksProvider;
+            _resourceModifier = resourceModifier;
         }
 
         public async Task<ResourcePutResponse> Handle(ResourcePutRequest request, CancellationToken cancellationToken)
@@ -61,7 +64,13 @@ namespace Handlers.Resource
 
                 resource = await _storage.UpdateAsync(resource);
 
-                response.Model = _mapper.Map<Data.Model.Response.Resource>(resource);
+                var responseModel = _mapper.Map<Data.Model.Response.Resource>(resource);
+
+
+                if (!string.IsNullOrWhiteSpace(request.Keys))
+                {
+                    responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
+                }
 
                 var systemKeys = new Dictionary<string, string>() { { "{id}", $"{resource.Id}" } };
                 var relatedEntities = EmptyEntityList;
@@ -72,7 +81,7 @@ namespace Handlers.Resource
                                                                 systemKeys,
                                                                 relatedEntities);
 
-
+                response.Model = responseModel;
                 response.Headers = await _responseHeadersProvider.AddHeadersFromItem(response.Model);
                 response.StatusCode = HttpStatusCode.OK;
                 return response;

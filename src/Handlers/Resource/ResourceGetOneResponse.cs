@@ -28,19 +28,25 @@ namespace Handlers.Resource
             switch(StatusCode)
             {
                 case HttpStatusCode.NotModified:
-
+                    foreach (var item in Headers)
+                    {
+                        source.Response.Headers.Add(item.Key, item.Value);
+                    }
                     return source.StatusCode((int)HttpStatusCode.NotModified);
 
                 case HttpStatusCode.NotFound:
 
                     return source.NotFound();
 
-                case HttpStatusCode.Created:
-
+                case HttpStatusCode.OK:
+                    foreach (var item in Headers)
+                    {
+                        source.Response.Headers.Add(item.Key, item.Value);
+                    }
                     return source.Ok(Model);
 
                 default:
-                    RequestValidationErrors.Add($"Unhandled condition set in {nameof(ResourcePostHandler)} for {nameof(ResourcePostResponse)}");
+                    RequestValidationErrors.Add($"Unhandled condition set in {nameof(ResourceGetOneHandler)} for {nameof(ResourceGetOneResponse)}");
                     return source.StatusCode(500, new RequestExceptionModel(RequestValidationErrors));
             }
         }
