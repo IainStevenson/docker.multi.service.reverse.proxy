@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		certificates.md = certificates.md
 		docker.md = docker.md
+		http.md = http.md
 		identity.md = identity.md
 		issues.md = issues.md
 		linux.md = linux.md
@@ -86,7 +87,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Model.Response", "Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Model.Storage.MongoDB", "Data.Model.Storage.MongoDB\Data.Model.Storage.MongoDB.csproj", "{AD30CD0F-26B7-4194-B6AF-636B45C050E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handlers", "Handlers\Handlers.csproj", "{25FDE52D-A404-4673-9DD7-295218A17408}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handlers", "Handlers\Handlers.csproj", "{25FDE52D-A404-4673-9DD7-295218A17408}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
