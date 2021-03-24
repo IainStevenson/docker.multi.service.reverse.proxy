@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using MongoDB.Bson;
 using Response.Formater;
 using Storage;
 using System;
@@ -15,14 +16,18 @@ namespace Handlers.Resource
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly IRequestHeadersProvider _requestHeadersProvider;
         private readonly IMapper _mapper;
+        private readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
+        private readonly IResponseLinksProvider _responseLinksProvider;
 
         public ResourceGetManyHandler(IRepository<Data.Model.Storage.Resource> storage,
           IRequestHeadersProvider requestHeadersProvider,
-          IMapper mapper)
+          IMapper mapper,
+          IResponseLinksProvider responseLinksProvider)
         {
             _storage = storage;
             _requestHeadersProvider = requestHeadersProvider;
             _mapper = mapper;
+            _responseLinksProvider = responseLinksProvider;
         }
 
         public async Task<ResourceGetManyResponse> Handle(ResourceGetManyRequest request, CancellationToken cancellationToken)
@@ -34,10 +39,9 @@ namespace Handlers.Resource
             var ifModifiedSince = await _requestHeadersProvider.IfModifiedSince(request.Headers) ?? DateTimeOffset.MinValue; // if none make modified as default;
 
 
-            resources = await _storage.GetAsync(
-                            r => r.OwnerId == request.OwnerId &&
-                            r.Namespace == request.Namespace 
-                            );
+            resources = await _storage.GetAsync(r => r.OwnerId == request.OwnerId && r.Namespace == request.Namespace);
+
+            // 
 
             if (!resources.Any())
             {
@@ -63,7 +67,18 @@ namespace Handlers.Resource
             {
                 response.Model = _mapper.Map<IEnumerable<Data.Model.Response.Resource>>(resources);
             }
-            
+
+            var relatedEntities = EmptyEntityList;
+            foreach (var item in response.Model)
+            {
+                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{item.Id}" } };
+                item.Links = await _responseLinksProvider.BuildLinks(
+                                                                request.Scheme,
+                                                                request.Host,
+                                                                request.Path.TrimEnd('/'),
+                                                                systemKeys,
+                                                                relatedEntities);
+            }
             response.StatusCode = System.Net.HttpStatusCode.OK;
             return response;
         }

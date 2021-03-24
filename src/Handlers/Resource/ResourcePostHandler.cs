@@ -48,18 +48,23 @@ namespace Handlers.Resource
             {
                 var resource = new Data.Model.Storage.Resource()
                 {
-                    Namespace = request.Namespace,
+                    Namespace = request.Namespace.ToLower(),
                     Content = request.Content,
                     OwnerId = request.OwnerId,
                     Metadata = new Data.Model.Storage.StorageMetadata()
                     {
-                        RequestId = request.RequestId
+                        RequestId = request.RequestId,
+                        Tags = new Dictionary<string, object>() {
+                            { "Created", DateTimeOffset.UtcNow } ,
+                            { "RequestId", request.RequestId},
+                            { "Keys", request.Keys }
+                        }
                     },
                 };
 
                 resource = await _storage.CreateAsync(resource);
 
-                
+
                 var systemKeys = new Dictionary<string, string>() { { "{id}", $"{resource.Id}" } };
 
                 var relatedEntities = EmptyEntityList;

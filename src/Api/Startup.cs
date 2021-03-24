@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Pluralizer;
 using Response.Formater;
@@ -130,6 +131,8 @@ namespace Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
+            ConfigureMongoDriver2IgnoreExtraElements();
+
             app.UsePathBase("/api");
 
             if (env.IsDevelopment())
@@ -179,5 +182,20 @@ namespace Api
                 // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             });
         }
+        private static void ConfigureMongoDriver2IgnoreExtraElements()
+        {
+            BsonClassMap.RegisterClassMap<Data.Model.Storage.StorageMetadata>(cm =>
+            {
+                cm.AutoMap();
+                cm.SetIgnoreExtraElements(true);
+            });
+            BsonClassMap.RegisterClassMap<Data.Model.Storage.Resource>(cm =>
+            {
+                cm.AutoMap();
+                cm.SetIgnoreExtraElements(true);
+            });
+
+        }
     }
+
 }

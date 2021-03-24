@@ -10,5 +10,8 @@ namespace Handlers.Resource
         public IHeaderDictionary Headers { get; set; }
         public Guid OwnerId { get; set; }
         public Guid RequestId { get; set; }
+        public string Scheme { get; set; }
+        public string Host { get; set; }
+        public string Path { get; set; }
     }
 }

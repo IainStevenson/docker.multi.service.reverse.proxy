@@ -2,6 +2,7 @@
 using MediatR;
 using Response.Formater;
 using Storage;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,16 +15,20 @@ namespace Handlers.Resource
         private readonly IRequestHeadersProvider _requestHeadersProvider;
         private readonly IResponseHeadersProvider _responseHeadersProvider;
         private readonly IMapper _mapper;
+        private readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
+        private readonly IResponseLinksProvider _responseLinksProvider;
 
         public ResourceGetOneHandler(IRepository<Data.Model.Storage.Resource> storage,
           IRequestHeadersProvider requestHeadersProvider,
           IResponseHeadersProvider responseHeadersProvider,
-          IMapper mapper)
+          IMapper mapper,
+          IResponseLinksProvider responseLinksProvider)
         {
             _storage = storage;
             _requestHeadersProvider = requestHeadersProvider;
             _responseHeadersProvider = responseHeadersProvider;
             _mapper = mapper;
+            _responseLinksProvider= responseLinksProvider;
         }
 
         public async Task<ResourceGetOneResponse> Handle(ResourceGetOneRequest request, CancellationToken cancellationToken)
@@ -64,6 +69,18 @@ namespace Handlers.Resource
                 }
 
             }
+
+
+            
+            var relatedEntities = EmptyEntityList;
+            var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Id}" } };
+
+            responseModel.Links = await _responseLinksProvider.BuildLinks(
+                                                            request.Scheme,
+                                                            request.Host,
+                                                            request.Path.TrimEnd('/'),
+                                                            systemKeys,
+                                                            relatedEntities);
 
             response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
             response.Model = responseModel;

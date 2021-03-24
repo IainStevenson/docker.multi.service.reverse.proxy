@@ -32,7 +32,11 @@ namespace Api.Controllers
             var request = new ResourceGetOneRequest()
             {
                 Id = id,
-                Headers = Request.Headers
+                Headers = Request.Headers,
+                Scheme = Request.Scheme,
+                Host = Request.Host.Value,
+                Path = Request.Path.Value
+
             };
 
             var response = await _mediator.Send(request);
@@ -66,10 +70,13 @@ namespace Api.Controllers
 
             var request = new ResourceGetManyRequest()
             {
-                Namespace = @namespace,
+                Namespace = @namespace.ToLower(),
                 Headers = Request.Headers,
                 OwnerId = _ownerId,
-                RequestId = _requestId
+                RequestId = _requestId,
+                Scheme = Request.Scheme,
+                Host = Request.Host.Value,
+                Path = Request.Path.Value
             };
 
             var response = await _mediator.Send(request);

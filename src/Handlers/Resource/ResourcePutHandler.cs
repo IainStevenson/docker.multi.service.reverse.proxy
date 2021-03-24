@@ -62,6 +62,9 @@ namespace Handlers.Resource
                 resource.Content = request.Model;
                 resource.Namespace = request.Namespace;
                 resource.Modified = DateTimeOffset.UtcNow;
+                resource.Metadata.Tags.Add("RequestId", $"{request.RequestId}");
+                resource.Metadata.Tags.Add("Updated", $"{resource.Modified}");
+                resource.Metadata.Tags.Add("Namespace", $"{resource.Namespace}");
 
                 resource = await _storage.UpdateAsync(resource);
 

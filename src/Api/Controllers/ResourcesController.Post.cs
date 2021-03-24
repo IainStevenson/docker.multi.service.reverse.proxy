@@ -49,7 +49,7 @@ namespace Api.Controllers
 
             var request = new ResourcePostRequest()
             {
-                Namespace = @namespace,
+                Namespace = @namespace.ToLower(),
                 Content = content,
                 Keys = keys,
                 OwnerId = _ownerId,

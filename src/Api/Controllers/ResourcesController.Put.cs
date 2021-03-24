@@ -47,7 +47,7 @@ namespace Api.Controllers
             var request = new ResourcePutRequest()
             {
                 Id = id,
-                Namespace = @namespace,
+                Namespace = @namespace.ToLower(),
                 Model = content,
 
                 Keys = keys,
@@ -67,6 +67,6 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}:PUT. Processing response.");
 
             return response.Handle(this);
-        }
+        }       
     }
 }
