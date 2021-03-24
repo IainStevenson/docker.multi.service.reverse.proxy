@@ -28,7 +28,7 @@ namespace Api.Controllers
         /// <summary>
         /// Mediator service to abstract controller processing
         /// </summary>
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         /// <summary>
         /// Logger for this controller
         /// </summary>
