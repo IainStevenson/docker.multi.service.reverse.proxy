@@ -8,33 +8,40 @@ using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
-
     public partial class ResourcesController
     {
         /// <summary>
-        /// GET: api/resources/{identity}/{id:guid}
+        /// GET: api/resources/{namespace}/{id:guid}
         /// </summary>
         /// <remarks>
         /// Supports Headers: If-Modified-Since (which is interpreted as New or changed since), If-None-Match
         /// </remarks>
-        /// <param name="id">The unique storage identifier of the rsource.</param>
+        /// <param name="namespace">The storage namespace type of the resource.</param>
+        /// <param name="id">The unique storage identifier of the resource.</param>
         /// <returns>
-        /// Status code 404 Not Found if the resource does not exist
+        /// Status code 404 Not Found if the resource does not exist in that namespace.
         /// Status code 200 and an instance of <see cref="Data.Model.Response.Resource"/> wrapping the <see cref="Data.Model.Storage.Resource"/> matching the resource identifier .
         /// Status Code 304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> Get([Required][FromRoute] Guid id)
+        [Route("{namespace}/{id:guid}")]
+        public async Task<IActionResult> Get(
+            [Required][FromRoute] string @namespace,
+            [Required][FromRoute] Guid id
+            )
         {
 
             _logger.LogTrace($"{nameof(ResourcesController)}:GET (One). Sending request.");
             var request = new ResourceGetOneRequest()
             {
                 Id = id,
+                Namespace = @namespace.ToLower(),
+                OwnerId = _ownerId,
+                RequestId = _requestId,
                 Headers = Request.Headers,
                 Scheme = Request.Scheme,
                 Host = Request.Host.Value,
+                PathBase = Request.PathBase.Value,
                 Path = Request.Path.Value
 
             };
@@ -48,22 +55,23 @@ namespace Api.Controllers
 
 
         /// <summary>
-        /// GET: api/resources/{identity}/{*namespace}
+        /// GET: api/resources/{namespace}
         /// </summary>
         /// <remarks>
-        /// Supports Headers: If-Modified-Since, which is interpreted as New or changed since
+        /// Supports Headers: If-Modified-Since (which is interpreted as New or changed since), If-None-Match
         /// </remarks>
-        /// <param name="namespace">
-        /// The collective storage name space of the resources.
-        /// </param>
+        /// <param name="namespace">The storage namespace type of the resource.</param>
+        /// <param name="id">The unique storage identifier of the resource.</param>
         /// <returns>
-        /// An array of all of the <see cref="Data.Model.Response.Resource"/> wrapping the existing <see cref="Data.Model.Response.Resource"/> of that namespace. 
-        /// When If-Modified-Since is not specified all of the existing resources are returned with status code 200.
-        /// When If-Modified-Since is specified with a valid time, only those resources changed since that time are returned with status code of 200. If none have changed since then, a status code of 304 is returned with no body content.
+        /// Status code 404 Not Found if the resource does not exist in that namespace.
+        /// Status code 200 and an instance of <see cref="Data.Model.Response.Resource"/> wrapping the <see cref="Data.Model.Storage.Resource"/> matching the resource identifier .
+        /// Status Code 304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
-        [Route("{*namespace}")]
-        public async Task<IActionResult> Get([Required][FromRoute] string @namespace)
+        [Route("{namespace}")]
+        public async Task<IActionResult> Get(
+            [Required][FromRoute] string @namespace
+            )
         {
 
             _logger.LogTrace($"{nameof(ResourcesController)}:GET (Many). Sending request.");
@@ -76,6 +84,7 @@ namespace Api.Controllers
                 RequestId = _requestId,
                 Scheme = Request.Scheme,
                 Host = Request.Host.Value,
+                PathBase = Request.PathBase.Value,
                 Path = Request.Path.Value
             };
 

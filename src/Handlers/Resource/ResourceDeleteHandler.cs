@@ -27,8 +27,9 @@ namespace Handlers.Resource
             var response = new ResourceDeleteResponse() { };
 
             Data.Model.Storage.Resource resource = (await _storage.GetAsync(r =>
-                               r.Id == request.Id &&
-                               r.OwnerId == request.OwnerId
+                               r.Id == request.Id
+                               && r.OwnerId == request.OwnerId
+                               && r.Namespace == request.Namespace
                                )).FirstOrDefault();
 
 
@@ -39,7 +40,7 @@ namespace Handlers.Resource
             }
 
 
-            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers)??DateTimeOffset.MaxValue; // if none make unmodifiedever as default
+            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers) ?? DateTimeOffset.MaxValue; // if none make unmodifiedever as default
             var etags = await _requestHeadersProvider.IfMatch(request.Headers);
 
             // only proceed if resource is unmodified since or is one of the etags
@@ -55,7 +56,7 @@ namespace Handlers.Resource
                     response.StatusCode = HttpStatusCode.NoContent;
                     return response;
                 }
-                response.RequestValidationErrors.Add($"The resource deletion attempt was made but did not happen."); 
+                response.RequestValidationErrors.Add($"The resource deletion attempt was made but did not happen.");
 
                 response.StatusCode = HttpStatusCode.Gone;
                 return response;

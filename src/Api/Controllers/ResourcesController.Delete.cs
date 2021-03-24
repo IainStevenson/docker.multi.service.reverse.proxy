@@ -9,7 +9,7 @@ namespace Api.Controllers
     public partial class ResourcesController 
     {
         /// <summary>
-        /// DELETE: api/resources/{id}
+        /// DELETE: api/resources/{namespace}/{id}
         /// </summary>
         /// <remarks>
         /// Supports Headers: If-Unmodified-Since, If-Match
@@ -21,12 +21,15 @@ namespace Api.Controllers
         /// 412 PreConditionFailed
         /// 200 OK
         /// </returns>
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{namespace}/{id:guid}")]
+        public async Task<IActionResult> Delete(
+            [FromRoute] string @namespace,
+            [FromRoute] Guid id)
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:DELETE. Sending request.");
 
             var request = new ResourceDeleteRequest() {
+                Namespace = @namespace.ToLower(),
                 Id = id,
                 OwnerId = _ownerId,
                 RequestId = _requestId,

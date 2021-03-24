@@ -40,7 +40,11 @@ namespace Handlers.Resource
 
             var response = new ResourcePutResponse() { };
 
-            Data.Model.Storage.Resource resource = await _storage.GetAsync(request.Id);
+            Data.Model.Storage.Resource resource = (await _storage.GetAsync(
+                    r => r.Id == request.Id
+                    && r.OwnerId == request.OwnerId
+                    && r.Namespace == request.Namespace
+                    )).FirstOrDefault();
 
             if (resource == null)
             {
@@ -48,23 +52,28 @@ namespace Handlers.Resource
                 return response;
             }
 
-            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers)?? DateTimeOffset.MaxValue;
+            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers) ?? DateTimeOffset.MaxValue;
             var etags = await _requestHeadersProvider.IfMatch(request.Headers);
 
             // only proceed if resource is unmodified since or is one of the etags
             if (
-                    (resource.Modified.HasValue ? 
+                    (resource.Modified.HasValue ?
                     resource.Modified.Value <= unmodifiedSince : resource.Created <= unmodifiedSince) ||
                     (etags.Contains(resource.Etag))
                     )
             {
 
                 resource.Content = request.Model;
-                resource.Namespace = request.Namespace;
+
                 resource.Modified = DateTimeOffset.UtcNow;
                 resource.Metadata.Tags.Add("RequestId", $"{request.RequestId}");
                 resource.Metadata.Tags.Add("Updated", $"{resource.Modified}");
-                resource.Metadata.Tags.Add("Namespace", $"{resource.Namespace}");
+
+                if (!string.IsNullOrWhiteSpace(request.MoveTo))
+                {
+                    resource.Namespace = request.MoveTo;
+                    resource.Metadata.Tags.Add("Namespace Changed", $"{resource.Namespace}");
+                }
 
                 resource = await _storage.UpdateAsync(resource);
 
@@ -76,17 +85,21 @@ namespace Handlers.Resource
                     responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
                 }
 
-                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{resource.Id}" } };
+                var systemKeys = new Dictionary<string, string>() {
+                    { "{id}", $"{resource.Id}" }
+                };
+
                 var relatedEntities = EmptyEntityList;
                 responseModel.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
                                                                 request.Host,
+                                                                request.PathBase.TrimEnd('/'),
                                                                 request.Path.TrimEnd('/'),
                                                                 systemKeys,
                                                                 relatedEntities);
 
                 response.Model = responseModel;
-                response.Headers =  _responseHeadersProvider.AddHeadersFromItem(response.Model);
+                response.Headers = _responseHeadersProvider.AddHeadersFromItem(response.Model);
                 response.StatusCode = HttpStatusCode.OK;
                 return response;
 

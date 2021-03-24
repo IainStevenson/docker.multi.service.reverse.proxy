@@ -10,7 +10,7 @@ namespace Api.Controllers
     public partial class ResourcesController
     {
         /// <summary>
-        /// Action verb POST : api/resources/storage.name.space[?keys=id1[&keys=id2...]
+        /// Action verb POST : api/resources/{namespace}[?keys=id1[&keys=id2...]
         /// </summary>
         /// <param name="namespace">The required resource storage namespace, an optionally dotted string folder semantic for the client  to declare a data type and provides a means of type aggregation. 
         /// The dotted string format is validated and any deviance will result in a return status code of 400-BadRequest.
@@ -38,7 +38,7 @@ namespace Api.Controllers
         ///     
         /// </example>
         [HttpPost]
-        [Route("{*namespace}")]
+        [Route("{namespace}")]
         public async Task<IActionResult> Post(
             [Required][FromRoute] string @namespace,
             [Required][FromBody] dynamic content,
@@ -56,6 +56,7 @@ namespace Api.Controllers
                 RequestId = _requestId,
                 Scheme = Request.Scheme,
                 Host = Request.Host.Value,
+                PathBase = Request.PathBase.Value,
                 Path = Request.Path.Value
             };
 

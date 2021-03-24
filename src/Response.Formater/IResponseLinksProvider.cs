@@ -15,6 +15,7 @@ namespace Response.Formater
         /// <param name="source">The source item to apply the links to</param>
         /// <param name="scheme">The HTTP Request Scheme</param>
         /// <param name="host">The Http Request Host</param>
+        /// <param name="pathBase">The Http request path base (if used) for generating links</param>
         /// <param name="path">The Http request path for generating links</param>
         /// <param name="systemKeys">Additional key information to finalise the link Urls</param>
         /// <param name="relatedEntities">Additional and optional (sub-resource) verbs/actions/href's to apply to the outgoing response item</param>
@@ -23,6 +24,7 @@ namespace Response.Formater
         Task<List<IApiLink>> BuildLinks(
             string scheme,
             string host,
+            string pathBase,
             string path,
             IDictionary<string, string> systemKeys,
             IDictionary<string, string> relatedEntities);

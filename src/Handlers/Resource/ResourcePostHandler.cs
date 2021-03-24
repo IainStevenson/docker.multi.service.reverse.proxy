@@ -56,7 +56,6 @@ namespace Handlers.Resource
                         RequestId = request.RequestId,
                         Tags = new Dictionary<string, object>() {
                             { "Created", DateTimeOffset.UtcNow } ,
-                            { "RequestId", request.RequestId},
                             { "Keys", request.Keys }
                         }
                     },
@@ -65,7 +64,9 @@ namespace Handlers.Resource
                 resource = await _storage.CreateAsync(resource);
 
 
-                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{resource.Id}" } };
+                var systemKeys = new Dictionary<string, string>() {
+                    { "{id}", $"{resource.Id}" }
+                };
 
                 var relatedEntities = EmptyEntityList;
 
@@ -75,6 +76,7 @@ namespace Handlers.Resource
                 responseModel.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
                                                                 request.Host,
+                                                                request.PathBase.TrimEnd('/'),
                                                                 request.Path.TrimEnd('/'),
                                                                 systemKeys,
                                                                 relatedEntities);

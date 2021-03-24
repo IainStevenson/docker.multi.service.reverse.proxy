@@ -71,10 +71,13 @@ namespace Handlers.Resource
             var relatedEntities = EmptyEntityList;
             foreach (var item in response.Model)
             {
-                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{item.Id}" } };
+                var systemKeys = new Dictionary<string, string>() {
+                    { "{id}", $"{item.Id}" }
+                 };
                 item.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
                                                                 request.Host,
+                                                                request.PathBase.TrimEnd('/'),
                                                                 request.Path.TrimEnd('/'),
                                                                 systemKeys,
                                                                 relatedEntities);

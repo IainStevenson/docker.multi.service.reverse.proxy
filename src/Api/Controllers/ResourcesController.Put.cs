@@ -11,7 +11,7 @@ namespace Api.Controllers
     public partial class ResourcesController
     {
         /// <summary>
-        /// Action verb PUT: api/Resource/{id:guid}[/{namespace}]
+        /// Action verb PUT: api/Resource/{namespace}/{id:guid}[?moveto=newnamespace[&keys=id1[&keys=id2...]]]
         /// </summary>
         /// <remarks>
         /// Updates an existing resource, and or, optionally moves its namespace. 
@@ -35,30 +35,34 @@ namespace Api.Controllers
         /// 200 OK - Success - returns changed object
         /// </returns>
         [HttpPut()]
-        [Route("{id:guid}/{*namespace}")]
+        [Route("{namespace}/{id:guid}")]
         public async Task<IActionResult> Put(
+            [Required][FromRoute] string @namespace,
             [Required][FromRoute] Guid id,
-            [FromRoute] string @namespace,
             [FromBody] dynamic content,
-            [FromQuery] string keys)
+            [FromQuery] string keys,
+            [FromQuery] string moveto)
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:PUT. Sending request.");
 
             var request = new ResourcePutRequest()
             {
-                Id = id,
                 Namespace = @namespace.ToLower(),
+                Id = id,
+                Keys = keys,
+                MoveTo = moveto,
+                
                 Model = content,
 
-                Keys = keys,
                 
                 Headers = Request.Headers,
                 Query = Request.Query,
                 Scheme = Request.Scheme,
                 Host = Request.Host.Value,
+                PathBase = Request.PathBase.Value,
                 Path = Request.Path.Value,
                 
-                Owner = _ownerId,
+                OwnerId = _ownerId,
                 RequestId = _requestId
             };
 
@@ -67,6 +71,6 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}:PUT. Processing response.");
 
             return response.Handle(this);
-        }       
+        }
     }
 }

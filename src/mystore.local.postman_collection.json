@@ -257,7 +257,7 @@
 			"name": "Api",
 			"item": [
 				{
-					"name": "POST Data to the secured API",
+					"name": "POST Resource to the secured API",
 					"event": [
 						{
 							"listen": "test",
@@ -265,8 +265,17 @@
 								"exec": [
 									"pm.test(\"Status code is 201\", function () {\r",
 									"    pm.response.to.have.status(201);  \r",
-									"    var crudId = pm.response.headers.get(\"Location\").split('WeatherForecast/')[1];\r",
-									"    console.log(\"Location header: \", crudId)\r",
+									"    \r",
+									"    var locationHeader = pm.response.headers.get(\"Location\");\r",
+									"    console.log(\"Location header: \", locationHeader)\r",
+									"\r",
+									"    var locationHeaderElements = locationHeader.split('/');\r",
+									"    console.log(\"Location header Elements: \", locationHeaderElements)\r",
+									"    console.log(\"# Location header Elements: \", locationHeaderElements.length)\r",
+									"\r",
+									"    var crudId = locationHeaderElements[locationHeaderElements.length-1];\r",
+									"\r",
+									"    console.log(\"Location header ID: \", crudId)\r",
 									"\r",
 									"    pm.environment.set('crudId', crudId);\r",
 									"\r",
@@ -317,7 +326,7 @@
 					"response": []
 				},
 				{
-					"name": "GET Data from the secured API",
+					"name": "GET One Resource from the secured API",
 					"event": [
 						{
 							"listen": "test",
@@ -335,13 +344,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUri}}/api/resources/{{crudId}}",
+							"raw": "{{baseUri}}/api/resources//WeatherForecast/{{crudId}}",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
 								"resources",
+								"",
+								"WeatherForecast",
 								"{{crudId}}"
 							]
 						}
@@ -349,7 +360,40 @@
 					"response": []
 				},
 				{
-					"name": "PUT Data from the secured API",
+					"name": "GET Many Resources from the secured API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/api/resources//WeatherForecast",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"api",
+								"resources",
+								"",
+								"WeatherForecast"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Resource to the secured API",
 					"event": [
 						{
 							"listen": "test",
@@ -382,13 +426,14 @@
 							"raw": "{\r\n    \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\"\r\n}"
 						},
 						"url": {
-							"raw": "{{baseUri}}/api/resources/{{crudId}}",
+							"raw": "{{baseUri}}/api/resources/weatherforecast/{{crudId}}",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
 								"resources",
+								"weatherforecast",
 								"{{crudId}}"
 							]
 						}
@@ -396,7 +441,7 @@
 					"response": []
 				},
 				{
-					"name": "DELETE Data from the secured API",
+					"name": "DELETE Resource from the secured API",
 					"event": [
 						{
 							"listen": "test",
@@ -414,13 +459,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUri}}/api/resources/{{crudId}}",
+							"raw": "{{baseUri}}/api/resources/weatherforecast/{{crudId}}",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
 								"resources",
+								"weatherforecast",
 								"{{crudId}}"
 							]
 						}

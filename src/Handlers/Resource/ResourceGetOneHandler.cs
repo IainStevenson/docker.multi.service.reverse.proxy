@@ -28,14 +28,18 @@ namespace Handlers.Resource
             _requestHeadersProvider = requestHeadersProvider;
             _responseHeadersProvider = responseHeadersProvider;
             _mapper = mapper;
-            _responseLinksProvider= responseLinksProvider;
+            _responseLinksProvider = responseLinksProvider;
         }
 
         public async Task<ResourceGetOneResponse> Handle(ResourceGetOneRequest request, CancellationToken cancellationToken)
         {
             var response = new ResourceGetOneResponse();
 
-            Data.Model.Storage.Resource resource = await _storage.GetAsync(request.Id);
+            Data.Model.Storage.Resource resource = (await _storage.GetAsync(
+                        r => r.Id == request.Id
+                        && r.OwnerId == request.OwnerId
+                        && r.Namespace == request.Namespace
+                )).SingleOrDefault();
 
 
             if (resource == null)
@@ -47,9 +51,9 @@ namespace Handlers.Resource
             var responseModel = _mapper.Map<Data.Model.Response.Resource>(resource);
 
             var ifNoneMatch = await _requestHeadersProvider.IfNoneMatch(request.Headers);
-            if (ifNoneMatch.Any() &&  ifNoneMatch.Contains(resource.Etag))
+            if (ifNoneMatch.Any() && ifNoneMatch.Contains(resource.Etag))
             {
-                response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
+                response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
                 response.StatusCode = System.Net.HttpStatusCode.NotModified;
                 return response;
             }
@@ -63,7 +67,7 @@ namespace Handlers.Resource
                 if (resourceHasNotBeenModifiedSince)
                 {
 
-                    response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
+                    response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
                     response.StatusCode = System.Net.HttpStatusCode.NotModified;
                     return response;
                 }
@@ -71,18 +75,21 @@ namespace Handlers.Resource
             }
 
 
-            
+
             var relatedEntities = EmptyEntityList;
-            var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Id}" } };
+            var systemKeys = new Dictionary<string, string>() {
+                    { "{id}", $"{resource.Id}" }
+                 };
 
             responseModel.Links = await _responseLinksProvider.BuildLinks(
                                                             request.Scheme,
                                                             request.Host,
+                                                            request.PathBase.TrimEnd('/'),
                                                             request.Path.TrimEnd('/'),
                                                             systemKeys,
                                                             relatedEntities);
 
-            response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
+            response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
             response.Model = responseModel;
             response.StatusCode = System.Net.HttpStatusCode.OK;
             return response;
