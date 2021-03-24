@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
-using Handlers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Response.Formater;
-using Storage;
 
 namespace Api.Controllers
 {
