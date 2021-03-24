@@ -82,7 +82,7 @@ namespace Handlers.Resource
 
                 response.Model = responseModel;
                 response.ResourceUri = new Uri(responseModel.Links?.SingleOrDefault(x => x.Action == "get" && x.Rel == "self")?.Href ?? "\\");
-                response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);
+                response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
                 response.StatusCode = System.Net.HttpStatusCode.Created;
             }
             else

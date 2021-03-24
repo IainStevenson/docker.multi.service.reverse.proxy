@@ -2,6 +2,7 @@
 using MediatR;
 using Response.Formater;
 using Storage;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,15 +42,15 @@ namespace Handlers.Resource
             var responseModel = _mapper.Map<Data.Model.Response.Resource>(resource);
 
             var ifNoneMatch = await _requestHeadersProvider.IfNoneMatch(request.Headers);
-            if (ifNoneMatch.Contains(resource.Etag))
+            if (ifNoneMatch.Any() &&  ifNoneMatch.Contains(resource.Etag))
             {
-                response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);
+                response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
                 response.StatusCode = System.Net.HttpStatusCode.NotModified;
                 return response;
             }
 
             var ifModifiedSince = await _requestHeadersProvider.IfModifiedSince(request.Headers);
-            if (ifModifiedSince.HasValue)
+            if (ifModifiedSince.HasValue && ifModifiedSince.HasValue)
             {
                 var resourceHasNotBeenModifiedSince = !(resource.Modified.HasValue ?
                                                             resource.Modified > ifModifiedSince.Value :
@@ -57,14 +58,14 @@ namespace Handlers.Resource
                 if (resourceHasNotBeenModifiedSince)
                 {
 
-                    response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);
+                    response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
                     response.StatusCode = System.Net.HttpStatusCode.NotModified;
                     return response;
                 }
 
             }
 
-            //response.Headers = await _responseHeadersProvider.AddHeadersFromItem(responseModel);
+            response.Headers =  _responseHeadersProvider.AddHeadersFromItem(responseModel);
             response.Model = responseModel;
             response.StatusCode = System.Net.HttpStatusCode.OK;
             return response;

@@ -24,8 +24,8 @@ namespace Handlers.Resource
                 case HttpStatusCode.PreconditionFailed:
                     return source.StatusCode((int)HttpStatusCode.PreconditionFailed, new RequestExceptionModel(RequestValidationErrors));
 
-                case HttpStatusCode.OK:
-                    return source.Ok();
+                case HttpStatusCode.NoContent:
+                    return source.NoContent();
 
                 default:
                     RequestValidationErrors.Add($"Unhandled condition set in {nameof(ResourceDeleteHandler)} for {nameof(ResourceDeleteResponse)}");

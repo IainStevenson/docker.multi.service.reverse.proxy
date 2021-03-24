@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -31,7 +32,7 @@ namespace Handlers.Resource
         /// <summary>
         /// A collection of headers to add to the outgoing response
         /// </summary>
-        public IHeaderDictionary Headers { get; set; }
+        public IHeaderDictionary Headers { get; set; } 
 
         /// <summary>
         /// Handle the response as instructed
@@ -48,7 +49,9 @@ namespace Handlers.Resource
                 case HttpStatusCode.Created:
                     foreach (var item in Headers)
                     {
-                        source.Response.Headers.Add(item.Key, item.Value);
+                        if (!source.Response.Headers.ContainsKey(item.Key)) { 
+                            source.Response.Headers.Add(item.Key, item.Value);
+                        }
                     }
                     return source.Created(ResourceUri, Model);
 

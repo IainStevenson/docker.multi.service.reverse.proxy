@@ -13,17 +13,17 @@ namespace Response.Formater
         {
             _unwantedHeadersList = unwantedHeadersList;
         }
-        public Task<IHeaderDictionary> AddHeadersFromItem<T>(T resource) where T : IResponseItem
+        public IHeaderDictionary AddHeadersFromItem<T>(T resource) where T : IResponseItem
         {
-            var headers = new Dictionary<string, StringValues>
+            var headers = new HeaderDictionary
             {
                 { HeaderKeys.LastModified, $"{(resource.Modified ?? resource.Created):r}" },
                 { HeaderKeys.ETag, resource.Etag }
             };
-            return  Task.FromResult(headers as IHeaderDictionary);
+            return  headers;
         }
 
-        public Task RemoveUnwantedHeaders(IHeaderDictionary headers)
+        public void RemoveUnwantedHeaders(IHeaderDictionary headers)
         {
             foreach( var header in _unwantedHeadersList)
             {
@@ -31,9 +31,7 @@ namespace Response.Formater
                 {
                     headers.Remove(header);
                 }               
-            }
-            return Task.FromResult(0);
+            }            
         }
     }
-
 }

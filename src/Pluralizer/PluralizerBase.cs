@@ -127,7 +127,7 @@ namespace Pluralizer
 
             // Title cased words. E.g. "Title".
             if (originalWord[0] == char.ToUpper(originalWord[0]))
-                return char.ToUpper(newWord[0]) + newWord.Substring(1);
+                return char.ToUpper(newWord[0]) + newWord[1..];
 
             // Lower cased words. E.g. "test".
             return newWord.ToLower();

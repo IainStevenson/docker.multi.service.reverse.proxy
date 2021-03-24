@@ -1,4 +1,4 @@
 ﻿namespace Data.Model.Response
 {
-    public interface IResponseItem : IEntity, IResponseEntity, IApiLinks { }
+    public interface IResponseItem :  IResponseEntity, IApiLinks { }
 }

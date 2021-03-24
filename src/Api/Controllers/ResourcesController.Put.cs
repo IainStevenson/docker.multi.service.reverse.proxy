@@ -35,7 +35,7 @@ namespace Api.Controllers
         /// 200 OK - Success - returns changed object
         /// </returns>
         [HttpPut()]
-        [Route("{id:guid}/{*namespace?}")]
+        [Route("{id:guid}/{*namespace}")]
         public async Task<IActionResult> Put(
             [Required][FromRoute] Guid id,
             [FromRoute] string @namespace,

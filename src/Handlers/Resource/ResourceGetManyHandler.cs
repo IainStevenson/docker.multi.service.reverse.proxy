@@ -2,6 +2,7 @@
 using MediatR;
 using Response.Formater;
 using Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -30,33 +31,39 @@ namespace Handlers.Resource
 
             IEnumerable<Data.Model.Storage.Resource> resources = new List<Data.Model.Storage.Resource>();
 
-            var ifModifiedSince = await _requestHeadersProvider.IfModifiedSince(request.Headers);
+            var ifModifiedSince = await _requestHeadersProvider.IfModifiedSince(request.Headers) ?? DateTimeOffset.MinValue; // if none make modified as default;
 
-            if (ifModifiedSince.HasValue)
+
+            resources = await _storage.GetAsync(
+                            r => r.OwnerId == request.OwnerId &&
+                            r.Namespace == request.Namespace 
+                            );
+
+            if (!resources.Any())
             {
-                resources = await _storage.GetAsync(
-                    r => r.OwnerId == request.OwnerId &&
-                    r.Namespace == request.Namespace &&
-                    r.Modified.HasValue ? r.Modified > ifModifiedSince.Value : r.Created > ifModifiedSince.Value);
-
-                if (!resources.Any())
+                // if all of them are unmodified since then return none
+                var unmodifiedItems = resources.Where(r =>
+                                            r.Modified.HasValue ? r.Modified < ifModifiedSince :
+                                            r.Created < ifModifiedSince);
+                if (unmodifiedItems.Count() == resources.Count())
                 {
                     response.StatusCode = System.Net.HttpStatusCode.NotModified;
                     return response;
                 }
+
+                // else return modified since items
+                var modifiedItems = resources.Where(r =>
+                            r.Modified.HasValue ? r.Modified >= ifModifiedSince :
+                            r.Created > ifModifiedSince);
+
+                response.Model = _mapper.Map<IEnumerable<Data.Model.Response.Resource>>(modifiedItems);
+
             }
             else
             {
-                resources = await _storage.GetAsync(
-                        r => r.OwnerId ==request.OwnerId && 
-                        r.Namespace == request.Namespace);
+                response.Model = _mapper.Map<IEnumerable<Data.Model.Response.Resource>>(resources);
             }
-            if (!resources.Any())
-            {
-                response.StatusCode = System.Net.HttpStatusCode.NotFound;
-                return response;
-            }
-            response.Model = _mapper.Map<IEnumerable<Data.Model.Response.Resource>>(resources);
+            
             response.StatusCode = System.Net.HttpStatusCode.OK;
             return response;
         }

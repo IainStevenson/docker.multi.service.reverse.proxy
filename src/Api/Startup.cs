@@ -92,7 +92,7 @@ namespace Api
                         config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
                     });
 
-            services.AddMediatR(typeof(Handlers.RequestExceptionModel));
+            services.AddMediatR(typeof(Handlers.Resource.ResourcePostHandler));
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>
@@ -111,8 +111,8 @@ namespace Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" }); // TODO Add to config properties
 
-                var filePath = Path.Combine(System.AppContext.BaseDirectory, "Api.xml");
-                c.IncludeXmlComments(filePath);
+                //var filePath = Path.Combine(System.AppContext.BaseDirectory, "Api.xml");
+                //c.IncludeXmlComments(filePath);
             });
 
             services.AddAuthorization(options =>
@@ -120,7 +120,7 @@ namespace Api
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "mystore.api"); // TODO: Add to configuration
+                    policy.RequireClaim("scope", "api1"); // TODO: Add to configuration
                 });
             });
 
@@ -173,7 +173,8 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    .RequireAuthorization("ApiScope");
+                    .RequireAuthorization("ApiScope")
+                ;
                 // `.RequireAuthorization()` sets all controllers to [Authorize] 
                 // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
             });

@@ -6,7 +6,7 @@ namespace Response.Formater
 {
     public interface IResponseHeadersProvider
     {
-        Task<IHeaderDictionary> AddHeadersFromItem<T>(T resource) where T : IResponseItem;
-        Task RemoveUnwantedHeaders(IHeaderDictionary headers);
+        IHeaderDictionary AddHeadersFromItem<T>(T resource) where T : IResponseItem;
+        void RemoveUnwantedHeaders(IHeaderDictionary headers);
     }
 }

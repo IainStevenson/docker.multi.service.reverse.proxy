@@ -39,7 +39,7 @@ namespace Handlers.Resource
             }
 
 
-            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers);
+            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers)??DateTimeOffset.MaxValue; // if none make unmodifiedever as default
             var etags = await _requestHeadersProvider.IfMatch(request.Headers);
 
             // only proceed if resource is unmodified since or is one of the etags
@@ -52,7 +52,7 @@ namespace Handlers.Resource
                 var count = await _storage.DeleteAsync(request.Id);
                 if (count == 1)
                 {
-                    response.StatusCode = HttpStatusCode.OK;
+                    response.StatusCode = HttpStatusCode.NoContent;
                     return response;
                 }
                 response.RequestValidationErrors.Add($"The resource deletion attempt was made but did not happen."); 

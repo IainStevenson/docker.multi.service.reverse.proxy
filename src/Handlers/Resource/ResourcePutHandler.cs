@@ -48,12 +48,13 @@ namespace Handlers.Resource
                 return response;
             }
 
-            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers);
+            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(request.Headers)?? DateTimeOffset.MaxValue;
             var etags = await _requestHeadersProvider.IfMatch(request.Headers);
 
             // only proceed if resource is unmodified since or is one of the etags
             if (
-                    (resource.Modified.HasValue ? resource.Modified.Value <= unmodifiedSince : resource.Created <= unmodifiedSince) ||
+                    (resource.Modified.HasValue ? 
+                    resource.Modified.Value <= unmodifiedSince : resource.Created <= unmodifiedSince) ||
                     (etags.Contains(resource.Etag))
                     )
             {
@@ -82,7 +83,7 @@ namespace Handlers.Resource
                                                                 relatedEntities);
 
                 response.Model = responseModel;
-                response.Headers = await _responseHeadersProvider.AddHeadersFromItem(response.Model);
+                response.Headers =  _responseHeadersProvider.AddHeadersFromItem(response.Model);
                 response.StatusCode = HttpStatusCode.OK;
                 return response;
 
@@ -93,7 +94,7 @@ namespace Handlers.Resource
                 {
                     response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', etags)}/r/n");
                 }
-                if (unmodifiedSince != DateTimeOffset.MinValue)
+                if (unmodifiedSince != DateTimeOffset.MaxValue)
                 {
                     response.RequestValidationErrors.Add($"The resource has been modified since {unmodifiedSince}");
                 }
