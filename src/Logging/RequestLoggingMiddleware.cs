@@ -57,14 +57,10 @@ namespace Logging
             {
                 context.Response.Body = newResponseBody;
                 await _next(context);
-
-
-
             }
             catch (Exception ex)
             {
                 requestProfilerModel.Exception = ex;
-
             }
             finally
             {

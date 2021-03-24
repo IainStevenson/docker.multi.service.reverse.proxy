@@ -75,7 +75,7 @@ namespace Handlers.Resource
 
                 var systemKeys = new Dictionary<string, string>() { { "{id}", $"{resource.Id}" } };
                 var relatedEntities = EmptyEntityList;
-                response.Model.Links = await _responseLinksProvider.BuildLinks(
+                responseModel.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
                                                                 request.Host,
                                                                 request.Path.TrimEnd('/'),
