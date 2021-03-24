@@ -303,13 +303,14 @@
 							"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
 						},
 						"url": {
-							"raw": "{{baseUri}}/api/weatherforecast",
+							"raw": "{{baseUri}}/api/resources/WeatherForecast",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
-								"weatherforecast"
+								"resources",
+								"WeatherForecast"
 							]
 						}
 					},
@@ -334,13 +335,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUri}}/api/weatherforecast/{{crudId}}",
+							"raw": "{{baseUri}}/api/resources/{{crudId}}",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
-								"weatherforecast",
+								"resources",
 								"{{crudId}}"
 							]
 						}
@@ -354,8 +355,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 204\", function () {\r",
-									"    pm.response.to.have.status(204);\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -381,13 +382,13 @@
 							"raw": "{\r\n    \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\"\r\n}"
 						},
 						"url": {
-							"raw": "{{baseUri}}/api/weatherforecast/{{crudId}}",
+							"raw": "{{baseUri}}/api/resources/{{crudId}}",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
-								"weatherforecast",
+								"resources",
 								"{{crudId}}"
 							]
 						}
@@ -413,13 +414,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUri}}/api/weatherforecast/{{crudId}}",
+							"raw": "{{baseUri}}/api/resources/{{crudId}}",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
-								"weatherforecast",
+								"resources",
 								"{{crudId}}"
 							]
 						}
@@ -464,7 +465,7 @@
 			},
 			{
 				"key": "authUrl",
-				"value": "https://mystore.local/identity/connect/authorize",
+				"value": "https://miconsent.com/identity/connect/authorize",
 				"type": "string"
 			},
 			{
