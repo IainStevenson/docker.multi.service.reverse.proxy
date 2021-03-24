@@ -87,8 +87,6 @@ services:
         - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
         - ${APPDATA}/MongoDb/Data:/data/db
         - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/
-    ports: 
-        - "27017:27017"    
     networks: 
       - mystore
 

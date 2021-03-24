@@ -25,7 +25,7 @@ namespace WebApp1
 
             services.AddControllersWithViews();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Store"; });
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Store"; });// TODO: Add to configuration
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -40,7 +40,6 @@ namespace WebApp1
                     options.ClientSecret = "secret"; //TODO: CONFIG
                     options.ResponseType = "code"; //TODO: CONFIG
 
-
                     options.SaveTokens = true;
 
                     options.Scope.Add("openid"); //TODO: CONFIG
@@ -54,8 +53,8 @@ namespace WebApp1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UsePathBase("/store");
-           
+            app.UsePathBase("/store");// TODO: Add to configuration
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

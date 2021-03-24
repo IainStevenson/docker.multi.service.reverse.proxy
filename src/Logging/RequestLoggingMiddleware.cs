@@ -17,7 +17,7 @@ namespace Logging
         private readonly ILogger<RequestResponseLoggingMiddleware> _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private const int ReadChunkBufferLength = 4096;
-        private RequestLoggingMiddlewareOptions _options;
+        private readonly RequestLoggingMiddlewareOptions _options;
 
         public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger, IOptions<RequestLoggingMiddlewareOptions> options)
         {
@@ -52,88 +52,83 @@ namespace Logging
 
             var originalBody = context.Response.Body;
 
-            using (var newResponseBody = _recyclableMemoryStreamManager.GetStream())
+            using var newResponseBody = _recyclableMemoryStreamManager.GetStream();
+            try
             {
-
-
-                try
+                context.Response.Body = newResponseBody;
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                requestProfilerModel.Exception = ex;
+            }
+            finally
+            {
+                if (requestProfilerModel.Exception == null)
                 {
-                    context.Response.Body = newResponseBody;
-                    await _next(context);
+                    newResponseBody.Seek(0, SeekOrigin.Begin);
+                    await newResponseBody.CopyToAsync(originalBody);
+                    newResponseBody.Seek(0, SeekOrigin.Begin);
+                    requestProfilerModel.Response = await FormatResponseAsync(context, newResponseBody);
 
-
-                   
                 }
-                catch (Exception ex)
+                else
                 {
-                    requestProfilerModel.Exception = ex;
-
-                }
-                finally
-                {
-                    if (requestProfilerModel.Exception == null)
+                    // there was an excption so populate the more detailed information
+                    object routes = null;
+                    if (provider != null)
                     {
-                        newResponseBody.Seek(0, SeekOrigin.Begin);
-                        await newResponseBody.CopyToAsync(originalBody);
-                        newResponseBody.Seek(0, SeekOrigin.Begin);
-                        requestProfilerModel.Response = await FormatResponseAsync(context, newResponseBody);
-
-                    }
-                    else
-                    {
-                        // there was an excption so populate the more detailed information
-                        object routes = null;
-                        if (provider != null)
+                        routes = provider.ActionDescriptors.Items.Select(x => new
                         {
-                            routes = provider.ActionDescriptors.Items.Select(x => new
-                            {
-                                Action = x.RouteValues.ContainsKey("Action") ? x.RouteValues["Action"] : null,
-                                Controller = x.RouteValues.ContainsKey("Controller") ? x.RouteValues["Controller"] : null,
-                                Page = x.RouteValues.ContainsKey("Page") ? x.RouteValues["Page"] : null,
-                                x.AttributeRouteInfo?.Name,
-                                x.AttributeRouteInfo?.Template,
-                                Contraint = JsonConvert.SerializeObject(x.ActionConstraints)
-                            }).ToArray();
+                            Action = x.RouteValues.ContainsKey("Action") ? x.RouteValues["Action"] : null,
+                            Controller = x.RouteValues.ContainsKey("Controller") ? x.RouteValues["Controller"] : null,
+                            Page = x.RouteValues.ContainsKey("Page") ? x.RouteValues["Page"] : null,
+                            x.AttributeRouteInfo?.Name,
+                            x.AttributeRouteInfo?.Template,
+                            Contraint = JsonConvert.SerializeObject(x.ActionConstraints)
+                        }).ToArray();
 
-                            //routesJson = JsonConvert.SerializeObject(routes, new JsonSerializerSettings() { Formatting = Formatting.Indented });
-                        }
-                        requestProfilerModel.Routes = routes ?? new object[] { };
-
+                        //routesJson = JsonConvert.SerializeObject(routes, new JsonSerializerSettings() { Formatting = Formatting.Indented });
                     }
-                    requestProfilerModel.TimeOfResponse = DateTimeOffset.UtcNow;
+                    requestProfilerModel.Routes = routes ?? new object[] { };
 
-                    _logger.LogInformation(JsonConvert.SerializeObject(requestProfilerModel, new JsonSerializerSettings()
-                    {
-                        Formatting = Formatting.Indented,
-                        DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                        DateTimeZoneHandling = DateTimeZoneHandling.Utc
-                    }));
                 }
+                requestProfilerModel.TimeOfResponse = DateTimeOffset.UtcNow;
 
+                _logger.LogInformation(JsonConvert.SerializeObject(requestProfilerModel, new JsonSerializerSettings()
+                {
+                    Formatting = Formatting.Indented,
+                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                }));
             }
         }
 
         private async Task<RequestProfilerResponseModel> FormatResponseAsync(HttpContext context, Stream newResponseBody)
         {
-            var result = new RequestProfilerResponseModel();
-            result.StatusCode = context.Response.StatusCode;
-            result.Headers = context.Request.Headers;
-            result.Body = await ReadStreamInChunksAsync(newResponseBody);
-            
+            var result = new RequestProfilerResponseModel
+            {
+                StatusCode = context.Response.StatusCode,
+                Headers = context.Request.Headers,
+                Body = await ReadStreamInChunksAsync(newResponseBody)
+            };
+
             return result;
         }
 
         private async Task<RequestProfilerRequestModel> FormatRequestAsync(HttpContext context)
         {
-            var result = new RequestProfilerRequestModel();
-            result.Method = context.Request.Method;
-            result.Scheme = context.Request.Scheme;
-            result.Host = context.Request.Host;
-            result.PathBase = context.Request.PathBase;
-            result.Path = context.Request.Path;
-            result.QueryString = context.Request.QueryString;
-            result.Headers = context.Request.Headers;
-            result.Body = await GetRequestBodyAsync(context.Request);
+            var result = new RequestProfilerRequestModel
+            {
+                Method = context.Request.Method,
+                Scheme = context.Request.Scheme,
+                Host = context.Request.Host,
+                PathBase = context.Request.PathBase,
+                Path = context.Request.Path,
+                QueryString = context.Request.QueryString,
+                Headers = context.Request.Headers,
+                Body = await GetRequestBodyAsync(context.Request)
+            };
             return result;
         }
 
@@ -142,12 +137,10 @@ namespace Logging
         public async Task<string> GetRequestBodyAsync(HttpRequest request)
         {
             request.EnableBuffering();
-            using (var stream = _recyclableMemoryStreamManager.GetStream())
-            {
-                await request.Body.CopyToAsync(stream);
-                request.Body.Seek(0, SeekOrigin.Begin);
-                return await ReadStreamInChunksAsync(stream);
-            }
+            using var stream = _recyclableMemoryStreamManager.GetStream();
+            await request.Body.CopyToAsync(stream);
+            request.Body.Seek(0, SeekOrigin.Begin);
+            return await ReadStreamInChunksAsync(stream);
         }
 
         private static async Task<string> ReadStreamInChunksAsync(Stream stream)

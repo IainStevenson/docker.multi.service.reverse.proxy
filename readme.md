@@ -6,8 +6,9 @@ To document the research needed to produce;
 * A common domain URL scheme with different services serving different url paths
 * A Secure API service an /api url path
 * A common security domain allowing social identities and role based access
+* A common persistence server with separate databases and collections
 
-The key elements of the configuration is documented in the [issues document](file://issues.md) which lists the isues encountered during development and how they were resolved.
+The key elements of the configuration is documented in the [issues document](file://issues.md) which lists the issues encountered during development and how they were resolved.
 
 # Dependencies
 
@@ -38,12 +39,12 @@ The container orchestration is provided using the Visual Studio docker orchestra
 
 - Install git for windows in its default location if you have not done so, or modify src/Proxy/gen-vars.cmd to find the openssl.exe elsewhere
 - Download this repository and load it into visual studio.
-- to install the domain trusted certificate to your dev host, open a powershell or command window in the ```src/Proxy``` folder and execute ```./gen-root.cmd``` and follow instructions \* 
-- to generate default certificates for each microservice execute the ```gen-host.cmd``` and follow instructions.
+- To install the domain trusted certificate to your dev host, open a powershell or command window in the ```src/Proxy``` folder and execute ```./gen-root.cmd``` and follow instructions \* 
+- To generate default certificates for each microservice execute the ```gen-host.cmd``` and follow instructions.
 - Edit your hosts file as described in 'Fictional Domain' below. Once that change is saved it is active immediately.
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
 - Press F5.
-- If no browser appears start one and navigate to https://mystore.local and you will see the store site.
+- If no browser appears, start one and navigate to https://mystore.local and you will see the store site.
 - Navigate around, when you click Weather Forecast you will need to login, use username: bob Password: bob
 - Alternatively or as well, import the mystore.local.postman_collection.json file into postman and run the tests in the mystore.local collection.
 

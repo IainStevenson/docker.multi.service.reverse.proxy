@@ -38,6 +38,15 @@ db.createUser({
 
 db = db.getSiblingDB('mystoreAPI')
 db.createCollection('resources')
+db.resources.createIndex(
+	{ OwnerId: 1, Namespace: 1 },
+	{
+		collation: {
+			local: 'en',
+			strength: 2
+		}
+	}
+)
 
 
 db = db.getSiblingDB('mystoreIdentity')
@@ -51,14 +60,14 @@ usersCol.createIndex({ "Username": 1 })
 
 db.createCollection('clients')
 var clientsCol = db.getCollection('clients')
-clientsCol.createIndex({ "ClientId": 1 }, { unique : true })
+clientsCol.createIndex({ "ClientId": 1 }, { unique: true })
 
 db.createCollection('apiresources')
 var apiCol = db.getCollection('apiresources')
-apiCol.createIndex({ "Name": 1 }, { unique : true })
+apiCol.createIndex({ "Name": 1 }, { unique: true })
 
 db.createCollection('identityresources')
 var idCol = db.getCollection('identityresources')
-idCol.createIndex({ "Name": 1 }, { unique : true })
+idCol.createIndex({ "Name": 1 }, { unique: true })
 
 

@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 
-namespace Api
+namespace WebApp2.Models
 {
     public class WeatherForecast
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }

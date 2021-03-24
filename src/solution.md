@@ -11,6 +11,7 @@ src
 |_Api
 |_Identity
 |_Logging
+|-MongoDB
 |_Proxy
 |_WebApp1
 |_WebApp2
@@ -84,9 +85,10 @@ docker network inspect f0a6248031f4
 
 ## ASP.NET Core
 
-Applies to Container 1 and Container 2
+Applies to Container 1 and Container 2, Api and Identity
 
 ## Path mapping
+
 In the ASP.NET Core web applications the application start ups are mapped to their appropriate application path in the startup method,
 
 
