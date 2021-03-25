@@ -23,7 +23,7 @@ namespace Identity
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("api1", "My API") 
+                new ApiScope("myStore.Api", "My API") 
             };
 
         public static IEnumerable<Client> Clients =>
@@ -43,7 +43,7 @@ namespace Identity
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "myStore.Api" }
                 },
                 
                 // interactive ASP.NET Core MVC client
@@ -77,7 +77,7 @@ namespace Identity
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1"
+                        "myStore.Api"
                     }
                 }
             };

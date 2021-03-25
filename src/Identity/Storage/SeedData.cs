@@ -21,7 +21,7 @@ namespace Identity.Storage
         public static IEnumerable<ApiResource> Apis =>
         new List<ApiResource>
         {
-            new ApiResource("miConsent.Api", "miConsent API") {
+            new ApiResource("myStore.Api", "myStore API") {
                 ApiSecrets = { new Secret("secret".Sha256()) { } },
                 UserClaims = {
                     JwtClaimTypes.Name,
@@ -29,7 +29,7 @@ namespace Identity.Storage
                 },
                 ShowInDiscoveryDocument = true,
                 Scopes = {
-                    "miConsent.Api"
+                    "myStore.Api"
                 }
             }
         };
@@ -38,8 +38,8 @@ namespace Identity.Storage
         new List<ApiScope>
         {
             new ApiScope(
-                "miConsent.Api",
-                "miConsent API") {
+                "myStore.Api",
+                "myStore API") {
                 ShowInDiscoveryDocument = true,
                 UserClaims = {
                     JwtClaimTypes.Name,
@@ -52,6 +52,7 @@ namespace Identity.Storage
 
         public static IEnumerable<Client> Clients => new List<Client>
         {
+            // command line client
             new Client
             {
                 ClientId = "SDK.Command",
@@ -67,34 +68,64 @@ namespace Identity.Storage
                 },
 
                 // scopes that client has access to
-                AllowedScopes = { "miConsent.Api" }
+                AllowedScopes = { "myStore.Api" }
             },
             // interactive ASP.NET Core MVC client
             new Client
-            {
-                ClientId = "miConsent.Mvc",
-                ClientName = "miConsent Portal client",
-                ClientSecrets = { new Secret("secret".Sha256()) },
-
-                AllowedGrantTypes = GrantTypes.Hybrid,
-                RequireConsent = false,
-                RequirePkce = false,
-
-                // where to redirect to after login/ out
-                RedirectUris = { "https://miconsent.com/portal/signin-oidc" },
-                FrontChannelLogoutUri = "https://miconsent.com/portal/signin-oidc",
-
-                AllowedScopes = new List<string>
                 {
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile,
-                    IdentityServerConstants.StandardScopes.Email,
-                    "miConsent.Api"
-                },
-                AllowedCorsOrigins = new[] { "miconsent.com"},
+                    ClientId = "myStore.Mvc",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
-                AllowOfflineAccess = true
-            },
+                    AllowedGrantTypes = GrantTypes.Code,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    // where to redirect to after login
+                    RedirectUris = {
+                        "https://mystore.local/signin-oidc" ,
+                        "https://mystore.local/store/signin-oidc" ,
+                        "https://mystore.local/support/signin-oidc"
+                    },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = {
+                        "https://mystore.local/signout-callback-oidc",
+                        "https://mystore.local/store/signout-callback-oidc",
+                        "https://mystore.local/support/signout-callback-oidc"
+                    },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "myStore.Api"
+                    }
+                },
+            //new Client
+            //{
+            //    ClientId = "myStore.Mvc",
+            //    ClientName = "myStore Portal client",
+            //    ClientSecrets = { new Secret("secret".Sha256()) },
+
+            //    AllowedGrantTypes = GrantTypes.Hybrid,
+            //    RequireConsent = false,
+            //    RequirePkce = false,
+
+            //    // where to redirect to after login/ out
+            //    RedirectUris = {    "https://myStore.local/store/signin-oidc",
+            //                        "https://myStore.local/support/signin-oidc"},
+            //    FrontChannelLogoutUri = "https://myStore.local/signin-oidc",
+
+            //    AllowedScopes = new List<string>
+            //    {
+            //        IdentityServerConstants.StandardScopes.OpenId,
+            //        IdentityServerConstants.StandardScopes.Profile,
+            //        IdentityServerConstants.StandardScopes.Email,
+            //        "myStore.Api"
+            //    },
+            //    AllowedCorsOrigins = new[] { "myStore.local"},
+
+            //    AllowOfflineAccess = true
+            //},
             // JavaScript Client
             new Client
             {
@@ -104,16 +135,16 @@ namespace Identity.Storage
                 RequirePkce = true,
                 RequireClientSecret = false,
 
-                RedirectUris =           { "http://miconsent.com/subject/callback.html" },
-                PostLogoutRedirectUris = { "http://miconsent.com/subject/index.html" },
-                AllowedCorsOrigins =     { "http://miconsent.com" },
+                RedirectUris =           { "http://myStore.local/subject/callback.html" },
+                PostLogoutRedirectUris = { "http://myStore.local/subject/index.html" },
+                AllowedCorsOrigins =     { "http://myStore.local" },
 
                 AllowedScopes =
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Email,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "miConsent.Api"
+                    "myStore.Api"
                 }
             },
             new Client{
@@ -131,7 +162,7 @@ namespace Identity.Storage
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
-                    "miConsent.Api"
+                    "myStore.Api"
                 },
                 ClientSecrets = new [] { new Secret("secret".Sha256())},
                 Enabled = true,
@@ -141,10 +172,10 @@ namespace Identity.Storage
 
         public static List<TestUser> Users => new List<TestUser>
         {
-            new TestUser() { Username = "alice", Password  = "password", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "sdk.alice@miConsent.com") } },
-            new TestUser() { Username = "bob", Password  = "password", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "sdk.bob@miConsent.com") } }
+            new TestUser() { Username = "alice", Password  = "alice", SubjectId = Guid.NewGuid().ToString(),
+                Claims = new List<Claim>(){ new Claim("email", "sdk.alice@myStore.local") } },
+            new TestUser() { Username = "bob", Password  = "bob", SubjectId = Guid.NewGuid().ToString(),
+                Claims = new List<Claim>(){ new Claim("email", "sdk.bob@myStore.local") } }
         };
     }
 
