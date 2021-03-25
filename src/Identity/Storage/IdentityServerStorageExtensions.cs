@@ -109,9 +109,9 @@ namespace Identity.Storage
             });
         }
         /// <summary>
-        /// Initialise the database with the <see cref="SeedData"/> if its found to be empty.
+        /// Initialise the database with the <see cref="SeedData"/> if its found to be missing data.
         /// </summary>
-        /// <param name="app"></param>
+        /// <param name="app">The application builder</param>
         /// <returns></returns>
         public static IApplicationBuilder InitializeDatabase(this IApplicationBuilder app)
         {
@@ -124,39 +124,37 @@ namespace Identity.Storage
             {
                 foreach (var item in SeedData.Clients)
                 {
-                    var response = repository.Add(item).ConfigureAwait(false).GetAwaiter().GetResult();
+                    _ = repository.Add(item).GetAwaiter().GetResult();
                 }
             }
             if ((repository.CollectionCount<ApiResource>().Result) == 0)
             {
                 foreach (var item in SeedData.Apis)
                 {
-                    var response = repository.Add(item).ConfigureAwait(false).GetAwaiter().GetResult();
+                    _ = repository.Add(item).GetAwaiter().GetResult();
                 }
             }
             if ((repository.CollectionCount<ApiScope>().Result) == 0)
             {
                 foreach (var item in SeedData.ApiScopes)
                 {
-                    var response = repository.Add(item).ConfigureAwait(false).GetAwaiter().GetResult();
+                    _ = repository.Add(item).GetAwaiter().GetResult();
                 }
             }
             if ((repository.CollectionCount<IdentityResource>().Result) == 0)
             {
                 foreach (var item in SeedData.Ids)
                 {
-                    var response = repository.Add(item).ConfigureAwait(false).GetAwaiter().GetResult();
+                    _ = repository.Add(item).GetAwaiter().GetResult();
                 }
             }
             if ((repository.CollectionCount<TestUser>().Result) == 0)
             {
                 foreach (var item in SeedData.Users)
                 {
-
-                    var response = repository.Add(item).ConfigureAwait(false).GetAwaiter().GetResult();
+                    _ = repository.Add(item).GetAwaiter().GetResult();
                 }
             }
-
 
             return app;
         }

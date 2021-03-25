@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Storage
 {
     /// <summary>
-    /// Basic interface with a few methods for adding, deleting, and querying data. NOTE: Updates not required at this time
+    /// Basic interface with a few methods for adding, deleting, and querying data. 
     /// </summary>
     public interface IIdentityRepository
     {
