@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebApp2.Models;
+using Store.Models;
 
-namespace WebApp2.Controllers
+namespace Store.Controllers
 {
     [AllowAnonymous]
     public class HomeController : Controller

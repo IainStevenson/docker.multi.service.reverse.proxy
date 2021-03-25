@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace WebApp1.Controllers
+namespace Store.Controllers
 {
     public class WeatherForecastController : Controller
     {

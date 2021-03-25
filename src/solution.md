@@ -13,8 +13,8 @@ src
 |_Logging
 |-MongoDB
 |_Proxy
-|_WebApp1
-|_WebApp2
+|_Store
+|_Support
 docker.multi.service.reverse.proxy.sln
 docker-compose.dcproj
 docker-compose.yml
@@ -40,7 +40,7 @@ Provides Request/Response logging middle-ware to aid in request tracing and figu
 ### Services
 As specified in the docker-compose file; There are a number of discrete containers build to assemble a set of micro-services.
 #### API
-Provides a basic but seured API feature
+Provides a basic but secured API feature
 #### Identity
 Provides a Custom IdentityServer4 instance to serve as the authorisation domain.
 #### Proxy
@@ -55,7 +55,7 @@ Provides the commercial support landing area.
 
 For current details ples refer to the details in docker-compose project docker-compose.yml and docker-compose.override.yml
 
-The containers are given container names to help avoid conflicts in other developers docker sets (and mine).  WebApp1 is a common image name!
+The containers are given container names to help avoid conflicts in other developers docker sets (and mine).  
 
 The containers are given host names to provide a container local dns ability, which will be useful for configuring NGINX.
 

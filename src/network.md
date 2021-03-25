@@ -112,7 +112,7 @@ Support access via path    | https://mystore.local/support is served direct from
 
 URL inter_site redirects from Container 1 to Container 2 and vis_a_versa work as expected and intra site urls using controller actions work as expected
 
-Example index.cshtml from WebApp1 shows a self referenceing controller action link and a standard domain relative ``` href="/support"``` link to the support site from the store;
+Example index.cshtml from Store shows a self referenceing controller action link and a standard domain relative ``` href="/support"``` link to the support site from the store;
 
 ```
 @{

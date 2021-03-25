@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp1", "WebApp1\WebApp1.csproj", "{93D5E4DA-B9F2-4228-A57F-77F56A0FB178}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp2", "WebApp2\WebApp2.csproj", "{5AC84196-43B1-4DB1-BA76-0B63228F44AD}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A2335A74-D681-439E-9A74-2F549E4B50AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7CF5B55-7B58-48DE-8E09-2406C7130FB9}"
@@ -54,11 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "Identity\Identi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certificates", "certificates", "{5A4DDCD8-A2E5-421A-9EB8-557D73E69F19}"
 	ProjectSection(SolutionItems) = preProject
-		Proxy\certificates\api.mystore.local.conf = Proxy\certificates\api.mystore.local.conf
 		Proxy\certificates\dhparam.pem = Proxy\certificates\dhparam.pem
 		Proxy\certificates\domains.conf = Proxy\certificates\domains.conf
-		Proxy\certificates\identity.mystore.local.conf = Proxy\certificates\identity.mystore.local.conf
-		Proxy\certificates\mystore.local.conf = Proxy\certificates\mystore.local.conf
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage", "Storage\Storage.csproj", "{FC63D81E-8151-4F72-B512-48D83B3671A3}"
@@ -93,20 +86,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Storage.MopngoDB", "Identity.Storage.MopngoDB\Identity.Storage.MopngoDB.csproj", "{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store", "Store\Store.csproj", "{86BA59F7-4607-4A50-94B1-4DB0AAE5900B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Support", "Support\Support.csproj", "{BBFD28B5-FCAA-4396-83DC-E35168FC3479}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93D5E4DA-B9F2-4228-A57F-77F56A0FB178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93D5E4DA-B9F2-4228-A57F-77F56A0FB178}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93D5E4DA-B9F2-4228-A57F-77F56A0FB178}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93D5E4DA-B9F2-4228-A57F-77F56A0FB178}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5AC84196-43B1-4DB1-BA76-0B63228F44AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5AC84196-43B1-4DB1-BA76-0B63228F44AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5AC84196-43B1-4DB1-BA76-0B63228F44AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5AC84196-43B1-4DB1-BA76-0B63228F44AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2335A74-D681-439E-9A74-2F549E4B50AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2335A74-D681-439E-9A74-2F549E4B50AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2335A74-D681-439E-9A74-2F549E4B50AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -175,13 +164,19 @@ Global
 		{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86BA59F7-4607-4A50-94B1-4DB0AAE5900B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86BA59F7-4607-4A50-94B1-4DB0AAE5900B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86BA59F7-4607-4A50-94B1-4DB0AAE5900B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86BA59F7-4607-4A50-94B1-4DB0AAE5900B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBFD28B5-FCAA-4396-83DC-E35168FC3479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBFD28B5-FCAA-4396-83DC-E35168FC3479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBFD28B5-FCAA-4396-83DC-E35168FC3479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBFD28B5-FCAA-4396-83DC-E35168FC3479}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{93D5E4DA-B9F2-4228-A57F-77F56A0FB178} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
-		{5AC84196-43B1-4DB1-BA76-0B63228F44AD} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{A2335A74-D681-439E-9A74-2F549E4B50AF} = {9CEA8009-C2EB-44B3-9754-194138F79DCF}
 		{48FF9497-6FA5-4B50-8749-9FA87F10385B} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{C694F770-E674-4166-8F42-309FBEB0AD3C} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
@@ -202,6 +197,8 @@ Global
 		{AD30CD0F-26B7-4194-B6AF-636B45C050E4} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
 		{25FDE52D-A404-4673-9DD7-295218A17408} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
 		{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
+		{86BA59F7-4607-4A50-94B1-4DB0AAE5900B} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{BBFD28B5-FCAA-4396-83DC-E35168FC3479} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}

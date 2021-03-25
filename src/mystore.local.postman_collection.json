@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6807b355-9745-4f93-bd1a-3fe92d3b0b49",
+		"_postman_id": "92e4aee7-9a34-4510-8767-e2622254583c",
 		"name": "mystore.local",
 		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -57,7 +57,7 @@
 								"privacy"
 							]
 						},
-						"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+						"description": "Test required  direct access to Container 2 (Support) (support) "
 					},
 					"response": []
 				},
@@ -88,7 +88,7 @@
 								"store"
 							]
 						},
-						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+						"description": "Test required  direct access to Container 1 (Store) (store) "
 					},
 					"response": []
 				},
@@ -119,7 +119,7 @@
 								"store"
 							]
 						},
-						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+						"description": "Test required  direct access to Container 1 (Store) (store) "
 					},
 					"response": []
 				},
@@ -151,7 +151,7 @@
 								"home"
 							]
 						},
-						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+						"description": "Test required  direct access to Container 1 (Store) (store) "
 					},
 					"response": []
 				},
@@ -184,7 +184,7 @@
 								"privacy"
 							]
 						},
-						"description": "Test required  direct access to Container 1 (WebApp1) (store) "
+						"description": "Test required  direct access to Container 1 (Store) (store) "
 					},
 					"response": []
 				},
@@ -216,7 +216,7 @@
 								"home"
 							]
 						},
-						"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+						"description": "Test required  direct access to Container 2 (Support) (support) "
 					},
 					"response": []
 				},
@@ -247,7 +247,7 @@
 								"support"
 							]
 						},
-						"description": "Test required  direct access to Container 2 (WebApp2) (support) "
+						"description": "Test required  direct access to Container 2 (Support) (support) "
 					},
 					"response": []
 				}
@@ -299,6 +299,21 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{currentAccessToken}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -341,6 +356,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{currentAccessToken}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -375,6 +405,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{currentAccessToken}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -413,6 +458,21 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{currentAccessToken}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -456,6 +516,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{currentAccessToken}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -477,71 +552,11 @@
 		}
 	],
 	"auth": {
-		"type": "oauth2",
-		"oauth2": [
+		"type": "bearer",
+		"bearer": [
 			{
-				"key": "accessTokenUrl",
-				"value": "{{baseuri}}/identity/connect/token",
-				"type": "string"
-			},
-			{
-				"key": "scope",
-				"value": "api1",
-				"type": "string"
-			},
-			{
-				"key": "clientId",
-				"value": "client",
-				"type": "string"
-			},
-			{
-				"key": "grant_type",
-				"value": "client_credentials",
-				"type": "string"
-			},
-			{
-				"key": "password",
-				"value": "password",
-				"type": "string"
-			},
-			{
-				"key": "username",
-				"value": "bob",
-				"type": "string"
-			},
-			{
-				"key": "authUrl",
-				"value": "https://miconsent.com/identity/connect/authorize",
-				"type": "string"
-			},
-			{
-				"key": "clientSecret",
-				"value": "secret",
-				"type": "string"
-			},
-			{
-				"key": "useBrowser",
-				"value": true,
-				"type": "boolean"
-			},
-			{
-				"key": "redirect_uri",
-				"value": "https://www.getpostman.com/oauth2/callback",
-				"type": "string"
-			},
-			{
-				"key": "tokenType",
-				"value": "",
-				"type": "string"
-			},
-			{
-				"key": "tokenName",
-				"value": "API-Test",
-				"type": "string"
-			},
-			{
-				"key": "addTokenTo",
-				"value": "header",
+				"key": "token",
+				"value": "{{currentAccessToken}}",
 				"type": "string"
 			}
 		]

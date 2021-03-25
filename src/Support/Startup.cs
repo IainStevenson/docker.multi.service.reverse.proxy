@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace WebApp2
+namespace Support
 {
     public class Startup
     {

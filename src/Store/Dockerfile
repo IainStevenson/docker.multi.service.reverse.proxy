@@ -13,17 +13,17 @@ RUN update-ca-certificates
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["WebApp1/WebApp1.csproj", "WebApp1/"]
-RUN dotnet restore "WebApp1/WebApp1.csproj"
+COPY ["Store/Store.csproj", "Store/"]
+RUN dotnet restore "Store/Store.csproj"
 COPY . .
-WORKDIR "/src/WebApp1"
-RUN dotnet build "WebApp1.csproj" -c Release -o /app/build
+WORKDIR "/src/Store"
+RUN dotnet build "Store.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebApp1.csproj" -c Release -o /app/publish
+RUN dotnet publish "Store.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "WebApp1.dll"]
+ENTRYPOINT ["dotnet", "Store.dll"]

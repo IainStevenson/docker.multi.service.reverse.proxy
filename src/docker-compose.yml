@@ -9,7 +9,7 @@ services:
 
     build:
       context: .
-      dockerfile: WebApp1/Dockerfile  
+      dockerfile: Store/Dockerfile  
     depends_on:
      - mongo.mystore.local
      - api.mystore.local
@@ -23,7 +23,7 @@ services:
     image: ${DOCKER_REGISTRY-}support.mystore.local
     build:
       context: .
-      dockerfile: WebApp2/Dockerfile    
+      dockerfile: Support/Dockerfile    
     depends_on:
      - mongo.mystore.local
      - api.mystore.local    

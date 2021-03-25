@@ -22,8 +22,8 @@ Each service should have an additional base path added that should cope with int
 Service  |   Base Path
 _________|____________
 Identity | /identity
-WebApp1  | /store
-WebApp2  | /support
+Store    | /store
+Support  | /support
 Api      | /api
 
 All of these were achieved by using app.UsePathBase("/subdomain"); in the Startup classes Configure method.
