@@ -21,6 +21,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Identity.Storage.MopngoDB\Identity.Storage.MopngoDB.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
+    <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
+    <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 </Project>

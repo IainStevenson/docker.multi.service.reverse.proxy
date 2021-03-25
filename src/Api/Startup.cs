@@ -19,7 +19,6 @@ using Response.Formater;
 using Storage;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 
 namespace Api
@@ -66,7 +65,7 @@ namespace Api
                 cfg.CreateMap<Data.Model.Storage.Resource, Data.Model.Response.Resource>();
             }).CreateMapper();
 
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "mystore.api"; });
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "myStore.Api"; });
             services.AddHttpClient("");
             services.AddScoped(NewMongoClient);
             services.AddScoped(NewResourceStorageClient);
@@ -110,7 +109,7 @@ namespace Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" }); // TODO Add to config properties
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "myStore.Api", Version = "v1" }); // TODO Add to config properties
 
                 //var filePath = Path.Combine(System.AppContext.BaseDirectory, "Api.xml");
                 //c.IncludeXmlComments(filePath);
@@ -121,7 +120,7 @@ namespace Api
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "api1"); // TODO: Add to configuration
+                    policy.RequireClaim("scope", "myStore.Api"); // TODO: Add to configuration
                 });
             });
 
@@ -154,7 +153,7 @@ namespace Api
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "api";
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); // TODO Add to config properties
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "myStore.Api V1"); // TODO Add to config properties
             });
 
             app.UseHttpsRedirection();

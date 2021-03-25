@@ -36,7 +36,7 @@ namespace WebApp2
 
                     options.Authority = "https://mystore.local/identity"; //TODO: CONFIG
                     options.RequireHttpsMetadata = true; //TODO: CONFIG
-                    options.ClientId = "mvc"; //TODO: CONFIG
+                    options.ClientId = "myStore.Mvc"; //TODO: CONFIG
                     options.ClientSecret = "secret"; //TODO: CONFIG
                     options.ResponseType = "code"; //TODO: CONFIG
 
@@ -45,7 +45,7 @@ namespace WebApp2
                     options.Scope.Add("openid"); //TODO: CONFIG
                     options.Scope.Add("profile"); //TODO: CONFIG
                     options.Scope.Add("email"); //TODO: CONFIG
-                    options.Scope.Add("api1"); //TODO: CONFIG
+                    options.Scope.Add("myStore.Api"); //TODO: CONFIG
                     options.GetClaimsFromUserInfoEndpoint = true;
 
                 });
