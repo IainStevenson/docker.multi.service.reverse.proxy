@@ -39,3 +39,13 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  mongo.mystore.local:
+    environment: 
+      - MONGO_INITDB_USERNAME=admin
+      - MONGO_INITDB_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=admin        
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init-local.js:ro
+      - ${APPDATA}/MongoDb/Data:/data/db
+      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/

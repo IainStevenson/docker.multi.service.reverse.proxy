@@ -38,6 +38,7 @@ services:
     build:
       context: .
       dockerfile: Proxy/Dockerfile
+    restart: always  
     depends_on:
      - store.mystore.local
      - support.mystore.local
@@ -53,6 +54,7 @@ services:
     build:
       context: .
       dockerfile: Identity/Dockerfile
+    restart: always  
     depends_on:
      - mongo.mystore.local
     networks:      
@@ -65,6 +67,7 @@ services:
     build:
       context: .
       dockerfile: Api/Dockerfile
+    restart: always  
     depends_on:
      - identity.mystore.local
      - mongo.mystore.local
@@ -78,18 +81,9 @@ services:
     build:
       context: .
       dockerfile: MongoDB/Dockerfile
-    restart: always
-    environment: 
-        - MONGO_INITDB_USERNAME=admin
-        - MONGO_INITDB_PASSWORD=admin
-        - MONGO_INITDB_DATABASE=admin        
-    volumes:
-        - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-        - ${APPDATA}/MongoDb/Data:/data/db
-        - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/
+    restart: always  
     networks: 
       - mystore
 
 networks:  
     mystore:
-
