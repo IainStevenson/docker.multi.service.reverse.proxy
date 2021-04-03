@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
 
-  store.mystore:
+  mystore.store:
     hostname: store.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -11,7 +11,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  support.mystore:
+  mystore.support:
     hostname: support.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -20,14 +20,14 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  proxy.mystore:  
+  mystore.proxy:  
     hostname: mystore.local    
     ports:
       - "80:80"
       - "443:443"   
       - "27017:27017"   
       
-  identity.mystore:
+  mystore.identity:
     hostname: identity.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -36,7 +36,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  api.mystore:
+  mystore.api:
     hostname: api.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -45,7 +45,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  mongo.mystore:
+  mystore.mongo:
     hostname: mongo.mystore.local
     environment: 
       - MONGO_INITDB_USERNAME=admin

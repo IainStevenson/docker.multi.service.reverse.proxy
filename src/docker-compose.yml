@@ -2,75 +2,75 @@ version: '3.4'
 
 services:
 
-  store.mystore:
-    container_name:  store.mystore    
-    image: ${DOCKER_REGISTRY-}store.mystore
+  mystore.store:
+    container_name:  mystore.store    
+    image: ${DOCKER_REGISTRY-}mystore.store
     build:
       context: .
       dockerfile: Store/Dockerfile  
     depends_on:
-     - mongo.mystore
-     - api.mystore
-     - identity.mystore    
+     - mystore.mongo
+     - mystore.api
+     - mystore.identity    
     networks:      
       - mystore    
 
-  support.mystore:
-    container_name:  support.mystore
-    image: ${DOCKER_REGISTRY-}support.mystore
+  mystore.support:
+    container_name:  mystore.support
+    image: ${DOCKER_REGISTRY-}mystore.support
     build:
       context: .
       dockerfile: Support/Dockerfile    
     depends_on:
-     - mongo.mystore
-     - api.mystore    
-     - identity.mystore    
+     - mystore.mongo
+     - mystore.api    
+     - mystore.identity    
     networks:      
       - mystore
 
-  proxy.mystore:
-    container_name: proxy.mystore
-    image: ${DOCKER_REGISTRY-}proxy.mystore
+  mystore.proxy:
+    container_name: mystore.proxy
+    image: ${DOCKER_REGISTRY-}mystore.proxy
     build:
       context: .
       dockerfile: Proxy/Dockerfile
     restart: always  
     depends_on:
-     - store.mystore
-     - support.mystore
-     - identity.mystore
-     - api.mystore
+     - mystore.store
+     - mystore.support
+     - mystore.identity
+     - mystore.api
     networks:      
       - mystore
 
-  identity.mystore:
-    container_name:  identity.mystore
-    image: ${DOCKER_REGISTRY-}identity.mystore
+  mystore.identity:
+    container_name:  mystore.identity
+    image: ${DOCKER_REGISTRY-}mystore.identity
     build:
       context: .
       dockerfile: Identity/Dockerfile
     restart: always  
     depends_on:
-     - mongo.mystore
+     - mystore.mongo
     networks:      
       - mystore
 
-  api.mystore:
-    container_name: api.mystore   
-    image: ${DOCKER_REGISTRY-}api.mystore
+  mystore.api:
+    container_name: mystore.api   
+    image: ${DOCKER_REGISTRY-}mystore.api
     build:
       context: .
       dockerfile: Api/Dockerfile
     restart: always  
     depends_on:
-     - identity.mystore
-     - mongo.mystore
+     - mystore.identity
+     - mystore.mongo
     networks:
       - mystore
 
-  mongo.mystore:
-    container_name: mongo.mystore
-    image: ${DOCKER_REGISTRY-}mongo.mystore
+  mystore.mongo:
+    container_name: mystore.mongo
+    image: ${DOCKER_REGISTRY-}mystore.mongo
     build:
       context: .
       dockerfile: MongoDB/Dockerfile
