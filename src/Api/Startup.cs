@@ -28,6 +28,8 @@ namespace Api
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment HostEnvironment { get; }
 
+
+        private readonly Api.Configuration.Configuration _configuration = new Api.Configuration.Configuration();
         public Startup(IWebHostEnvironment env)
         {
             HostEnvironment = env;
@@ -36,23 +38,24 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var excludedHeaders = new List<string>() { "X-Powered-By" };
+            var excludedHeaders = _configuration.Headers.Exclude.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
             if (HostEnvironment.IsDevelopment())
             {
-                IdentityModelEventSource.ShowPII = true; //Add this line to expose better debugging when token validation fails
-
+                //Add this line to expose better debugging when token validation fails
+                IdentityModelEventSource.ShowPII = true;
             }
 
             IMongoClient NewMongoClient(IServiceProvider services)
             {
-                var connectionString = $"mongodb://storage:storagepass@mongo.mystore.local:27017";
+
+                var connectionString = _configuration.Mongo.ConnectionString;
                 return new MongoClient(new MongoUrl(connectionString));
             }
-            
+
             IRepository<Data.Model.Storage.Resource> NewResourceStorageClient(IServiceProvider services)
             {
-                var databaseName = "myStoreApi";
+                var databaseName = _configuration.Mongo.DatabaseName;
                 return new Data.Model.Storage.MongoDB.ResourceRepository(
                             services.GetService<IMongoClient>(),
                             services.GetService<ILogger<Data.Model.Storage.MongoDB.ResourceRepository>>(),
@@ -64,9 +67,12 @@ namespace Api
             {
                 cfg.CreateMap<Data.Model.Storage.Resource, Data.Model.Response.Resource>();
             }).CreateMapper();
-
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "myStore.Api"; });
-            services.AddHttpClient("");
+            // _configuration.Logging.Source
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
+            {
+                options.LogSource = _configuration.Logging.Source;
+            });
+            services.AddHttpClient(string.Empty);
             services.AddScoped(NewMongoClient);
             services.AddScoped(NewResourceStorageClient);
             services.AddCors();
@@ -86,8 +92,9 @@ namespace Api
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
                         options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
                     })
-                    .AddFluentValidation(config => { 
-                    
+                    .AddFluentValidation(config =>
+                    {
+
                         config.AutomaticValidationEnabled = true;
                         config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
                     });
@@ -97,19 +104,19 @@ namespace Api
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>
                         {
-                            options.Authority = "https://mystore.local/identity"; //TODO: CONFIG
-                            options.Audience = "https://mystore.local/identity/resources"; //TODO: CONFIG
-                            options.RequireHttpsMetadata = true;                            //TODO: CONFIG
+                            options.Authority = _configuration.Identity.Authority;
+                            options.Audience = _configuration.Identity.Audience;
+                            options.RequireHttpsMetadata = _configuration.Identity.RequireHttpsMetadata;
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
-                                ValidateIssuer = true, //TODO: CONFIG
-                                ValidateAudience = true, //TODO: CONFIG
+                                ValidateIssuer = _configuration.Identity.TokenValidation.ValidateIssuer,
+                                ValidateAudience = _configuration.Identity.TokenValidation.ValidateAudience,
                             };
                         });
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "myStore.Api", Version = "v1" }); // TODO Add to config properties
+                c.SwaggerDoc(_configuration.Swagger.Version, new OpenApiInfo { Title = _configuration.Swagger.OpenAPIInfo.Title, Version = _configuration.Swagger.OpenAPIInfo.Version });
 
                 //var filePath = Path.Combine(System.AppContext.BaseDirectory, "Api.xml");
                 //c.IncludeXmlComments(filePath);
@@ -117,14 +124,12 @@ namespace Api
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiScope", policy =>
+                options.AddPolicy(_configuration.Authorization.Policy.Name, policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "myStore.Api"); // TODO: Add to configuration
+                    policy.RequireClaim(_configuration.Authorization.Policy.ClaimName, _configuration.Authorization.Policy.ClaimValues.Split(',', StringSplitOptions.RemoveEmptyEntries)); 
                 });
             });
-
-            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -132,7 +137,7 @@ namespace Api
 
             ConfigureMongoDriver2IgnoreExtraElements();
 
-            app.UsePathBase("/api");
+            app.UsePathBase(_configuration.Service.BasePath );
 
             if (env.IsDevelopment())
             {
@@ -140,6 +145,8 @@ namespace Api
             }
             app.UseCors(policy =>
             {
+                //TODO: Determine requirements and add to Configutation
+                // TODO: Find a way of making this dynamic
                 //policy.WithOrigins("*");
                 policy.AllowAnyOrigin();
                 policy.AllowAnyHeader();
@@ -152,8 +159,8 @@ namespace Api
 
             app.UseSwaggerUI(c =>
             {
-                c.RoutePrefix = "api";
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "myStore.Api V1"); // TODO Add to config properties
+                c.RoutePrefix = _configuration.Swagger.RoutePrefix;
+                c.SwaggerEndpoint(_configuration.Swagger.Endpoint, _configuration.Swagger.EndpointName); 
             });
 
             app.UseHttpsRedirection();
@@ -175,7 +182,7 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    .RequireAuthorization("ApiScope")
+                    .RequireAuthorization(_configuration.Authorization.Policy.Name)
                 ;
                 // `.RequireAuthorization()` sets all controllers to [Authorize] 
                 // therefore Anonymous access is by exception using [AllowAnonymous] on the required element
