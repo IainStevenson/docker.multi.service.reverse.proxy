@@ -3,6 +3,8 @@ version: '3.4'
 services:
 
   store.mystore.local:
+    container_name: store.mystore.local
+    hostname: store.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -11,6 +13,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   support.mystore.local:
+    container_name: support.mystore.local
+    hostname: support.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -19,12 +23,16 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   proxy.mystore.local:  
+    container_name: proxy.mystore.local
+    hostname: mystore.local    
     ports:
       - "80:80"
       - "443:443"   
       - "27017:27017"   
       
   identity.mystore.local:
+    container_name: identity.mystore.local
+    hostname: identity.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -33,6 +41,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   api.mystore.local:
+    container_name: api.mystore.local
+    hostname: api.mystore.local
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80 
@@ -41,6 +51,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   mongo.mystore.local:
+    container_name: ${DOCKER_REGISTRY-}mongo.mystore.local
+    hostname: mongo.mystore.local
     environment: 
       - MONGO_INITDB_USERNAME=admin
       - MONGO_INITDB_PASSWORD=admin

@@ -3,8 +3,6 @@ version: '3.4'
 services:
 
   store.mystore.local:
-    container_name: store.mystore.local
-    hostname: store.mystore.local
     image: ${DOCKER_REGISTRY-}store.mystore.local
 
     build:
@@ -18,8 +16,6 @@ services:
       - mystore    
 
   support.mystore.local:
-    container_name: support.mystore.local
-    hostname: support.mystore.local
     image: ${DOCKER_REGISTRY-}support.mystore.local
     build:
       context: .
@@ -32,8 +28,6 @@ services:
       - mystore
 
   proxy.mystore.local:
-    container_name: proxy.mystore.local
-    hostname: mystore.local    
     image: ${DOCKER_REGISTRY-}proxy.mystore.local
     build:
       context: .
@@ -48,8 +42,6 @@ services:
       - mystore
 
   identity.mystore.local:
-    container_name: identity.mystore.local
-    hostname: identity.mystore.local
     image: ${DOCKER_REGISTRY-}identity.mystore.local
     build:
       context: .
@@ -61,8 +53,6 @@ services:
       - mystore
 
   api.mystore.local:
-    container_name: api.mystore.local
-    hostname: api.mystore.local
     image: ${DOCKER_REGISTRY-}api.mystore.local
     build:
       context: .
@@ -75,8 +65,6 @@ services:
       - mystore
 
   mongo.mystore.local:
-    container_name: ${DOCKER_REGISTRY-}mongo.mystore.local
-    hostname: mongo.mystore.local
     image: ${DOCKER_REGISTRY-}mongo.mystore.local
     build:
       context: .
