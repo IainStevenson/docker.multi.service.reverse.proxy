@@ -52,7 +52,7 @@ namespace Api
             
             IRepository<Data.Model.Storage.Resource> NewResourceStorageClient(IServiceProvider services)
             {
-                var databaseName = "myStoreData";
+                var databaseName = "myStoreApi";
                 return new Data.Model.Storage.MongoDB.ResourceRepository(
                             services.GetService<IMongoClient>(),
                             services.GetService<ILogger<Data.Model.Storage.MongoDB.ResourceRepository>>(),
