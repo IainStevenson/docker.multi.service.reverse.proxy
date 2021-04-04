@@ -1,6 +1,6 @@
 ﻿namespace Configuration
 {
-    public class GoogleConfiguration
+    public class GoogleOptions
     {
         public string SignInScheme { get; set; } = "idsrv.external";
         public string ClientId { get; set; } = "<your google client id>";

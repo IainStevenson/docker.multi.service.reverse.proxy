@@ -5,23 +5,24 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Support.Controllers
 {
     public class WeatherForecastController : Controller
     {
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly Configuration.Options _options;
+        private readonly Configuration.ApiOptions _options;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger,
-            Configuration.Options options, IHttpClientFactory httpClientFactory)
+             IHttpClientFactory httpClientFactory,
+             IOptions<Configuration.ApiOptions> options)
         {
             _logger = logger;
-            _options = options;
+            _options = options.Value;
             _httpClientFactory = httpClientFactory;
         }
-
         public async Task<IActionResult> Index()
         {
             using (var apiClient = _httpClientFactory.CreateClient())
@@ -29,7 +30,7 @@ namespace Support.Controllers
                 string accessToken = await HttpContext.GetTokenAsync("access_token");
                 //string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
                 apiClient.SetBearerToken(accessToken);
-                var apiUri = new Uri($"{_options.Api.BaseUri}/weatherforecast"); 
+                var apiUri = new Uri($"{_options.BaseUri}/weatherforecast");
                 var response = await apiClient.GetAsync(apiUri);
                 if (!response.IsSuccessStatusCode)
                 {
@@ -40,6 +41,7 @@ namespace Support.Controllers
                     ViewBag.JsonData = await response.Content.ReadAsStringAsync();
                 }
             }
+
             return View();
         }
     }

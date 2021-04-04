@@ -13,21 +13,30 @@ namespace Store
 {
     public partial class Startup
     {
-        private Configuration.Configuration _configuration = new Configuration.Configuration();
+        public IConfiguration Configuration { get; }
+        private readonly Configuration.Options _configuration;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _configuration = Configuration.Get<Configuration.Options>();
         }
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            services.AddOptions();
+
+            services.Configure<Configuration.ApiOptions>(options => Configuration.GetSection("Api").Bind(options));
+
+            services.AddControllersWithViews();
+
+            services.AddHttpClient(string.Empty);
+
             services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
-            { options.LogSource = _configuration.Logging.Source; });
+            { options.LogSource = _configuration.RequestResponse.Source; });
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = _configuration.Authentication.Scheme;
