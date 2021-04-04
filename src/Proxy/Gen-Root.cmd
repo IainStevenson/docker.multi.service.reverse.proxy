@@ -12,13 +12,14 @@ CALL Gen-Vars.CMD
 @ECHO.
 @ECHO *             NOT FOR USE IN PRODUCTION SYSTEMS                               *
 @ECHO.
-@ECHO   By using this script you agree to use them only in development environments
+@ECHO   By using this script you agree to use them only in 
+@ECHO   non-production AND non public facing environments
 @ECHO.
 @ECHO -------------------------------------------------------------------------------
 @ECHO Control-C to abort or,
 PAUSE
 ::
-IF EXIST certificates/myRootCA.pfx GOTO GenHostCertExists
+IF EXIST certificates/myStoreRootCA.pfx GOTO GenHostCertExists
 ::
 :GenRootCA
 @ECHO -------------------------------------------------------------------------------
@@ -31,12 +32,12 @@ IF EXIST certificates/myRootCA.pfx GOTO GenHostCertExists
 @ECHO.
 @ECHO Generating the Self-Signed Root CA Certificate...
 @ECHO.
-openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout certificates/myRootCA.key -out certificates/myRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
-openssl x509 -outform pem -in certificates/myRootCA.pem -out certificates/myRootCA.crt
-openssl pkcs12 -export -inkey certificates/myRootCA.key -in certificates/myRootCA.pem -out certificates/myRootCA.pfx
+openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout certificates/myStoreRootCA.key -out certificates/myStoreRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
+openssl x509 -outform pem -in certificates/myStoreRootCA.pem -out certificates/myStoreRootCA.crt
+openssl pkcs12 -export -inkey certificates/myStoreRootCA.key -in certificates/myStoreRootCA.pem -out certificates/myStoreRootCA.pfx
 @ECHO.
 @ECHO.
-@ECHO You should Import myRootCA.PFX SPECIFICALLY to the;
+@ECHO You should Import myStoreRootCA.PFX SPECIFICALLY to the;
 @ECHO	LOCAL MACHINE 'Trusted Root Certification Authorities' 
 @ECHO certificate store using the password you entered.
 @ECHO *** Do not let it choose the store for you. ***
@@ -46,7 +47,7 @@ openssl pkcs12 -export -inkey certificates/myRootCA.key -in certificates/myRootC
 TYPE ImportRootCA.txt
 @ECHO.
 PAUSE
-certificates\myRootCA.pfx
+certificates\myStoreRootCA.pfx
 @ECHO Continue only when the root CA certificate is imported.
 PAUSE
 GOTO Finish

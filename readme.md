@@ -44,7 +44,7 @@ The container orchestration is provided using the Visual Studio docker orchestra
 - Edit your hosts file as described in 'Fictional Domain' below. Once that change is saved it is active immediately.
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
 - Press F5.
-- If no browser appears, start one and navigate to https://mystore.local and you will see the store site.
+- If no browser appears, start one and navigate to https://mystore.local, and optionally  https://mystore.test, or https://mystore.demo and you will see the store site.
 - Navigate around, when you click Weather Forecast you will need to login, use username: bob Password: bob
 - Alternatively or as well, import the mystore.local.postman_collection.json file into postman and run the tests in the mystore.local collection.
 
@@ -65,10 +65,21 @@ Add this domain to the development environment by adding the following entry to 
 
 ```
 127.0.0.1 mystore.local
+127.0.0.1 mystore.test
+127.0.0.1 mystore.demo
 ```
 
-Having set that domain name there is a need to generate configure and use self signed certificates to depart from using ```localhost``` as a default.
+Optionally add these domain's to the development environment by adding the following entry to your ```%SystemRoot%\system32\drivers\etc\hosts``` file using any suitable text editor run as administrator.
 
-The overall intention of that is to provide a workable route to configuring different environments (local / test / production) and in parameterised builds and deployments.
+```
+127.0.0.1 mystore.test
+127.0.0.1 mystore.demo
+```
+This will allow you to simualte the test and demo environmetns work locally with the same self-signed certificates
+
+
+Having set that domain name there is a need to generate configure and use self-signed certificates to depart from using ```localhost``` as a default.
+
+The overall intention of that is to provide a workable route to configuring different environments (local / test / demo / production) and in parameterised builds and deployments.
 
 Which is now taken care of by the setup steps above and the provided scripts.

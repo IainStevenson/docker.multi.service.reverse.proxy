@@ -13,32 +13,33 @@ VOLUME ["/etc/nginx", "/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/ngin
 EXPOSE 80 443
 
 # Provide NGINX config files
-COPY Proxy/default.conf /etc/nginx/conf.d/default.conf
-COPY Proxy/stream.conf /etc/nginx/sites-enabled/stream.conf
+COPY Proxy/nginx.conf /etc/nginx/nginx.conf
 COPY Proxy/self-signed.conf /etc/nginx/conf.d/self-signed.conf
 COPY Proxy/ssl-params.conf /etc/nginx/conf.d/ssl-params.conf
 COPY Proxy/index.html /usr/local/nginx/html/
-COPY Proxy/nginx.conf /etc/nginx/nginx.conf
+COPY Proxy/default.conf /etc/nginx/sites-enabled/sites-local.conf      # TODO: Configuration
+COPY Proxy/stream.conf /etc/nginx/sites-enabled/streams-local.conf     # TODO: Configuration
 
 # Allow trust of certificates from other services
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY Proxy/certificates/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
+COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt # TODO: Configuration
 RUN update-ca-certificates
 
 # Copy Diffie-Hellman file
 COPY Proxy/certificates/dhparam.pem /etc/ssl/certs/dhparam.pem
 # Copy local service certificate
-COPY Proxy/certificates/mystore.local.crt /etc/ssl/certs/mystore.local.crt
-COPY Proxy/certificates/mystore.local.key /etc/ssl/private/mystore.local.key
+COPY Proxy/certificates/mystore.crt /etc/ssl/certs/mystore.crt
+COPY Proxy/certificates/myStore.key /etc/ssl/private/myStore.key
 
+# TODO: Configuration
 # use these to enable regenerating or adding any service certificate on the proxy host during development
-#COPY Proxy/certificates/myRootCA.crt /etc/ssl/certs/myRootCA.crt
-#COPY Proxy/certificates/myRootCA.key /etc/ssl/private/myRootCA.key
-#COPY Proxy/certificates/myRootCA.pem /etc/ssl/certs/myRootCA.pem
-#COPY Proxy/certificates/myRootCA.pfx /etc/ssl/certs/myRootCA.pfx
-#COPY Proxy/certificates/myRootCA.srl /etc/ssl/certs/myRootCA.srl
+#COPY Proxy/certificates/myStoreRootCA.crt /etc/ssl/certs/myStoreRootCA.crt
+#COPY Proxy/certificates/myStoreRootCA.key /etc/ssl/private/myStoreRootCA.key
+#COPY Proxy/certificates/myStoreRootCA.pem /etc/ssl/certs/myStoreRootCA.pem
+#COPY Proxy/certificates/myStoreRootCA.pfx /etc/ssl/certs/myStoreRootCA.pfx
+#COPY Proxy/certificates/myStoreRootCA.srl /etc/ssl/certs/myStoreRootCA.srl
 
 
 # Define default command.
