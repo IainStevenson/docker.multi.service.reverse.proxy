@@ -4,6 +4,9 @@ services:
 
   mystore.store:
     hostname: store.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Store/Dockerfile  
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -13,6 +16,9 @@ services:
 
   mystore.support:
     hostname: support.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Support/Dockerfile    
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -22,6 +28,9 @@ services:
 
   mystore.proxy:  
     hostname: mystore.local    
+    build:
+      context: .
+      dockerfile: Proxy/Dockerfile
     ports:
       - "80:80"
       - "443:443"   
@@ -29,6 +38,9 @@ services:
       
   mystore.identity:
     hostname: identity.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Identity/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -38,6 +50,9 @@ services:
 
   mystore.api:
     hostname: api.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80 
@@ -47,6 +62,9 @@ services:
 
   mystore.mongo:
     hostname: mongo.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: MongoDB/Dockerfile
     environment: 
       - MONGO_INITDB_USERNAME=admin # must match mongo-init-local.js
       - MONGO_INITDB_PASSWORD=admin # must match mongo-init-local.js

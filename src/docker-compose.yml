@@ -5,9 +5,7 @@ services:
   mystore.store:
     container_name: mystore.store    
     image: ${DOCKER_REGISTRY-}mystore.store
-    build:
-      context: .
-      dockerfile: Store/Dockerfile  
+    restart: always  
     depends_on:
      - mystore.mongo
      - mystore.api
@@ -18,9 +16,7 @@ services:
   mystore.support:
     container_name: mystore.support
     image: ${DOCKER_REGISTRY-}mystore.support
-    build:
-      context: .
-      dockerfile: Support/Dockerfile    
+    restart: always  
     depends_on:
      - mystore.mongo
      - mystore.api    
@@ -31,9 +27,6 @@ services:
   mystore.proxy:
     container_name: mystore.proxy
     image: ${DOCKER_REGISTRY-}mystore.proxy
-    build:
-      context: .
-      dockerfile: Proxy/Dockerfile
     restart: always  
     depends_on:
      - mystore.store
@@ -46,9 +39,6 @@ services:
   mystore.identity:
     container_name: mystore.identity
     image: ${DOCKER_REGISTRY-}mystore.identity
-    build:
-      context: .
-      dockerfile: Identity/Dockerfile
     restart: always  
     depends_on:
      - mystore.mongo
@@ -58,9 +48,6 @@ services:
   mystore.api:
     container_name: mystore.api   
     image: ${DOCKER_REGISTRY-}mystore.api
-    build:
-      context: .
-      dockerfile: Api/Dockerfile
     restart: always  
     depends_on:
      - mystore.identity
@@ -71,9 +58,6 @@ services:
   mystore.mongo:
     container_name: mystore.mongo
     image: ${DOCKER_REGISTRY-}mystore.mongo
-    build:
-      context: .
-      dockerfile: MongoDB/Dockerfile
     restart: always  
     networks: 
       - mystore
