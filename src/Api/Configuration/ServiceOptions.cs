@@ -1,6 +1,6 @@
 ﻿namespace Configuration
 {
-    public class ServiceConfiguration
+    public class ServiceOptions
     {
         public string BasePath { get; set; } = "/api";
     }

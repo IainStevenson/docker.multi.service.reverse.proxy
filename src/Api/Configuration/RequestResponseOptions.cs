@@ -1,6 +1,6 @@
 ﻿namespace Configuration
 {
-    public class LoggingConfiguration
+    public class RequestResponseOptions
     {
         public string Source { get; set; } = "myStore.Api";
     }

@@ -25,13 +25,13 @@ namespace Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IWebHostEnvironment HostEnvironment { get; }
-
-
-        private readonly Configuration.Configuration _configuration = new Configuration.Configuration();
-        public Startup(IWebHostEnvironment env)
+        private readonly Configuration.Options _configuration;
+        private readonly IWebHostEnvironment HostEnvironment;
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            HostEnvironment = env;
+            Configuration = configuration;
+            _configuration = Configuration.Get<Configuration.Options>();
+            HostEnvironment = environment;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -69,7 +69,7 @@ namespace Api
             // _configuration.Logging.Source
             services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
             {
-                options.LogSource = _configuration.Logging.Source;
+                options.LogSource = _configuration.RequestResponse.Source;
             });
             services.AddHttpClient(string.Empty);
             services.AddScoped(NewMongoClient);
