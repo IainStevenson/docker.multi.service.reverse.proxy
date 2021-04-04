@@ -2,6 +2,6 @@
 {
     public class ApiOptions
     {
-        public string BaseUri { get; internal set; }
+        public string BaseUri { get;  set; }
     }
 }

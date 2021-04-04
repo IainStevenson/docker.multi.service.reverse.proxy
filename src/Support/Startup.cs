@@ -31,7 +31,9 @@ namespace Support
 
             services.AddOptions();
 
-            services.Configure<Configuration.ApiOptions>(Configuration);
+            //services.Configure<Configuration.Options>(Configuration);
+
+            services.AddSingleton(_configuration);
 
             services.AddControllersWithViews();
 
