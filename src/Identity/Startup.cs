@@ -13,21 +13,27 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization.Conventions;
+using Microsoft.Extensions.Configuration;
 
 namespace Identity
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        private readonly Configuration.Options _configuration;
         private readonly IWebHostEnvironment HostEnvironment;
-        public Startup(IWebHostEnvironment environment)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
+            Configuration = configuration;
+            _configuration = Configuration.Get<Configuration.Options>();
             HostEnvironment = environment;
         }
-        private Configuration.Configuration _configuration = new Configuration.Configuration();
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRequestResponseLoggingMiddlewareWithOptions(options => 
-            { options.LogSource = _configuration.Logging.Source; });                        
+            { 
+                options.LogSource = _configuration.RequestResponse.Source; 
+            });                        
             
             var builder = services.AddIdentityServer(options =>
             {
