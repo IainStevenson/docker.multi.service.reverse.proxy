@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   mystore.store:
-    container_name:  mystore.store    
+    container_name: mystore.store    
     image: ${DOCKER_REGISTRY-}mystore.store
     build:
       context: .
@@ -16,7 +16,7 @@ services:
       - mystore    
 
   mystore.support:
-    container_name:  mystore.support
+    container_name: mystore.support
     image: ${DOCKER_REGISTRY-}mystore.support
     build:
       context: .
@@ -44,7 +44,7 @@ services:
       - mystore
 
   mystore.identity:
-    container_name:  mystore.identity
+    container_name: mystore.identity
     image: ${DOCKER_REGISTRY-}mystore.identity
     build:
       context: .
