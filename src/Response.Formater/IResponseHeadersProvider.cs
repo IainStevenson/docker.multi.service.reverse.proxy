@@ -1,6 +1,5 @@
 ﻿using Data.Model.Response;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 
 namespace Response.Formater
 {

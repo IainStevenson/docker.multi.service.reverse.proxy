@@ -2,50 +2,74 @@ version: '3.4'
 
 services:
 
-  store.mystore.local:
+  mystore.store:
+    hostname: store.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Store/Dockerfile  
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
 
-  support.mystore.local:
+  mystore.support:
+    hostname: support.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Support/Dockerfile    
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
 
-  proxy.mystore.local:  
+  mystore.proxy:  
+    hostname: mystore.local    
+    build:
+      context: .
+      dockerfile: Proxy/Dockerfile
     ports:
       - "80:80"
       - "443:443"   
       - "27017:27017"   
       
-  identity.mystore.local:
+  mystore.identity:
+    hostname: identity.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Identity/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
 
-  api.mystore.local:
+  mystore.api:
+    hostname: api.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80 
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in  Proxy/Gen-Certs.cmd
 
-  mongo.mystore.local:
+  mystore.mongo:
+    hostname: mongo.mystore.local # root certificate must support his dns entry
+    build:
+      context: .
+      dockerfile: MongoDB/Dockerfile
     environment: 
-      - MONGO_INITDB_USERNAME=admin
-      - MONGO_INITDB_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=admin        
+      - MONGO_INITDB_USERNAME=admin # must match mongo-init-local.js
+      - MONGO_INITDB_PASSWORD=admin # must match mongo-init-local.js
+      - MONGO_INITDB_DATABASE=admin # must match mongo-init-local.js
     volumes:
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init-local.js:ro
-      - ${APPDATA}/MongoDb/Data:/data/db
-      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/
+      - ./mongo-init-local.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ${APPDATA}/MongoDb/Data:/data/db # local persistence of mongo database
+      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/ # local persistence of mongo database

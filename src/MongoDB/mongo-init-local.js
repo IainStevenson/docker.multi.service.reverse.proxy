@@ -29,7 +29,7 @@ db.createUser({
 		},
 		{
 			role: "readWrite",
-			db: "mystoreSupport"
+			db: "myStoreSupport"
 		}
 	],
 });

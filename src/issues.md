@@ -155,7 +155,7 @@ adding the following snippet.
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY Proxy/certificates/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
+COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt
 RUN update-ca-certificates
 ```
 

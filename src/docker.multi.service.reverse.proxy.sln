@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7CF5B55-7B58-48DE-8E09-2406C7130FB9}"
 	ProjectSection(SolutionItems) = preProject
 		certificates.md = certificates.md
+		Configuration.md = Configuration.md
 		docker.md = docker.md
 		http.md = http.md
 		identity.md = identity.md
@@ -23,7 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497-6FA5-4B50-8749-9FA87F10385B}"
 	ProjectSection(SolutionItems) = preProject
-		Proxy\default.conf = Proxy\default.conf
 		Proxy\Dockerfile = Proxy\Dockerfile
 		Proxy\Gen-Host.cmd = Proxy\Gen-Host.cmd
 		Proxy\Gen-Root.cmd = Proxy\Gen-Root.cmd
@@ -32,8 +32,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497
 		Proxy\index.html = Proxy\index.html
 		Proxy\nginx.conf = Proxy\nginx.conf
 		Proxy\self-signed.conf = Proxy\self-signed.conf
+		Proxy\sites-local.conf = Proxy\sites-local.conf
 		Proxy\ssl-params.conf = Proxy\ssl-params.conf
-		Proxy\stream.conf = Proxy\stream.conf
+		Proxy\streams-local.conf = Proxy\streams-local.conf
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C694F770-E674-4166-8F42-309FBEB0AD3C}"

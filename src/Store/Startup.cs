@@ -7,53 +7,64 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Store
 {
     public partial class Startup
     {
+        public IConfiguration Configuration { get; }
+        private readonly Configuration.Options _configuration;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _configuration = Configuration.Get<Configuration.Options>();
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Store"; });// TODO: Add to configuration
+
+            services.AddOptions();
+
+            services.Configure<Configuration.ApiOptions>(options => Configuration.GetSection("Api").Bind(options));
+
+            services.AddControllersWithViews();
+
+            services.AddHttpClient(string.Empty);
+
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
+            { options.LogSource = _configuration.RequestResponse.Source; });
             services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-                .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://mystore.local/identity"; //TODO: CONFIG
-                    options.RequireHttpsMetadata = true; //TODO: CONFIG
-                    options.ClientId = "myStore.Mvc"; //TODO: CONFIG
-                    options.ClientSecret = "secret"; //TODO: CONFIG
-                    options.ResponseType = "code"; //TODO: CONFIG
-
-                    options.SaveTokens = true;
-
-                    options.Scope.Add("openid"); //TODO: CONFIG
-                    options.Scope.Add("profile"); //TODO: CONFIG
-                    options.Scope.Add("email"); //TODO: CONFIG
-                    options.Scope.Add("myStore.Api"); //TODO: CONFIG
-                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.DefaultScheme = _configuration.Authentication.Scheme;
+                    options.DefaultChallengeScheme = _configuration.Authentication.ChallengeScheme;
+                })
+                .AddCookie(_configuration.Authentication.Scheme)
+                .AddOpenIdConnect(_configuration.Authentication.ChallengeScheme, options =>
+                {
+                    options.Authority = _configuration.Authentication.Authority;
+                    options.RequireHttpsMetadata = _configuration.Authentication.RequireHttpsMetadata;
+                    options.ClientId = _configuration.Authentication.ClientId;
+                    options.ClientSecret = _configuration.Authentication.ClientSecret;
+                    options.ResponseType = _configuration.Authentication.ResponseType;
+                    options.SaveTokens = _configuration.Authentication.SaveTokens;
+                    var scopesSetting = _configuration.Authentication.RequiredScopes;
+                    var scopes = scopesSetting.Split(',', System.StringSplitOptions.RemoveEmptyEntries).Distinct();
+                    foreach (var scope in scopes)
+                    {
+                        options.Scope.Add(scope);
+                    }
+                    options.GetClaimsFromUserInfoEndpoint = _configuration.Authentication.GetClaimsFromUserInfoEndpoint;
                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UsePathBase("/store");// TODO: Add to configuration
+            app.UsePathBase(_configuration.Service.BasePath);
 
             if (env.IsDevelopment())
             {
@@ -63,9 +74,9 @@ namespace Store
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
             }
+
+            app.UseHsts();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

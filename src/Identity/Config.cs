@@ -23,7 +23,7 @@ namespace Identity
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("myStore.Api", "My API") 
+                new ApiScope("myStore.Api", "My API")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -51,7 +51,7 @@ namespace Identity
                 {
                     ClientId = "mvc",
                     ClientSecrets = { new Secret("secret".Sha256()) },
-                    
+
                     AllowedGrantTypes = GrantTypes.Code,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login
