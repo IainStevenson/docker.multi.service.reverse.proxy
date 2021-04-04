@@ -2,6 +2,6 @@
 {
     public class LoggingConfiguration
     {
-        public string Source { get; set; } = "myStore.Api";
+        public string Source { get; set; } = "myStore.Identity";
     }
 }

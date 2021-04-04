@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Api.Configuration
+namespace Configuration
 {
     public class AuthoriszationPolicy
     {

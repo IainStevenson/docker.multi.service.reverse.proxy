@@ -18,7 +18,6 @@ using Pluralizer;
 using Response.Formater;
 using Storage;
 using System;
-using System.Collections.Generic;
 
 
 namespace Api
@@ -29,7 +28,7 @@ namespace Api
         public IWebHostEnvironment HostEnvironment { get; }
 
 
-        private readonly Api.Configuration.Configuration _configuration = new Api.Configuration.Configuration();
+        private readonly Configuration.Configuration _configuration = new Configuration.Configuration();
         public Startup(IWebHostEnvironment env)
         {
             HostEnvironment = env;

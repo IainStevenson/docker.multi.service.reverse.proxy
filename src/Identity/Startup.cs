@@ -23,14 +23,11 @@ namespace Identity
         {
             HostEnvironment = environment;
         }
-
+        private Configuration.Configuration _configuration = new Configuration.Configuration();
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => { options.LogSource = "Identity"; });
-
-            var mongoDatabaseConnectionString = "mongodb://storage:storagepass@mongo.mystore.local:27017";
-            var mongoDatabaseName = "mystoreIdentity";
-            
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options => 
+            { options.LogSource = _configuration.Logging.Source; });                        
             
             var builder = services.AddIdentityServer(options =>
             {
@@ -41,7 +38,7 @@ namespace Identity
                         .AddCorsPolicyService<InMemoryCorsPolicyService>() // Add the CORS service
                         .AddIdentityApiResources()
                         .AddPersistedGrants()
-                        .AddMongoRepository(mongoDatabaseConnectionString, mongoDatabaseName)
+                        .AddMongoRepository(_configuration.Mongo.ConnectionString, _configuration.Mongo.DatabaseName)
                         .AddProfileService<UserProfileService>()
                         .AddTestUsers(SeedData.Users);
 
@@ -67,12 +64,12 @@ namespace Identity
             //// Install-Package Microsoft.AspNetCore.Authentication.Google 
             //// add the abive nuget package to the project
             //// then uncomment the following lines 
-            //    .AddGoogle("Google", options =>
-            //    {
-            //        options.SignInScheme = "idsrv.external";
-            //        options.ClientId = "<your google client id>";
-            //        options.ClientSecret = "<your google client secret>";
-            //    })
+            //.AddGoogle("Google", options =>
+            //{
+            //    options.SignInScheme = _configuration.Google.SignInScheme;
+            //    options.ClientId = _configuration.Google.ClientId  ;
+            //    options.ClientSecret = _configuration.Google.ClientSecret ;
+            //})
             ;
 
             services.AddControllersWithViews();            
@@ -88,7 +85,7 @@ namespace Identity
                 );
 
 
-            app.UsePathBase("/identity");
+            app.UsePathBase(_configuration.Service.BasePath);
 
             app.InitializeDatabase();
 

@@ -1,4 +1,4 @@
-﻿namespace Api.Configuration
+﻿namespace Configuration
 {
     public class OpenAPIInfoConfiguration
     {
