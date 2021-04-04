@@ -17,20 +17,24 @@ COPY Proxy/nginx.conf /etc/nginx/nginx.conf
 COPY Proxy/self-signed.conf /etc/nginx/conf.d/self-signed.conf
 COPY Proxy/ssl-params.conf /etc/nginx/conf.d/ssl-params.conf
 COPY Proxy/index.html /usr/local/nginx/html/
-COPY Proxy/default.conf /etc/nginx/sites-enabled/sites-local.conf      # TODO: Configuration
-COPY Proxy/stream.conf /etc/nginx/sites-enabled/streams-local.conf     # TODO: Configuration
+# TODO: Configuration +++
+COPY Proxy/sites-local.conf /etc/nginx/sites-enabled/sites-local.conf      
+COPY Proxy/streams-local.conf /etc/nginx/sites-enabled/streams-local.conf     
+# TODO: Configuration ---
 
 # Allow trust of certificates from other services
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt # TODO: Configuration
+# TODO: Configuration +++
+COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt 
+# TODO: Configuration ---
 RUN update-ca-certificates
 
 # Copy Diffie-Hellman file
 COPY Proxy/certificates/dhparam.pem /etc/ssl/certs/dhparam.pem
 # Copy local service certificate
-COPY Proxy/certificates/mystore.crt /etc/ssl/certs/mystore.crt
+COPY Proxy/certificates/myStore.crt /etc/ssl/certs/myStore.crt
 COPY Proxy/certificates/myStore.key /etc/ssl/private/myStore.key
 
 # TODO: Configuration

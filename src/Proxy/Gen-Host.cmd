@@ -29,7 +29,7 @@ PAUSE
 @ECHO.
 openssl req -new -nodes -newkey rsa:2048 -keyout certificates/myStore.key -out certificates/myStore.csr -subj "/CN=localhost"
 openssl x509 -req -sha256 -days 1024 -in certificates/myStore.csr -CA certificates/myStoreRootCA.pem -CAkey certificates/myStoreRootCA.key -CAcreateserial -extfile certificates\domains.conf -out certificates/myStore.crt
-openssl pkcs12 -export -inkey certificates/myStore.key -in certificates/myStore.crt -certfile certificates/myStoreRootCA.crt -out certificates/myStore.pfx 
+openssl pkcs12 -export -inkey certificates/myStore.key -in certificates/3 -certfile certificates/myStoreRootCA.crt -out certificates/myStore.pfx 
 @ECHO.
 @ECHO Host certificate created.
 GOTO ConfigureSecrets
