@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Configuration
+﻿namespace Configuration
 {
     public class ServiceConfiguration
     {

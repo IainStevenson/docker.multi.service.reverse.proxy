@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Configuration
+﻿namespace Configuration
 {
     public class HeadersConfiguration
     {
-        public string Exclude { get; set; } =  "X-Powered-By";
+        public string Exclude { get; set; } = "X-Powered-By";
     }
 }
