@@ -56,14 +56,14 @@ NOTE: This does not travel through the revrse-proxy.
 ```
 apt update
 apt-get install -y curl
-curl https://identity.mystore.local/identity/.well-known/openid-configuration
+curl https://identity.myInfo.local/identity/.well-known/openid-configuration
 ```
 
 # Verify intra-container communication via SSL without certificate checking
 ```
 apt update
 apt-get install -y curl
-curl -k https://identity.mystore.local/identity/.well-known/openid-configuration
+curl -k https://identity.myInfo.local/identity/.well-known/openid-configuration
 ```
 
 
@@ -79,6 +79,6 @@ Add this to the build (early) as needed.
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt
+COPY Proxy/certificates/myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt
 RUN update-ca-certificates
 ```

@@ -15,7 +15,7 @@ The following issues cropped up in providing those capabilities.
 
 # Conformed address space
 
-Intention: Every url should have a bse of; https://mystore.local/
+Intention: Every url should have a bse of; https://myInfo.local/
 
 Each service should have an additional base path added that should cope with internal relative Urls and respect external references across services.
 
@@ -55,8 +55,8 @@ The following code in the Api will ensure this is correct.
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://mystore.local/identity";
-                    options.Audience = "https://mystore.local/identity/resources";
+                    options.Authority = "https://myInfo.local/identity";
+                    options.Audience = "https://myInfo.local/identity/resources";
                     options.RequireHttpsMetadata = true;
 
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -155,7 +155,7 @@ adding the following snippet.
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt
+COPY Proxy/certificates/myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt
 RUN update-ca-certificates
 ```
 

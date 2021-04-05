@@ -26,10 +26,10 @@ The certificate generation, configuration and consumption is split into the foll
 
 Create the service certificate to cover each of the following service hostnames.
 
-mystore.local
-*.mystore.local
+myInfo.local
+*.myInfo.local
 
-The ALT wildcard name of *.mystore.local will allow the same certificate to be used for all backend services having a dnsname of mystore.local.
+The ALT wildcard name of *.myInfo.local will allow the same certificate to be used for all backend services having a dnsname of myInfo.local.
 
 
 # Self-Signing certificates for development use.
@@ -50,7 +50,7 @@ Start the project using docker-compose as the startup project.
 
 Then in the menu if its not already running; View\Other Windows\Containers
 
-Select ```proxy.mystore.local```
+Select ```proxy.myInfo.local```
 
 Use the menu icons to start a console.
 
@@ -64,18 +64,18 @@ apt install nano
 # Create the common development root certificate
 
 ```
-openssl genrsa -out /etc/ssl/private/myStoreRootCA.key 4096
-openssl req -x509 -new -nodes -key /etc/ssl/private/myStoreRootCA.key -days 3650 -out /etc/ssl/certs/myStoreRootCA.pem
+openssl genrsa -out /etc/ssl/private/myInfoRootCA.key 4096
+openssl req -x509 -new -nodes -key /etc/ssl/private/myInfoRootCA.key -days 3650 -out /etc/ssl/certs/myInfoRootCA.pem
 ```
 This requires some manual input;
 ```
 UK
 London
 London
-myStoreRootCA
+myInfoRootCA
 development
-myStoreRootCA.development
-admin@myStoreRootCA.development
+myInfoRootCA.development
+admin@myInfoRootCA.development
 ```
 
 NOTE: These can pretty much be anything you like.
@@ -83,7 +83,7 @@ NOTE: These can pretty much be anything you like.
 # Convert the root Certificate to PFX to be able to import it into Windows
 
 ```
-openssl pkcs12 -export -inkey /etc/ssl/private/myStoreRootCA.key -in /etc/ssl/certs/myStoreRootCA.pem -out /etc/ssl/certs/myStoreRootCA.pfx
+openssl pkcs12 -export -inkey /etc/ssl/private/myInfoRootCA.key -in /etc/ssl/certs/myInfoRootCA.pem -out /etc/ssl/certs/myInfoRootCA.pfx
 ```
 
 Again, this requires manual input;
@@ -99,7 +99,7 @@ Any password will do as you are not going to use this for production, are you?
 # Convert the CA certificate to CRT to be able to import it into Ubuntu
 This is needed to provide the proxy or any other docker container with an ability to trust any certificate emanating from another container
 ```
-openssl pkcs12 -in /etc/ssl/certs/myStoreRootCA.pfx -clcerts -nokeys -out /usr/local/share/ca-certificates/myStoreRootCA.crt
+openssl pkcs12 -in /etc/ssl/certs/myInfoRootCA.pfx -clcerts -nokeys -out /usr/local/share/ca-certificates/myInfoRootCA.crt
 ```
 
 
@@ -110,7 +110,7 @@ Enter Import Password: password
 ```
 
 
-Capture the output during the generation session by downloading the /usr/local/share/ca-certificates/myStoreRootCA.crt to the Proxy project folder.
+Capture the output during the generation session by downloading the /usr/local/share/ca-certificates/myInfoRootCA.crt to the Proxy project folder.
 
 Additionally, to implement this CA on a container, include the following in the Dockerfile for that service;
 
@@ -119,7 +119,7 @@ Additionally, to implement this CA on a container, include the following in the 
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt
+COPY myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt
 RUN update-ca-certificates
 ```
 
@@ -135,73 +135,73 @@ It will, when installed on the local windows host machine under the 'Local Compu
 # Create the key
 One for each host certificate needed.
 ```
-openssl genrsa -out /etc/ssl/private/mystore.local.key 2048
-openssl genrsa -out /etc/ssl/private/api.mystore.local.key 2048
-openssl genrsa -out /etc/ssl/private/identity.mystore.local.key 2048
+openssl genrsa -out /etc/ssl/private/myInfo.local.key 2048
+openssl genrsa -out /etc/ssl/private/api.myInfo.local.key 2048
+openssl genrsa -out /etc/ssl/private/identity.myInfo.local.key 2048
 ```
 # Create a config file
-Create a config file : /etc/ssl/certs/mystore.local.conf
+Create a config file : /etc/ssl/certs/myInfo.local.conf
 Containing;
 
 ```
-touch /etc/ssl/certs/mystore.local.conf
-touch /etc/ssl/certs/api.mystore.local.conf
-touch /etc/ssl/certs/identity.mystore.local.conf
-nano /etc/ssl/certs/mystore.local.conf
-nano /etc/ssl/certs/api.mystore.local.conf
-nano /etc/ssl/certs/identity.mystore.local.conf
+touch /etc/ssl/certs/myInfo.local.conf
+touch /etc/ssl/certs/api.myInfo.local.conf
+touch /etc/ssl/certs/identity.myInfo.local.conf
+nano /etc/ssl/certs/myInfo.local.conf
+nano /etc/ssl/certs/api.myInfo.local.conf
+nano /etc/ssl/certs/identity.myInfo.local.conf
 ```
 
 Paste in the following then Control-x and save the file.
 
 ```
 [req]
-distinguished_name = mystore.local
+distinguished_name = myInfo.local
 req_extensions = v3_req
 prompt = no
-[mystore.local]
+[myInfo.local]
 C = UK
 ST = London
 L = London
-O = mystore
+O = myInfo
 OU = local
-CN = mystore.local
+CN = myInfo.local
 [v3_req]
 keyUsage = keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 [alt_names]
-DNS.1 = mystore.local
-DNS.2 = *.mystore.local
+DNS.1 = myInfo.local
+DNS.2 = *.myInfo.local
 ```
 
-The critical (specific) elements here are; ```distinguished_name = mystore.local``` ```CN = mystore.local``` and;
+The critical (specific) elements here are; ```distinguished_name = myInfo.local``` ```CN = myInfo.local``` and;
 ```
 [alt_names]
-DNS.1 = *.mystore.local
+DNS.1 = *.myInfo.local
 ```
 
 In which there is a dependency in the signing section below.
 
 # Create a certificate signing request
 ```
-openssl req -new -out /etc/ssl/certs/mystore.local.csr -key /etc/ssl/private/mystore.local.key -config /etc/ssl/certs/mystore.local.conf
-openssl req -new -out /etc/ssl/certs/api.mystore.local.csr -key /etc/ssl/private/api.mystore.local.key -config /etc/ssl/certs/api.mystore.local.conf
-openssl req -new -out /etc/ssl/certs/identity.mystore.local.csr -key /etc/ssl/private/identity.mystore.local.key -config /etc/ssl/certs/identity.mystore.local.conf
+openssl req -new -out /etc/ssl/certs/myInfo.local.csr -key /etc/ssl/private/myInfo.local.key -config /etc/ssl/certs/myInfo.local.conf
+openssl req -new -out /etc/ssl/certs/api.myInfo.local.csr -key /etc/ssl/private/api.myInfo.local.key -config /etc/ssl/certs/api.myInfo.local.conf
+openssl req -new -out /etc/ssl/certs/identity.myInfo.local.csr -key /etc/ssl/private/identity.myInfo.local.key -config /etc/ssl/certs/identity.myInfo.local.conf
 ```
 
 # Sign the certificate
 ```
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myStoreRootCA.pem -CAkey /etc/ssl/private/myStoreRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:mystore.local,DNS:*.mystore.local")) -in /etc/ssl/certs/mystore.local.csr -out /etc/ssl/certs/mystore.local.crt
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myStoreRootCA.pem -CAkey /etc/ssl/private/myStoreRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:api.mystore.local,DNS:*.mystore.local")) -in /etc/ssl/certs/api.mystore.local.csr -out /etc/ssl/certs/api.mystore.local.crt
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myStoreRootCA.pem -CAkey /etc/ssl/private/myStoreRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:identity.mystore.local,DNS:*.mystore.local")) -in /etc/ssl/certs/identity.mystore.local.csr -out /etc/ssl/certs/identity.mystore.local.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:myInfo.local,DNS:*.myInfo.local")) -in /etc/ssl/certs/myInfo.local.csr -out /etc/ssl/certs/myInfo.local.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:api.myInfo.local,DNS:*.myInfo.local")) -in /etc/ssl/certs/api.myInfo.local.csr -out /etc/ssl/certs/api.myInfo.local.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:identity.myInfo.local,DNS:*.myInfo.local")) -in /etc/ssl/certs/identity.myInfo.local.csr -out /etc/ssl/certs/identity.myInfo.local.crt
 ```
 
-This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myStoreRootCA.pem -CAkey /etc/ssl/private/myStoreRootCA.key```
+This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key```
 
 NOTE: When using printf the back tick  “ “ disables the \n make sure its " "
 
-The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:mystore.local,DNS:*.mystore.local"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
+The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:myInfo.local,DNS:*.myInfo.local"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
 
 # Create a strong Diffie-Hellman group
 
@@ -233,8 +233,8 @@ nano /etc/nginx/conf.d/self-signed.conf
 Enter the following and save the file.
 
 ```
-ssl_certificate /etc/ssl/certs/mystore.local.crt;
-ssl_certificate_key /etc/ssl/private/mystore.local.key;
+ssl_certificate /etc/ssl/certs/myInfo.local.crt;
+ssl_certificate_key /etc/ssl/private/myInfo.local.key;
 ```
 
 # Create a Configuration Snippet with Strong Encryption Settings
@@ -278,7 +278,7 @@ If the old default.conf is in place with jsut HTTP then replace;
 ```
 server {
     listen       80;
-    server_name  localhost mystore.local;
+    server_name  localhost myInfo.local;
 
     #charset koi8-r;
     access_log  /var/log/nginx/host.access.log  main;
@@ -290,7 +290,7 @@ else/With;
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name  localhost mystore.local;
+    server_name  localhost myInfo.local;
     return 302 https://$server_name$request_uri;
 }
 
@@ -314,23 +314,23 @@ Download created SSL files from linux container and place within solution folder
 
 The following files (with paths) were be created and will need to be downloaded to the windows development host inside the solution folder structure for use in future builds.;
 
-- /usr/share/ca-certificates/myStoreRootCA.crt
+- /usr/share/ca-certificates/myInfoRootCA.crt
 
-- /etc/ssl/certs/myStoreRootCA.pem
-- /etc/ssl/certs/myStoreRootCA.srl
-- /etc/ssl/certs/myStoreRootCA.pem
-- /etc/ssl/certs/mystore.local.conf
-- /etc/ssl/certs/mystore.local.crt
-- /etc/ssl/certs/mystore.local.csr
+- /etc/ssl/certs/myInfoRootCA.pem
+- /etc/ssl/certs/myInfoRootCA.srl
+- /etc/ssl/certs/myInfoRootCA.pem
+- /etc/ssl/certs/myInfo.local.conf
+- /etc/ssl/certs/myInfo.local.crt
+- /etc/ssl/certs/myInfo.local.csr
 
-- /etc/ssl/private/myStoreRootCA.key
-- /etc/ssl/private/mystore.local.key
+- /etc/ssl/private/myInfoRootCA.key
+- /etc/ssl/private/myInfo.local.key
 
 - /etc/ssl/certs/dhparam.pem
 
 Each of these should be downloaded from the container file system to the windows development file system in the 'proxy' project folder.
 
-Use the containers panel and the file tab. View\Other Windows\Containers. Select 'proxy.mystore.local' and select the 'Files' tab.
+Use the containers panel and the file tab. View\Other Windows\Containers. Select 'proxy.myInfo.local' and select the 'Files' tab.
 
 Navigate to each file and right click, then select 'Download'. 
 Navigate to the 'Proxy' project folder as needed and click 'Save'.
@@ -339,7 +339,7 @@ When complete add all of the downloaded files to the solution in the Proxy virtu
 
 They will be referenced in the Dockerfile with instructions following later to restore each file to its propeer place in each new image version.
 
-The myStoreRootCA files do not need to included in container images they are used to add to the Windows certificate hive.
+The myInfoRootCA files do not need to included in container images they are used to add to the Windows certificate hive.
 
 
 # Add file COPIES to proxy dockerfile
@@ -356,19 +356,19 @@ COPY index.html /usr/local/nginx/html/
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt
+COPY myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt
 RUN update-ca-certificates
 # Copy Diffie-Hellman file
 COPY dhparam.pem /etc/ssl/certs/dhparam.pem
 # Copy local service certificate
-COPY mystore.local.crt /etc/ssl/certs/mystore.local.crt
-COPY mystore.local.key /etc/ssl/private/mystore.local.key
+COPY myInfo.local.crt /etc/ssl/certs/myInfo.local.crt
+COPY myInfo.local.key /etc/ssl/private/myInfo.local.key
 
 ```
 
 # Add the root Certificate to the windows development host
 
-In file explorer, locate the Proxy/myStoreRootCA.pfx file.
+In file explorer, locate the Proxy/myInfoRootCA.pfx file.
 Double click the file.
 In the Certificate Import Wizard choose Local Machine and click Next.
 Elevate privileges as requried.

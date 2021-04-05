@@ -2,8 +2,8 @@ version: '3.4'
 
 services:
 
-  mystore.store:
-    hostname: store.mystore.local # root certificate must support his dns entry
+  myInfo.store:
+    hostname: store.local.myInfo.world # root certificate must support his dns entry
     build:
       context: .
       dockerfile: Store/Dockerfile  
@@ -14,8 +14,8 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
 
-  mystore.support:
-    hostname: support.mystore.local # root certificate must support his dns entry
+  myInfo.support:
+    hostname: support.local.myInfo.world # root certificate must support his dns entry
     build:
       context: .
       dockerfile: Support/Dockerfile    
@@ -26,8 +26,8 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
 
-  mystore.proxy:  
-    hostname: mystore.local    
+  myInfo.proxy:  
+    hostname: local.myInfo.world
     build:
       context: .
       dockerfile: Proxy/Dockerfile
@@ -36,8 +36,8 @@ services:
       - "443:443"   
       - "27017:27017"   
       
-  mystore.identity:
-    hostname: identity.mystore.local # root certificate must support his dns entry
+  myInfo.identity:
+    hostname: identity.local.myInfo.world # root certificate must support his dns entry
     build:
       context: .
       dockerfile: Identity/Dockerfile
@@ -48,8 +48,8 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
 
-  mystore.api:
-    hostname: api.mystore.local # root certificate must support his dns entry
+  myInfo.api:
+    hostname: api.local.myInfo.world # root certificate must support his dns entry
     build:
       context: .
       dockerfile: Api/Dockerfile
@@ -60,8 +60,8 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in  Proxy/Gen-Certs.cmd
 
-  mystore.mongo:
-    hostname: mongo.mystore.local # root certificate must support his dns entry
+  myInfo.mongo:
+    hostname: mongo.local.myInfo.world # root certificate must support his dns entry
     build:
       context: .
       dockerfile: MongoDB/Dockerfile

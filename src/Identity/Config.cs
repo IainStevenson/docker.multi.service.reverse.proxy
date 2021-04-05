@@ -23,7 +23,7 @@ namespace Identity
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("myStore.Api", "My API")
+                new ApiScope("myInfo.Api", "My API")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -43,7 +43,7 @@ namespace Identity
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "myStore.Api" }
+                    AllowedScopes = { "myInfo.Api" }
                 },
                 
                 // interactive ASP.NET Core MVC client
@@ -58,18 +58,18 @@ namespace Identity
                     RedirectUris = {
                         "https://localhost/store/signin-oidc" ,
                         "https://localhost/support/signin-oidc" ,
-                        "https://mystore.local/signin-oidc" ,
-                        "https://mystore.local/store/signin-oidc" ,
-                        "https://mystore.local/support/signin-oidc"
+                        "https://myInfo.local/signin-oidc" ,
+                        "https://myInfo.local/store/signin-oidc" ,
+                        "https://myInfo.local/support/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = {
                         "https://localhost/store/signout-callback-oidc",
                         "https://localhost/support/signout-callback-oidc",
-                        "https://mystore.local/signout-callback-oidc",
-                        "https://mystore.local/store/signout-callback-oidc",
-                        "https://mystore.local/support/signout-callback-oidc"
+                        "https://myInfo.local/signout-callback-oidc",
+                        "https://myInfo.local/store/signout-callback-oidc",
+                        "https://myInfo.local/support/signout-callback-oidc"
                     },
 
                     AllowedScopes = new List<string>
@@ -77,7 +77,7 @@ namespace Identity
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "myStore.Api"
+                        "myInfo.Api"
                     }
                 }
             };

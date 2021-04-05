@@ -8,9 +8,9 @@ namespace ApiTestClient
 {
     public class Program
     {
-        private static readonly string weatherForecatsUri = "https://mystore.local/api/weatherforecast";
-        private static readonly string authority = "https://mystore.local/identity";
-        private static readonly string identityUri = "https://mystore.local/api/identity";
+        private static readonly string weatherForecatsUri = "https://myInfo.local/api/weatherforecast";
+        private static readonly string authority = "https://myInfo.local/identity";
+        private static readonly string identityUri = "https://myInfo.local/api/identity";
 
         private static async Task Main(string[] args)
         {

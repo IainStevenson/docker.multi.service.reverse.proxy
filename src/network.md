@@ -5,8 +5,8 @@ solution leverages the automatic DNS feature of docker to provide
 container-to-container communications through their deterministic hostnames.
 
 Container-to-container communications:
-* (A) are (mediated) proxied by the proxy service if addresses use the the main domain  ```mystore.local``` and application base paths. e,g, https://mystore.local/api
-* (B) are direct if the addresses use the actual sub-domain host name for the service e.b. https://api.mystore.local/api
+* (A) are (mediated) proxied by the proxy service if addresses use the the main domain  ```myInfo.local``` and application base paths. e,g, https://myInfo.local/api
+* (B) are direct if the addresses use the actual sub-domain host name for the service e.b. https://api.myInfo.local/api
 
 
 ## Network topology
@@ -54,7 +54,7 @@ The decision here was to trade that performance drop for increased transport sec
 
 Any inadvertent exposure of backend services to the outside world can therefore fall back on TLS. (Strength in depth)
 
-Outside world can only access the proxy at mystore.local where port 80 (http) redirects to port 443 (https)
+Outside world can only access the proxy at myInfo.local where port 80 (http) redirects to port 443 (https)
 
 Proxy can access all backend services only on port 443
 
@@ -85,17 +85,17 @@ The following URL's are tested in this order.
 
 Request URLS                                                    | Routes internally to
 ________________________________________________________________|________________________________________________________________________
-https://mystore.local/identity/.well_lnown/openid_configuration | https://identity.mystore.local/identity/.well_lnown/openid_configuration
-https://mystore.local                                           | https://store.mystore.local/store/
-https://mystore.local/store                                     | https://store.mystore.local/store/
-https://mystore.local/store/home                                | https://store.mystore.local/store/home
-https://mystore.local/store/home/privacy                        | https://store.mystore.local/store/home/privacy
-https://mystore.local/support                                   | https://support.mystore.local/support/
-https://mystore.local/support/home                              | https://support.mystore.local/support/home
-https://mystore.local/support/home/privacy                      | https://support.mystore.local/support/home/privacy
-https://mystore.local/support/home/privacy                      | https://support.mystore.local/support/home/privacy
-https://mystore.local/api/identity                              | https://api.mystore.local/api/identity
-https://mystore.local/api/weatherforecast                       | https://api.mystore.local/api/weatherforecast
+https://myInfo.local/identity/.well_lnown/openid_configuration | https://identity.myInfo.local/identity/.well_lnown/openid_configuration
+https://myInfo.local                                           | https://store.myInfo.local/store/
+https://myInfo.local/store                                     | https://store.myInfo.local/store/
+https://myInfo.local/store/home                                | https://store.myInfo.local/store/home
+https://myInfo.local/store/home/privacy                        | https://store.myInfo.local/store/home/privacy
+https://myInfo.local/support                                   | https://support.myInfo.local/support/
+https://myInfo.local/support/home                              | https://support.myInfo.local/support/home
+https://myInfo.local/support/home/privacy                      | https://support.myInfo.local/support/home/privacy
+https://myInfo.local/support/home/privacy                      | https://support.myInfo.local/support/home/privacy
+https://myInfo.local/api/identity                              | https://api.myInfo.local/api/identity
+https://myInfo.local/api/weatherforecast                       | https://api.myInfo.local/api/weatherforecast
 
 ```
 
@@ -105,9 +105,9 @@ https://mystore.local/api/weatherforecast                       | https://api.my
 ```
 Http access                | http://*  redirects to https://*
 ________________________________________________________________________________________________________________
-Default Store access       | https://mystore.local is served direct from container 1 index view
-Store access via path      | https://mystore.local/store  is served direct from container 1 index view
-Support access via path    | https://mystore.local/support is served direct from container 2 index view
+Default Store access       | https://myInfo.local is served direct from container 1 index view
+Store access via path      | https://myInfo.local/store  is served direct from container 1 index view
+Support access via path    | https://myInfo.local/support is served direct from container 2 index view
 ```
 
 URL inter_site redirects from Container 1 to Container 2 and vis_a_versa work as expected and intra site urls using controller actions work as expected

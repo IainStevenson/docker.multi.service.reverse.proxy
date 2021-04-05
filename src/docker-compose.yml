@@ -2,65 +2,65 @@ version: '3.4'
 
 services:
 
-  mystore.store:
-    container_name: mystore.store    
-    image: ${DOCKER_REGISTRY-}mystore.store
+  myInfo.store:
+    container_name: myInfo.store    
+    image: ${DOCKER_REGISTRY-}myInfo.store
     restart: always  
     depends_on:
-     - mystore.mongo
-     - mystore.api
-     - mystore.identity    
+     - myInfo.mongo
+     - myInfo.api
+     - myInfo.identity    
     networks:      
-      - mystore    
+      - myInfo    
 
-  mystore.support:
-    container_name: mystore.support
-    image: ${DOCKER_REGISTRY-}mystore.support
+  myInfo.support:
+    container_name: myInfo.support
+    image: ${DOCKER_REGISTRY-}myInfo.support
     restart: always  
     depends_on:
-     - mystore.mongo
-     - mystore.api    
-     - mystore.identity    
+     - myInfo.mongo
+     - myInfo.api    
+     - myInfo.identity    
     networks:      
-      - mystore
+      - myInfo
 
-  mystore.proxy:
-    container_name: mystore.proxy
-    image: ${DOCKER_REGISTRY-}mystore.proxy
+  myInfo.proxy:
+    container_name: myInfo.proxy
+    image: ${DOCKER_REGISTRY-}myInfo.proxy
     restart: always  
     depends_on:
-     - mystore.store
-     - mystore.support
-     - mystore.identity
-     - mystore.api
+     - myInfo.store
+     - myInfo.support
+     - myInfo.identity
+     - myInfo.api
     networks:      
-      - mystore
+      - myInfo
 
-  mystore.identity:
-    container_name: mystore.identity
-    image: ${DOCKER_REGISTRY-}mystore.identity
+  myInfo.identity:
+    container_name: myInfo.identity
+    image: ${DOCKER_REGISTRY-}myInfo.identity
     restart: always  
     depends_on:
-     - mystore.mongo
+     - myInfo.mongo
     networks:      
-      - mystore
+      - myInfo
 
-  mystore.api:
-    container_name: mystore.api   
-    image: ${DOCKER_REGISTRY-}mystore.api
+  myInfo.api:
+    container_name: myInfo.api   
+    image: ${DOCKER_REGISTRY-}myInfo.api
     restart: always  
     depends_on:
-     - mystore.identity
-     - mystore.mongo
+     - myInfo.identity
+     - myInfo.mongo
     networks:
-      - mystore
+      - myInfo
 
-  mystore.mongo:
-    container_name: mystore.mongo
-    image: ${DOCKER_REGISTRY-}mystore.mongo
+  myInfo.mongo:
+    container_name: myInfo.mongo
+    image: ${DOCKER_REGISTRY-}myInfo.mongo
     restart: always  
     networks: 
-      - mystore
+      - myInfo
 
 networks:  
-    mystore:
+    myInfo:

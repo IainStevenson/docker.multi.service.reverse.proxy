@@ -19,7 +19,7 @@ CALL Gen-Vars.CMD
 @ECHO Control-C to abort or,
 PAUSE
 ::
-IF EXIST certificates/myStoreRootCA.pfx GOTO GenHostCertExists
+IF EXIST certificates/myInfoRootCA.pfx GOTO GenHostCertExists
 ::
 :GenRootCA
 @ECHO -------------------------------------------------------------------------------
@@ -32,12 +32,12 @@ IF EXIST certificates/myStoreRootCA.pfx GOTO GenHostCertExists
 @ECHO.
 @ECHO Generating the Self-Signed Root CA Certificate...
 @ECHO.
-openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout certificates/myStoreRootCA.key -out certificates/myStoreRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
-openssl x509 -outform pem -in certificates/myStoreRootCA.pem -out certificates/myStoreRootCA.crt
-openssl pkcs12 -export -inkey certificates/myStoreRootCA.key -in certificates/myStoreRootCA.pem -out certificates/myStoreRootCA.pfx
+openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout certificates/myInfoRootCA.key -out certificates/myInfoRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
+openssl x509 -outform pem -in certificates/myInfoRootCA.pem -out certificates/myInfoRootCA.crt
+openssl pkcs12 -export -inkey certificates/myInfoRootCA.key -in certificates/myInfoRootCA.pem -out certificates/myInfoRootCA.pfx
 @ECHO.
 @ECHO.
-@ECHO You should Import myStoreRootCA.PFX SPECIFICALLY to the;
+@ECHO You should Import myInfoRootCA.PFX SPECIFICALLY to the;
 @ECHO	LOCAL MACHINE 'Trusted Root Certification Authorities' 
 @ECHO certificate store using the password you entered.
 @ECHO *** Do not let it choose the store for you. ***
@@ -47,7 +47,7 @@ openssl pkcs12 -export -inkey certificates/myStoreRootCA.key -in certificates/my
 TYPE ImportRootCA.txt
 @ECHO.
 PAUSE
-certificates\myStoreRootCA.pfx
+certificates\myInfoRootCA.pfx
 @ECHO Continue only when the root CA certificate is imported.
 PAUSE
 GOTO Finish

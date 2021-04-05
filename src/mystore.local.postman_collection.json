@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "92e4aee7-9a34-4510-8767-e2622254583c",
-		"name": "mystore.local",
+		"name": "myInfo.local",
 		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -581,12 +581,12 @@
 				"type": "text/javascript",
 				"exec": [
 					"const echoPostRequest = {",
-					"  url: 'https://mystore.local/identity/connect/token',",
+					"  url: 'https://myInfo.local/identity/connect/token',",
 					"  method: 'POST',",
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
 					"    mode: 'application/json',",
-					"    raw: 'grant_type=client_credentials&scope=myStore.Api&client_id=SDK.Command&client_secret=secret'",
+					"    raw: 'grant_type=client_credentials&scope=myInfo.Api&client_id=SDK.Command&client_secret=secret'",
 					"  }",
 					"};",
 					"",
@@ -634,7 +634,7 @@
 	"variable": [
 		{
 			"key": "baseUri",
-			"value": "https://mystore.local"
+			"value": "https://myInfo.local"
 		},
 		{
 			"key": "currentAccessToken",
