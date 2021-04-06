@@ -26,10 +26,10 @@ The certificate generation, configuration and consumption is split into the foll
 
 Create the service certificate to cover each of the following service hostnames.
 
-myInfo.local
-*.myInfo.local
+local.myInfo.world
+*.local.myInfo.world
 
-The ALT wildcard name of *.myInfo.local will allow the same certificate to be used for all backend services having a dnsname of myInfo.local.
+The ALT wildcard name of *.local.myInfo.world will allow the same certificate to be used for all backend services having a dnsname of local.myInfo.world.
 
 
 # Self-Signing certificates for development use.
@@ -50,7 +50,7 @@ Start the project using docker-compose as the startup project.
 
 Then in the menu if its not already running; View\Other Windows\Containers
 
-Select ```proxy.myInfo.local```
+Select ```proxy.local.myInfo.world```
 
 Use the menu icons to start a console.
 
@@ -135,73 +135,73 @@ It will, when installed on the local windows host machine under the 'Local Compu
 # Create the key
 One for each host certificate needed.
 ```
-openssl genrsa -out /etc/ssl/private/myInfo.local.key 2048
-openssl genrsa -out /etc/ssl/private/api.myInfo.local.key 2048
-openssl genrsa -out /etc/ssl/private/identity.myInfo.local.key 2048
+openssl genrsa -out /etc/ssl/private/local.myInfo.world.key 2048
+openssl genrsa -out /etc/ssl/private/api.local.myInfo.world.key 2048
+openssl genrsa -out /etc/ssl/private/identity.local.myInfo.world.key 2048
 ```
 # Create a config file
-Create a config file : /etc/ssl/certs/myInfo.local.conf
+Create a config file : /etc/ssl/certs/local.myInfo.world.conf
 Containing;
 
 ```
-touch /etc/ssl/certs/myInfo.local.conf
-touch /etc/ssl/certs/api.myInfo.local.conf
-touch /etc/ssl/certs/identity.myInfo.local.conf
-nano /etc/ssl/certs/myInfo.local.conf
-nano /etc/ssl/certs/api.myInfo.local.conf
-nano /etc/ssl/certs/identity.myInfo.local.conf
+touch /etc/ssl/certs/local.myInfo.world.conf
+touch /etc/ssl/certs/api.local.myInfo.world.conf
+touch /etc/ssl/certs/identity.local.myInfo.world.conf
+nano /etc/ssl/certs/local.myInfo.world.conf
+nano /etc/ssl/certs/api.local.myInfo.world.conf
+nano /etc/ssl/certs/identity.local.myInfo.world.conf
 ```
 
 Paste in the following then Control-x and save the file.
 
 ```
 [req]
-distinguished_name = myInfo.local
+distinguished_name = local.myInfo.world
 req_extensions = v3_req
 prompt = no
-[myInfo.local]
+[local.myInfo.world]
 C = UK
 ST = London
 L = London
 O = myInfo
 OU = local
-CN = myInfo.local
+CN = local.myInfo.world
 [v3_req]
 keyUsage = keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 [alt_names]
-DNS.1 = myInfo.local
-DNS.2 = *.myInfo.local
+DNS.1 = local.myInfo.world
+DNS.2 = *.local.myInfo.world
 ```
 
-The critical (specific) elements here are; ```distinguished_name = myInfo.local``` ```CN = myInfo.local``` and;
+The critical (specific) elements here are; ```distinguished_name = local.myInfo.world``` ```CN = local.myInfo.world``` and;
 ```
 [alt_names]
-DNS.1 = *.myInfo.local
+DNS.1 = *.local.myInfo.world
 ```
 
 In which there is a dependency in the signing section below.
 
 # Create a certificate signing request
 ```
-openssl req -new -out /etc/ssl/certs/myInfo.local.csr -key /etc/ssl/private/myInfo.local.key -config /etc/ssl/certs/myInfo.local.conf
-openssl req -new -out /etc/ssl/certs/api.myInfo.local.csr -key /etc/ssl/private/api.myInfo.local.key -config /etc/ssl/certs/api.myInfo.local.conf
-openssl req -new -out /etc/ssl/certs/identity.myInfo.local.csr -key /etc/ssl/private/identity.myInfo.local.key -config /etc/ssl/certs/identity.myInfo.local.conf
+openssl req -new -out /etc/ssl/certs/local.myInfo.world.csr -key /etc/ssl/private/local.myInfo.world.key -config /etc/ssl/certs/local.myInfo.world.conf
+openssl req -new -out /etc/ssl/certs/api.local.myInfo.world.csr -key /etc/ssl/private/api.local.myInfo.world.key -config /etc/ssl/certs/api.local.myInfo.world.conf
+openssl req -new -out /etc/ssl/certs/identity.local.myInfo.world.csr -key /etc/ssl/private/identity.local.myInfo.world.key -config /etc/ssl/certs/identity.local.myInfo.world.conf
 ```
 
 # Sign the certificate
 ```
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:myInfo.local,DNS:*.myInfo.local")) -in /etc/ssl/certs/myInfo.local.csr -out /etc/ssl/certs/myInfo.local.crt
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:api.myInfo.local,DNS:*.myInfo.local")) -in /etc/ssl/certs/api.myInfo.local.csr -out /etc/ssl/certs/api.myInfo.local.crt
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:identity.myInfo.local,DNS:*.myInfo.local")) -in /etc/ssl/certs/identity.myInfo.local.csr -out /etc/ssl/certs/identity.myInfo.local.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/local.myInfo.world.csr -out /etc/ssl/certs/local.myInfo.world.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:api.local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/api.local.myInfo.world.csr -out /etc/ssl/certs/api.local.myInfo.world.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:identity.local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/identity.local.myInfo.world.csr -out /etc/ssl/certs/identity.local.myInfo.world.crt
 ```
 
 This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key```
 
 NOTE: When using printf the back tick  “ “ disables the \n make sure its " "
 
-The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:myInfo.local,DNS:*.myInfo.local"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
+The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:local.myInfo.world,DNS:*.local.myInfo.world"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
 
 # Create a strong Diffie-Hellman group
 
@@ -233,8 +233,8 @@ nano /etc/nginx/conf.d/self-signed.conf
 Enter the following and save the file.
 
 ```
-ssl_certificate /etc/ssl/certs/myInfo.local.crt;
-ssl_certificate_key /etc/ssl/private/myInfo.local.key;
+ssl_certificate /etc/ssl/certs/local.myInfo.world.crt;
+ssl_certificate_key /etc/ssl/private/local.myInfo.world.key;
 ```
 
 # Create a Configuration Snippet with Strong Encryption Settings
@@ -278,7 +278,7 @@ If the old default.conf is in place with jsut HTTP then replace;
 ```
 server {
     listen       80;
-    server_name  localhost myInfo.local;
+    server_name  localhost local.myInfo.world;
 
     #charset koi8-r;
     access_log  /var/log/nginx/host.access.log  main;
@@ -290,7 +290,7 @@ else/With;
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name  localhost myInfo.local;
+    server_name  localhost local.myInfo.world;
     return 302 https://$server_name$request_uri;
 }
 
@@ -319,18 +319,18 @@ The following files (with paths) were be created and will need to be downloaded 
 - /etc/ssl/certs/myInfoRootCA.pem
 - /etc/ssl/certs/myInfoRootCA.srl
 - /etc/ssl/certs/myInfoRootCA.pem
-- /etc/ssl/certs/myInfo.local.conf
-- /etc/ssl/certs/myInfo.local.crt
-- /etc/ssl/certs/myInfo.local.csr
+- /etc/ssl/certs/local.myInfo.world.conf
+- /etc/ssl/certs/local.myInfo.world.crt
+- /etc/ssl/certs/local.myInfo.world.csr
 
 - /etc/ssl/private/myInfoRootCA.key
-- /etc/ssl/private/myInfo.local.key
+- /etc/ssl/private/local.myInfo.world.key
 
 - /etc/ssl/certs/dhparam.pem
 
 Each of these should be downloaded from the container file system to the windows development file system in the 'proxy' project folder.
 
-Use the containers panel and the file tab. View\Other Windows\Containers. Select 'proxy.myInfo.local' and select the 'Files' tab.
+Use the containers panel and the file tab. View\Other Windows\Containers. Select 'proxy.local.myInfo.world' and select the 'Files' tab.
 
 Navigate to each file and right click, then select 'Download'. 
 Navigate to the 'Proxy' project folder as needed and click 'Save'.
@@ -361,8 +361,8 @@ RUN update-ca-certificates
 # Copy Diffie-Hellman file
 COPY dhparam.pem /etc/ssl/certs/dhparam.pem
 # Copy local service certificate
-COPY myInfo.local.crt /etc/ssl/certs/myInfo.local.crt
-COPY myInfo.local.key /etc/ssl/private/myInfo.local.key
+COPY local.myInfo.world.crt /etc/ssl/certs/local.myInfo.world.crt
+COPY local.myInfo.world.key /etc/ssl/private/local.myInfo.world.key
 
 ```
 

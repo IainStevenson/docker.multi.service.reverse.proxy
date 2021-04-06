@@ -1,6 +1,5 @@
 # HTTP
 
-
 Several HTTP headers, called conditional headers, lead to conditional requests. These are:
 
 
@@ -20,7 +19,7 @@ The first upload of a resource is an edge case of the previous. Like any update 
 
 # Resources
 
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Unmodified-Since
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Unmodified-Since

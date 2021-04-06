@@ -1,58 +1,18 @@
 # Purpose
 
-To document the research and development needed to produce;
+To document the research and development needed to produce the following;
 
 A  Docker orchestration of a distinct small set of microservices featuring;
-* A store front end site
-* A support front end site
-* A common security domain front end site (using Identity Server 4) allowing social identities and role based access
-* A secure frontend/backend API service 
-* A backend common persistence server (MongoDB) with separate databases and collections for each service
-* A reverse Proxy (NGINX) fronting all services.
 
-# Local Networking Gotcha
+* A secure store front-end site
+* A secure support front-end site
+* A common security domain front-end site (using Identity Server 4) allowing social identities and role based access
+* A secure front-end/back-end API service 
+* A secure back-end common persistence server (MongoDB) with separate databases and collections for each service
+* A secure reverse Proxy (NGINX) fronting all services.
 
-BEWARE: 
-
-The technique used here with a single NGINX reverse proxy listening on localhost(127.0.0.1):443 has 
-consequences for other development projects on your development host. 
-
-You will not be able to simultaneously run http/s services from other hosting programs such as IIS Express or self hoested programs in other VS projects due to port 443 and 80 already being bound.
-
-Conversely is that this solution will not work properly or at all if those ports are already in use elesewhere.
-
-## Fictional Domain
-
-This solution now has a real domain name entry of '''myinfo.world''' 
-
-In keeping with usual DNS subdomain conventions the following environment sub-domains will be set up;
-
-| Sub domain         | Use                                    | 
-|:-------------------|:---------------------------------------|
-| local.myinfo.world | intended for developer isolation       |
-| dev.myinfo.world   | intended for developer collaboration   |
-| test.myinfo.world  | intended for tester collaboration      |
-| demo.myinfo.world  | intended for demonstration             |
-| myinfo.world       | for customer use                       |
-
-
-In each domain the micro-services each use a DNS prefix to those domains within the docker subnet of;
-
-- identity
-- api
-- store
-- support
-- mongo
-
-# DNS names
-
-These example DNS host names are for the local top level domain and will be replicated for each of; local, test, demo, world
-
-- identity.myinfo.local
-- api.myinfo.local
-- store.myinfo.local
-- support.myinfo.local
-- mongo.myinfo.local
+Note: During development of this solution some local only credentials may appear in config files 
+the solution will be hardened later to secure all environment settings in the final V1 release
 
 # Setup your environment 
 
@@ -128,6 +88,46 @@ Postman V8.1.0
 In the solution, container orchestration is enabled with Linux containers and docker-compose.
 
 The docker_compose project should be your preferred startup for solution debugging builds and runs.
+
+
+# Local Networking Gotcha
+
+BEWARE: 
+
+The technique used here with a single NGINX reverse proxy listening on localhost(127.0.0.1) port 443 has 
+consequences for other development projects on your development host.  You will not be able to simultaneously run http/s services from other hosting programs such as IIS Express or 
+self hosted programs in other VS projects due to port 443 and 80 already being bound/in use. 
+Conversely is that this solution will not work properly or at all if those ports are already in use elesewhere.
+
+## DNS  Domains
+
+This solution has a real domain name entry of ```myinfo.world```
+
+In keeping with usual DNS subdomain conventions the following environment sub-domains will be set up as follows;
+
+| Sub domain         | Use                                    | 
+|--------------------|---------------------------------------|
+| local.myinfo.world | intended for developer isolation       |
+| dev.myinfo.world   | intended for developer collaboration   |
+| test.myinfo.world  | intended for tester collaboration      |
+| demo.myinfo.world  | intended for demonstration             |
+| myinfo.world       | for customer use                       |
+
+In each sub-domain the micro-services each use a DNS prefix of;
+
+- identity
+- api
+- store
+- support
+- mongo
+
+These example DNS host names are for the local top level domain and will be replicated for each of; local, test, demo, world
+
+- identity.myinfo.local
+- api.myinfo.local
+- store.myinfo.local
+- support.myinfo.local
+- mongo.myinfo.local
 
 
 # More Reading:

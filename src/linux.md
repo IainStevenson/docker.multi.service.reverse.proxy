@@ -1,4 +1,4 @@
-# Notes on linux for newbies (like me)
+# Notes on linux (for newbies like me)
 
 To temporarily add additional tooling to the container 
 
@@ -68,6 +68,16 @@ curl -k https://identity.myInfo.local/identity/.well-known/openid-configuration
 
 
 # Install a root certificate in a linux host
+AFAIK There are two locations for certificates according to type (that I know to work), that roughly correspond to the 'Personal' and 'Trusted Root Certification Authorities' folders in Windows Certifcate manager.
+
+```
+/etc/ssl/certs
+```
+
+and
+
+```
+/usr/local/share/ca-certificates```
 
 # Allow trust of certificates from other services
 

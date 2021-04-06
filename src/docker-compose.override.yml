@@ -1,9 +1,10 @@
 version: '3.4'
 
 services:
-
+  # certificates must support these dns hostname's
+  # referto the section :ConfigureSecrets in Proxy/Gen-Certs.cmd regarding UserSecrets
   myInfo.store:
-    hostname: store.local.myInfo.world # root certificate must support his dns entry
+    hostname: store.local.myInfo.world 
     build:
       context: .
       dockerfile: Store/Dockerfile  
@@ -11,11 +12,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
   myInfo.support:
-    hostname: support.local.myInfo.world # root certificate must support his dns entry
+    hostname: support.local.myInfo.world 
     build:
       context: .
       dockerfile: Support/Dockerfile    
@@ -23,8 +24,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
   myInfo.proxy:  
     hostname: local.myInfo.world
@@ -37,7 +38,7 @@ services:
       - "27017:27017"   
       
   myInfo.identity:
-    hostname: identity.local.myInfo.world # root certificate must support his dns entry
+    hostname: identity.local.myInfo.world
     build:
       context: .
       dockerfile: Identity/Dockerfile
@@ -45,11 +46,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
   myInfo.api:
-    hostname: api.local.myInfo.world # root certificate must support his dns entry
+    hostname: api.local.myInfo.world 
     build:
       context: .
       dockerfile: Api/Dockerfile
@@ -57,19 +58,21 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80 
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in  Proxy/Gen-Certs.cmd
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
   myInfo.mongo:
-    hostname: mongo.local.myInfo.world # root certificate must support his dns entry
+    hostname: mongo.local.myInfo.world 
     build:
       context: .
       dockerfile: MongoDB/Dockerfile
     environment: 
-      - MONGO_INITDB_USERNAME=admin # must match mongo-init-local.js
-      - MONGO_INITDB_PASSWORD=admin # must match mongo-init-local.js
-      - MONGO_INITDB_DATABASE=admin # must match mongo-init-local.js
+        # NOTE: these must currently match mongo-init-local.js settings
+      - MONGO_INITDB_USERNAME=admin
+      - MONGO_INITDB_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=admin
     volumes:
       - ./mongo-init-local.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      - ${APPDATA}/MongoDb/Data:/data/db # local persistence of mongo database
-      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/ # local persistence of mongo database
+      # local persistence of mongo database
+      - ${APPDATA}/MongoDb/Data:/data/db 
+      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/

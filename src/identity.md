@@ -1,4 +1,4 @@
-# Identity, Identity SErver and authorisation notes
+# Identity, Identity Server and authorisation notes
 
 Identity server provides an authorisation domain specif to this set of micro services and allows integration with many social identity providers through OAUTH and OpenID.
 
