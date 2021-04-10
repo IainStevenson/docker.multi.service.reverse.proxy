@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		network.md = network.md
 		..\readme.md = ..\readme.md
 		solution.md = solution.md
+		user-secrets-example.cmd = user-secrets-example.cmd
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}"

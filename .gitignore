@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 /src/Identity/identity-log.txt
 /src/Proxy/certificates
+/src/user-secrets.cmd
