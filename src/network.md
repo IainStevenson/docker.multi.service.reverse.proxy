@@ -18,7 +18,7 @@ This diagram illustrates the host and docker network setup.
 |                                                                                           |
 |                    .___________________________________________________________________.  |
 | Development host   | Docker        Front End             Back End                      |  |
-| Network            | sub_network  ._____________.       ._________________________.    |  |
+| Network (localhost)| sub_network  ._____________.       ._________________________.    |  |
 |                    |              |             |       |                B  =     |    |  |
 | Visual Studio      |              |             |       |  .___________.    |     |    |  |
 | Browser            |              |             |   A   |->| store     |<-->|     |    |  |
@@ -44,27 +44,27 @@ This diagram illustrates the host and docker network setup.
 `___________________________________________________________________________________________'
 ```
 
-All services are provided with a discrete service certificate with ```localhost```  as the CN and all the requried domain and sub-domains as SAN (Subject Alternative Names) names. the default of ```localhost``` stops ASP.NET debuging from complaining about a localhost trusted certificate on startup.
+All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the requried domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debuging from complaining about a localhost trusted certificate on startup.
 
 All transport is encrypted. 
 
-Clearly here, network transmission performance is reduced over a Front end TLS and backed http only scenario, due to increased TLS handshaking.
+Clearly here, network transmission performance is reduced over a Front end TLS and backed http only scenario, due to increased TLS handshaking per request.
 
 The decision here was to trade that performance drop for increased transport security on the basis that ```security should never be undermined by performance considerations```.
 
 Any inadvertent exposure of backend services to the outside world can therefore fall back on TLS. (Strength in depth)
 
-Outside world can only access the proxy at local.myInfo.world where port 80 (http) redirects to port 443 (https)
+Outside world can only access the proxy at local.myInfo.world where port 80 (http) forces a redirect to port 443 (https).
 
-Proxy can access all backend services only on port 443
+The Proxy can access all backend services only on port 443
 
-All backend services can access all services only via port 443 (https) 
+All backend services can access all services via the Proxy via port 443 (https) or the mongoDB port 27017. Each service may access any other service directly by any other exposed port. 
 
 Certificates provided for each service and each has the development root CA certificate available to trust those services certificates.
 
 # Application mapping in proxy configuration
 
-With 5 defined externally useful application mappings of;
+With 5 defined externally useful application base path mappings of;
 ```
 /
 /store/

@@ -55,8 +55,8 @@ The following code in the Api will ensure this is correct.
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "https://myInfo.local/identity";
-                    options.Audience = "https://myInfo.local/identity/resources";
+                    options.Authority = "https://local.myInfo.world/identity";
+                    options.Audience = "https://local.myInfo.world/identity/resources";
                     options.RequireHttpsMetadata = true;
 
                     options.TokenValidationParameters = new TokenValidationParameters
