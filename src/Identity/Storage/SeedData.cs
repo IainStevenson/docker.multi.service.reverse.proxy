@@ -80,16 +80,16 @@ namespace Identity.Storage
                     AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login
                     RedirectUris = {
-                        "https://myInfo.local/signin-oidc" ,
-                        "https://myInfo.local/store/signin-oidc" ,
-                        "https://myInfo.local/support/signin-oidc"
+                        "https://local.myinfo.world/signin-oidc" ,
+                        "https://local.myinfo.world/store/signin-oidc" ,
+                        "https://local.myinfo.world/support/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = {
-                        "https://myInfo.local/signout-callback-oidc",
-                        "https://myInfo.local/store/signout-callback-oidc",
-                        "https://myInfo.local/support/signout-callback-oidc"
+                        "https://local.myinfo.world/signout-callback-oidc",
+                        "https://local.myinfo.world/store/signout-callback-oidc",
+                        "https://local.myinfo.world/support/signout-callback-oidc"
                     },
 
                     AllowedScopes = new List<string>
@@ -111,9 +111,9 @@ namespace Identity.Storage
             //    RequirePkce = false,
 
             //    // where to redirect to after login/ out
-            //    RedirectUris = {    "https://myInfo.local/store/signin-oidc",
-            //                        "https://myInfo.local/support/signin-oidc"},
-            //    FrontChannelLogoutUri = "https://myInfo.local/signin-oidc",
+            //    RedirectUris = {    "https://local.myinfo.world/store/signin-oidc",
+            //                        "https://local.myinfo.world/support/signin-oidc"},
+            //    FrontChannelLogoutUri = "https://local.myinfo.world/signin-oidc",
 
             //    AllowedScopes = new List<string>
             //    {
@@ -135,9 +135,9 @@ namespace Identity.Storage
                 RequirePkce = true,
                 RequireClientSecret = false,
 
-                RedirectUris =           { "http://myInfo.local/subject/callback.html" },
-                PostLogoutRedirectUris = { "http://myInfo.local/subject/index.html" },
-                AllowedCorsOrigins =     { "http://myInfo.local" },
+                RedirectUris =           { "https://local.myinfo.world/subject/callback.html" },
+                PostLogoutRedirectUris = { "https://local.myinfo.world/subject/index.html" },
+                AllowedCorsOrigins =     { "https://local.myinfo.world" },
 
                 AllowedScopes =
                 {

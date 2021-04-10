@@ -4,7 +4,7 @@ services:
 
   myInfo.store:
     container_name: myInfo.store    
-    image: ${DOCKER_REGISTRY-}myInfo.store
+    image: ${DOCKER_REGISTRY-}myinfo.store
     restart: always  
     depends_on:
      - myInfo.mongo
@@ -15,7 +15,7 @@ services:
 
   myInfo.support:
     container_name: myInfo.support
-    image: ${DOCKER_REGISTRY-}myInfo.support
+    image: ${DOCKER_REGISTRY-}myinfo.support
     restart: always  
     depends_on:
      - myInfo.mongo
@@ -26,7 +26,7 @@ services:
 
   myInfo.proxy:
     container_name: myInfo.proxy
-    image: ${DOCKER_REGISTRY-}myInfo.proxy
+    image: ${DOCKER_REGISTRY-}myinfo.proxy
     restart: always  
     depends_on:
      - myInfo.store
@@ -38,7 +38,7 @@ services:
 
   myInfo.identity:
     container_name: myInfo.identity
-    image: ${DOCKER_REGISTRY-}myInfo.identity
+    image: ${DOCKER_REGISTRY-}myinfo.identity
     restart: always  
     depends_on:
      - myInfo.mongo
@@ -47,7 +47,7 @@ services:
 
   myInfo.api:
     container_name: myInfo.api   
-    image: ${DOCKER_REGISTRY-}myInfo.api
+    image: ${DOCKER_REGISTRY-}myinfo.api
     restart: always  
     depends_on:
      - myInfo.identity
@@ -57,7 +57,7 @@ services:
 
   myInfo.mongo:
     container_name: myInfo.mongo
-    image: ${DOCKER_REGISTRY-}myInfo.mongo
+    image: ${DOCKER_REGISTRY-}myinfo.mongo
     restart: always  
     networks: 
       - myInfo
