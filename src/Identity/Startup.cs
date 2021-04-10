@@ -38,7 +38,7 @@ namespace Identity
             var builder = services.AddIdentityServer(options =>
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                //options.EmitStaticAudienceClaim = true;
+                options.EmitStaticAudienceClaim = true;
             });
             builder.AddClients()
                         .AddCorsPolicyService<InMemoryCorsPolicyService>() // Add the CORS service

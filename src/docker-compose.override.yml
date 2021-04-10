@@ -71,11 +71,12 @@ services:
       - MONGO_INITDB_USERNAME=admin
       - MONGO_INITDB_PASSWORD=admin
       - MONGO_INITDB_DATABASE=admin
-      #- MONGO_STORAGE_USERNAME=storage
-      #- MONGO_STORAGE_PASSWORD=storagepass
+      - MONGO_STORAGE_USERNAME=storage
+      - MONGO_STORAGE_PASSWORD=storagepass
     volumes:
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./MongoDb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       # local persistence of mongo database
+      - ${APPDATA}/MongoDb/Data:/data/db
+      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb
       - ${APPDATA}/Microsoft/UserSecrets/5151c09A-27d2-4f8a-a445-ea3ae9b6e786:/root/usersecrets:ro 
-      - ${APPDATA}/MongoDb/Data:/data/db 
-      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/
+

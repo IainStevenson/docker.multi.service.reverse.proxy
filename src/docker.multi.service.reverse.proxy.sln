@@ -73,7 +73,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB", "MongoDB", "{1E9975DA-67DB-48D2-A619-F2BA44881DA8}"
 	ProjectSection(SolutionItems) = preProject
 		MongoDB\Dockerfile = MongoDB\Dockerfile
-		MongoDB\mongo-init-local.js = MongoDB\mongo-init-local.js
+		MongoDB\mongo-init.js = MongoDB\mongo-init.js
 		MongoDB\mongo-init.sh = MongoDB\mongo-init.sh
 		Proxy\mongodb.csproj = Proxy\mongodb.csproj
 	EndProjectSection
