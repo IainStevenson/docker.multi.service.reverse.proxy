@@ -1,4 +1,5 @@
 SETLOCAL
+:: DO NOT EXECUTE THIS FILE!!!!!
 :: Please create a copy of this file outside Source control (add to .gitignore) 
 :: and to that copy ...
 :: Please add the configuration values here and run that command.
