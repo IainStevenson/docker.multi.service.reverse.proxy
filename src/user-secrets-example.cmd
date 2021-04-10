@@ -5,7 +5,14 @@ SETLOCAL
 :: Please add the configuration values here and run that command.
 :: these values will be picked up via the ASP.NET core User Seecrets configuration provider at run time.
 :: Also please see the Proxy/GEN-HOST.CMD file for certificate details.
-SET Mongo-Credentials=
+SET MONGO_INITDB_DATABASE=
+SET MONGO_INITDB_USERNAME
+SET MONGO_INITDB_PASSWORD
+SET MONGO_STORAGE_USERNAME=
+SET MONGO_STORAGE_PASSWORD=
+
+
+
 SET API-DatabaseName=
 
 SET IDENTITY-DatabaseName=
@@ -21,17 +28,27 @@ SET SUPPORT-DatabaseName=
 SET SUPPORT-ClientId=
 SET SUPPORT-ClientSecret=
 
+pushd Mongo
+
+dotnet user-secrets set "MONGO_INITDB_USERNAME" "%MONGO_INITDB_USERNAME%"
+dotnet user-secrets set "MONGO_INITDB_PASSWORD" "%MONGO_INITDB_PASSWORD%"
+dotnet user-secrets set "MONGO_INITDB_DATABASE" "%MONGO_INITDB_DATABASE%"
+dotnet user-secrets set "MONGO_STORAGE_USERNAME" "%MONGO_STORAGE_USERNAME%"
+dotnet user-secrets set "MONGO_STORAGE_PASSWORD" "%MONGO_STORAGE_PASSWORD%"
+dotnet user-secrets list
+
+popd
 
 pushd api
 @echo %CD%
-dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%Mongo-Credentials%@mongo.local.myInfo.world:27017"
+dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%MONGO_STORAGE_USERNAME%:%MONGO_STORAGE_PASSWORD%@mongo.local.myInfo.world:27017"
 dotnet user-secrets set "Mongo:DatabaseName" "%API-DatabaseName%"
 dotnet user-secrets list
 popd
 pushd identity
 
 @echo %CD%
-dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%Mongo-Credentials%@mongo.local.myInfo.world:27017"
+dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%MONGO_STORAGE_USERNAME%:%MONGO_STORAGE_PASSWORD%@mongo.local.myInfo.world:27017"
 dotnet user-secrets set "Mongo:DatabaseName" "%IDENTITY-DatabaseName%"
 dotnet user-secrets set "Google:ClientId" "%IDENTITY-Google-ClientId%"
 dotnet user-secrets set "Google:ClientSecret" "%IDENTITY-Google-ClientSecret%"
@@ -39,7 +56,7 @@ dotnet user-secrets list
 popd
 pushd store
 @echo %CD%
-dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%Mongo-Credentials%@mongo.local.myInfo.world:27017"
+dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%MONGO_STORAGE_USERNAME%:%MONGO_STORAGE_PASSWORD%@mongo.local.myInfo.world:27017"
 dotnet user-secrets set "Mongo:DatabaseName" "%STORE-DatabaseName%"
 dotnet user-secrets set "Authentication:ClientId" "%STORE-ClientId%"
 dotnet user-secrets set "Authentication:ClientSecret" "%STORE-ClientSecret%"
@@ -47,7 +64,7 @@ dotnet user-secrets list
 popd
 pushd support
 @echo %CD%
-dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%Mongo-Credentials%@mongo.local.myInfo.world:27017"
+dotnet user-secrets set "Mongo:ConnectionString" "mongodb://%MONGO_STORAGE_USERNAME%:%MONGO_STORAGE_PASSWORD%@mongo.local.myInfo.world:27017"
 dotnet user-secrets set "Mongo:DatabaseName" "myInfoSupport"
 dotnet user-secrets set "Mongo:DatabaseName" "%SUPPORT-DatabaseName%"
 dotnet user-secrets set "Authentication:ClientId" "%SUPPORT-ClientId%"

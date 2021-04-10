@@ -65,6 +65,7 @@ Certificates provided for each service and each has the development root CA cert
 # Application mapping in proxy configuration
 
 With 5 defined externally useful application base path mappings of;
+
 ```
 /
 /store/
