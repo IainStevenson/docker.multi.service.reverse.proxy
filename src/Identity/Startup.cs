@@ -84,7 +84,15 @@ namespace Identity
             //})
             ;
 
-            services.AddControllersWithViews();            
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options =>
+                    {
+                        // Use the default property (Pascal) casing
+                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                    })
+                    ;
         }
 
         public void Configure(IApplicationBuilder app)

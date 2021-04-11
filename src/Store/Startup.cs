@@ -36,7 +36,14 @@ namespace Store
 
             services.Configure<Configuration.ApiOptions>(options => Configuration.GetSection("Api").Bind(options));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    {
+                        // Use the default property (Pascal) casing
+                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                    });
 
             services.AddHttpClient(string.Empty);
 

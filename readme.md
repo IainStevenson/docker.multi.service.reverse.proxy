@@ -143,3 +143,11 @@ Various markdown files are included focussing on different aspects of the develo
 - [network](file://network.md)
 - [solution](file://solution.md)
 - [issues document](file://issues.md)
+
+# Important
+
+When changing domain or product names casing is important
+
+- MongoDB: manage mongo-init.js, delete persisted mongo data : check %APPDATA%/MongoDb/Data
+- services : appsettings.*.json
+- Proxy: manage Proxy/certificates.domain.conf, gen-host.cmd, user-secrets.cmd
