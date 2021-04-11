@@ -35,8 +35,9 @@ db.createUser({
 });
 
 
-db = db.getSiblingDB('myInfoAPI')
+db = db.getSiblingDB('myInfoApi')
 db.createCollection('resources')
+
 db = db.getSiblingDB('myInfoIdentity')
 db.createCollection('testusers')
 var usersCol = db.getCollection('testusers')
