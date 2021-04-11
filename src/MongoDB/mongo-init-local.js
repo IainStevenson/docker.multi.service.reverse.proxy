@@ -17,7 +17,7 @@ db.createUser({
 	roles: [
 		{
 			role: "readWrite",
-			db: "myStoreAPI"
+			db: "myStoreApi"
 		},
 		{
 			role: "readWrite",
@@ -35,7 +35,7 @@ db.createUser({
 });
 
 
-db = db.getSiblingDB('myStoreAPI')
+db = db.getSiblingDB('myStoreApi')
 db.createCollection('resources')
 db = db.getSiblingDB('myStoreIdentity')
 db.createCollection('appusers')

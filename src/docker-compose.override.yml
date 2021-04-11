@@ -70,6 +70,6 @@ services:
       - MONGO_INITDB_PASSWORD=admin # must match mongo-init-local.js
       - MONGO_INITDB_DATABASE=admin # must match mongo-init-local.js
     volumes:
-      - ./mongo-init-local.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./MongoDb/mongo-init-local.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ${APPDATA}/MongoDb/Data:/data/db # local persistence of mongo database
       - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/ # local persistence of mongo database
