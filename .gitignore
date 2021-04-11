@@ -341,3 +341,7 @@ healthchecksdb
 /src/Identity/identity-log.txt
 /src/Proxy/certificates
 /src/user-secrets.cmd
+/src/Support/active-configuration.json
+/src/Store/active-configuration.json
+/src/Identity/active-configuration.json
+/src/Api/active-configuration.json
