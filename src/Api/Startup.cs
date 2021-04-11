@@ -14,8 +14,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using Pluralizer;
 using Response.Formater;
+using Serilog;
 using Storage;
 using System;
 
@@ -31,6 +33,9 @@ namespace Api
         {
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
+            var configfile = $@"/{environment.ContentRootPath}/active-configuration.json";
+            System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
+            Log.Logger.Debug($"Logged configuration to {configfile}");
             HostEnvironment = environment;
         }
 

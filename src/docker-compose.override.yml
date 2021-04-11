@@ -68,6 +68,7 @@ services:
       dockerfile: MongoDB/Dockerfile
     environment: 
         # NOTE: these must currently match mongo-init-local.js settings
+        ## these are to be replaced by user-secrets
       - MONGO_INITDB_USERNAME=admin
       - MONGO_INITDB_PASSWORD=admin
       - MONGO_INITDB_DATABASE=admin

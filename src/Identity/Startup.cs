@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization.Conventions;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Identity
 {
@@ -26,6 +29,9 @@ namespace Identity
         {
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
+            var configfile = $@"/{environment.ContentRootPath}/active-configuration.json";
+            System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
+            Log.Logger.Debug($"Logged configuration to {configfile}");
             HostEnvironment = environment;
         }
         public void ConfigureServices(IServiceCollection services)

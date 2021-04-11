@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
@@ -15,10 +17,12 @@ namespace Support
     {
         public IConfiguration Configuration { get; }
         private readonly Configuration.Options _configuration;
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
+            var configfile = $@"/{environment.ContentRootPath}/active-configuration.json";
+            System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
