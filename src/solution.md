@@ -8,6 +8,7 @@ Some of this data in examples is out of date. Beware: Check the actual values in
 The solutions main file set is as follows;
 ```
 src
+|_Certificates
 |_Api
 |_Identity
 |_Logging
@@ -27,14 +28,20 @@ myInfo.local.postman_collection.json
 The solution has a virtual folder layout as follows;
 
 ```
+Certificates
+Deployment
 Infrastructure
 Services
 Solution Items
-docker-compose
+Testing
 ```
+
+### Certificates
+Includes command scripts to generate a slef-signed root and hsot certificate to enable SSL.
 
 ### Infrastructure
 Provides Various libraries will be available for cross cutting concerns.
+
 #### Logging
 Provides Request/Response logging middle-ware to aid in request tracing and figuring out any routing problems.
 ### Services

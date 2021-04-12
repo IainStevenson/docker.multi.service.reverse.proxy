@@ -4,26 +4,25 @@ SETLOCAL
 :: and to that copy ...
 :: Please add the configuration values here and run that command.
 :: these values will be picked up via the ASP.NET core User Seecrets configuration provider at run time.
-:: Also please see the Proxy/GEN-HOST.CMD file for certificate details.
+:: Also please see the Certificates/GEN-HOST.CMD file for certificate details.
+:: MONGO
 SET MONGO_INITDB_DATABASE=
 SET MONGO_INITDB_USERNAME
 SET MONGO_INITDB_PASSWORD
 SET MONGO_STORAGE_USERNAME=
 SET MONGO_STORAGE_PASSWORD=
-
-
-
+:: API
 SET API-DatabaseName=
-
+:: Identity
 SET IDENTITY-DatabaseName=
 :: Please add Google client credentials for identity server when known
 SET IDENTITY-Google-ClientId=
 SET IDENTITY-Google-ClientSecret=
-
+:: STORE
 SET STORE-DatabaseName=
 SET STORE-ClientId=
 SET STORE-ClientSecret=
-
+:: SUPPORT
 SET SUPPORT-DatabaseName=
 SET SUPPORT-ClientId=
 SET SUPPORT-ClientSecret=

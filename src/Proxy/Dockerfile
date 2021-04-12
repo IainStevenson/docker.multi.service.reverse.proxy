@@ -27,23 +27,23 @@ RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 # TODO: Configuration +++
-COPY Proxy/certificates/myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt 
+COPY Proxy/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt 
 # TODO: Configuration ---
 RUN update-ca-certificates
 
 # Copy Diffie-Hellman file
-COPY Proxy/certificates/dhparam.pem /etc/ssl/certs/dhparam.pem
+COPY Proxy/dhparam.pem /etc/ssl/certs/dhparam.pem
 # Copy local service certificate
-COPY Proxy/certificates/myInfo.crt /etc/ssl/certs/myInfo.crt
-COPY Proxy/certificates/myInfo.key /etc/ssl/private/myInfo.key
+COPY Proxy/myInfo.crt /etc/ssl/certs/myInfo.crt
+COPY Proxy/myInfo.key /etc/ssl/private/myInfo.key
 
 # TODO: Configuration
 # use these to enable regenerating or adding any service certificate on the proxy host during development
-#COPY Proxy/certificates/myInfoRootCA.crt /etc/ssl/certs/myInfoRootCA.crt
-#COPY Proxy/certificates/myInfoRootCA.key /etc/ssl/private/myInfoRootCA.key
-#COPY Proxy/certificates/myInfoRootCA.pem /etc/ssl/certs/myInfoRootCA.pem
-#COPY Proxy/certificates/myInfoRootCA.pfx /etc/ssl/certs/myInfoRootCA.pfx
-#COPY Proxy/certificates/myInfoRootCA.srl /etc/ssl/certs/myInfoRootCA.srl
+#COPY Proxy/myRootCA.crt /etc/ssl/certs/myRootCA.crt
+#COPY Proxy/myRootCA.key /etc/ssl/private/myRootCA.key
+#COPY Proxy/myRootCA.pem /etc/ssl/certs/myRootCA.pem
+#COPY Proxy/myRootCA.pfx /etc/ssl/certs/myRootCA.pfx
+#COPY Proxy/myRootCA.srl /etc/ssl/certs/myRootCA.srl
 
 
 # Define default command.

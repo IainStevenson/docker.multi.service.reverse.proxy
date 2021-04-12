@@ -1,0 +1,26 @@
+------------------------------------------------------------------------------
+
+Manual instructions
+
+------------------------------------------------------------------------------
+
+To Import the certificate into the correct store;
+
+Select Local MACHINE
+Click Next
+Click Yes to elevate privilege
+Click Next
+enter 'password' (without ')
+Click next
+At: Place all certificates in the following store
+Click Browse
+Select Trusted Root Certification Authorities
+Click OK
+Click Next
+Click Finish
+
+At: Import Successful
+Click OK
+
+------------------------------------------------------------------------------
+

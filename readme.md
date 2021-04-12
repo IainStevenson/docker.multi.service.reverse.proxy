@@ -11,8 +11,7 @@ A  Docker orchestration of a distinct small set of microservices featuring;
 * A secure back-end common persistence server (MongoDB) with separate databases and collections for each service
 * A secure reverse Proxy (NGINX) fronting all services.
 
-Note: During development of this solution some local only credentials may appear in config files 
-the solution will be hardened later to secure all environment settings in the final V1 release
+Note: During development of this solution some local only credentials may appear in config files and the solution will be hardened later to secure all environment settings in the final V1 release
 
 # Setup your environment 
 
@@ -26,10 +25,7 @@ Add these temp domains to the development environment private DNS by adding the 
 Having set that domain name there is a need to generate configure and use self-signed certificates 
 to depart from using ```localhost``` as a default.
 
-The overall intention of that is to provide a workable secure local environments via self-signed certificates, 
-and use services like (lets encrypt)[https://letsencrypt.org/] to provide other sub domain certificates.
-
-
+The overall intention of that is to provide a workable secure local environments via self-signed certificates, and use services like (lets encrypt)[https://letsencrypt.org/] to provide other sub domain certificates.
 
 Which is now taken care of by the setup steps above and the provided scripts.
 
@@ -40,13 +36,20 @@ Which is now taken care of by the setup steps above and the provided scripts.
 - If git is anywhere else, or you have openssl somewhere else, or modify '''src/Proxy/gen-vars.cmd''' to locate openssl.exe
 - Edit your hosts file as described in 'Fictional Domain' below. Once that change is saved it is active immediately.
 - Download this repository and load it into visual studio.
-- Install the self-signed domain trusted certificates to your dev host, open a powershell or command window in the ```src/Proxy``` folder and execute ```./gen-root.cmd``` and follow instructions \* 
+- Install the self-signed domain trusted certificates to your dev host, open a powershell or command window in the ```src/Certificates``` folder and execute ```./gen-root.cmd``` and follow instructions \* 
 - To generate default certificates for each microservice execute the ```gen-host.cmd``` and follow instructions.
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
+- Create the following empty folders to persist mongo data across container run-times 
+	```
+	%APPDATA%\MongoDb\Data
+	%APPDATA%\MongoDb\Logs
+	```
+- After generating the certificates make a copy the ```user-secrets-example.cmd``` to ```user-secrets.cmd``` and edit it to provide your local environment variables and secret values then run the copy. 
+	- The mongo credentials are currently set in two places; in the connectionstring setting ```user-secrets.cmd``` and the user and auth settings in ```MongoDb/mongo-init.js```, set the database names accordingly, you can even have them all in one database if you want.
 - Press F5.
-- If no browser appears, start one and navigate to https://myInfo.local, and optionally  https://myInfo.test, or https://myInfo.demo and you will see the store site.
+- If no browser appears, start one and navigate to https://local.myInfo.world and you will see the store site.
 - Navigate around, when you click Weather Forecast you will need to login, use username: bob Password: bob
-- Alternatively or as well, import the myInfo.local.postman_collection.json file into postman and run the tests in the myInfo.local collection.
+- Alternatively or as well, import the ```local.myInfo.world.postman_collection.json``` file into postman and run the tests in the ```local.myInfo.world``` collection.
 
 \* I will convert this, side by side, as powershell later.
 
@@ -121,13 +124,13 @@ In each sub-domain the micro-services each use a DNS prefix of;
 - support
 - mongo
 
-These example DNS host names are for the local top level domain and will be replicated for each of; local, test, demo, world
+These example DNS host names are for the local top level domain and will be replicated for each of; local, test, demo
 
-- identity.myinfo.local
-- api.myinfo.local
-- store.myinfo.local
-- support.myinfo.local
-- mongo.myinfo.local
+- identity.local.myinfo.world
+- api.local.myinfo.world
+- store.local.myinfo.world
+- support.local.myinfo.world
+- mongo.local.myinfo.world
 
 
 # More Reading:
@@ -151,3 +154,5 @@ When changing domain or product names casing is important
 - MongoDB: manage mongo-init.js, delete persisted mongo data : check %APPDATA%/MongoDb/Data
 - services : appsettings.*.json
 - Proxy: manage Proxy/certificates.domain.conf, gen-host.cmd, user-secrets.cmd
+
+A lot of effort has been expended on rducing the complexity of the configuration and its an ongoing exercaise.
