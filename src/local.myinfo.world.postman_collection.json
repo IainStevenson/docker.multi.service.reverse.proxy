@@ -202,6 +202,44 @@
 					"response": []
 				},
 				{
+					"name": "Test access to Store with /store/weatherforecast redirects to login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.text().includes(\"<title>IdentityServer4</title>\");\r",
+									"    pm.response.text().includes(\"<h1>Login</h1>\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/weatherforecast",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"weatherforecast"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
 					"name": "Test access to Support with /support/home",
 					"event": [
 						{
@@ -590,8 +628,6 @@
 					"  }",
 					"};",
 					"",
-					"var getToken = true;",
-					"",
 					"if (!pm.environment.get('accessTokenExpiry') || ",
 					"    !pm.environment.get('currentAccessToken')) {",
 					"    console.log('Token or expiry date are missing')",
@@ -601,6 +637,8 @@
 					"    getToken = false;",
 					"    console.log('No need to get a Token as expiry not passed');",
 					"}",
+					"",
+					"getToken = true;",
 					"",
 					"if (getToken === true) {",
 					"    pm.sendRequest(echoPostRequest, function (err, res) {",
@@ -633,19 +671,19 @@
 	],
 	"variable": [
 		{
-			"id": "ebf1bd44-31e0-47dc-a123-e1a4a3291d12",
+			"id": "b0631786-4c50-493c-bf1a-72e075a2fb47",
 			"key": "baseUri",
 			"value": "https://local.myinfo.world"
 		},
 		{
-			"id": "9c2582f3-3435-4cf8-adc4-c784ef16e8d5",
+			"id": "8502e76f-be37-4e34-9dc9-1d6c9b71c85c",
 			"key": "currentAccessToken",
 			"value": ""
 		},
 		{
-			"id": "ca20e132-e04f-490c-b7c8-c6cc05f902c7",
+			"id": "d7c6ec75-f649-46d8-95d6-eb925266589a",
 			"key": "crudId",
-			"value": ""
+			"value": "asdasd"
 		}
 	]
 }
