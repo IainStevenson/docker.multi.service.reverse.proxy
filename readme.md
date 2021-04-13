@@ -50,6 +50,9 @@ Note: During development of this solution some local only credentials may appear
 		- Identity shared cliet secret
 		- [optiona] google login client id
 		- [optiona] google login secret
+		- [optiona] microsoft login client id
+		- [optiona] microsoft login secret
+		
 	- ```./user-secrets set local.myinfo.world admin admin admin myInfoUser storagepass myInfo myInfo.Mvc secret googleid googlesecret```
 	- Note: ATM: if you use different database username and password it needs to also be reflectd in ```docker-compose.override.yml```
 	- if you dont yet have a google external setup for your app then leave the last two paramters off and the identity server startup will not cofigure google authentication.

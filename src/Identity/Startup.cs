@@ -37,11 +37,11 @@ namespace Identity
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRequestResponseLoggingMiddlewareWithOptions(options => 
-            { 
-                options.LogSource = _configuration.RequestResponse.Source; 
-            });                        
-            
+            services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
+            {
+                options.LogSource = _configuration.RequestResponse.Source;
+            });
+
             var builder = services.AddIdentityServer(options =>
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
@@ -72,18 +72,36 @@ namespace Identity
 
             services.AddSingleton<IUserStore, UserStore>();
 
-            services.AddAuthentication()
-            //// If Google Sign-on is needed 
-            //// Install-Package Microsoft.AspNetCore.Authentication.Google 
-            //// add the abive nuget package to the project
-            //// then uncomment the following lines 
-            .AddGoogle("Google", options =>
+            var authenticationBuilder = services.AddAuthentication();
+
+            if (_configuration.Google.ClientId != null && _configuration.Google.ClientSecret != null)
             {
-                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                options.ClientId = _configuration.Google.ClientId;
-                options.ClientSecret = _configuration.Google.ClientSecret;
-            })
-            ;
+                authenticationBuilder.AddGoogle("Google", options =>
+                    {
+                        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                        options.ClientId = _configuration.Google.ClientId;
+                        options.ClientSecret = _configuration.Google.ClientSecret;
+                    });
+            }
+            if (_configuration.Microsoft.ClientId != null && _configuration.Microsoft.ClientSecret != null)
+            {
+                authenticationBuilder.AddMicrosoftAccount("Microsoft", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.ClientId = _configuration.Microsoft.ClientId;
+                    options.ClientSecret = _configuration.Microsoft.ClientSecret;
+                });
+            }
+            if (true)
+            {
+                authenticationBuilder.AddGitHub("GitHub", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.ClientId = _configuration.GitHub.ClientId;
+                    options.ClientSecret = _configuration.GitHub.ClientSecret;
+                });
+            }
+            
 
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options =>
@@ -127,7 +145,7 @@ namespace Identity
 
             app.UseRouting();
 
-            app.UseIdentityServer();            
+            app.UseIdentityServer();
 
             app.UseAuthorization();
 

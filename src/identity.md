@@ -17,7 +17,7 @@ Notes: Project name changes and url path modifications made.
 
 Note: Microsoft.AspNetCore.Authentication.JwtBearer must be set to version 3.1.10 as the latest versions only support .NET Framework 5!
 
-Note: Tehre are various differences in teh Api: Statup.cs such as the following which were left in place.
+Note: There are various differences in teh Api: Statup.cs such as the following which were left in place.
 ```
 if (env.IsDevelopment())
 {
@@ -27,4 +27,27 @@ if (env.IsDevelopment())
 app.UseHttpsRedirection();
 ```
 Api Test Client uses enhanced colours, Green for headings, yellow for Input, White for output Grey for Information on program activity, red for errors.
+# Google 
+# Setup is straight forward
+
+Ensure you capture the Client Secret while you can
+
+# Microsoft Account
+
+## Setup
+
+- Go through the normal [Account setup](https://portal.azure.com)
+- Add your requried URI's with the ```/identity/signin-microsoft``` suffix
+- Obtain the 'Application (Client) ID' from the Overview for the configuration ClientId
+- Add a new secret and get the Secret 'Value' as the  configuration ClientSecret
+
+Then modify the Manifest as below;
+
+```
+"accessTokenAcceptedVersion": 2,
+"signInAudience": "AzureADandPersonalMicrosoftAccount"
+```
+
+As found in [this post](https://stackoverflow.com/questions/63924622/getting-unauthorized-client-when-trying-to-login-using-microsoft-account)
+
 
