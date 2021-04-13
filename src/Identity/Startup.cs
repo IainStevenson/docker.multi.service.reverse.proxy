@@ -74,7 +74,8 @@ namespace Identity
 
             var authenticationBuilder = services.AddAuthentication();
 
-            if (_configuration.Google.ClientId != null && _configuration.Google.ClientSecret != null)
+            if (_configuration.Google.ClientId != null 
+                && _configuration.Google.ClientSecret != null)
             {
                 authenticationBuilder.AddGoogle("Google", options =>
                     {
@@ -83,7 +84,8 @@ namespace Identity
                         options.ClientSecret = _configuration.Google.ClientSecret;
                     });
             }
-            if (_configuration.Microsoft.ClientId != null && _configuration.Microsoft.ClientSecret != null)
+            if (_configuration.Microsoft.ClientId != null 
+                && _configuration.Microsoft.ClientSecret != null)
             {
                 authenticationBuilder.AddMicrosoftAccount("Microsoft", options =>
                 {
@@ -92,7 +94,8 @@ namespace Identity
                     options.ClientSecret = _configuration.Microsoft.ClientSecret;
                 });
             }
-            if (true)
+            if (_configuration.GitHub.ClientId != null
+                && _configuration.GitHub.ClientSecret != null)
             {
                 authenticationBuilder.AddGitHub("GitHub", options =>
                 {

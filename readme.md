@@ -52,10 +52,12 @@ Note: During development of this solution some local only credentials may appear
 		- [optiona] google login secret
 		- [optiona] microsoft login client id
 		- [optiona] microsoft login secret
+		- [optiona] github login client id
+		- [optiona] github login secret
 		
-	- ```./user-secrets set local.myinfo.world admin admin admin myInfoUser storagepass myInfo myInfo.Mvc secret googleid googlesecret```
+	- ```./user-secrets set local.myinfo.world admin admin admin myInfoUser storagepass myInfo myInfo.Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
 	- Note: ATM: if you use different database username and password it needs to also be reflectd in ```docker-compose.override.yml```
-	- if you dont yet have a google external setup for your app then leave the last two paramters off and the identity server startup will not cofigure google authentication.
+	- if you dont yet have a google, microsoft or github external account signin setup for your app then leave the optional parameters off and the identity server startup will not cofigure external authentication.
 	- In google console you will need to add in your allowed url's as they would normally. they operate by redirect so they are picked up locally on the browser and still work according to the local development machine DNS via the hosts file.	
 - Press F5.
 	- If no browser appears, start one and navigate to https://local.myInfo.world and you will see the store site.
