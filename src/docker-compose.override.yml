@@ -9,8 +9,8 @@ services:
       context: .
       dockerfile: Store/Dockerfile  
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
@@ -21,12 +21,12 @@ services:
       context: .
       dockerfile: Support/Dockerfile    
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
-
+ 
   myInfo.proxy:  
     hostname: local.myInfo.world
     build:
@@ -43,8 +43,8 @@ services:
       context: .
       dockerfile: Identity/Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
@@ -55,8 +55,8 @@ services:
       context: .
       dockerfile: Api/Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80 
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
@@ -69,11 +69,11 @@ services:
     environment: 
         # NOTE: these must currently match mongo-init-local.js settings
         ## these are to be replaced by user-secrets
-      - MONGO_INITDB_USERNAME=admin
-      - MONGO_INITDB_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=admin
-      - MONGO_STORAGE_USERNAME=storage
-      - MONGO_STORAGE_PASSWORD=storagepass
+      - MONGO_INITDB_USERNAME=${MONGO_INITDB_USERNAME}
+      - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_STORAGE_USERNAME=${MONGO_STORAGE_USERNAME}
+      - MONGO_STORAGE_PASSWORD=${MONGO_STORAGE_PASSWORD}
     volumes:
       - ./MongoDb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       # local persistence of mongo database
