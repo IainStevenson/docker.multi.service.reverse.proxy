@@ -77,6 +77,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handlers", "Handlers\Handlers.csproj", "{25FDE52D-A404-4673-9DD7-295218A17408}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{9CEA8009-C2EB-44B3-9754-194138F79DCF}"
+	ProjectSection(SolutionItems) = preProject
+		.env = .env
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Storage.MopngoDB", "Identity.Storage.MopngoDB\Identity.Storage.MopngoDB.csproj", "{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF}"
 EndProject
