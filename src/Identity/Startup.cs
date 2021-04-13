@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using IdentityServer4;
 
 namespace Identity
 {
@@ -76,12 +77,12 @@ namespace Identity
             //// Install-Package Microsoft.AspNetCore.Authentication.Google 
             //// add the abive nuget package to the project
             //// then uncomment the following lines 
-            //.AddGoogle("Google", options =>
-            //{
-            //    options.SignInScheme = _configuration.Google.SignInScheme;
-            //    options.ClientId = _configuration.Google.ClientId  ;
-            //    options.ClientSecret = _configuration.Google.ClientSecret ;
-            //})
+            .AddGoogle("Google", options =>
+            {
+                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                options.ClientId = _configuration.Google.ClientId;
+                options.ClientSecret = _configuration.Google.ClientSecret;
+            })
             ;
 
             services.AddControllersWithViews()

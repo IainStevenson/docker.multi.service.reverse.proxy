@@ -64,18 +64,18 @@ apt install nano
 # Create the common development root certificate
 
 ```
-openssl genrsa -out /etc/ssl/private/myInfoRootCA.key 4096
-openssl req -x509 -new -nodes -key /etc/ssl/private/myInfoRootCA.key -days 3650 -out /etc/ssl/certs/myInfoRootCA.pem
+openssl genrsa -out /etc/ssl/private/myRootCA.key 4096
+openssl req -x509 -new -nodes -key /etc/ssl/private/myRootCA.key -days 3650 -out /etc/ssl/certs/myRootCA.pem
 ```
 This requires some manual input;
 ```
 UK
 London
 London
-myInfoRootCA
+myRootCA
 development
-myInfoRootCA.development
-admin@myInfoRootCA.development
+myRootCA.development
+admin@myRootCA.development
 ```
 
 NOTE: These can pretty much be anything you like.
@@ -83,7 +83,7 @@ NOTE: These can pretty much be anything you like.
 # Convert the root Certificate to PFX to be able to import it into Windows
 
 ```
-openssl pkcs12 -export -inkey /etc/ssl/private/myInfoRootCA.key -in /etc/ssl/certs/myInfoRootCA.pem -out /etc/ssl/certs/myInfoRootCA.pfx
+openssl pkcs12 -export -inkey /etc/ssl/private/myRootCA.key -in /etc/ssl/certs/myRootCA.pem -out /etc/ssl/certs/myRootCA.pfx
 ```
 
 Again, this requires manual input;
@@ -99,7 +99,7 @@ Any password will do as you are not going to use this for production, are you?
 # Convert the CA certificate to CRT to be able to import it into Ubuntu
 This is needed to provide the proxy or any other docker container with an ability to trust any certificate emanating from another container
 ```
-openssl pkcs12 -in /etc/ssl/certs/myInfoRootCA.pfx -clcerts -nokeys -out /usr/local/share/ca-certificates/myInfoRootCA.crt
+openssl pkcs12 -in /etc/ssl/certs/myRootCA.pfx -clcerts -nokeys -out /usr/local/share/ca-certificates/myRootCA.crt
 ```
 
 
@@ -110,7 +110,7 @@ Enter Import Password: password
 ```
 
 
-Capture the output during the generation session by downloading the /usr/local/share/ca-certificates/myInfoRootCA.crt to the Proxy project folder.
+Capture the output during the generation session by downloading the /usr/local/share/ca-certificates/myRootCA.crt to the Proxy project folder.
 
 Additionally, to implement this CA on a container, include the following in the Dockerfile for that service;
 
@@ -119,7 +119,7 @@ Additionally, to implement this CA on a container, include the following in the 
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt
+COPY myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
 ```
 
@@ -192,12 +192,12 @@ openssl req -new -out /etc/ssl/certs/identity.local.myInfo.world.csr -key /etc/s
 
 # Sign the certificate
 ```
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/local.myInfo.world.csr -out /etc/ssl/certs/local.myInfo.world.crt
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:api.local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/api.local.myInfo.world.csr -out /etc/ssl/certs/api.local.myInfo.world.crt
-openssl x509 -req -days 365 -CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:identity.local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/identity.local.myInfo.world.csr -out /etc/ssl/certs/identity.local.myInfo.world.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/local.myInfo.world.csr -out /etc/ssl/certs/local.myInfo.world.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:api.local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/api.local.myInfo.world.csr -out /etc/ssl/certs/api.local.myInfo.world.crt
+openssl x509 -req -days 365 -CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key -CAcreateserial -extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:identity.local.myInfo.world,DNS:*.local.myInfo.world")) -in /etc/ssl/certs/identity.local.myInfo.world.csr -out /etc/ssl/certs/identity.local.myInfo.world.crt
 ```
 
-This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myInfoRootCA.pem -CAkey /etc/ssl/private/myInfoRootCA.key```
+This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key```
 
 NOTE: When using printf the back tick  “ “ disables the \n make sure its " "
 
@@ -314,16 +314,16 @@ Download created SSL files from linux container and place within solution folder
 
 The following files (with paths) were be created and will need to be downloaded to the windows development host inside the solution folder structure for use in future builds.;
 
-- /usr/share/ca-certificates/myInfoRootCA.crt
+- /usr/share/ca-certificates/myRootCA.crt
 
-- /etc/ssl/certs/myInfoRootCA.pem
-- /etc/ssl/certs/myInfoRootCA.srl
-- /etc/ssl/certs/myInfoRootCA.pem
+- /etc/ssl/certs/myRootCA.pem
+- /etc/ssl/certs/myRootCA.srl
+- /etc/ssl/certs/myRootCA.pem
 - /etc/ssl/certs/local.myInfo.world.conf
 - /etc/ssl/certs/local.myInfo.world.crt
 - /etc/ssl/certs/local.myInfo.world.csr
 
-- /etc/ssl/private/myInfoRootCA.key
+- /etc/ssl/private/myRootCA.key
 - /etc/ssl/private/local.myInfo.world.key
 
 - /etc/ssl/certs/dhparam.pem
@@ -339,7 +339,7 @@ When complete add all of the downloaded files to the solution in the Proxy virtu
 
 They will be referenced in the Dockerfile with instructions following later to restore each file to its propeer place in each new image version.
 
-The myInfoRootCA files do not need to included in container images they are used to add to the Windows certificate hive.
+The myRootCA files do not need to included in container images they are used to add to the Windows certificate hive.
 
 
 # Add file COPIES to proxy dockerfile
@@ -356,7 +356,7 @@ COPY index.html /usr/local/nginx/html/
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY myInfoRootCA.crt /usr/local/share/ca-certificates/myInfoRootCA.crt
+COPY myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
 # Copy Diffie-Hellman file
 COPY dhparam.pem /etc/ssl/certs/dhparam.pem
@@ -368,7 +368,7 @@ COPY local.myInfo.world.key /etc/ssl/private/local.myInfo.world.key
 
 # Add the root Certificate to the windows development host
 
-In file explorer, locate the Proxy/myInfoRootCA.pfx file.
+In file explorer, locate the Proxy/myRootCA.pfx file.
 Double click the file.
 In the Certificate Import Wizard choose Local Machine and click Next.
 Elevate privileges as requried.

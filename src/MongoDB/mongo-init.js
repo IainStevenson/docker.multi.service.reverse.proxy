@@ -17,7 +17,7 @@ db.createUser({
 	roles: [
 		{
 			role: "readWrite",
-			db: "myInfoAPI"
+			db: "myInfoApi"
 		},
 		{
 			role: "readWrite",

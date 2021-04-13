@@ -80,4 +80,3 @@ services:
       - ${APPDATA}/MongoDb/Data:/data/db
       - ${APPDATA}/MongoDb/Logs:/var/log/mongodb
       - ${APPDATA}/Microsoft/UserSecrets/5151c09A-27d2-4f8a-a445-ea3ae9b6e786:/root/usersecrets:ro 
-

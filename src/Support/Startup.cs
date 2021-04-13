@@ -21,8 +21,10 @@ namespace Support
         {
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
+#if DEBUG
             var configfile = $@"/{environment.ContentRootPath}/active-configuration.json";
             System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
+#endif
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
