@@ -10,8 +10,8 @@ CALL Gen-Vars.CMD
 :: Generate the default certificate with the necessary DNS entries
 ::
 :GenHostCert
-IF NOT EXIST Output/myRootCA.pfx GOTO RunGenRoot
-IF EXIST Output/myInfo.pfx	 GOTO ConfigureSecrets
+IF NOT EXIST ../myRootCA.pfx GOTO RunGenRoot
+IF EXIST ../myInfo.pfx	 GOTO ConfigureSecrets
 @ECHO -------------------------------------------------------------------------------
 @ECHO.
 @ECHO These settings will be applied (from domains.ext).
@@ -27,9 +27,9 @@ PAUSE
 @ECHO.
 @ECHO Generating the Self-Signed Host Certificate- * NOT FOR PRODUCTION USE * ...
 @ECHO.
-openssl req -new -nodes -newkey rsa:2048 -keyout Output/myInfo.key -out Output/myInfo.csr -subj "/CN=localhost"
-openssl x509 -req -sha256 -days 1024 -in Output/myInfo.csr -CA Output/myRootCA.pem -CAkey Output/myRootCA.key -CAcreateserial -extfile domains.conf -out Output/myInfo.crt
-openssl pkcs12 -export -inkey Output/myInfo.key -in Output/myInfo.crt -certfile Output/myRootCA.crt -out Output/myInfo.pfx 
+openssl req -new -nodes -newkey rsa:2048 -keyout ../myInfo.key -out ../myInfo.csr -subj "/CN=localhost"
+openssl x509 -req -sha256 -days 1024 -in ../myInfo.csr -CA ../myRootCA.pem -CAkey ../myRootCA.key -CAcreateserial -extfile domains.conf -out ../myInfo.crt
+openssl pkcs12 -export -inkey ../myInfo.key -in ../myInfo.crt -certfile ../myRootCA.crt -out ../myInfo.pfx 
 @ECHO.
 @ECHO Host certificate created.
 GOTO ConfigureSecrets
@@ -38,36 +38,36 @@ GOTO ConfigureSecrets
 ::
 :ConfigureSecrets
 @ECHO.
-@ECHO Configuring user secrets...
+@ECHO Certificates exist, Configuring user secrets...
 @ECHO.
 ::
-:: Using specifc user-secrets from this folder to avoid PUSHD/POPD nonesnse - the id's dont change themselves after project creation.
+:: Using specifc user-secrets from this folder to avoid fiddly PUSHD/POPD - the id's dont change themselves after project creation.
 ::
 :: API
 ::
-dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 remove Kestrel:Certificates:Default:Path
-dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 remove Kestrel:Certificates:Default:Password
+::dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 remove Kestrel:Certificates:Default:Path
+::dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 remove Kestrel:Certificates:Default:Password
 dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 set Kestrel:Certificates:Default:Path /root/.aspnet/https/myInfo.pfx
 dotnet user-secrets --id  5151c092-27d2-4f8a-a445-ea3ae9b6e786 set Kestrel:Certificates:Default:Password %PASSWORD%
 ::
 :: Identity
 ::
-dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 remove Kestrel:Certificates:Default:Path
-dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 remove Kestrel:Certificates:Default:Password
+::dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 remove Kestrel:Certificates:Default:Path
+::dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 remove Kestrel:Certificates:Default:Password
 dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 set Kestrel:Certificates:Default:Path /root/.aspnet/https/myInfo.pfx
 dotnet user-secrets --id  70be3d3e-27d5-4fa3-8870-f933385a83e2 set Kestrel:Certificates:Default:Password %PASSWORD%
 ::
 :: Store
 ::
-dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 remove Kestrel:Certificates:Default:Path
-dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 remove Kestrel:Certificates:Default:Password
+::dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 remove Kestrel:Certificates:Default:Path
+::dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 remove Kestrel:Certificates:Default:Password
 dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 set Kestrel:Certificates:Default:Path /root/.aspnet/https/myInfo.pfx
 dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 set Kestrel:Certificates:Default:Password %PASSWORD%
 ::
 :: Support
 ::
-dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Path
-dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Password
+::dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Path
+::dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Password
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Path /root/.aspnet/https/myInfo.pfx
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Password %PASSWORD%
 @ECHO.
@@ -76,10 +76,10 @@ dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certi
 ::
 :: Deliver certificates and other files to the proxy folder for docker builds and the .NET core secrets folder
 ::
-COPY /Y Output\myInfo.pfx %APPDATA%\ASP.NET\https\myInfo.pfx
-COPY /Y Output\myInfo.crt ..\Proxy\*
-COPY /Y Output\myInfo.key ..\Proxy\*
-COPY /Y dhparam.pem ..\Proxy\*
+@ECHO COPYing myInfo.PFX to user-secrets ASP.NET\https folder
+COPY /Y ..\myInfo.pfx %APPDATA%\ASP.NET\https\myInfo.pfx > nul
+@ECHO COPYing dhparam.pem to context folder
+COPY /Y dhparam.pem ..\ > nul
 @ECHO.
 @ECHO Certificates delivered to build folders
 @ECHO.

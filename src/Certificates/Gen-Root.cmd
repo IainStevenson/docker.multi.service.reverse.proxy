@@ -22,15 +22,7 @@ CALL Gen-Vars.CMD
 @ECHO Control-C to abort or,
 PAUSE
 ::
-IF NOT EXIST Output. GOTO CleanBuild
-IF EXIST Output/myRootCA.pfx GOTO GenHostCertExists
-GOTO GenRootCA
-
-:CleanBuild
-@ECHO This is a clean build creating local output folder
-MKDIR Output
-GOTO GenRootCA
-
+IF EXIST ../myRootCA.pfx GOTO RootCAExists
 ::
 :GenRootCA
 @ECHO -------------------------------------------------------------------------------
@@ -44,9 +36,9 @@ GOTO GenRootCA
 @ECHO.
 @ECHO Generating the Self-Signed Root CA Certificate...
 @ECHO.
-openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout Output/myRootCA.key -out Output/myRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
-openssl x509 -outform pem -in Output/myRootCA.pem -out Output/myRootCA.crt
-openssl pkcs12 -export -inkey Output/myRootCA.key -in Output/myRootCA.pem -out Output/myRootCA.pfx
+openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout ../myRootCA.key -out ../myRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
+openssl x509 -outform pem -in ../myRootCA.pem -out ../myRootCA.crt
+openssl pkcs12 -export -inkey ../myRootCA.key -in ../myRootCA.pem -out ../myRootCA.pfx
 @ECHO.
 @ECHO.
 @ECHO You should Import myRootCA.PFX SPECIFICALLY to the;
@@ -59,15 +51,15 @@ openssl pkcs12 -export -inkey Output/myRootCA.key -in Output/myRootCA.pem -out O
 TYPE ImportRootCA.txt
 @ECHO.
 PAUSE
-Output\myRootCA.pfx
+..\myRootCA.pfx
 @ECHO Continue only when the root CA certificate is imported.
 PAUSE
-@ECHO Delivering certificate files to the Proxy build folder.
-COPY /Y Output\myRootCA.* ..\Proxy\*
 GOTO Finish
-:GenHostCertExists
+
+:RootCAExists
 @ECHO The certificate already exists.
 GOTO Finish
+
 :Finish
 @ECHO.
 @ECHO Job done. You may now generate the host certificate using the GEN-HOST command script.
