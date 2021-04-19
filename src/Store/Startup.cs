@@ -23,7 +23,7 @@ namespace Store
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
 #if DEBUG
-            var configfile = $@"/{environment.ContentRootPath}/active-configuration.json";
+            var configfile = $@"/{environment.ContentRootPath}/appsettings.active.json";
             System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
 #endif
 

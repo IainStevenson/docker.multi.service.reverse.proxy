@@ -351,3 +351,7 @@ healthchecksdb
 /src/*.csr
 /src/*.crt
 /src/configure.*
+/src/Api/appsettings.active.json
+/src/Identity/appsettings.active.json
+/src/Store/appsettings.active.json
+/src/Support/appsettings.active.json

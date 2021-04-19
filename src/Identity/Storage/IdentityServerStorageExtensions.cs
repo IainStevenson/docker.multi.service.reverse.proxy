@@ -68,6 +68,7 @@ namespace Identity.Storage
         /// </summary>
         private static void ConfigureMongoDriver2IgnoreExtraElements()
         {
+        
             BsonClassMap.RegisterClassMap<Client>(cm =>
             {
                 cm.AutoMap();
@@ -113,10 +114,13 @@ namespace Identity.Storage
         /// </summary>
         /// <param name="app">The application builder</param>
         /// <returns></returns>
-        public static IApplicationBuilder InitializeDatabase(this IApplicationBuilder app)
+        public static IApplicationBuilder InitializeDatabase(this IApplicationBuilder app, string domain)
         {
+
+
             ConfigureMongoDriver2IgnoreExtraElements();
 
+            SeedData.Domain = domain;
 
             var repository = app.ApplicationServices.GetService<IIdentityRepository>();
 

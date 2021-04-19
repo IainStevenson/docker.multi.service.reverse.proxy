@@ -3,11 +3,7 @@ version: '3.4'
 services:
   # certificates must support these dns hostname's
   # referto the section :ConfigureSecrets in Proxy/Gen-Certs.cmd regarding UserSecrets
-  myInfo.store:
-    hostname: store.local.myInfo.world 
-    build:
-      context: .
-      dockerfile: Store/Dockerfile  
+  store:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
@@ -15,11 +11,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
-  myInfo.support:
-    hostname: support.local.myInfo.world 
-    build:
-      context: .
-      dockerfile: Support/Dockerfile    
+  support:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
@@ -27,21 +19,12 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
  
-  myInfo.proxy:  
-    hostname: local.myInfo.world
-    build:
-      context: .
-      dockerfile: Proxy/Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"   
-      - "27017:27017"   
-      
-  myInfo.identity:
-    hostname: identity.local.myInfo.world
-    build:
-      context: .
-      dockerfile: Identity/Dockerfile
+  proxy:  
+    environment:
+      - PROXY_DOMAIN=${APP_DOMAIN}
+      - NGINX_ENVSUBST_OUTPUT_DIR=${NGINX_ENVSUBST_OUTPUT_DIR}
+
+  identity:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
@@ -49,11 +32,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
-  myInfo.api:
-    hostname: api.local.myInfo.world 
-    build:
-      context: .
-      dockerfile: Api/Dockerfile
+  api:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
@@ -61,22 +40,20 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
-  myInfo.mongo:
-    hostname: mongo.local.myInfo.world 
-    build:
-      context: .
-      dockerfile: MongoDB/Dockerfile
+  mongo:
     environment: 
-        # NOTE: these must currently match mongo-init-local.js settings
-        ## these are to be replaced by user-secrets
       - MONGO_INITDB_USERNAME=${MONGO_INITDB_USERNAME}
       - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - MONGO_STORAGE_USERNAME=${MONGO_STORAGE_USERNAME}
       - MONGO_STORAGE_PASSWORD=${MONGO_STORAGE_PASSWORD}
     volumes:
+      #
+      # initlisation script for empty mongo data folder (NOTE This is written by configuration script)
+      #
       - ./MongoDb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      # local persistence of mongo database
+      #
+      # local persistence of mongo database (Note this is created by Configuration script)
+      #
       - ${APPDATA}/MongoDb/Data:/data/db
       - ${APPDATA}/MongoDb/Logs:/var/log/mongodb
-      - ${APPDATA}/Microsoft/UserSecrets/5151c09A-27d2-4f8a-a445-ea3ae9b6e786:/root/usersecrets:ro 

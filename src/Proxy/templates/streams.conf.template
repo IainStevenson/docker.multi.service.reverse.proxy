@@ -9,6 +9,6 @@ stream {
     }
 
     upstream stream_mongo_backend {
-        server mongo.local.myInfo.world:27017;
+        server mongo.${PROXY_DOMAIN}:27017;
         }
 }

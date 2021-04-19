@@ -26,12 +26,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{48FF9497-6FA5-4B50-8749-9FA87F10385B}"
 	ProjectSection(SolutionItems) = preProject
 		Proxy\Dockerfile = Proxy\Dockerfile
+		Proxy\environment.sh = Proxy\environment.sh
 		Proxy\index.html = Proxy\index.html
 		Proxy\nginx.conf = Proxy\nginx.conf
 		Proxy\self-signed.conf = Proxy\self-signed.conf
-		Proxy\sites-local.conf = Proxy\sites-local.conf
 		Proxy\ssl-params.conf = Proxy\ssl-params.conf
-		Proxy\streams-local.conf = Proxy\streams-local.conf
+		Proxy\streams.template = Proxy\streams.template
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C694F770-E674-4166-8F42-309FBEB0AD3C}"
@@ -64,7 +64,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB", "MongoDB", "{1E99
 	ProjectSection(SolutionItems) = preProject
 		MongoDB\Dockerfile = MongoDB\Dockerfile
 		MongoDB\mongo-init.js = MongoDB\mongo-init.js
-		MongoDB\mongo-init.sh = MongoDB\mongo-init.sh
 		Proxy\mongodb.csproj = Proxy\mongodb.csproj
 	EndProjectSection
 EndProject
@@ -95,6 +94,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificate
 		Certificates\Gen-Root.cmd = Certificates\Gen-Root.cmd
 		Certificates\Gen-Vars.CMD = Certificates\Gen-Vars.CMD
 		Certificates\ImportRootCA.txt = Certificates\ImportRootCA.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{1584A0A7-2055-4F90-906D-A00096DB9CCE}"
+	ProjectSection(SolutionItems) = preProject
+		Proxy\templates\sites.conf.template = Proxy\templates\sites.conf.template
+		Proxy\templates\streams.conf.template = Proxy\templates\streams.conf.template
 	EndProjectSection
 EndProject
 Global
@@ -205,6 +210,7 @@ Global
 		{49FE4F3D-4A36-4CD8-8C7E-B891A97E74FF} = {384B583C-DF84-4C25-88B0-FF28D73A8839}
 		{86BA59F7-4607-4A50-94B1-4DB0AAE5900B} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{BBFD28B5-FCAA-4396-83DC-E35168FC3479} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{1584A0A7-2055-4F90-906D-A00096DB9CCE} = {48FF9497-6FA5-4B50-8749-9FA87F10385B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}

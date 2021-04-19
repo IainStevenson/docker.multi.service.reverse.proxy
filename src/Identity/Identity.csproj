@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="active-configuration.json" />
+    <Content Remove="appsettings.active.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="identity-log.txt" />
   </ItemGroup>
   

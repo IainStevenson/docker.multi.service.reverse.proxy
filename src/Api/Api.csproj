@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="active-configuration.json" />
+    <Content Remove="appsettings.active.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.3" />
     <PackageReference Include="MediatR" Version="9.0.0" />

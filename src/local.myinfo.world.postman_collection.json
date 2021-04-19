@@ -624,7 +624,7 @@
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
 					"    mode: 'application/json',",
-					"    raw: 'grant_type=client_credentials&scope=myInfo.Api&client_id=SDK.Command&client_secret=secret'",
+					"    raw: 'grant_type=client_credentials&scope=myInfo.Api&client_id=Command&client_secret=secret'",
 					"  }",
 					"};",
 					"",
@@ -671,17 +671,17 @@
 	],
 	"variable": [
 		{
-			"id": "b0631786-4c50-493c-bf1a-72e075a2fb47",
+			"id": "aa35d3ac-73ba-498d-a8c0-8f48e5cae513",
 			"key": "baseUri",
 			"value": "https://local.myinfo.world"
 		},
 		{
-			"id": "8502e76f-be37-4e34-9dc9-1d6c9b71c85c",
+			"id": "bca817e6-877b-4764-947d-65ce0c22ccce",
 			"key": "currentAccessToken",
 			"value": ""
 		},
 		{
-			"id": "d7c6ec75-f649-46d8-95d6-eb925266589a",
+			"id": "a5d7629a-6ae7-4314-8ecf-3d73bc6f51c3",
 			"key": "crudId",
 			"value": "asdasd"
 		}

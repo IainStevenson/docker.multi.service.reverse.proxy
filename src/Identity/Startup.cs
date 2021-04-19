@@ -30,7 +30,7 @@ namespace Identity
         {
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
-            var configfile = $@"/{environment.ContentRootPath}/active-configuration.json";
+            var configfile = $@"/{environment.ContentRootPath}/appsettings.active.json";
             System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
             Log.Logger.Debug($"Logged configuration to {configfile}");
             HostEnvironment = environment;
@@ -129,7 +129,7 @@ namespace Identity
 
             app.UsePathBase(_configuration.Service.BasePath);
 
-            app.InitializeDatabase();
+            app.InitializeDatabase(_configuration.Service.Domain);
 
             if (HostEnvironment.IsDevelopment())
             {

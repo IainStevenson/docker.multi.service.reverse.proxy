@@ -1,6 +1,6 @@
 db.createUser({
-	user: "admin",
-	pwd: "admin",
+	user: "admin", // TODO: Configuration
+	pwd: "admin", // TODO: Configuration
 	roles: [
 		{
 			role: 'root',
@@ -9,36 +9,36 @@ db.createUser({
 	]
 })
 
-db.auth('admin', 'admin')
+db.auth('admin', 'admin') // TODO: Configuration
 
 db.createUser({
-	user: 'storage',
-	pwd: 'storagepass',
+	user: 'storage', // TODO: Configuration
+	pwd: 'storagepass', // TODO: Configuration
 	roles: [
 		{
 			role: "readWrite",
-			db: "myInfoApi"
+			db: "myApi"
 		},
 		{
 			role: "readWrite",
-			db: "myInfoIdentity"
+			db: "myIdentity"
 		},
 		{
 			role: "readWrite",
-			db: "myInfoStore"
+			db: "myStore"
 		},
 		{
 			role: "readWrite",
-			db: "myInfoSupport"
+			db: "mySupport"
 		}
 	],
 });
 
 
-db = db.getSiblingDB('myInfoApi')
+db = db.getSiblingDB('myApi')
 db.createCollection('resources')
 
-db = db.getSiblingDB('myInfoIdentity')
+db = db.getSiblingDB('myIdentity')
 db.createCollection('testusers')
 var usersCol = db.getCollection('testusers')
 usersCol.createIndex({ "SubjectId": 1 }, { unique: true })
