@@ -355,3 +355,4 @@ healthchecksdb
 /src/Identity/appsettings.active.json
 /src/Store/appsettings.active.json
 /src/Support/appsettings.active.json
+/src/*.setup.cmd
