@@ -2,7 +2,7 @@
 
 Most of this is historically correct during development but has been superceeded by events.
 
-I am leaving it intact to provide historical information and ways of doing things that may be of use in future.
+I am leaving it intact to provide background information and ways of doing things that may be of use in future.
 
 The processes described here are superceeded by the Gen-Root.cmd and Gen-host.cmd in the Proxy project.
 
@@ -29,7 +29,7 @@ Create the service certificate to cover each of the following service hostnames.
 local.myInfo.world
 *.local.myInfo.world
 
-The ALT wildcard name of *.local.myInfo.world will allow the same certificate to be used for all backend services having a dnsname of local.myInfo.world.
+The ALT wildcard name of \*.local.myInfo.world will allow the same certificate to be used for all backend services having a dnsname of local.myInfo.world.
 
 
 # Self-Signing certificates for development use.
