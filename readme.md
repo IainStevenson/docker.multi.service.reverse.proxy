@@ -78,7 +78,7 @@ Special Note: During development of this solution some local environment only cr
 		- [optional] GitHub login client id
 		- [optional] GitHub login secret
 		
-	- ```./user-secrets set local.myinfo.world admin admin admin myInfoUser storagepass myInfo myInfo.Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
+	- ```./user-secrets set local.myinfo.world admin admin storage storagepass Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
 	- Note: ATM: if you use different database username and password it needs to also be reflected in ```src/.env``` and ```src/MongoDb/mongo-init.js```
 	- if you don't yet have a Google, Microsoft or GitHub external account sign in setup for your app then leave the optional parameters off and the identity server startup will not configure external authentication.
 	- In google, Microsoft and GitHub developer consoles you will need to add in your allowed url's as they would normally using the \*.domain They operate by redirect so they are picked up locally on the browser and still work according to the local development machine DNS via the hosts file.	
