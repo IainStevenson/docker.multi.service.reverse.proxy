@@ -146,9 +146,9 @@ namespace Identity.Storage
         public static List<TestUser> Users => new List<TestUser>
         {
             new TestUser() { Username = "alice", Password  = "alice", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "sdk.alice@local.myInfo.world") } },
+                Claims = new List<Claim>(){ new Claim("email", "alice@my.domain") } },
             new TestUser() { Username = "bob", Password  = "bob", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "sdk.bob@local.myInfo.world") } }
+                Claims = new List<Claim>(){ new Claim("email", "bob@my.domain") } }
         };
     }
 
