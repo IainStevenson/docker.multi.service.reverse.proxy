@@ -8,19 +8,13 @@ namespace ApiTestClient
 {
     public class Program
     {
-        
+
         private static async Task Main(string[] args)
-        {
-            // create service collection
-            var services = new ServiceCollection();
-        
-            ConfigureServices(services);
-
-            // create service provider
-            var serviceProvider = services.BuildServiceProvider();
-
-            // entry to run app
-            await serviceProvider.GetService<App>().Run(args);
+        {            
+            var services = new ServiceCollection(); // create service collection
+            ConfigureServices(services);            
+            var serviceProvider = services.BuildServiceProvider();// create service provider            
+            await serviceProvider.GetService<App>().Run(args);// entry to run app
 
         }
         private static void ConfigureServices(IServiceCollection services)
@@ -31,11 +25,13 @@ namespace ApiTestClient
                 builder.AddConsole();
                 builder.AddDebug();
             });
-
             // build config
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false)
+#if DEBUG
+                .AddUserSecrets("2d71d321-7620-49dc-afee-9e296f1e970c") // this is taken care of in the framework for ASP.NET 
+#endif
                 .AddEnvironmentVariables()
                 .Build();
             services.AddOptions();

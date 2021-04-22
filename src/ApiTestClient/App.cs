@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ApiTestClient
@@ -27,10 +28,10 @@ namespace ApiTestClient
         {
             _logger.LogInformation("API Test Client Starting...");
             _logger.LogInformation("Initialising...");
-            _logger.LogInformation($"This test client interacts with the {_appSettings.Authority} to obtain an access token");
+            _logger.LogInformation($"Interacts with the {_appSettings.Authority} to obtain an access token");
             _logger.LogInformation("Then contacts the API directly using the token.");
-
-            Console.Write("Please ensure the api and identity server end points are started and available, and then press any key: ");
+            Thread.Sleep(100); // wait for logger to catch up
+            Console.Write("\n\nEnsure the api and identity server end points are started and available, and then press any key: ");
             Console.ReadKey(true);
             Console.WriteLine();
 
@@ -64,8 +65,10 @@ namespace ApiTestClient
                         _logger.LogInformation("Using Access Token in new Http Client");
                         apiClient.SetBearerToken(_tokenResponse.AccessToken);
 
+                        Thread.Sleep(100); // wait for logger to catch up
                         Console.Write("\n\nPress any key to use the token to call the API: ");
                         Console.ReadKey(true);
+                        Console.WriteLine();
 
                         _logger.LogInformation("Calling Identity API with token: ...");
 
@@ -90,10 +93,15 @@ namespace ApiTestClient
                                 }
                                 else
                                 {
+                                    Thread.Sleep(100); // wait for logger to catch up
+                                    Console.Write("\n\nPress any key to NEGLECT to use the token to call the API: ");
+                                    Console.ReadKey(true);
+                                    Console.WriteLine();
                                     using var apiClient3 = _clientFactory.CreateClient();
-                                    {// NOTE: No token is set
-                                        Console.WriteLine("Calling API without the token: ...");
-                                        Console.WriteLine($"Expecting an error on next call");
+                                    {
+                                        // NOTE: No token is set
+                                        _logger.LogInformation("Calling API without the token: ...");
+                                        _logger.LogInformation($"Expecting an error on next call");
 
                                         if (await CallApi(apiClient3, new Uri(_appSettings.DataApiUri)))
                                         {
@@ -116,6 +124,7 @@ namespace ApiTestClient
 
             // Finished
             _logger.LogInformation("Finished!");
+            Thread.Sleep(100); // wait for logger to catch up
             Console.Write("\n\nPress any key to terminate: ");
             Console.ReadKey(true);
             await Task.CompletedTask;
