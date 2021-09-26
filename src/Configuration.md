@@ -53,6 +53,25 @@ sites-local.conf
 
 * TODO: Work out how to use environment variables here
 
+# Notes on changing domain
+
+Regenerate the host certificates, the same root certiicate can be retained.
+Change the database names in ```mongo-init-local.js``` 
+Modify all of the ```appsettings.Development.json```
+
+# Database names
+
+If changing names with the same mongo instance the databses and collections will either;
+
+- need to be created manually using Compass
+- or strip out the files in the following folders and restart mongo;
+
+```
+${APPDATA}/MongoDb/Data
+${APPDATA}/MongoDb/Logs
+```
+
+
 # ASP.Net Core services
 
 Create user-secrets and reference the ASP.NET\https certificate and password

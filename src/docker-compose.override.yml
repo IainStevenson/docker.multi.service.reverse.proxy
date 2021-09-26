@@ -55,5 +55,5 @@ services:
       #
       # local persistence of mongo database (Note this is created by Configuration script)
       #
-      - ${APPDATA}/MongoDb/Data:/data/db
+      - ${APPDATA}/MongoDb/Data:/data/db 
       - ${APPDATA}/MongoDb/Logs:/var/log/mongodb
