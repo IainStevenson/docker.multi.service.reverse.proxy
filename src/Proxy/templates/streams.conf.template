@@ -1,4 +1,3 @@
-# TODO: Configuration
 stream { 
 
 	# TCP configuration
@@ -10,6 +9,6 @@ stream {
     }
 
     upstream stream_mongo_backend {
-        server mongo.myStore.local:27017;
+        server mongo.${PROXY_DOMAIN}:27017;
         }
 }

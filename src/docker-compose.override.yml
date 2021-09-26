@@ -1,75 +1,59 @@
 version: '3.4'
 
 services:
-
-  mystore.store:
-    hostname: store.mystore.local # root certificate must support his dns entry
-    build:
-      context: .
-      dockerfile: Store/Dockerfile  
+  # certificates must support these dns hostname's
+  # referto the section :ConfigureSecrets in Proxy/Gen-Certs.cmd regarding UserSecrets
+  store:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
-  mystore.support:
-    hostname: support.mystore.local # root certificate must support his dns entry
-    build:
-      context: .
-      dockerfile: Support/Dockerfile    
+  support:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-
-  mystore.proxy:  
-    hostname: mystore.local    
-    build:
-      context: .
-      dockerfile: Proxy/Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"   
-      - "27017:27017"   
-      
-  mystore.identity:
-    hostname: identity.mystore.local # root certificate must support his dns entry
-    build:
-      context: .
-      dockerfile: Identity/Dockerfile
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
+ 
+  proxy:  
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
+      - PROXY_DOMAIN=${APP_DOMAIN}
+      - NGINX_ENVSUBST_OUTPUT_DIR=${NGINX_ENVSUBST_OUTPUT_DIR}
 
-  mystore.api:
-    hostname: api.mystore.local # root certificate must support his dns entry
-    build:
-      context: .
-      dockerfile: Api/Dockerfile
+  identity:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80 
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro # see :ConfigureSecrets in Proxy/Gen-Certs.cmd
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro # see :ConfigureSecrets in  Proxy/Gen-Certs.cmd
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
 
-  mystore.mongo:
-    hostname: mongo.mystore.local # root certificate must support his dns entry
-    build:
-      context: .
-      dockerfile: MongoDB/Dockerfile
+  api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro 
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
+
+  mongo:
     environment: 
-      - MONGO_INITDB_USERNAME=admin # must match mongo-init-local.js
-      - MONGO_INITDB_PASSWORD=admin # must match mongo-init-local.js
-      - MONGO_INITDB_DATABASE=admin # must match mongo-init-local.js
+      - MONGO_INITDB_USERNAME=${MONGO_INITDB_USERNAME}
+      - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_STORAGE_USERNAME=${MONGO_STORAGE_USERNAME}
+      - MONGO_STORAGE_PASSWORD=${MONGO_STORAGE_PASSWORD}
     volumes:
-      - ./MongoDb/mongo-init-local.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      - ${APPDATA}/MongoDb/Data:/data/db # local persistence of mongo database
-      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb/ # local persistence of mongo database
+      #
+      # initlisation script for empty mongo data folder (NOTE This is written by configuration script)
+      #
+      - ./MongoDb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      #
+      # local persistence of mongo database (Note this is created by Configuration script)
+      #
+      - ${APPDATA}/MongoDb/Data:/data/db 
+      - ${APPDATA}/MongoDb/Logs:/var/log/mongodb

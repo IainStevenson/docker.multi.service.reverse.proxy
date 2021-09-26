@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
@@ -15,10 +17,14 @@ namespace Support
     {
         public IConfiguration Configuration { get; }
         private readonly Configuration.Options _configuration;
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
             _configuration = Configuration.Get<Configuration.Options>();
+#if DEBUG
+            var configfile = $@"/{environment.ContentRootPath}/appsettings.active.json";
+            System.IO.File.WriteAllText(configfile, JsonConvert.SerializeObject(_configuration));
+#endif
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -31,7 +37,14 @@ namespace Support
 
             services.Configure<Configuration.ApiOptions>(options => Configuration.GetSection("Api").Bind(options));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    {
+                        // Use the default property (Pascal) casing
+                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                    });
 
             services.AddHttpClient(string.Empty);
 

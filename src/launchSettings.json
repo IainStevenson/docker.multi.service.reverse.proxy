@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchServiceName": "store",
+      "serviceActions": {
+        "api": "StartDebugging",
+        "identity": "StartDebugging",
+        "mongo": "StartWithoutDebugging",
+        "proxy": "StartWithoutDebugging",
+        "store": "StartDebugging",
+        "support": "StartDebugging"
+      },
+      "composeLaunchAction": "LaunchBrowser",
+      "commandVersion": "1.0",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/{Scheme}://{ServiceHost}:{ServicePort}"
+    }
+  }
+}

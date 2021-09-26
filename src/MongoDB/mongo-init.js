@@ -1,6 +1,6 @@
 db.createUser({
-	user: "admin",
-	pwd: "admin",
+	user: "admin", // TODO: Configuration
+	pwd: "admin", // TODO: Configuration
 	roles: [
 		{
 			role: 'root',
@@ -9,37 +9,38 @@ db.createUser({
 	]
 })
 
-db.auth('admin', 'admin')
+db.auth('admin', 'admin') // TODO: Configuration
 
 db.createUser({
-	user: 'storage',
-	pwd: 'storagepass',
+	user: 'storage', // TODO: Configuration
+	pwd: 'storagepass', // TODO: Configuration
 	roles: [
 		{
 			role: "readWrite",
-			db: "myStoreApi"
+			db: "myApi"
 		},
 		{
 			role: "readWrite",
-			db: "myStoreIdentity"
+			db: "myIdentity"
 		},
 		{
 			role: "readWrite",
-			db: "myStoreStore"
+			db: "myStore"
 		},
 		{
 			role: "readWrite",
-			db: "myStoreSupport"
+			db: "mySupport"
 		}
 	],
 });
 
 
-db = db.getSiblingDB('myStoreApi')
+db = db.getSiblingDB('myApi')
 db.createCollection('resources')
-db = db.getSiblingDB('myStoreIdentity')
-db.createCollection('appusers')
-var usersCol = db.getCollection('appusers')
+
+db = db.getSiblingDB('myIdentity')
+db.createCollection('testusers')
+var usersCol = db.getCollection('testusers')
 usersCol.createIndex({ "SubjectId": 1 }, { unique: true })
 usersCol.createIndex({ "ProviderName": 1, "ProviderSubjectId": 1 }, { unique: true })
 usersCol.createIndex({ "Username": 1 })

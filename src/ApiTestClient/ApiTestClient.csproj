@@ -5,10 +5,39 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyVersion>1.0.17.7678</AssemblyVersion>
     <FileVersion>1.0.17.7678</FileVersion>
+    <UserSecretsId>2d71d321-7620-49dc-afee-9e296f1e970c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.Development.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="IdentityModel" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

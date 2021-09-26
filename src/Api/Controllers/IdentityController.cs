@@ -6,6 +6,7 @@ namespace Api.Controllers
     public class IdentityController : ControllerBase
     {
         [HttpGet]
+        [Route("[controller]")]
         public IActionResult Get()
         {
             return new JsonResult(from c in User.Claims select new { c.Type, c.Value });

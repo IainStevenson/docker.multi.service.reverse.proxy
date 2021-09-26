@@ -1,4 +1,4 @@
-# Notes on linux for newbies (like me)
+# Notes on linux (for newbies like me)
 
 To temporarily add additional tooling to the container 
 
@@ -56,18 +56,28 @@ NOTE: This does not travel through the revrse-proxy.
 ```
 apt update
 apt-get install -y curl
-curl https://identity.mystore.local/identity/.well-known/openid-configuration
+curl https://identity.myInfo.local/identity/.well-known/openid-configuration
 ```
 
 # Verify intra-container communication via SSL without certificate checking
 ```
 apt update
 apt-get install -y curl
-curl -k https://identity.mystore.local/identity/.well-known/openid-configuration
+curl -k https://identity.myInfo.local/identity/.well-known/openid-configuration
 ```
 
 
 # Install a root certificate in a linux host
+AFAIK There are two locations for certificates according to type (that I know to work), that roughly correspond to the 'Personal' and 'Trusted Root Certification Authorities' folders in Windows Certifcate manager.
+
+```
+/etc/ssl/certs
+```
+
+and
+
+```
+/usr/local/share/ca-certificates```
 
 # Allow trust of certificates from other services
 
@@ -79,6 +89,6 @@ Add this to the build (early) as needed.
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-COPY Proxy/certificates/myStoreRootCA.crt /usr/local/share/ca-certificates/myStoreRootCA.crt
+COPY Proxy/certificates/myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
 ```

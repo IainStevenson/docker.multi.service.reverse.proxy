@@ -2,65 +2,97 @@ version: '3.4'
 
 services:
 
-  mystore.store:
-    container_name: mystore.store    
-    image: ${DOCKER_REGISTRY-}mystore.store
+  store:
+    container_name: ${APP}.store    
+    image: ${DOCKER_REGISTRY-}${APP}.store:${TAG:-latest}
     restart: always  
+    hostname: store.${APP_DOMAIN}
+    build:
+      context: .
+      dockerfile: Store/Dockerfile  
     depends_on:
-     - mystore.mongo
-     - mystore.api
-     - mystore.identity    
+     - mongo
+     - api
+     - identity    
     networks:      
-      - mystore    
+      - backend
 
-  mystore.support:
-    container_name: mystore.support
-    image: ${DOCKER_REGISTRY-}mystore.support
+  support:
+    container_name: ${APP}.support
+    image: ${DOCKER_REGISTRY-}${APP}.support:${TAG:-latest}
+    hostname: support.${APP_DOMAIN}
     restart: always  
+    build:
+      context: .
+      dockerfile: Support/Dockerfile    
     depends_on:
-     - mystore.mongo
-     - mystore.api    
-     - mystore.identity    
+     - mongo
+     - api    
+     - identity    
     networks:      
-      - mystore
+      - backend
 
-  mystore.proxy:
-    container_name: mystore.proxy
-    image: ${DOCKER_REGISTRY-}mystore.proxy
+  proxy:
+    container_name: ${APP}.proxy
+    image: ${DOCKER_REGISTRY-}${APP}.proxy:${TAG:-latest}
+    #
+    # Important note, the proxy host name is the domain name so that all other backend hosts can reference it as the domain root server
+    # the same was as if the url was coming from outside. This is important for identity server
+    #
+    hostname: ${APP_DOMAIN}
     restart: always  
+    build:
+      context: .
+      dockerfile: Proxy/Dockerfile
     depends_on:
-     - mystore.store
-     - mystore.support
-     - mystore.identity
-     - mystore.api
-    networks:      
-      - mystore
-
-  mystore.identity:
-    container_name: mystore.identity
-    image: ${DOCKER_REGISTRY-}mystore.identity
-    restart: always  
-    depends_on:
-     - mystore.mongo
-    networks:      
-      - mystore
-
-  mystore.api:
-    container_name: mystore.api   
-    image: ${DOCKER_REGISTRY-}mystore.api
-    restart: always  
-    depends_on:
-     - mystore.identity
-     - mystore.mongo
+     - store
+     - support
+     - identity
+     - api    
+    ports:
+      - "80:80"
+      - "443:443"   
+      - "27017:27017"   
     networks:
-      - mystore
+      - backend
 
-  mystore.mongo:
-    container_name: mystore.mongo
-    image: ${DOCKER_REGISTRY-}mystore.mongo
+  identity:
+    container_name: ${APP}.identity
+    image: ${DOCKER_REGISTRY-}${APP}.identity:${TAG:-latest}
+    hostname: identity.${APP_DOMAIN}
+    build:
+      context: .
+      dockerfile: Identity/Dockerfile
+    restart: always  
+    depends_on:
+     - mongo
+    networks:      
+      - backend
+
+  api:
+    container_name: ${APP}.api   
+    image: ${DOCKER_REGISTRY-}${APP}.api:${TAG:-latest}
+    hostname: api.${APP_DOMAIN}
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    restart: always  
+    depends_on:
+     - identity
+     - mongo
+    networks:
+      - backend
+
+  mongo:
+    container_name: ${APP}.mongo
+    image: ${DOCKER_REGISTRY-}${APP}.mongo:${TAG:-latest}
+    hostname: mongo.${APP_DOMAIN}
+    build:
+      context: .
+      dockerfile: MongoDB/Dockerfile
     restart: always  
     networks: 
-      - mystore
+      - backend
 
 networks:  
-    mystore:
+    backend:

@@ -10,6 +10,7 @@ namespace Identity.Storage
 {
     public static class SeedData
     {
+        public static string Domain { get; set; } = "localhost";
         public static IEnumerable<IdentityResource> Ids =>
             new IdentityResource[]
             {
@@ -21,7 +22,7 @@ namespace Identity.Storage
         public static IEnumerable<ApiResource> Apis =>
         new List<ApiResource>
         {
-            new ApiResource("myStore.Api", "myStore API") {
+            new ApiResource("myApi", "myApi") {
                 ApiSecrets = { new Secret("secret".Sha256()) { } },
                 UserClaims = {
                     JwtClaimTypes.Name,
@@ -29,7 +30,7 @@ namespace Identity.Storage
                 },
                 ShowInDiscoveryDocument = true,
                 Scopes = {
-                    "myStore.Api"
+                    "myApi"
                 }
             }
         };
@@ -38,8 +39,8 @@ namespace Identity.Storage
         new List<ApiScope>
         {
             new ApiScope(
-                "myStore.Api",
-                "myStore API") {
+                "myApi",
+                "my API") {
                 ShowInDiscoveryDocument = true,
                 UserClaims = {
                     JwtClaimTypes.Name,
@@ -48,15 +49,13 @@ namespace Identity.Storage
             }
         };
 
-
-
         public static IEnumerable<Client> Clients => new List<Client>
         {
             // command line client
             new Client
             {
-                ClientId = "SDK.Command",
-                ClientName = "SDK sample Command Line client",
+                ClientId = "Command",
+                ClientName = "Command Line client",
    
                 // no interactive user, use the clientid/secret for authentication
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
@@ -68,28 +67,28 @@ namespace Identity.Storage
                 },
 
                 // scopes that client has access to
-                AllowedScopes = { "myStore.Api" }
+                AllowedScopes = { "myApi" }
             },
             // interactive ASP.NET Core MVC client
             new Client
                 {
-                    ClientId = "myStore.Mvc",
+                    ClientId = "Mvc",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     // where to redirect to after login
                     RedirectUris = {
-                        "https://mystore.local/signin-oidc" ,
-                        "https://mystore.local/store/signin-oidc" ,
-                        "https://mystore.local/support/signin-oidc"
+                        $"https://{Domain}/signin-oidc" ,
+                        $"https://{Domain}/store/signin-oidc" ,
+                        $"https://{Domain}/support/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = {
-                        "https://mystore.local/signout-callback-oidc",
-                        "https://mystore.local/store/signout-callback-oidc",
-                        "https://mystore.local/support/signout-callback-oidc"
+                        $"https://{Domain}/signout-callback-oidc",
+                        $"https://{Domain}/store/signout-callback-oidc",
+                        $"https://{Domain}/support/signout-callback-oidc"
                     },
 
                     AllowedScopes = new List<string>
@@ -97,54 +96,28 @@ namespace Identity.Storage
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "myStore.Api"
+                        "myApi"
                     }
                 },
-            //new Client
-            //{
-            //    ClientId = "myStore.Mvc",
-            //    ClientName = "myStore Portal client",
-            //    ClientSecrets = { new Secret("secret".Sha256()) },
 
-            //    AllowedGrantTypes = GrantTypes.Hybrid,
-            //    RequireConsent = false,
-            //    RequirePkce = false,
-
-            //    // where to redirect to after login/ out
-            //    RedirectUris = {    "https://myStore.local/store/signin-oidc",
-            //                        "https://myStore.local/support/signin-oidc"},
-            //    FrontChannelLogoutUri = "https://myStore.local/signin-oidc",
-
-            //    AllowedScopes = new List<string>
-            //    {
-            //        IdentityServerConstants.StandardScopes.OpenId,
-            //        IdentityServerConstants.StandardScopes.Profile,
-            //        IdentityServerConstants.StandardScopes.Email,
-            //        "myStore.Api"
-            //    },
-            //    AllowedCorsOrigins = new[] { "myStore.local"},
-
-            //    AllowOfflineAccess = true
-            //},
-            // JavaScript Client
             new Client
             {
-                ClientId = "SDK.Javascript",
-                ClientName = "SDK sample JavaScript client",
+                ClientId = "Javascript",
+                ClientName = "JavaScript client",
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
                 RequireClientSecret = false,
 
-                RedirectUris =           { "http://myStore.local/subject/callback.html" },
-                PostLogoutRedirectUris = { "http://myStore.local/subject/index.html" },
-                AllowedCorsOrigins =     { "http://myStore.local" },
+                RedirectUris =           { $"https://{Domain}/subject/callback.html" },
+                PostLogoutRedirectUris = { $"https://{Domain}/subject/index.html" },
+                AllowedCorsOrigins =     { $"https://{Domain}" },
 
                 AllowedScopes =
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Email,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "myStore.Api"
+                    "myApi"
                 }
             },
             new Client{
@@ -162,7 +135,7 @@ namespace Identity.Storage
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
-                    "myStore.Api"
+                    "myApi"
                 },
                 ClientSecrets = new [] { new Secret("secret".Sha256())},
                 Enabled = true,
@@ -173,9 +146,9 @@ namespace Identity.Storage
         public static List<TestUser> Users => new List<TestUser>
         {
             new TestUser() { Username = "alice", Password  = "alice", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "sdk.alice@myStore.local") } },
+                Claims = new List<Claim>(){ new Claim("email", "alice@my.domain") } },
             new TestUser() { Username = "bob", Password  = "bob", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "sdk.bob@myStore.local") } }
+                Claims = new List<Claim>(){ new Claim("email", "bob@my.domain") } }
         };
     }
 

@@ -8,6 +8,7 @@ Some of this data in examples is out of date. Beware: Check the actual values in
 The solutions main file set is as follows;
 ```
 src
+|_Certificates
 |_Api
 |_Identity
 |_Logging
@@ -20,21 +21,27 @@ docker-compose.dcproj
 docker-compose.yml
 docker-compose.override.yml
 readme.md
-mystore.local.postman_collection.json
+myInfo.local.postman_collection.json
 {various}.md
 ```
 
 The solution has a virtual folder layout as follows;
 
 ```
+Certificates
+Deployment
 Infrastructure
 Services
 Solution Items
-docker-compose
+Testing
 ```
+
+### Certificates
+Includes command scripts to generate a slef-signed root and hsot certificate to enable SSL.
 
 ### Infrastructure
 Provides Various libraries will be available for cross cutting concerns.
+
 #### Logging
 Provides Request/Response logging middle-ware to aid in request tracing and figuring out any routing problems.
 ### Services
@@ -59,7 +66,7 @@ The containers are given container names to help avoid conflicts in other develo
 
 The containers are given host names to provide a container local dns ability, which will be useful for configuring NGINX.
 
-The docker orchestration also provides a named network 'mystore'
+The docker orchestration also provides a named network 'myInfo'
 
 Once the project is run the following commands can be used to examine the container network
 
@@ -67,18 +74,18 @@ Once the project is run the following commands can be used to examine the contai
 docker network ls
 ```
 
-Which will display all your configured docker networks. The one you are interested in is the one with the name ending in 'mystore'. e.g. dockercompose12441271731797403570_mystore
+Which will display all your configured docker networks. The one you are interested in is the one with the name ending in 'myInfo'. e.g. dockercompose12441271731797403570_myInfo
 
 ```
 NETWORK ID     NAME                                        DRIVER    SCOPE
 ecf7656d1dc4   bridge                                      bridge    local
-f0a6248031f4   dockercompose12441271731797403570_mystore   bridge    local
+f0a6248031f4   dockercompose12441271731797403570_myInfo   bridge    local
 ```
 
 Then you can examine its details using the inspect command using either the name or its id
 
 ```
-docker network inspect dockercompose12441271731797403570_mystore
+docker network inspect dockercompose12441271731797403570_myInfo
 docker network inspect f0a6248031f4
 ```
 
@@ -119,22 +126,22 @@ The headers forwarded by the NGINX proxy are set up in the startup. e.g.
 ASP.NET Core MVC web site simply providing a basic site identifying index page as the store site
 
 ```
-Container name: store.mystore.local
-hostname:		store.mystore.local
+Container name: store.myInfo.local
+hostname:		store.myInfo.local
 ```
 ## Container 2
 
 ASP.NET Core MVC web site simply providing a basic site identifying index page as the support site
 ```
-Container name: support.mystore.local
-hostname:		support.mystore.local
+Container name: support.myInfo.local
+hostname:		support.myInfo.local
 ```
 
 ## Container 3
 NGINX - Configured as reverse proxy to serve containers 1 and 2 mapped via the /store and /support path segments
 ```
-Container name: proxy.mystore.local
-hostname:		proxy.mystore.local
+Container name: proxy.myInfo.local
+hostname:		proxy.myInfo.local
 Ports:			80, 443
 ```
 ### NGINX Container build notes
@@ -163,10 +170,10 @@ Initially sets to listen on port 80 and 443.
 #### Domain specification
 
 ```
-server_name  localhost mystore.local;
+server_name  localhost myInfo.local;
 ```
 
-Sets a server name for thie NGINX proxy as either ```localhost``` or ```mystore.local```.
+Sets a server name for thie NGINX proxy as either ```localhost``` or ```myInfo.local```.
 
-Means that in the following URL table ```localhost``` can be replaced with ```mystore.local``` but requires adjustment to ```\Windows\system32\drivers\etc\hosts``` file to direct to 127.0.0.1
+Means that in the following URL table ```localhost``` can be replaced with ```myInfo.local``` but requires adjustment to ```\Windows\system32\drivers\etc\hosts``` file to direct to 127.0.0.1
 

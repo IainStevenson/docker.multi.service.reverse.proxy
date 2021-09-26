@@ -42,7 +42,7 @@ namespace Handlers.Resource
 
             // 
 
-            if (!resources.Any())
+            if (resources.Any())
             {
                 // if all of them are unmodified since then return none
                 var unmodifiedItems = resources.Where(r =>

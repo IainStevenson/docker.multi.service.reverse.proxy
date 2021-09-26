@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "92e4aee7-9a34-4510-8767-e2622254583c",
-		"name": "mystore.local",
+		"_postman_id": "f7308fe5-ee6b-4ea4-b05e-4ab7a1087193",
+		"name": "local.myinfo.world",
 		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -195,6 +195,44 @@
 								"store",
 								"home",
 								"privacy"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Store with /store/weatherforecast redirects to login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.text().includes(\"<title>IdentityServer4</title>\");\r",
+									"    pm.response.text().includes(\"<h1>Login</h1>\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/weatherforecast",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"weatherforecast"
 							]
 						},
 						"description": "Test required  direct access to Container 1 (Store) (store) "
@@ -581,16 +619,14 @@
 				"type": "text/javascript",
 				"exec": [
 					"const echoPostRequest = {",
-					"  url: 'https://mystore.local/identity/connect/token',",
+					"  url: 'https://local.myinfo.world/identity/connect/token',",
 					"  method: 'POST',",
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
 					"    mode: 'application/json',",
-					"    raw: 'grant_type=client_credentials&scope=myStore.Api&client_id=SDK.Command&client_secret=secret'",
+					"    raw: 'grant_type=client_credentials&scope=myInfo.Api&client_id=Command&client_secret=secret'",
 					"  }",
 					"};",
-					"",
-					"var getToken = true;",
 					"",
 					"if (!pm.environment.get('accessTokenExpiry') || ",
 					"    !pm.environment.get('currentAccessToken')) {",
@@ -601,6 +637,8 @@
 					"    getToken = false;",
 					"    console.log('No need to get a Token as expiry not passed');",
 					"}",
+					"",
+					"getToken = true;",
 					"",
 					"if (getToken === true) {",
 					"    pm.sendRequest(echoPostRequest, function (err, res) {",
@@ -633,16 +671,19 @@
 	],
 	"variable": [
 		{
+			"id": "aa35d3ac-73ba-498d-a8c0-8f48e5cae513",
 			"key": "baseUri",
-			"value": "https://mystore.local"
+			"value": "https://local.myinfo.world"
 		},
 		{
+			"id": "bca817e6-877b-4764-947d-65ce0c22ccce",
 			"key": "currentAccessToken",
 			"value": ""
 		},
 		{
+			"id": "a5d7629a-6ae7-4314-8ecf-3d73bc6f51c3",
 			"key": "crudId",
-			"value": ""
+			"value": "asdasd"
 		}
 	]
 }

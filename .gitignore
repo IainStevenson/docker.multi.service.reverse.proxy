@@ -338,5 +338,21 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+
 /src/Identity/identity-log.txt
-/src/Proxy/certificates
+/src/Support/active-configuration.json
+/src/Store/active-configuration.json
+/src/Identity/active-configuration.json
+/src/Api/active-configuration.json
+/src/*.srl
+/src/*.pem
+/src/*.key
+/src/*.csr
+/src/*.crt
+/src/configure.*
+/src/Api/appsettings.active.json
+/src/Identity/appsettings.active.json
+/src/Store/appsettings.active.json
+/src/Support/appsettings.active.json
+/src/*.setup.cmd

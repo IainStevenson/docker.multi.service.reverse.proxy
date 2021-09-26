@@ -1,5 +1,5 @@
 ::
-:: Gen-Root.CMS
+:: Gen-Root.CMD
 ::
 :: Create a root certificate to provide a self signed Trusted root Certificate for development host and microservices
 ::
@@ -16,28 +16,32 @@ CALL Gen-Vars.CMD
 @ECHO   non-production AND non public facing environments
 @ECHO.
 @ECHO -------------------------------------------------------------------------------
+@ECHO.
+@ECHO NOTE: The certificate files are ignored in the repository and must be generated.
+@ECHO.
 @ECHO Control-C to abort or,
 PAUSE
 ::
-IF EXIST certificates/myStoreRootCA.pfx GOTO GenHostCertExists
+IF EXIST ../myRootCA.pfx GOTO RootCAExists
 ::
 :GenRootCA
 @ECHO -------------------------------------------------------------------------------
 @ECHO.
-@ECHO You may be required to input a pasword, Please use '%PASSWORD%' to ensure its 
-@ECHO consistent with the registered secrets file and easy to remember. 
+@ECHO You will be required to manually input a pasword, Please use '%PASSWORD%' 
+@ECHO to ensure its consistent with the registered secrets file and easy to remember. 
+@ECHO.
 @ECHO This is NOT a production secret. If you wish to change that go ahead but do it 
-@ECHO in this script, delete the current certificates and run again.
+@ECHO in the GenVARS.CMD script, delete the current output sub folder and run again.
 @ECHO.
 @ECHO.
 @ECHO Generating the Self-Signed Root CA Certificate...
 @ECHO.
-openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout certificates/myStoreRootCA.key -out certificates/myStoreRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
-openssl x509 -outform pem -in certificates/myStoreRootCA.pem -out certificates/myStoreRootCA.crt
-openssl pkcs12 -export -inkey certificates/myStoreRootCA.key -in certificates/myStoreRootCA.pem -out certificates/myStoreRootCA.pfx
+openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout ../myRootCA.key -out ../myRootCA.pem -subj "/C=UK/ST=London/L=London/O=Development-Root-CA/OU=Development/CN=Development-Root-CA"
+openssl x509 -outform pem -in ../myRootCA.pem -out ../myRootCA.crt
+openssl pkcs12 -export -inkey ../myRootCA.key -in ../myRootCA.pem -out ../myRootCA.pfx
 @ECHO.
 @ECHO.
-@ECHO You should Import myStoreRootCA.PFX SPECIFICALLY to the;
+@ECHO You should Import myRootCA.PFX SPECIFICALLY to the;
 @ECHO	LOCAL MACHINE 'Trusted Root Certification Authorities' 
 @ECHO certificate store using the password you entered.
 @ECHO *** Do not let it choose the store for you. ***
@@ -47,16 +51,21 @@ openssl pkcs12 -export -inkey certificates/myStoreRootCA.key -in certificates/my
 TYPE ImportRootCA.txt
 @ECHO.
 PAUSE
-certificates\myStoreRootCA.pfx
+..\myRootCA.pfx
 @ECHO Continue only when the root CA certificate is imported.
 PAUSE
 GOTO Finish
-:GenHostCertExists
+
+:RootCAExists
 @ECHO The certificate already exists.
+@ECHO Please ensure you have it installed in your Local Machine Truster Root Certificate Authority folder.
+@Echo Search for it using the certificates.msc and Issed By: Development-Root-CA
+
 GOTO Finish
+
 :Finish
 @ECHO.
-@ECHO Job done. You may now generate the host certificate.
+@ECHO Job done. You may now generate the host certificate using the GEN-HOST command script.
 @ECHO.
 endlocal
 @echo on

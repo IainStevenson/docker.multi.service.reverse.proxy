@@ -2,6 +2,6 @@
 {
     public class RequestResponseOptions
     {
-        public string Source { get; set; } = "myStore.Api";
+        public string Source { get; set; } = "myApi";
     }
 }

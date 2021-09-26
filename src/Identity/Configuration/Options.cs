@@ -4,7 +4,9 @@
     {
         public MongoOptions Mongo { get; set; } = new MongoOptions();
         public RequestResponseOptions RequestResponse { get; set; } = new RequestResponseOptions();
-        public ServiceOptions Service { get; set; } = new ServiceOptions();       
-        public GoogleOptions Google {  get;set; } = new GoogleOptions();
+        public ServiceOptions Service { get; set; } = new ServiceOptions();
+        public ExternalProviderOptions Google { get; set; } = new ExternalProviderOptions();
+        public ExternalProviderOptions Microsoft { get; set; } = new ExternalProviderOptions();
+        public ExternalProviderOptions GitHub { get; set; } = new ExternalProviderOptions();
     }
 }
