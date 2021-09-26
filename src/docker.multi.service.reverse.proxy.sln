@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		identity.md = identity.md
 		issues.md = issues.md
 		linux.md = linux.md
-		local.myinfo.world.postman_collection.json = local.myinfo.world.postman_collection.json
 		network.md = network.md
 		..\readme.md = ..\readme.md
 		SetupLocalDB.CMD = SetupLocalDB.CMD
@@ -42,6 +41,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{00792EB5-290D-4D73-A1AE-C35C45918F6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{9F5491B1-96A2-4F48-96C0-8DA262FE802E}"
+	ProjectSection(SolutionItems) = preProject
+		Testing\local.myinfo.world.postman_collection.json = Testing\local.myinfo.world.postman_collection.json
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTestClient", "ApiTestClient\ApiTestClient.csproj", "{A60791A0-D768-4CEC-BB9B-4993CF782814}"
 EndProject
