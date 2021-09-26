@@ -79,10 +79,20 @@ dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certi
 @ECHO COPYing myHost.PFX to user-secrets ASP.NET\https folder
 COPY /Y ..\myHost.pfx %APPDATA%\ASP.NET\https\myHost.pfx > nul
 @ECHO COPYing dhparam.pem to context folder
+IF NOT EXIST %APPDATA%\ASP.NET\https\myHost.pfx GOTO InstallFailed
 COPY /Y dhparam.pem ..\ > nul
 @ECHO.
 @ECHO Certificates delivered to build folders
 @ECHO.
+GOTO Finish
+
+:InstallFailed
+@ECHO.
+@ECHO The ASP.NET https certificate was not delivered
+@ECHO Please fix this by copying the ''..\myHost.pfx'' file to ''%APPDATA%\ASP.NET\https''
+@ECHO.
+
+
 GOTO Finish
 
 :RunGenRoot
@@ -92,6 +102,7 @@ GOTO Finish
 @ECHO.
 
 :Finish
+CALL SetupMongoDB.cmd
 @ECHO.
 @ECHO Job done, Set your startup project to docker-compose and start debugging.
 @ECHO.

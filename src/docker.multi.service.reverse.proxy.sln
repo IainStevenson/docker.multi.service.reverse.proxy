@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		local.myinfo.world.postman_collection.json = local.myinfo.world.postman_collection.json
 		network.md = network.md
 		..\readme.md = ..\readme.md
+		SetupLocalDB.CMD = SetupLocalDB.CMD
 		solution.md = solution.md
 		user-secrets.cmd = user-secrets.cmd
 	EndProjectSection

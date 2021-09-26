@@ -60,6 +60,7 @@ Special Note: During development of this solution some local environment only cr
 	%APPDATA%\MongoDb\Data
 	%APPDATA%\MongoDb\Logs
 	```
+	You can make this easy by executing the '''src\SetupLocalDB.CMD'''
 - After generating the certificates run the user-secrets command script with parameters similar to these but for your own settings;
 	- parameters are: 
 		- action (SET|REMOVE)

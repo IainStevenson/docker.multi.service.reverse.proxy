@@ -58,6 +58,9 @@ GOTO Finish
 
 :RootCAExists
 @ECHO The certificate already exists.
+@ECHO Please ensure you have it installed in your Local Machine Truster Root Certificate Authority folder.
+@Echo Search for it using the certificates.msc and Issed By: Development-Root-CA
+
 GOTO Finish
 
 :Finish
