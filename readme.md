@@ -32,8 +32,9 @@ If you are asking WHY, then lets just say its long been my opinion, and objectiv
 
 # Networking
 
-The network details are explained in: - [network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
+Its a docker controlled subnet inside your machine, analagous to group of VM's inside a VNET in the cloud with a prublic IP address leading only to the reverse proxy font end.
 
+[network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
 
 # Reducing complexity
 
