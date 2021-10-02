@@ -6,6 +6,15 @@ I am leaving it intact to provide background information and ways of doing thing
 
 The processes described here are superceeded by the Gen-Root.cmd and Gen-host.cmd in the Proxy project.
 
+# Using LetsEncrypt
+https://dev.to/herocod3r/configuring-ssl-on-an-aspnet-core-docker-container-1c9l
+https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-5.0
+https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
+https://www.digitalocean.com/community/tutorials/how-to-secure-a-containerized-node-js-application-with-nginx-let-s-encrypt-and-docker-compose
+https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+
+
+
 # Certificate and SSL configuration notes
 
 The self-signed certificates are organised into a root CA to authorise many service certificates.
