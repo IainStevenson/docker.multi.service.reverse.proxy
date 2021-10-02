@@ -2,7 +2,7 @@
 
 To document the research and development needed to produce and configure the following;
 
-A secure docker compose orchestration of a small set of micro services running on Linux containers and featuring;
+A secured docker composed orchestration of a small set of micro services running on Linux containers and featuring;
 
 * A secure Reverse Proxy (NGINX) fronting all services.
 * A secure store front-end Web site
@@ -21,16 +21,18 @@ A secure docker compose orchestration of a small set of micro services running o
 From a security perspective the primary objectives are;
 
 * To have a dedicated authentication and authorisation domain 
-* Implement FULL SSL for encryption in motion.
-implementation for all services in all environments.  * Implement encryption at rest
-* Avoid using localhost as a domain name.
+* Implement FULL SSL for encryption in motion. 
+ * implementation for all services in all environments.  
+ * Implement encryption at rest as can be achieved with MongoDB
+* Avoid having to use localhost as a domain name.
 
 ## Opinion
-If you are asking WHY then lets just say its long been my opinion, and objective, that you could and therefore should.  This solution is working out the how that can be done in all environments.
+
+If you are asking WHY, then lets just say its long been my opinion, and objective, that you could and therefore should. This solution is working out the how that can be done in all environments.
 
 # Networking
 
-
+The network details are explained in: - [network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
 
 
 # Reducing complexity
@@ -41,14 +43,15 @@ Efforts have been made to limit this complexity but still there are currently ab
 
 Half a dozen of those are to do with MongoDB setup, and another half dozen to do with social login support (if you have them).
 
-
 Special Note: During development of this solution some local environment only credentials may appear in configuration files and the solution will be hardened later to secure all environment settings in the final V1 release, where the secrets will be entirely ephemeral and unrecorded in any files in the repository.
 
 # Getting started
 
-- Download this repository and load it into visual studio.
-- Install git for windows in its default location.
+- Requried: Install Visual Studio 2019 or above.
+- Requried: Install Docker for windows
+- Required: Install git for windows in its default location.
 	- If git is anywhere else, or you have openssl somewhere else, or modify ```src/Certificates/gen-vars.cmd``` to specify where to find openssl.exe 
+- Download this repository and load it into visual studio.
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
 - Edit your hosts file as described in 'DNS domain name' below. 
 	- Once that change is saved it is active immediately.
@@ -60,8 +63,8 @@ Special Note: During development of this solution some local environment only cr
 	%APPDATA%\MongoDb\Data
 	%APPDATA%\MongoDb\Logs
 	```
-	You can make this easy by executing the '''src\SetupLocalDB.CMD'''
-- After generating the certificates run the user-secrets command script with parameters similar to these but for your own settings;
+	You can make this easy by executing the ```src\SetupLocalDB.CMD```
+- After generating the certificates run the ```user-secrets.cmd``` command script with parameters similar to these but for your own settings;
 	- parameters are: 
 		- action (SET|REMOVE)
 		- domain
@@ -89,6 +92,7 @@ Special Note: During development of this solution some local environment only cr
 	- Alternatively or as well, import the ```local.myInfo.world.postman_collection.json``` file into postman and run the tests in the ```local.myInfo.world``` collection. This will acquire tokens from Identity Server and check basic MVC and API CRUD functionality.
 
 \* I will convert this, side by side, as Powershell later.
+
 ## Patience and Frustration
 
 Depending on your network speed, the first build run may take a while if none of the docker layer dependencies are not already in your docker cache. 
@@ -169,7 +173,7 @@ This solution has a real domain name entry of ```myinfo.world```
 In keeping with usual DNS subdomain conventions the following environment sub-domains will be set up as follows;
 
 | Sub domain         | Use                                    | 
-|--------------------|---------------------------------------|
+|--------------------|----------------------------------------|
 | local.myinfo.world | intended for developer isolation       |
 | dev.myinfo.world   | intended for developer collaboration   |
 | test.myinfo.world  | intended for tester collaboration      |
