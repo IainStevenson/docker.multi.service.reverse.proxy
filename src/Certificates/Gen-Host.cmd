@@ -1,6 +1,6 @@
 ::
 :: Create a host default certificate for ASP.NET (Kestrel) applications signed by the root CA 
-:: Add the certificate to the Output folder and add settings to the suer secrets for these projects
+:: Add the certificate to the Output folder and add settings to the user secrets for these projects
 :: Note the Project secrets id's should be same for whoever runs this solution as they are set in the .csproj files
 ::
 @ECHO off
@@ -78,8 +78,8 @@ dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certi
 ::
 @ECHO COPYing myHost.PFX to user-secrets ASP.NET\https folder
 COPY /Y ..\myHost.pfx %APPDATA%\ASP.NET\https\myHost.pfx > nul
-@ECHO COPYing dhparam.pem to context folder
 IF NOT EXIST %APPDATA%\ASP.NET\https\myHost.pfx GOTO InstallFailed
+@ECHO COPYing dhparam.pem to context folder for docker build operations
 COPY /Y dhparam.pem ..\ > nul
 @ECHO.
 @ECHO Certificates delivered to build folders
