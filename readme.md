@@ -20,11 +20,13 @@ A secured docker composed orchestration of a small set of micro services running
 
 From a security perspective the primary objectives are;
 
+* Avoid having to use localhost as a domain name. 
+ * localhost used in multi-service container configurations is worse than meaningless, suddenly it becomes a blocker. 
+ * But without a certificate that supports localhost in development .NET services blow up on startup.
 * To have a dedicated authentication and authorisation domain 
 * Implement FULL SSL for encryption in motion. 
  * implementation for all services in all environments.  
  * Implement encryption at rest as can be achieved with MongoDB
-* Avoid having to use localhost as a domain name.
 
 ## Opinion
 
