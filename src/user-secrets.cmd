@@ -1,73 +1,78 @@
 SETLOCAL
 @echo off
-::=================================================================================================
-:: Parameters
-::=================================================================================================
-:: %1 action (set|remove)
-:: %2 domain e.g. whatever.tld
-:: %3 database admin user e.g. admin
-:: %4 database admin password e.g. password
-:: %5 app storage user name e.g. datauser
-:: %6 app storage user password e.g. password
-:: %7 Mvc shared Client Id e.g. Mvc
-:: %8 mvc shared client secret e.g. secret
-:: %9  (optional) google client id e.g. id
-:: %10 (optional) google client secret e.g. secret
-:: %11 (optional) microsoft client id e.g. id
-:: %12 (optional) microsoft client secret e.g. secret
-:: %13 (optional) github client id e.g. id
-:: %14 (optional) github client secret e.g. secret
+::===================================================================================================
+:: Execute this command script to setup the Visual Studio User-Secrets required to make this all work
+:: If you have setup to use social identities from google, live or github you may optionally use them
+:: use null as a literal as placeholders for missing optionals.
 ::
+:: Parameters are required unless stated.
 ::
-SET USERSECRETS-DOMAIN=%2
-if "%1"=="set" GOTO setup
-if "%1"=="remove" GOTO remove
-if "%8"=="" GOTO syntax
+::===================================================================================================
+:: %~1 action (set|remove)
+:: %~2 domain e.g. whatever.tld
+:: %~3 database admin user e.g. admin
+:: %~4 database admin password e.g. password
+:: %~5 app storage user name e.g. datauser
+:: %~6 app storage user password e.g. password
+:: %~7 Mvc shared Client Id e.g. Mvc
+:: %~8 mvc shared client secret e.g. secret
+:: %~9  (optional) google client id e.g. id
+:: %~10 (optional) google client secret e.g. secret
+:: %~11 (optional) microsoft client id e.g. id
+:: %~12 (optional) microsoft client secret e.g. secret
+:: %~13 (optional) github client id e.g. id
+:: %~14 (optional) github client secret e.g. secret
+::
+:: 
+SET USERSECRETS-DOMAIN=%~2
+if "%~1"=="set" GOTO setup
+if "%~1"=="remove" GOTO remove
+if "%~8"=="" GOTO syntax
 Goto Syntax
 
 :setup
 @ECHO Performing setup
 :: MONGO
-SET USERSECRETS_Action=%1
+SET USERSECRETS_Action=%~1
 SET USERSECRETS-MONGO_INITDB_DATABASE=admin
-SET USERSECRETS-MONGO_INITDB_USERNAME=%3
-SET USERSECRETS-MONGO_INITDB_PASSWORD=%4
-SET USERSECRETS-MONGO_STORAGE_USERNAME=%5
-SET USERSECRETS-MONGO_STORAGE_PASSWORD=%6
+SET USERSECRETS-MONGO_INITDB_USERNAME=%~3
+SET USERSECRETS-MONGO_INITDB_PASSWORD=%~4
+SET USERSECRETS-MONGO_STORAGE_USERNAME=%~5
+SET USERSECRETS-MONGO_STORAGE_PASSWORD=%~6
 SET USERSECRETS-MONGO-ConnectionString=mongodb://%USERSECRETS-MONGO_STORAGE_USERNAME%:%USERSECRETS-MONGO_STORAGE_PASSWORD%@mongo.%USERSECRETS-DOMAIN%:27017
-SET USERSECRETS-STORE-ClientId=%7
-SET USERSECRETS-STORE-ClientSecret=%8
-SET USERSECRETS-SUPPORT-ClientId=%7
-SET USERSECRETS-SUPPORT-ClientSecret=%8
+SET USERSECRETS-STORE-ClientId=%~7
+SET USERSECRETS-STORE-ClientSecret=%~8
+SET USERSECRETS-SUPPORT-ClientId=%~7
+SET USERSECRETS-SUPPORT-ClientSecret=%~8
 
-if "%9"=="" GOTO execute
-if NOT "%9"=="null" SET USERSECRETS-IDENTITY-Google-ClientId=%9
-
-SHIFT
-if "%9"=="" GOTO execute
-if NOT "%9"=="null" SET USERSECRETS-IDENTITY-Google-ClientSecret=%9
+if "%~9"=="" GOTO execute
+if NOT "%~9"=="null" SET USERSECRETS-IDENTITY-Google-ClientId=%~9
 
 SHIFT
-if "%9"=="" GOTO execute
-if NOT "%9"=="null" SET USERSECRETS-IDENTITY-Microsoft-ClientId=%9
+if "%~9"=="" GOTO execute
+if NOT "%~9"=="null" SET USERSECRETS-IDENTITY-Google-ClientSecret=%~9
 
 SHIFT
-if "%9"=="" GOTO execute
-if NOT "%9"=="null" SET USERSECRETS-IDENTITY-Microsoft-ClientSecret=%9
+if "%~9"=="" GOTO execute
+if NOT "%~9"=="null" SET USERSECRETS-IDENTITY-Microsoft-ClientId=%~9
 
 SHIFT
-if "%9"=="" GOTO execute
-if NOT "%9"=="null" SET USERSECRETS-IDENTITY-GitHub-ClientId=%9
+if "%~9"=="" GOTO execute
+if NOT "%~9"=="null" SET USERSECRETS-IDENTITY-Microsoft-ClientSecret=%~9
 
 SHIFT
-if "%9"=="" GOTO execute
-if NOT "%9"=="null" SET USERSECRETS-IDENTITY-GitHub-ClientSecret=%9
+if "%~9"=="" GOTO execute
+if NOT "%~9"=="null" SET USERSECRETS-IDENTITY-GitHub-ClientId=%~9
+
+SHIFT
+if "%~9"=="" GOTO execute
+if NOT "%~9"=="null" SET USERSECRETS-IDENTITY-GitHub-ClientSecret=%~9
 
 GOTO execute
 
 
 :execute
-@ECHO Performing %1 with...
+@ECHO Performing %~1 with...
 SET USERSECRETS-
 PAUSE
 

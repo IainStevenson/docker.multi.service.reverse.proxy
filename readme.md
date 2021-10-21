@@ -2,7 +2,7 @@
 
 To document the research and development needed to produce and configure the following;
 
-A secured docker composed orchestration of a small set of micro services running on Linux containers and featuring;
+A secured docker composed orchestration of a small set of micro services running on Linux containers within kubernetes to provide ```24 * 7``` up time and transparent upgrading and load balancing, featuring;
 
 * A secure Reverse Proxy (NGINX) fronting all services.
 * A secure store front-end Web site

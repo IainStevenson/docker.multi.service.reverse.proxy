@@ -53,7 +53,7 @@ services:
       #
       - ./MongoDb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       #
-      # local persistence of mongo database (Note this is created by Configuration script)
+      # local persistence of mongo database (Note this is created by Configuration script ```SetupLocalDB.CMD```)
       #
       - ${APPDATA}/MongoDb/Data:/data/db 
       - ${APPDATA}/MongoDb/Logs:/var/log/mongodb

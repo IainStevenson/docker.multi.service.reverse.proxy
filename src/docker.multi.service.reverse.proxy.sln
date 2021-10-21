@@ -67,7 +67,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB", "MongoDB", "{1E99
 	ProjectSection(SolutionItems) = preProject
 		MongoDB\Dockerfile = MongoDB\Dockerfile
 		MongoDB\mongo-init.js = MongoDB\mongo-init.js
-		Proxy\mongodb.csproj = Proxy\mongodb.csproj
+		MongoDB\mongo-init.sh = MongoDB\mongo-init.sh
+		MongoDB\mongodb.csproj = MongoDB\mongodb.csproj
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Model.Storage", "Data.Model.Storage\Data.Model.Storage.csproj", "{3AE437FE-4D40-47EF-B442-178133BA52E2}"
