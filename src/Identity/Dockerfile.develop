@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 443
+
+WORKDIR /src
+COPY ["Data.Model.Storage/Data.Model.Storage.csproj", "Data.Model.Storage/"]
+COPY ["Data.Model/Data.Model.csproj", "Data.Model/"]
+COPY ["Identity.Storage.MopngoDB/Identity.Storage.MopngoDB.csproj", "Identity.Storage.MopngoDB/"]
+COPY ["Identity/Identity.csproj", "Identity/"]
+COPY ["Logging/Logging.csproj", "Logging/"]
+COPY ["Pluralizer/Pluralizer.csproj", "Pluralizer/"]
+COPY ["Storage/Storage.csproj", "Storage/"]
+
+RUN dotnet restore "Identity/Identity.csproj"
+COPY . .
+WORKDIR "/src/Identity"
+RUN dotnet build --no-restore "Identity.csproj" -c $BUILD_CONFIGURATION
+
+RUN echo "exec dotnet run --no-build --no-launch-profile -c $BUILD_CONFIGURATION --" > /entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]

@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 443
+
+WORKDIR /src
+COPY ["Logging/Logging.csproj", "Logging/"]
+COPY ["Support/Support.csproj", "Support/"]
+
+RUN dotnet restore "Support/Support.csproj"
+COPY . .
+WORKDIR "/src/Support"
+RUN dotnet build --no-restore "Support.csproj" -c $BUILD_CONFIGURATION
+
+RUN echo "exec dotnet run --no-build --no-launch-profile -c $BUILD_CONFIGURATION --" > /entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
