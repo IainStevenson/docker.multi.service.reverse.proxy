@@ -4,9 +4,12 @@ Most of this is historically correct during development but has been superceeded
 
 I am leaving it intact to provide background information and ways of doing things that may be of use in future.
 
-The processes described here are superceeded by the Gen-Root.cmd and Gen-host.cmd in the Proxy project.
+The processes described here are superceeded by the Gen-Root.cmd and Gen-host.cmd.
 
 # Using LetsEncrypt
+
+
+## Resources
 https://dev.to/herocod3r/configuring-ssl-on-an-aspnet-core-docker-container-1c9l
 https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-5.0
 https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
@@ -17,9 +20,9 @@ https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-m
 
 # Certificate and SSL configuration notes
 
-The self-signed certificates are organised into a root CA to authorise many service certificates.
+The self-signed certificates are organised using a root CA to authorise many service certificates.
 
-The root CA is installed in any trusting host, including the development host for the docker network.
+The root CA is installed in any trusting host, including each rusting container and the development host for the docker network.
 
 The trusted host recieves its host identification certificate as required during the build via dockerfile instructions.
 
@@ -38,7 +41,7 @@ Create the service certificate to cover each of the following service hostnames.
 local.myInfo.world
 *.local.myInfo.world
 
-The ALT wildcard name of \*.local.myInfo.world will allow the same certificate to be used for all backend services having a dnsname of local.myInfo.world.
+The ALT wildcard name of \*.local.myInfo.world will allow the same certificate to be used for all backend services having a dnsname of \*.local.myInfo.world.
 
 
 # Self-Signing certificates for development use.
@@ -87,7 +90,7 @@ myRootCA.development
 admin@myRootCA.development
 ```
 
-NOTE: These can pretty much be anything you like.
+NOTE: These can pretty much be anything you like but you should use a real country code.
 
 # Convert the root Certificate to PFX to be able to import it into Windows
 
