@@ -1,0 +1,16 @@
+{
+    "Title": "Azure DevOps.Reference IaC specification file",
+    "Description": "Deployment definition file for driving the deployment process scripts either interactively or silently",
+    "TenantId": "", 
+    "SubscriptionIds": [],
+    "OwnerUserId": "",
+    "ProductName": "myInfo",
+    "ProductCode": "mi",
+    "DomainName": "myinfo.world",
+    "Location": "uksouth",
+    "EnvironmentNames": ["team"], 
+    "InstancesPerEnvironment": 1,
+    "ServiceNames": ["storage","identity", "api","store", "support", "proxy"],
+    "CommonResourceTemplate": ".\\common-template.json",
+    "ServiceResourceTemplate": ".\\service-template.json"
+}

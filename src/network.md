@@ -1,10 +1,10 @@
-# Network notes
+# Networking
 
 The docker subnet network is agnostic about its actual run time IP Addresses and this 
 solution leverages the automatic DNS feature of docker to provide 
-container-to-container communications through their deterministic hostnames.
+container-to-container communications through their deterministic hostnames rather thatn thier non-dertministic Ip Addresses
 
-Container-to-container communications:
+# Container-to-container communications:
 * (A) are (mediated) proxied by the proxy service if addresses use the the main domain  ```local.myInfo.world``` and application base paths. e,g, https://local.myInfo.world/api
 * (B) are direct if the addresses use the actual sub-domain host name for the service e.b. https://api.local.myInfo.world/api
 
@@ -44,7 +44,7 @@ This diagram illustrates the host and docker network setup.
 `___________________________________________________________________________________________'
 ```
 
-All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the requried domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debuging from complaining about a localhost trusted certificate on startup.
+All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the requried domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debuging from complaining about a localhost trusted certificate on startup but is not otherwise important or used.
 
 All transport is encrypted. 
 
@@ -61,6 +61,18 @@ The Proxy can access all backend services only on port 443
 All backend services can access all services via the Proxy via port 443 (https) or the mongoDB port 27017. Each service may access any other service directly by any other exposed port. 
 
 Certificates provided for each service and each has the development root CA certificate available to trust those services certificates.
+
+# docker internal network DNS
+
+| Service  | local                 | Team                 | Test                 | Production      |
+|----------|-----------------------|----------------------|----------------------|-----------------|
+| mongodb | mongodb.local.domain | mongodb.team.domain | mongodb.test.domain | mongodb.domain |
+| api | api.local.domain | api.team.domain | api.test.domain | api.domain |
+| identity | identity.local.domain | identity.team.domain | identity.test.domain | identity.domain |
+| store | store.local.domain | store.team.domain | store.test.domain | store.domain |
+| support | support.local.domain | support.team.domain | support.test.domain | support.domain |
+| proxy | proxy.local.domain | proxy.team.domain | proxy.test.domain | proxy.domain |
+
 
 # Application mapping in proxy configuration
 

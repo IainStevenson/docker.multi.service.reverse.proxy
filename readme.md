@@ -1,8 +1,8 @@
 # Purpose
 
-To document the research and development needed to produce and configure the following;
+To ssolution the research and development needed to produce and configure the following;
 
-A secured docker composed orchestration of a small set of micro services running on Linux containers and featuring;
+A fully secured docker composed orchestration of a small integrated set of micro services running on Linux containers and featuring;
 
 * A secure Reverse Proxy (NGINX) fronting all services.
 * A secure store front-end Web site
@@ -28,13 +28,20 @@ From a security perspective the primary objectives are;
  	* implementation for all services in all environments.  
  	* Implement encryption at rest as can be achieved with MongoDB
 
-## Opinion
+## Opinionated
 
-If you are asking WHY, then lets just say its long been my opinion, and objective, that you could and therefore should. This solution is working out the how that can be done in all environments.
+If you are asking WHY, then lets just say its long been my opinion, and objective, that you could and therefore should. 
 
-# Networking
+This solution is working out the how that can be done in all environments. 
+* Development (local),
+* Team,
+* Test,
+* Production
 
-Its a docker controlled subnet inside your machine, analagous to group of VM's inside a VNET in the cloud with a prublic IP address leading only to the reverse proxy font end.
+
+# Inter service networking
+
+Leverages a docker controlled subnet inside your machine, analagous to group of VM's inside a VNET in the cloud with just a public IP address (your host address) leading only to the reverse proxy font end.
 
 [network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
 
@@ -50,7 +57,7 @@ Special Note: During development of this solution some local environment only cr
 
 # Getting started
 
-- Requried: Install Visual Studio 2019 or above.
+- Requried: Install Visual Studio 2019/22 or above.
 - Requried: Install Docker for windows
 - Required: Install git for windows in its default location.
 	- If git is anywhere else, or you have openssl somewhere else, or modify ```src/Certificates/gen-vars.cmd``` to specify where to find openssl.exe 
@@ -71,13 +78,13 @@ Special Note: During development of this solution some local environment only cr
 	- parameters are: 
 		- action (SET|REMOVE)
 		- domain
-		- MONGO admin database
-		- MONGO admin user
-		- MONGO admin password
-		- MONGO connection string username
-		- MONGO connection string password
-		- Identity shared client id
-		- Identity shared client secret
+		- MONGO admin database name
+		- MONGO admin user name
+		- MONGO admin user password
+		- MONGO service connection string username
+		- MONGO service connection string password
+		- Identity service shared client id for shared (store and support) mvc services
+		- Identity service shared client secret for shared (store and support) mvc services
 		- [optional] Google login client id
 		- [optional] Google login secret
 		- [optional] Microsoft login client id

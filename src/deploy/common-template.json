@@ -1,31 +1,30 @@
 {
-	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
         "adminUser": {
             "defaultValue": "", "type": "string"
-        },
-		"productName": {
-			"defaultValue": "myinfoworld",
-			"type": "string"
-		},
-		"product": {
-			"defaultValue": "miw",
-			"type": "string"
-		},
-		"environment": {
-			"defaultValue": "[ split( resourceGroup().location , '-') [0]]",
-			"type": "string"
 		},
         "tenantid": {
             "defaultValue": "", "type": "string"
-        }
+        },
+		"productCode": {
+			"defaultValue": "mi",
+			"type": "string"
+		},
+		"environment": {
+			"defaultValue": "team",
+			"type": "string"
+		},
+		"tags": {
+			"defaultValue": { "Empty": null},
+			"type": "object"
+		}
 	},
 	"variables": {
-		"configurationName": "[concat( parameters('product'),'-' , parameters('environment'), '-',   'ac')]",
-		"storageAccountName": "[concat(parameters('product'),  parameters('environment'),  'sa')]",
-		"containerRegistryName": "[concat( parameters('product'),parameters('environment'),   'cr')]",
-		"keyVaultName": "[concat( parameters('product'), parameters('environment'),  '-kv')]"
+		"storageAccountName": "[toLower(concat(parameters('productCode'),  parameters('environment'), 'sa'))]",
+		"containerRegistryName": "[toLower(concat( parameters('productCode'), parameters('environment'),  'cr'))]",
+		"keyVaultName": "[toLower(concat( parameters('productCode'), parameters('environment'), '-',   'kv'))]"
 	},
 	"resources": [
 		{
@@ -33,9 +32,7 @@
 			"type": "Microsoft.Storage/storageAccounts",
 			"apiVersion": "2015-06-15",
 			"location": "[resourceGroup().location]",
-			"tags": {
-				"displayName": "[variables('storageAccountName')]"
-			},
+			"tags": "[parameters('tags')]",
 			"properties": {
 				"accountType": "Standard_LRS"
 			}
@@ -116,6 +113,7 @@
 			"sku": {
 				"name": "Standard"
 			},
+			"tags": "[parameters('tags')]",
 			"properties": {
 				"adminUserEnabled": true
 			}
