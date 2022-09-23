@@ -24,7 +24,7 @@ namespace Data.Model.Storage.MongoDB
             var document = BsonDocumentSerializer.Instance.Deserialize(context);
             var writerSettings = new JsonWriterSettings
             {
-                OutputMode = JsonOutputMode.Strict,
+                OutputMode = JsonOutputMode.CanonicalExtendedJson,
                 Indent = true,
                 GuidRepresentation = GuidRepresentation.Standard
             };
