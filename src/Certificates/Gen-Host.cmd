@@ -102,7 +102,7 @@ GOTO Finish
 @ECHO.
 
 :Finish
-CALL SetupMongoDB.cmd
+CALL ..\SetupLocalDB.cmd
 @ECHO.
 @ECHO Job done, Set your startup project to docker-compose and start debugging.
 @ECHO.

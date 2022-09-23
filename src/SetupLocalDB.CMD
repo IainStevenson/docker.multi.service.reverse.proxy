@@ -6,4 +6,4 @@ IF NOT EXIST "%APPDATA%\MongoDB\Logs\." MD %APPDATA%\MongoDB\Logs
 GOTO Done
 
 :Done
-@Echo Local MongoDB data folders exist
+@Echo Local MongoDB data folders now exists
