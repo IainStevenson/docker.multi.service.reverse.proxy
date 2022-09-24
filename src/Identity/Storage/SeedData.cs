@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using IdentityModel;
 using IdentityServer4;
 using System;
+using MongoDB.Bson;
 
 namespace Identity.Storage
 {
     public static class SeedData
     {
-        public static string Domain { get; set; } = "localhost";
+        private const string DOMAINNAME = "myInfo.World";
+        public static string Domain { get; set; } = $"local.{DOMAINNAME}";
         public static IEnumerable<IdentityResource> Ids =>
             new IdentityResource[]
             {
@@ -40,7 +42,7 @@ namespace Identity.Storage
         {
             new ApiScope(
                 "myApi",
-                "my API") {
+                "myInfo API") {
                 ShowInDiscoveryDocument = true,
                 UserClaims = {
                     JwtClaimTypes.Name,
@@ -145,10 +147,23 @@ namespace Identity.Storage
 
         public static List<TestUser> Users => new List<TestUser>
         {
-            new TestUser() { Username = "alice", Password  = "alice", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "alice@my.domain") } },
-            new TestUser() { Username = "bob", Password  = "bob", SubjectId = Guid.NewGuid().ToString(),
-                Claims = new List<Claim>(){ new Claim("email", "bob@my.domain") } }
+            
+            new TestUser() {
+                Username = "alice",
+                Password  = "alice",
+                SubjectId = Guid.NewGuid().ToString() ,
+                ProviderName = DOMAINNAME,
+                ProviderSubjectId = Guid.NewGuid().ToString(),
+                Claims = new List<Claim>(){ new Claim("email", $"alice@{Domain}") }
+            },
+            new TestUser() {
+                Username = "bob",
+                Password  = "bob",
+                SubjectId = Guid.NewGuid().ToString(),
+                ProviderName = DOMAINNAME,
+                ProviderSubjectId = Guid.NewGuid().ToString(),
+                Claims = new List<Claim>(){ new Claim("email", $"bob@my.{Domain}") } 
+            }
         };
     }
 

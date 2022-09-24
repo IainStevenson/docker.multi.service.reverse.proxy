@@ -17,28 +17,25 @@ db.createUser({
 	roles: [
 		{
 			role: "readWrite",
-			db: "myApi"
+			db: "myInfoApi"
 		},
 		{
 			role: "readWrite",
-			db: "myIdentity"
+			db: "myInfoIdentity"
 		},
 		{
 			role: "readWrite",
-			db: "myStore"
+			db: "myInfoStore"
 		},
 		{
 			role: "readWrite",
-			db: "mySupport"
+			db: "myInfoSupport"
 		}
 	],
 });
 
 
-db = db.getSiblingDB('myApi')
-db.createCollection('resources')
-
-db = db.getSiblingDB('myIdentity')
+db = db.getSiblingDB('myInfoIdentity')
 db.createCollection('testusers')
 var usersCol = db.getCollection('testusers')
 usersCol.createIndex({ "SubjectId": 1 }, { unique: true })
@@ -53,3 +50,10 @@ apiCol.createIndex({ "Name": 1 }, { unique: true })
 db.createCollection('identityresources')
 var idCol = db.getCollection('identityresources')
 idCol.createIndex({ "Name": 1 }, { unique: true })
+
+db = db.getSiblingDB('myInfoApi')
+db.createCollection('resources')
+db = db.getSiblingDB('myInfoStore')
+db.createCollection('resources')
+db = db.getSiblingDB('myInfoSupport')
+db.createCollection('resources')

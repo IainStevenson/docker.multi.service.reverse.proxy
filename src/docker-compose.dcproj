@@ -4,10 +4,11 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>a2335a74-d681-439e-9a74-2f549e4b50af</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerLaunchAction>None</DockerLaunchAction>
     <DockerServiceUrl>https://local.myinfo.world</DockerServiceUrl>
     <DockerServiceName>myInfo.proxy</DockerServiceName>
-	<DockerComposeBuildArguments></DockerComposeBuildArguments>
+    <DockerComposeBuildArguments>
+    </DockerComposeBuildArguments>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
