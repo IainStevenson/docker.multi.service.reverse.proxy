@@ -20,10 +20,10 @@ A secured docker composed orchestration of a small set of micro services running
 
 From a security perspective the primary objectives are;
 
-* Avoid having to use localhost as a domain name. 
- 	* localhost used in multi-service container configurations is worse than meaningless, suddenly it becomes a blocker. 
- 	* But without a certificate that supports localhost in development .NET services blow up on startup.
-* To have a dedicated authentication and authorisation domain 
+* Avoid having to use `localhost` as a domain name. 
+ 	* `localhost` used in multi-service container configurations is worse than meaningless, suddenly it becomes a blocker. 
+ 	* But without a certificate that supports `localhost` in development .NET services blow up on startup.
+* To have a dedicated authentication and authorization domain 
 * Implement FULL SSL for encryption in motion. 
  	* implementation for all services in all environments.  
  	* Implement encryption at rest as can be achieved with MongoDB
@@ -34,7 +34,7 @@ If you are asking WHY, then lets just say its long been my opinion, and objectiv
 
 # Networking
 
-Its a docker controlled subnet inside your machine, analagous to group of VM's inside a VNET in the cloud with a prublic IP address leading only to the reverse proxy font end.
+Its a docker controlled sub-net inside your machine, analogous to group of VM's inside a VNET in the cloud with a public IP address leading only to the reverse proxy font end.
 
 [network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
 
@@ -50,23 +50,22 @@ Special Note: During development of this solution some local environment only cr
 
 # Getting started
 
-- Requried: Install Visual Studio 2019 or above.
-- Requried: Install Docker for windows
+- Required: Install Visual Studio 2019 or above.
+- Required: Install Docker for windows
 - Required: Install git for windows in its default location.
-	- If git is anywhere else, or you have openssl somewhere else, or modify ```src/Certificates/gen-vars.cmd``` to specify where to find openssl.exe 
 - Download this repository and load it into visual studio.
+	- If git is anywhere else, or you have OpenSSL somewhere else, or modify ```src/Certificates/gen-vars.cmd``` to specify where to find `openssl.exe` 
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
 - Edit your hosts file as described in 'DNS domain name' below. 
 	- Once that change is saved it is active immediately.
-- Install the self-signed domain trusted certificates to your development host, open a Powershell or command window in the ```src/Certificates``` folder.
+- Install the self-signed domain trusted certificates to your development host, open a PowerShell, Terminal or command window in the ```src/Certificates``` folder.
 	- Generate and install a root certificate execute ```./gen-root.cmd``` and follow instructions \* 
 	- Generate default certificates for each micro service execute the ```gen-host.cmd``` and follow instructions.
-- Create the following empty folders to persist MongoDB data across container run-times 
+- This will have created the following empty folders to persist MongoDB data across container run-times, by  executing the ```src\SetupLocalDB.CMD```
 	```
 	%APPDATA%\MongoDb\Data
 	%APPDATA%\MongoDb\Logs
 	```
-	You can make this easy by executing the ```src\SetupLocalDB.CMD```
 - After generating the certificates run the ```user-secrets.cmd``` command script with parameters similar to these but for your own settings;
 	- parameters are: 
 		- action (SET|REMOVE)
@@ -85,16 +84,16 @@ Special Note: During development of this solution some local environment only cr
 		- [optional] GitHub login client id
 		- [optional] GitHub login secret
 		
-	- ```./user-secrets set local.myinfo.world admin admin storage storagepass Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
-	- Note: ATM: if you use different database username and password it needs to also be reflected in ```src/.env``` and ```src/MongoDb/mongo-init.js```
-	- if you don't yet have a Google, Microsoft or GitHub external account sign in setup for your app then leave the optional parameters off and the identity server startup will not configure external authentication.
-	- In google, Microsoft and GitHub developer consoles you will need to add in your allowed url's as they would normally using the \*.domain They operate by redirect so they are picked up locally on the browser and still work according to the local development machine DNS via the hosts file.	
+	- Using your already generated Google/ Facebook / Microsoft or GitHub Client and secrets in this command will setup your Visual Studio user-secrets to work with your development configuration. ```./user-secrets set local.myinfo.world admin admin storage storagepass Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
+	- Note: ATM: if you use different database username and password it needs to also be reflected in ```src/.env``` and ```src/MongoDb/mongo-init.js``` settings.
+	- if you don't yet have a Google, Microsoft or GitHub external account sign in setup for your app then leave the optional parameters off and the identity server startup will not configure external authentication as an option and you can just use the test users. Find then in `Identity.Storage.SeedData`
+	- In google, Microsoft and GitHub developer consoles you will need to add in your allowed URL's as they would normally using the \*.domain They operate by redirect so they are picked up locally on the browser and still work according to the local development machine DNS via the hosts file.	
 - Press F5.
 	- If no browser appears, start one and navigate to https://local.myInfo.world and you will see the store site.
 	- Navigate around, when you click Weather Forecast you will need to login, if logging in locally then use username: bob Password: bob, or use available social logins.
 	- Alternatively or as well, import the ```local.myInfo.world.postman_collection.json``` file into postman and run the tests in the ```local.myInfo.world``` collection. This will acquire tokens from Identity Server and check basic MVC and API CRUD functionality.
 
-\* I will convert this, side by side, as Powershell later.
+\* I will convert this, side by side, as PowerShell later.
 
 ## Patience and Frustration
 
@@ -145,11 +144,11 @@ git version 2.30.0.windows.1
 Optional tools and resources that were used to diagnose and fix problems include;
 
 ```
-Fildder anywhere
-docker desktop
-stackoverflow
-nginx documentation
-docker documentation
+Fiddler anywhere
+Docker desktop
+StackOverflow
+Nginx documentation
+Docker documentation
 Postman V7.36.1
 Postman V8.0.3
 Postman V8.1.0
@@ -164,8 +163,7 @@ The docker_compose project should be your preferred startup for solution debuggi
 
 BEWARE: 
 
-The technique used here with a single NGINX reverse proxy listening on localhost(127.0.0.1) port 443 has 
-consequences for other development projects on your development host.  You will not be able to simultaneously run http/s services from other hosting programs such as IIS Express or 
+The technique used here with a single NGINX reverse proxy listening on `localhost` (127.0.0.1) port 443 has consequences for other development projects on your development host.  You will not be able to simultaneously run http/s services from other hosting programs such as IIS Express or 
 self hosted programs in other VS projects due to port 443 and 80 already being bound/in use. 
 Conversely is that this solution will not work properly or at all if those ports are already in use elsewhere.
 
@@ -173,7 +171,7 @@ Conversely is that this solution will not work properly or at all if those ports
 
 This solution has a real domain name entry of ```myinfo.world```
 
-In keeping with usual DNS subdomain conventions the following environment sub-domains will be set up as follows;
+In keeping with usual DNS sub-domain conventions the following environment sub-domains will be set up as follows;
 
 | Sub domain         | Use                                    | 
 |--------------------|----------------------------------------|
@@ -218,8 +216,8 @@ Various markdown files are included focusing on different aspects of the develop
 
 When changing domain or product names casing is important
 
-- MongoDB: manage mongo-init.js, delete persisted mongo data : check %APPDATA%/MongoDb/Data
-- services : appsettings.*.json
-- Proxy: manage Proxy/certificates.domain.conf, gen-host.cmd, user-secrets.cmd
+- MongoDB: manage `mongo-init.js`, delete persisted mongo data : check %APPDATA%/MongoDb/Data
+- services : `appsettings.*.json`
+- Proxy: manage `Proxy/certificates.domain.conf`, `gen-host.cmd`, `user-secrets.cmd`
 
 A lot of effort has been expended on reducing the complexity of the configuration and its an ongoing exercise.
