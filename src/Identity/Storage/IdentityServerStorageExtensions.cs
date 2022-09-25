@@ -8,7 +8,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Test;
 using MongoDB.Bson.Serialization;
 using System.Security.Claims;
-using Identity.Storage.MopngoDB;
+using Identity.Storage.MongoDB;
 
 namespace Identity.Storage
 {

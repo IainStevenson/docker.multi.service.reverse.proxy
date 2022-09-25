@@ -30,7 +30,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Identity.Storage.MopngoDB\Identity.Storage.MopngoDB.csproj" />
+    <ProjectReference Include="..\Data.Model.Storage.MongoDB\Data.Model.Storage.MongoDB.csproj" />
+    <ProjectReference Include="..\Identity.Storage.MongoDB\Identity.Storage.MongoDB.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
