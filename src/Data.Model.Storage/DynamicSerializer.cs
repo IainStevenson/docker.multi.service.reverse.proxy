@@ -3,16 +3,15 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using Newtonsoft.Json;
-using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace Data.Model.Storage
 {
     public class DynamicSerializer : SerializerBase<dynamic>
     {
         private readonly JsonSerializerSettings _jsonSerializerSettings;
-
         public DynamicSerializer()
         {
+            //BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
             _jsonSerializerSettings = new JsonSerializerSettings
             {
                 FloatFormatHandling = FloatFormatHandling.DefaultValue,
@@ -26,17 +25,16 @@ namespace Data.Model.Storage
             var writerSettings = new JsonWriterSettings
             {
                 OutputMode = JsonOutputMode.CanonicalExtendedJson,
-                Indent = true,
-                GuidRepresentation = GuidRepresentation.Standard
+                Indent = true
             };
             var value = document.ToJson(writerSettings);
-            return JsonConvert.DeserializeObject<dynamic>(value, _jsonSerializerSettings);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(value, _jsonSerializerSettings);
         }
 
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, dynamic value)
         {
-            var o = value ?? new { };
-            var json = JsonConvert.SerializeObject(o, _jsonSerializerSettings);
+            var item = value ?? new { };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(item, _jsonSerializerSettings);
             BsonDocument document = BsonDocument.Parse(json);
             BsonDocumentSerializer.Instance.Serialize(context, document);
         }
