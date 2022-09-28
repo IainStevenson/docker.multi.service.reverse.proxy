@@ -37,7 +37,7 @@ namespace Response.Formatting
                     return controller.Ok(resourceOutput.Model);
 
                 case HttpStatusCode.Created:
-                    return controller.Created(resourceOutput.Links.FirstOrDefault(x=>x.Action == "Get").Href, resourceOutput.Model);
+                    return controller.Created(resourceOutput.Links.FirstOrDefault(x=>x.Action == "get").Href, resourceOutput.Model);
                 //case HttpStatusCode.Accepted:
                 //    break;
                 //case HttpStatusCode.NonAuthoritativeInformation:
