@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Storage
@@ -61,7 +62,7 @@ namespace Storage
         /// <param name="item">The item to store</param>
         /// <remarks>The <see cref="Resource" /> is upserted</remarks>
         /// <returns>The item with an added Etag (void)</returns>
-        Task<T> CreateAsync(T item);
+        Task<T> CreateAsync(T item, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Stores one or more <see cref="Resource" /> items
@@ -121,7 +122,7 @@ namespace Storage
             _storage = storage;
         }
 
-        public Task<Data.Model.Storage.Resource> CreateAsync(Data.Model.Storage.Resource item)
+        public Task<Data.Model.Storage.Resource> CreateAsync(Data.Model.Storage.Resource item, CancellationToken cancellationToken)
         {
             item.Etag = Guid.NewGuid().ToString();
             item.Created = DateTimeOffset.UtcNow;

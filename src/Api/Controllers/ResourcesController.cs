@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Resource.Handling;
 
 namespace Api.Controllers
 {
@@ -31,15 +32,23 @@ namespace Api.Controllers
         /// Logger for this controller
         /// </summary>
         private readonly ILogger<ResourcesController> _logger;
+
+
+        private readonly IResourceRequestFactory _resourceRequestFactory;
+
+        private readonly IResponseOutputHandler _responseOutputHandler;
+
         /// <summary>
         /// Controller constructor
         /// </summary>
         /// <param name="logger">The logger instance provided by dependency injection</param>
         /// <param name="mediator">the mediator instance provided by dependency injection.</param>
-        public ResourcesController(ILogger<ResourcesController> logger, IMediator mediator)
+        public ResourcesController(ILogger<ResourcesController> logger, IMediator mediator, IResourceRequestFactory resourceRequestFactory, IResponseOutputHandler responseOutputHandler)
         {
             _logger = logger;
             _mediator = mediator;
+            _resourceRequestFactory = resourceRequestFactory;
+            _responseOutputHandler = responseOutputHandler;
         }
     }
 };

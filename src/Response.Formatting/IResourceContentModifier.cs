@@ -5,12 +5,18 @@ using System.Threading.Tasks;
 namespace Response.Formatting
 {
     /// <summary>
-    /// Modifies a <see cref="IResource"/> to collapse the  <see cref="IResource.Content"/> down to only those properties that are specified by the <see cref="propertyNames"/> collection.
+    /// Handles property removal from <see cref="IResource"/> objects to reduce metadata transfers back to the client.
     /// </summary>
-    /// <typeparam name="T">The concrete Type of the Resource</typeparam>
-    /// <typeparam propertyNames="T">The prperty names to be retained/typeparam>
+    /// <typeparam name="T"></typeparam>
     public interface IResourceContentModifier<T> where T : IResource
     {
+        /// <summary>
+        /// Modifies a <see cref="IResource"/> to collapse the  <see cref="IResource.Content"/> down to only those properties that are specified by the <see cref="propertyNames"/> collection. 
+        /// The property names are usually the key property names which the client nominated for the namespace content type.
+        /// </summary>
+        /// <param name="source">The Resource instance.</param>
+        /// <param name="propertyNames">The property names to be retained</param>
+        /// <returns>The modified resource.</returns>
         Task<T> CollapseContent(T source, IEnumerable<string> propertyNames);
     }
 }

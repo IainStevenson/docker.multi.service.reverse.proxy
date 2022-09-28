@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Response.Formatting
 {
+    /// <summary>
+    /// Handles HATEOS (Html as the engine of state) links for clients that require it.
+    /// </summary>
     public interface IResponseLinksProvider
     {
 

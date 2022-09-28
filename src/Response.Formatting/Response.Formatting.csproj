@@ -10,12 +10,15 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
    
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
+    <ProjectReference Include="..\Resource.Handling\Resource.Handling.csproj" />
   </ItemGroup>
 
 </Project>

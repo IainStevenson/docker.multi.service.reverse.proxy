@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Data.Model.Storage;
 using MediatR;
 using Response.Formatting;
 using Storage;
@@ -66,13 +67,13 @@ namespace Handlers.Resource
                 resource.Content = request.Model;
 
                 resource.Modified = DateTimeOffset.UtcNow;
-                resource.Metadata.Tags.Add("RequestId", $"{request.RequestId}");
-                resource.Metadata.Tags.Add("Updated", $"{resource.Modified}");
-
+                resource.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.ChangeRequestIdentifier, request.RequestId));
+                resource.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.Updated, resource.Modified));
+               
                 if (!string.IsNullOrWhiteSpace(request.MoveTo))
                 {
                     resource.Namespace = request.MoveTo;
-                    resource.Metadata.Tags.Add("Namespace Changed", $"{resource.Namespace}");
+                    resource.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.NamespaceRename, resource.Namespace));
                 }
 
                 resource = await _storage.UpdateAsync(resource);

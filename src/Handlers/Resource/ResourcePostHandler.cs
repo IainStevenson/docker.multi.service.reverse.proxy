@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Data.Model.Storage;
 using FluentValidation;
 using MediatR;
 
@@ -19,7 +20,7 @@ namespace Handlers.Resource
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly IMapper _mapper;
-        private readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
+        private readonly Dictionary<string, string> EmptyEntityList = new() { };
         private readonly IResponseLinksProvider _responseLinksProvider;
         private readonly IResourceContentModifier<Data.Model.Response.Resource> _resourceModifier;
         private readonly IResponseHeadersProvider _responseHeadersProvider;
@@ -55,14 +56,14 @@ namespace Handlers.Resource
                     Metadata = new Data.Model.Storage.StorageMetadata()
                     {
                         RequestId = request.RequestId,
-                        Tags = new Dictionary<string, object>() {
-                            { "Created", DateTimeOffset.UtcNow } ,
-                            { "Keys", request.Keys }
+                        Tags = new List<Tuple<MetadataPropertyNames, object>>() {
+                             new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.OriginallyCreated, DateTimeOffset.UtcNow)  ,
+                             new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.OriginalDataKeys, request.Keys)
                         }
                     },
                 };
 
-                resource = await _storage.CreateAsync(resource);
+                resource = await _storage.CreateAsync(resource, cancellationToken);
 
                 #region abstract out
                 var systemKeys = new Dictionary<string, string>() {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Resource.Handling;
 
 namespace Api.Controllers
 {
@@ -49,30 +50,35 @@ namespace Api.Controllers
             )
         {
 
-            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Sending request.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Processing request...");
 
-            // Use factory method to generate the request object that carries all of the data requried by the handler
+            PostResourceRequest resourceRequest = _resourceRequestFactory.CreatePostResourceRequest(
+                                                            @namespace,
+                                                            content,
+                                                            keys,
+                                                            _ownerId,
+                                                            _requestId);
 
-            var request = new ResourcePostRequest()
+            PostResourceResponse resourceResponse = await _mediator.Send(resourceRequest);
+
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Processing response ouptut..");
+
+            var resourceOutputRequest = new PostResourceOutputRequest()
             {
-                Namespace = @namespace.ToLower(),
-                Content = content,
-                Keys = keys,
-                OwnerId = _ownerId,
-                RequestId = _requestId,
+                Model = resourceResponse.Model,
+                StatusCode = resourceResponse.StatusCode,
                 Scheme = Request.Scheme,
                 Host = Request.Host.Value,
                 PathBase = Request.PathBase.Value,
-                Path = Request.Path.Value
+                Path = Request.Path.Value,
+                Keys = keys
             };
 
-            // pass the request to the handler and obtain a response
-            var response = await _mediator.Send(request);
+            ResourceOutputResponse<Data.Model.Response.Resource> resourceOutput = await _mediator.Send(resourceOutputRequest);
 
-            _logger.LogTrace($"{nameof(ResourcesController)}:POST. Processing response.");
 
-            // pass this controller and the response to the responseHandler to terminate the http request via the framework
-            return response.Handle(this);
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. returning output.");
+            return  _responseOutputHandler.Handle(this, resourceOutput);
         }
     }
 }

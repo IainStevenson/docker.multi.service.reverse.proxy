@@ -13,7 +13,17 @@ namespace Data.Model.Storage
         }
         
         [BsonRepresentation(BsonType.String)] public Guid RequestId { get; set; }      
-        public IDictionary<string, object> Tags { get; set; } = new Dictionary<string, object>();
+        public List< Tuple<MetadataPropertyNames, object>> Tags { get; set; } = new List<Tuple<MetadataPropertyNames, object>>();
         public long Index { get; set; }
+    }
+
+    public enum MetadataPropertyNames
+    {
+        OriginallyCreated ,
+        OriginalDataKeys,
+        SortValue,
+        ChangeRequestIdentifier,
+        Updated,
+        NamespaceRename
     }
 }

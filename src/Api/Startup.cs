@@ -96,7 +96,7 @@ namespace Api
                     {
                         // Use the default property (Pascal) casing
                         options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                         options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
                     })
                     .AddFluentValidation(config =>
@@ -104,9 +104,10 @@ namespace Api
 
                         config.AutomaticValidationEnabled = true;
                         config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
+                        config.RegisterValidatorsFromAssemblyContaining<Resource.Handling.PostResourceValidator>();
                     });
 
-            services.AddMediatR(typeof(Handlers.Resource.ResourcePostHandler));
+            services.AddMediatR(new[] { typeof(Handlers.Resource.ResourcePutHandler) , typeof(Resource.Handling.ResourceRequestFactory) } );
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>
