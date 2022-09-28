@@ -35,7 +35,6 @@
     <ProjectReference Include="..\Handlers\Handlers.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
-    <ProjectReference Include="..\Response.Formater\Response.Formater.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 

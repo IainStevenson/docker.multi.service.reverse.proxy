@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Response.Formater
+namespace Response.Formatting
 {
     /// <summary>
     /// Modifies a <see cref="IResource"/> to collapse the  <see cref="IResource.Content"/> down to only those properties that are specified by the <see cref="propertyNames"/> collection.

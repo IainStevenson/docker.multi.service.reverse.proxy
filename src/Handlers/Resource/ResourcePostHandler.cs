@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Response.Formater;
+
+using Response.Formatting;
 using Storage;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ namespace Handlers.Resource
 
                 resource = await _storage.CreateAsync(resource);
 
-
+                #region abstract out
                 var systemKeys = new Dictionary<string, string>() {
                     { "{id}", $"{resource.Id}" }
                 };
@@ -81,20 +82,26 @@ namespace Handlers.Resource
                                                                 systemKeys,
                                                                 relatedEntities);
 
-
+                #endregion
                 if (!string.IsNullOrWhiteSpace(request.Keys))
                 {
                     responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
                 }
 
                 response.Model = responseModel;
+                response.StatusCode = System.Net.HttpStatusCode.Created;
+                #region abstract out too
                 response.ResourceUri = new Uri(responseModel.Links?.SingleOrDefault(x => x.Action == "get" && x.Rel == "self")?.Href ?? "\\");
                 response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
-                response.StatusCode = System.Net.HttpStatusCode.Created;
+                #endregion
             }
             else
             {
+
+                #region abstract out
                 response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                #endregion
+
                 response.StatusCode = System.Net.HttpStatusCode.BadRequest;
             }
             return response;

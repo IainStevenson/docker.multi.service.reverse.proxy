@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Response.Formater;
+using Response.Formatting;
 using Storage;
 using System;
 using System.Linq;

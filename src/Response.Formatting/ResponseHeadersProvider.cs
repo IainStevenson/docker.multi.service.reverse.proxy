@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
-namespace Response.Formater
+namespace Response.Formatting
 {
     public class ResponseHeadersProvider : IResponseHeadersProvider
     {

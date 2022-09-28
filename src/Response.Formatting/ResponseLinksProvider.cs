@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Response.Formater
+namespace Response.Formatting
 {
     public class ResponseLinksProvider : IResponseLinksProvider
     {

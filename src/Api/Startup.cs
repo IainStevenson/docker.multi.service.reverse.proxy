@@ -16,7 +16,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Pluralizer;
-using Response.Formater;
+using Response.Formatting;
 using Serilog;
 using Storage;
 using System;

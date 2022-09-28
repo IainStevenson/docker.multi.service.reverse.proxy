@@ -1,7 +1,7 @@
 ﻿using Data.Model.Response;
 using Microsoft.AspNetCore.Http;
 
-namespace Response.Formater
+namespace Response.Formatting
 {
     public interface IResponseHeadersProvider
     {

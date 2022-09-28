@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Handlers.Resource;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,7 +17,6 @@ namespace Api.Controllers
         /// The dotted string format is validated and any deviance will result in a return status code of 400-BadRequest.
         /// Namesapce must follow the .NET rules for Namespaces.
         /// </param>
-        /// <param name="content">The client supplied resource Content value. This 'is' the resource to the client.</param>
         /// <param name="keys">
         /// This option reduces return response bandwidth. 
         /// An optional list of Content object key property names. These are used to selectively return content in the response in the <see cref="Data.Model.Response.Resource"/> content property. All properties are stored but only these key properties are returned if they are provided in the post call and exist in the content. See <see cref="Response.Formater.ResourceContentModifier"/> for details.
@@ -25,6 +25,7 @@ namespace Api.Controllers
         /// If no keys are provided the whole content is returned in the <see cref="Data.Model.Response.Resource"/>.
         /// If any keys provided are missing from the content, the whole content is returned in the <see cref="Data.Model.Response.Resource"/>.
         /// </param>
+        /// <param name="content">The client supplied resource Content value. This 'is' the resource to the client.</param>
         /// <returns>
         /// 201 Created with response body content containing an instance of <see cref="Data.Model.Response.Resource"/> 
         /// which is a wrapper around the client content enriched with storage identifier, ETag, time stamps, plus link information in exceess of the standard Location header info to provide a rich HATEOS compliance.
@@ -39,13 +40,18 @@ namespace Api.Controllers
         /// </example>
         [HttpPost]
         [Route("{namespace}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(
             [Required][FromRoute] string @namespace,
-            [Required][FromBody] dynamic content,
-            [FromQuery] string keys)
+            [FromQuery] string keys,
+            [Required][FromBody] dynamic content
+            )
         {
 
-            _logger.LogTrace($"{nameof(ResourcesController)}:POST. Sending request.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Sending request.");
+
+            // Use factory method to generate the request object that carries all of the data requried by the handler
 
             var request = new ResourcePostRequest()
             {
@@ -60,10 +66,12 @@ namespace Api.Controllers
                 Path = Request.Path.Value
             };
 
+            // pass the request to the handler and obtain a response
             var response = await _mediator.Send(request);
 
             _logger.LogTrace($"{nameof(ResourcesController)}:POST. Processing response.");
 
+            // pass this controller and the response to the responseHandler to terminate the http request via the framework
             return response.Handle(this);
         }
     }

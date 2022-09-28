@@ -1,4 +1,4 @@
-﻿namespace Response.Formater
+﻿namespace Response.Formatting
 {
     public static class HeaderKeys
     {

@@ -23,7 +23,7 @@ COPY ["Data.Model.Storage/Data.Model.Storage.csproj", "Data.Model.Storage/"]
 COPY ["Handlers/Handlers.csproj", "Handlers/"]
 COPY ["Data.Dynamic/Data.Dynamic.csproj", "Data.Dynamic/"]
 COPY ["Logging/Logging.csproj", "Logging/"]
-COPY ["Response.Formater/Response.Formater.csproj", "Response.Formater/"]
+COPY ["Response.Formatting/Response.Formatting.csproj", "Response.Formatting/"]
 RUN dotnet restore "Api/Api.csproj"
 COPY . .
 WORKDIR "/src/Api"

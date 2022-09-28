@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Response.Formater
+namespace Response.Formatting
 {
     public interface IPathResolver
     {
