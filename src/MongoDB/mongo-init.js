@@ -53,6 +53,11 @@ idCol.createIndex({ "Name": 1 }, { unique: true })
 
 db = db.getSiblingDB('myInfoApi')
 db.createCollection('resources')
+var resourcesCol = db.getCollection('resources')
+resourcesCol.createIndex({ "Namespace": 1 }, { unique: false })
+resourcesCol.createIndex({ "Metadata.$**": 1 }, { unique: false })
+
+
 db = db.getSiblingDB('myInfoStore')
 db.createCollection('resources')
 db = db.getSiblingDB('myInfoSupport')
