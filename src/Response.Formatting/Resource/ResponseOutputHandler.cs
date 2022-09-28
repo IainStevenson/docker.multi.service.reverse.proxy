@@ -22,14 +22,6 @@ namespace Response.Formatting
 
             switch (resourceOutput.StatusCode)
             {
-                //case HttpStatusCode.Continue:
-                //    break;
-                //case HttpStatusCode.SwitchingProtocols:
-                //    break;
-                //case HttpStatusCode.Processing:
-                //    break;
-                //case HttpStatusCode.EarlyHints:
-                //    break;
                 case HttpStatusCode.BadRequest:
                     return controller.BadRequest();
 
@@ -146,7 +138,15 @@ namespace Response.Formatting
                 //case HttpStatusCode.NotExtended:
                 //    break;
                 //case HttpStatusCode.NetworkAuthenticationRequired:
-                    
+                //case HttpStatusCode.Continue:
+                //    break;
+                //case HttpStatusCode.SwitchingProtocols:
+                //    break;
+                //case HttpStatusCode.Processing:
+                //    break;
+                //case HttpStatusCode.EarlyHints:
+                //    break;
+
                 //    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(resourceOutput.StatusCode), $"The status code {resourceOutput.StatusCode} of the request output was not handled. This is a programming logic error");
