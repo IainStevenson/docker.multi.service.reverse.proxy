@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Net;
 
-namespace Resource.Handling
+namespace Response.Formatting
 {
     public class PostResourceOutputRequest : IRequest<ResourceOutputResponse<Data.Model.Response.Resource>>
     {

@@ -16,6 +16,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Pluralizer;
+using Resource.Handling;
 using Response.Formatting;
 using Serilog;
 using Storage;
@@ -88,9 +89,11 @@ namespace Api
             services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(excludedHeaders));
             services.AddSingleton<IPathResolver, PathResolver>();
             services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
-            services.AddSingleton<IResponseLinksProvider>((p) => new ResponseLinksProvider());
+            services.AddSingleton<IResponseLinksProvider,ResponseLinksProvider>();
             services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
             services.AddSingleton(x => mapper);
+            services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
+            services.AddSingleton<IResponseOutputHandler, ResponseOutputHandler>();
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
@@ -101,13 +104,13 @@ namespace Api
                     })
                     .AddFluentValidation(config =>
                     {
-
+                        
                         config.AutomaticValidationEnabled = true;
+                        config.RegisterValidatorsFromAssemblyContaining<Resource.Handling.PostResourceRequestValidator>();
                         config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
-                        config.RegisterValidatorsFromAssemblyContaining<Resource.Handling.PostResourceValidator>();
                     });
 
-            services.AddMediatR(new[] { typeof(Handlers.Resource.ResourcePutHandler) , typeof(Resource.Handling.ResourceRequestFactory) } );
+            services.AddMediatR(new[] { typeof(Handlers.Resource.ResourcePutHandler), typeof(Resource.Handling.PostResourceHandler), typeof(Response.Formatting.PostResourceOutputHandler) } );
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>

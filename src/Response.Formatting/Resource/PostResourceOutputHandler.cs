@@ -5,14 +5,20 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Resource.Handling
+namespace Response.Formatting
 {
     public class PostResourceOutputHandler : IRequestHandler<PostResourceOutputRequest, ResourceOutputResponse<Data.Model.Response.Resource>>
     {
         private readonly Dictionary<string, string> EmptyEntityList = new() { };
         private readonly IResponseLinksProvider _responseLinksProvider;
         private readonly IResourceContentModifier<Data.Model.Response.Resource> _resourceModifier;
-
+        public PostResourceOutputHandler(Dictionary<string, string> emptyEntityList, IResponseLinksProvider responseLinksProvider, IResourceContentModifier<Data.Model.Response.Resource> resourceModifier)
+        {
+            EmptyEntityList = emptyEntityList;
+            _responseLinksProvider = responseLinksProvider;
+            _resourceModifier = resourceModifier;
+        }
+    
         public async Task<ResourceOutputResponse<Data.Model.Response.Resource>> Handle(PostResourceOutputRequest request, CancellationToken cancellationToken)
         {
             var response = new ResourceOutputResponse<Data.Model.Response.Resource>() { StatusCode = (HttpStatusCode)request.StatusCode };

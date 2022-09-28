@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace Resource.Handling
+namespace Response.Formatting
 {
 
     public class ResourceOutputResponse<T> : IApiLinks

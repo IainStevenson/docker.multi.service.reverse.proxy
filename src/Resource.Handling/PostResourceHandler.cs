@@ -23,7 +23,7 @@ namespace Resource.Handling
         /// Validates the incoming resource request data.
         /// </summary>
         private readonly AbstractValidator<PostResourceRequest> _validator;
-        public PostResourceHandler(IRepository<Data.Model.Storage.Resource> storage, IMapper mapper, AbstractValidator<PostResourceRequest> validator)
+        public PostResourceHandler(IRepository<Data.Model.Storage.Resource> storage, IMapper mapper, PostResourceRequestValidator validator)
         {
             _storage = storage;
             _mapper = mapper;

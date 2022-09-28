@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace Resource.Handling
+namespace Response.Formatting
 {
     /// <summary>
     /// Transalates a formatted response to final output ready for returning to the Mvc framework for client consumption

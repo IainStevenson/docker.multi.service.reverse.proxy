@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Resource.Handling;
+using Response.Formatting;
 
 namespace Api.Controllers
 {

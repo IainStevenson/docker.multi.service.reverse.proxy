@@ -14,10 +14,6 @@
     <Compile Remove="RequestActions.cs" />
     <Compile Remove="RequestHandler.cs" />
     <Compile Remove="RequestMessage.cs" />
-    <Compile Remove="Resource\ResourcePostHandler.cs" />
-    <Compile Remove="Resource\ResourcePostRequest.cs" />
-    <Compile Remove="Resource\ResourcePostResponse.cs" />
-    <Compile Remove="Resource\ResourcePostValidator.cs" />
     <Compile Remove="ResponseHander.cs" />
     <Compile Remove="ResponseMessage.cs" />
     <Compile Remove="ServicesSetupException.cs" />

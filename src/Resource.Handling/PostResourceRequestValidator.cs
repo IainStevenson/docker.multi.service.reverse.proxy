@@ -2,9 +2,9 @@
 
 namespace Resource.Handling
 {
-    public class PostResourceValidator : AbstractValidator<PostResourceRequest>
+    public class PostResourceRequestValidator : AbstractValidator<PostResourceRequest>
     {
-        public PostResourceValidator()
+        public PostResourceRequestValidator()
         {
             RuleFor(x => x.Content).NotNull();
             RuleFor(x => x.Namespace).NotNull()

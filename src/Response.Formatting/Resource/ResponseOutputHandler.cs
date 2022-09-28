@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Net;
 
-namespace Resource.Handling
+namespace Response.Formatting
 {
     public class ResponseOutputHandler : IResponseOutputHandler
     {
