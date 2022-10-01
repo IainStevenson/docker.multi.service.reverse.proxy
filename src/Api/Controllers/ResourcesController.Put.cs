@@ -49,8 +49,8 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing request.");
 
 
-            var unmodifiedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers); // prevents update of old version by time
-            var etags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers); // prevents update of old version by etag
+            var unmodifiedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue); 
+            var etags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers); 
 
             ResourceStoragePutRequest resourceStoragePutRequest = _resourceRequestFactory.CreateResourceStoragePutRequest(id,
                                                                                         content,

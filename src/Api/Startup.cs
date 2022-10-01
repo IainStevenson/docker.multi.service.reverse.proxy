@@ -1,5 +1,6 @@
 using Api.Domain.Handling.Framework;
 using Api.Domain.Handling.Resource;
+using Api.Domain.Handling.Resource.Post;
 using Api.Domain.Storage;
 using Api.Domain.Storage.Post;
 using AutoMapper;

@@ -13,7 +13,7 @@ namespace Api.Domain.Storage.Get
         //private readonly IResponseLinksProvider _responseLinksProvider;
 
         public ResourceStorageGetOneRequestHandler(
-            IRepository<Data.Model.Storage.Resource> storage,
+            IRepository<Data.Model.Storage.Resource> storage
           //IRequestHeadersProvider requestHeadersProvider,
           //IResponseHeadersProvider responseHeadersProvider,
           //IMapper mapper,

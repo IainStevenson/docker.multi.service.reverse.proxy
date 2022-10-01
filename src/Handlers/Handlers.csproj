@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Domain.Handling\Api.Domain.Handling.csproj" />
     <ProjectReference Include="..\Data.Dynamic\Data.Dynamic.csproj" />
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
     <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />

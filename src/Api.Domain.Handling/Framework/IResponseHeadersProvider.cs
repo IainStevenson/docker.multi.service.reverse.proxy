@@ -5,7 +5,7 @@ namespace Api.Domain.Handling.Framework
 {
     public interface IResponseHeadersProvider
     {
-        IHeaderDictionary AddHeadersFromItem<T>(T resource) where T : IResponseItem;
+        IHeaderDictionary AddHeadersFromItem<T>(T resource) where T : IResponseEntity;
         void RemoveUnwantedHeaders(IHeaderDictionary headers);
     }
 }

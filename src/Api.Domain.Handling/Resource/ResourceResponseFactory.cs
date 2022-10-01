@@ -1,5 +1,6 @@
 ﻿using Api.Domain.Handling.Resource.Get;
 using Api.Domain.Handling.Resource.Post;
+using Api.Domain.Handling.Resource.Put;
 using System.Net;
 
 namespace Api.Domain.Handling.Resource
@@ -54,6 +55,20 @@ namespace Api.Domain.Handling.Resource
         public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
         {
             return new ResourceResponsePostRequest()
+            {
+                Model = model,
+                StatusCode = statusCode,
+                Scheme = scheme,
+                Host = host,
+                PathBase = pathBase,
+                Path = path,
+                Keys = keys
+            };
+        }
+        /// <inheritdoc/>
+        public ResourceResponsePutRequest CreateResourceResponsePutRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
+        {
+            return new ResourceResponsePutRequest()
             {
                 Model = model,
                 StatusCode = statusCode,

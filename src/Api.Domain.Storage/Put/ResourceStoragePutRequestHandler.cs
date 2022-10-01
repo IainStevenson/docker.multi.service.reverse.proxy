@@ -60,7 +60,7 @@ namespace Api.Domain.Storage.Put
             {
                 if (request.ETags.Any())
                 {
-                    response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.Etags)}/r/n");
+                    response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.ETags)}/r/n");
                 }
                 if (request.UnmodifiedSince != DateTimeOffset.MaxValue)
                 {

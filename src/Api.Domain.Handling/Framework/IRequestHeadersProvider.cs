@@ -5,6 +5,7 @@ namespace Api.Domain.Handling.Framework
     public interface IRequestHeadersProvider
     {
         /// <summary>
+        /// Used for concurrency control.
         /// The If-Match HTTP request header makes the request conditional. 
         /// For GET and HEAD methods, the server will send back the requested resource only if it matches one of the listed ETags
         /// </summary>
@@ -16,6 +17,7 @@ namespace Api.Domain.Handling.Framework
 
 
         /// <summary>
+        /// Used for concurrency control.
         /// The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, 
         /// the server will send back the requested resource, 
         /// with a 200 status, only if it doesn't have an ETag matching the given ones.
@@ -31,6 +33,7 @@ namespace Api.Domain.Handling.Framework
         List<string> IfDoesNotHaveEtagMatching(IHeaderDictionary headers);
 
         /// <summary>
+        /// Used for concurrency control.
         /// The If-Modified-Since request HTTP header makes the request conditional: 
         /// the server sends back the requested resource, with a 200 status, only if it has been last modified after the given date. 
         /// If the resource has not been modified since, the response is a 304 without any body; 
@@ -44,6 +47,7 @@ namespace Api.Domain.Handling.Framework
         DateTimeOffset IfHasChangedSince(IHeaderDictionary headers, DateTimeOffset defaultValue);
 
         /// <summary>
+        /// Used for concurrency control.
         /// The HyperText Transfer Protocol (HTTP) If-Unmodified-Since request header makes the request for the resource conditional: 
         /// the server will send the requested resource or accept it in the case of a POST or another non-safe method only 
         /// if the resource has not been modified after the date specified by this HTTP header. 

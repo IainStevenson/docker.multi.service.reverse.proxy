@@ -32,7 +32,7 @@ namespace Api.Domain.Handling.Resource.Post
 
             var relatedEntities = EmptyEntityList;
 
-            var responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
+            Data.Model.Response.Resource responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
 
             response.Links = await _responseLinksProvider.BuildLinks(
                                                             request.Scheme,

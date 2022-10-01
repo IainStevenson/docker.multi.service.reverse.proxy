@@ -11,7 +11,7 @@ namespace Api.Domain.Handling.Resource
         {
             _unwantedHeadersList = unwantedHeadersList;
         }
-        public IHeaderDictionary AddHeadersFromItem<T>(T resource) where T : IResponseItem
+        public IHeaderDictionary AddHeadersFromItem<T>(T resource) where T : IResponseEntity
         {
             var headers = new HeaderDictionary
             {

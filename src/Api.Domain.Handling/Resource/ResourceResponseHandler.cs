@@ -185,5 +185,15 @@ namespace Api.Domain.Handling.Resource
         {
             throw new NotImplementedException();
         }
+
+        public IActionResult HandleMany<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult HandleNone(ControllerBase controller, ResourceResponse resourceOutput)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

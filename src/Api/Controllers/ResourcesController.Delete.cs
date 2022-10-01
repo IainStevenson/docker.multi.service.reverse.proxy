@@ -30,7 +30,7 @@ namespace Api.Controllers
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Sending request.");
 
-            var isUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MinValue); 
+            var isUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue); 
             var etags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
             var request = new ResourceStorageDeleteRequest() {
