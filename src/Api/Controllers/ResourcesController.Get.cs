@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Api.Domain.Storage.Get;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -31,17 +32,17 @@ namespace Api.Controllers
         {
 
             _logger.LogTrace($"{nameof(ResourcesController)}:GET (One). Sending request.");
-            var request = new ResourceGetOneRequest()
+            var request = new ResourceStorageGetOneRequest()
             {
                 Id = id,
                 Namespace = @namespace.ToLower(),
                 OwnerId = _ownerId,
                 RequestId = _requestId,
-                Headers = Request.Headers,
-                Scheme = Request.Scheme,
-                Host = Request.Host.Value,
-                PathBase = Request.PathBase.Value,
-                Path = Request.Path.Value
+                //Headers = Request.Headers,
+                //Scheme = Request.Scheme,
+                //Host = Request.Host.Value,
+                //PathBase = Request.PathBase.Value,
+                //Path = Request.Path.Value
 
             };
 
@@ -49,7 +50,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:GET (One). Processing rsponse.");
 
-            return response.Handle(this);
+            return _responseOutputHandler.Handle(this, new Domain.Handling.Resource.ResourceResponse<object>());
         }
 
 
@@ -75,16 +76,16 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:GET (Many). Sending request.");
 
-            var request = new ResourceGetManyRequest()
+            var request = new ResourceStorageGetManyRequest()
             {
                 Namespace = @namespace.ToLower(),
-                Headers = Request.Headers,
                 OwnerId = _ownerId,
                 RequestId = _requestId,
-                Scheme = Request.Scheme,
-                Host = Request.Host.Value,
-                PathBase = Request.PathBase.Value,
-                Path = Request.Path.Value
+                //Headers = Request.Headers,
+                //Scheme = Request.Scheme,
+                //Host = Request.Host.Value,
+                //PathBase = Request.PathBase.Value,
+                //Path = Request.Path.Value
             };
 
             var response = await _mediator.Send(request);

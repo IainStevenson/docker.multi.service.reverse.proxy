@@ -1,9 +1,8 @@
-using Api.Domain.Handling;
-using Api.Domain.Handling.Post;
+using Api.Domain.Handling.Framework;
+using Api.Domain.Handling.Resource;
 using Api.Domain.Storage;
 using Api.Domain.Storage.Post;
 using AutoMapper;
-using Domain.Handling;
 using FluentValidation.AspNetCore;
 using Logging;
 using MediatR;
@@ -96,8 +95,8 @@ namespace Api
             services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
             services.AddSingleton(x => mapper);
             services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
-            services.AddSingleton<IResourceResponseOutputFactory, ResourceResponseOutputFactory>();
-            services.AddSingleton<IResponseOutputHandler, ResponseOutputHandler>();
+            services.AddSingleton<IResourceResponseFactory, ResourceResponseFactory>();
+            services.AddSingleton<IResourceResponseHandler, ResourceResponseHandler>();
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
@@ -116,7 +115,7 @@ namespace Api
 
             services.AddMediatR(new[] { 
                 typeof(ResourceStoragePostRequestHandler), 
-                typeof(ResourceOutputPostRequestHandler) } 
+                typeof(ResourceResponsePostRequestHandler) } 
             );
 
             services.AddAuthentication("Bearer")

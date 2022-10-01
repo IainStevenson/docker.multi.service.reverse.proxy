@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
-using Api.Domain.Handling;
-using Api.Domain.Handling.Post;
+using Api.Domain.Handling.Resource;
 using Api.Domain.Storage.Post;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -82,7 +81,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Processing response output..");
 
-            ResourceOutputPostRequest resourceOutputRequest = _resourceResponseOutputFactory.CreateResourceOutputPostRequest(            
+            ResourceResponsePostRequest resourceOutputRequest = _resourceResponseOutputFactory.CreateResourceOutputPostRequest(            
                 resourceResponse.Model,
                 (HttpStatusCode)resourceResponse.StatusCode,
                 Request.Scheme,
@@ -92,7 +91,7 @@ namespace Api.Controllers
                 keys
             );
 
-            ResourceOutputResponse<Data.Model.Response.Resource> resourceOutput = await _mediator.Send(resourceOutputRequest);
+            ResourceResponse<Data.Model.Response.Resource> resourceOutput = await _mediator.Send(resourceOutputRequest);
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. returning output.");
 

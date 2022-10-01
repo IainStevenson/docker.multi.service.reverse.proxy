@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Api.Domain.Handling;
-using Api.Domain.Handling.Delete;
+using Api.Domain.Handling.Resource;
 using Api.Domain.Storage.Delete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -44,11 +43,11 @@ namespace Api.Controllers
 
             var response = await _mediator.Send(request);
 
-            ResourceOutputDeleteRequest outputRequest = new ResourceOutputDeleteRequest() { 
+            ResourceResponseDeleteRequest outputRequest = new ResourceResponseDeleteRequest() { 
                 Headers = Request.Headers
             };
 
-            ResourceOutputResponse<Data.Model.Response.Resource> responseOutput = await _mediator.Send(outputRequest);
+            ResourceResponse<Data.Model.Response.Resource> responseOutput = await _mediator.Send(outputRequest);
 
 
             _logger.LogTrace($"{nameof(ResourcesController)}DELETE. Processing response.");

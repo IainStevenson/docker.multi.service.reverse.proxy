@@ -1,5 +1,6 @@
 ﻿using System;
-using Api.Domain.Handling;
+using Api.Domain.Handling.Framework;
+using Api.Domain.Handling.Resource;
 using Api.Domain.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -40,11 +41,11 @@ namespace Api.Controllers
         /// <summary>
         /// Factory for response output creation
         /// </summary>
-        private readonly IResourceResponseOutputFactory _resourceResponseOutputFactory;
+        private readonly IResourceResponseFactory _resourceResponseOutputFactory;
         /// <summary>
         /// performs final handling of the request/response process.
         /// </summary>
-        private readonly IResponseOutputHandler _responseOutputHandler;
+        private readonly IResourceResponseHandler _responseOutputHandler;
         /// <summary>
         /// Provides a service to process the incoming <see cref="HttpRequst.Headers"/>
         /// </summary>
@@ -64,8 +65,8 @@ namespace Api.Controllers
                 IResourceRequestFactory resourceRequestFactory, 
                 IRequestHeadersProvider requestHeadersProvider,
                 IResponseHeadersProvider responseHeadersProvider,
-                IResourceResponseOutputFactory resourceResponseOutputFactory,
-                IResponseOutputHandler responseOutputHandler
+                IResourceResponseFactory resourceResponseOutputFactory,
+                IResourceResponseHandler responseOutputHandler
             )
         {
             _logger = logger;
