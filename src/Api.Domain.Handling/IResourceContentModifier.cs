@@ -1,8 +1,6 @@
 ﻿using Data.Model;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Response.Formatting
+namespace Api.Domain.Handling
 {
     /// <summary>
     /// Handles property removal from <see cref="IResource"/> objects to reduce metadata transfers back to the client.

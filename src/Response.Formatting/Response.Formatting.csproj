@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
-    <ProjectReference Include="..\Resource.Handling\Resource.Handling.csproj" />
   </ItemGroup>
 
 </Project>

@@ -29,13 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Domain.Handling\Api.Domain.Handling.csproj" />
+    <ProjectReference Include="..\Api.Domain.Storage\Api.Domain.Storage.csproj" />
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
     <ProjectReference Include="..\Data.Model.Storage.MongoDB\Data.Model.Storage.MongoDB.csproj" />
     <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />
-    <ProjectReference Include="..\Handlers\Handlers.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
-    <ProjectReference Include="..\Resource.Handling\Resource.Handling.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 

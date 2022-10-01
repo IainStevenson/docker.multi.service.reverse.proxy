@@ -1,4 +1,9 @@
+using Api.Domain.Handling;
+using Api.Domain.Handling.Post;
+using Api.Domain.Storage;
+using Api.Domain.Storage.Post;
 using AutoMapper;
+using Domain.Handling;
 using FluentValidation.AspNetCore;
 using Logging;
 using MediatR;
@@ -16,8 +21,6 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Pluralizer;
-using Resource.Handling;
-using Response.Formatting;
 using Serilog;
 using Storage;
 using System;
@@ -93,6 +96,7 @@ namespace Api
             services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
             services.AddSingleton(x => mapper);
             services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
+            services.AddSingleton<IResourceResponseOutputFactory, ResourceResponseOutputFactory>();
             services.AddSingleton<IResponseOutputHandler, ResponseOutputHandler>();
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
@@ -106,11 +110,14 @@ namespace Api
                     {
                         
                         config.AutomaticValidationEnabled = true;
-                        config.RegisterValidatorsFromAssemblyContaining<Resource.Handling.PostResourceRequestValidator>();
-                        config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
+                        config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
+                        config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
                     });
 
-            services.AddMediatR(new[] { typeof(Handlers.Resource.ResourcePutHandler), typeof(Resource.Handling.PostResourceHandler), typeof(Response.Formatting.PostResourceOutputHandler) } );
+            services.AddMediatR(new[] { 
+                typeof(ResourceStoragePostRequestHandler), 
+                typeof(ResourceOutputPostRequestHandler) } 
+            );
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>

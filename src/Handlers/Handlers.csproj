@@ -14,6 +14,22 @@
     <Compile Remove="RequestActions.cs" />
     <Compile Remove="RequestHandler.cs" />
     <Compile Remove="RequestMessage.cs" />
+    <Compile Remove="Resource\ResourceDeleteHandler.cs" />
+    <Compile Remove="Resource\ResourceDeleteRequest.cs" />
+    <Compile Remove="Resource\ResourceDeleteResponse.cs" />
+    <Compile Remove="Resource\ResourceGetManyHandler.cs" />
+    <Compile Remove="Resource\ResourceGetManyRequest.cs" />
+    <Compile Remove="Resource\ResourceGetManyResponse.cs" />
+    <Compile Remove="Resource\ResourceGetOneHandler.cs" />
+    <Compile Remove="Resource\ResourceGetOneRequest.cs" />
+    <Compile Remove="Resource\ResourceGetOneResponse.cs" />
+    <Compile Remove="Resource\ResourcePostHandler.cs" />
+    <Compile Remove="Resource\ResourcePostRequest.cs" />
+    <Compile Remove="Resource\ResourcePostResponse.cs" />
+    <Compile Remove="Resource\ResourcePostValidator.cs" />
+    <Compile Remove="Resource\ResourcePutHandler.cs" />
+    <Compile Remove="Resource\ResourcePutRequest.cs" />
+    <Compile Remove="Resource\ResourcePutResponse.cs" />
     <Compile Remove="ResponseHander.cs" />
     <Compile Remove="ResponseMessage.cs" />
     <Compile Remove="ServicesSetupException.cs" />
@@ -34,8 +50,11 @@
     <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
-    <ProjectReference Include="..\Response.Formatting\Response.Formatting.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resource\" />
   </ItemGroup>
 
 </Project>

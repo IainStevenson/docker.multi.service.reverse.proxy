@@ -1,6 +1,5 @@
 ﻿using CSharpVitamins;
 using System;
-using System.Collections.Generic;
 
 namespace Data.Model.Response
 {
@@ -27,8 +26,8 @@ namespace Data.Model.Response
         /// The HATEOS link information for this resource
         /// </summary>
         /// 
-        [Obsolete]
-        public IEnumerable<IApiLink> Links { get; set; }
+        //[Obsolete]
+        //public IEnumerable<IApiLink> Links { get; set; }
         /// <summary>
         /// The client provided content for this resource. On GET the whole Content is returnd as stored. On (POST|PUT), if property names are provided as keys, then the content contains only those keys from the stored content, otherwise the whole content is provided.
         /// </summary>

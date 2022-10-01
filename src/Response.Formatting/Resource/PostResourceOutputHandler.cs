@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Response.Formatting;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;

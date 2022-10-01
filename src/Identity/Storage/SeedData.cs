@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using IdentityModel;
 using IdentityServer4;
 using System;
-using MongoDB.Bson;
 
 namespace Identity.Storage
 {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Handlers.Resource;
+using Api.Domain.Handling;
+using Api.Domain.Handling.Delete;
+using Api.Domain.Storage.Delete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -26,21 +28,32 @@ namespace Api.Controllers
             [FromRoute] string @namespace,
             [FromRoute] Guid id)
         {
-            _logger.LogTrace($"{nameof(ResourcesController)}:DELETE. Sending request.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Sending request.");
 
-            var request = new ResourceDeleteRequest() {
+            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(Request.Headers) ?? DateTimeOffset.MaxValue; // if none make unmodifiedever as default
+            var etags = await _requestHeadersProvider.IfMatch(Request.Headers);
+
+            var request = new ResourceStorageDeleteRequest() {
                 Namespace = @namespace.ToLower(),
                 Id = id,
                 OwnerId = _ownerId,
-                RequestId = _requestId,
-                Headers = Request.Headers               
+                RequestId = _requestId,        
+                UnmodifiedSince = unmodifiedSince,
+                Etags = etags
             };
 
             var response = await _mediator.Send(request);
 
+            ResourceOutputDeleteRequest outputRequest = new ResourceOutputDeleteRequest() { 
+                Headers = Request.Headers
+            };
+
+            ResourceOutputResponse<Data.Model.Response.Resource> responseOutput = await _mediator.Send(outputRequest);
+
+
             _logger.LogTrace($"{nameof(ResourcesController)}DELETE. Processing response.");
 
-            return response.Handle(this);            
+            return _responseOutputHandler.Handle(this, responseOutput);            
         }
     }
 }

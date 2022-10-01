@@ -1,12 +1,12 @@
-﻿using MediatR;
+﻿using Api.Domain.Storage.Post;
 
-namespace Resource.Handling
+namespace Api.Domain.Storage
 {
     public class ResourceRequestFactory : IResourceRequestFactory
     {
-        public PostResourceRequest CreatePostResourceRequest(string @namespace, dynamic content, string keys, Guid _ownerId, Guid _requestId) 
+        public ResourceStoragePostRequest CreateResourceStoragePostRequest(string @namespace, dynamic content, string keys, Guid _ownerId, Guid _requestId)
         {
-            return new PostResourceRequest()
+            return new ResourceStoragePostRequest()
             {
                 Namespace = @namespace.ToLower(),
                 Content = content,

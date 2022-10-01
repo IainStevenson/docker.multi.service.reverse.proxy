@@ -15,7 +15,6 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization.Conventions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using IdentityServer4;
 

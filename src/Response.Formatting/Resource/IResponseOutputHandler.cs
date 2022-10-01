@@ -1,6 +1,5 @@
 ﻿using Data.Model;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Response.Formatting
 {

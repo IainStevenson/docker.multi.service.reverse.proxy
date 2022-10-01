@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 

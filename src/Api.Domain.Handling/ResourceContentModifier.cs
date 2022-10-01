@@ -1,10 +1,7 @@
 ﻿using Data.Model;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Response.Formatting
+namespace Api.Domain.Handling
 {
     public class ResourceContentModifier<T> : IResourceContentModifier<T> where T : IResource
     {

@@ -3,7 +3,8 @@
 		"_postman_id": "f7308fe5-ee6b-4ea4-b05e-4ab7a1087193",
 		"name": "local.myinfo.world",
 		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1467123"
 	},
 	"item": [
 		{
@@ -342,6 +343,17 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var value = pm.environment.get(\"dataIdentifier\");\r",
+									"\r",
+									"pm.environment.set(\"dataIdentifier\", value+1);"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"protocolProfileBehavior": {
@@ -375,17 +387,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
+							"raw": "{\r\n    \"id\": {{dataIdentifier}}, \r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
 						},
 						"url": {
-							"raw": "{{baseUri}}/api/resources/WeatherForecast",
+							"raw": "{{baseUri}}/api/resources/WeatherForecast&keys=id",
 							"host": [
 								"{{baseUri}}"
 							],
 							"path": [
 								"api",
 								"resources",
-								"WeatherForecast"
+								"WeatherForecast&keys=id"
 							]
 						}
 					},
@@ -624,7 +636,7 @@
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
 					"    mode: 'application/json',",
-					"    raw: 'grant_type=client_credentials&scope=myInfo.Api&client_id=Command&client_secret=secret'",
+					"    raw: 'grant_type=client_credentials&scope=myApi&client_id=Command&client_secret=secret'",
 					"  }",
 					"};",
 					"",
@@ -641,9 +653,10 @@
 					"getToken = true;",
 					"",
 					"if (getToken === true) {",
+					"    console.log('Requesting token...');",
 					"    pm.sendRequest(echoPostRequest, function (err, res) {",
 					"        if (err === null) {",
-					"            console.log('Saving the token and expiry date')",
+					"            console.log('Token recieved, saving the token and expiry date')",
 					"            var responseJson = res.json();",
 					"            pm.environment.set('currentAccessToken', responseJson.access_token)",
 					"    ",
@@ -671,19 +684,21 @@
 	],
 	"variable": [
 		{
-			"id": "aa35d3ac-73ba-498d-a8c0-8f48e5cae513",
 			"key": "baseUri",
 			"value": "https://local.myinfo.world"
 		},
 		{
-			"id": "bca817e6-877b-4764-947d-65ce0c22ccce",
 			"key": "currentAccessToken",
 			"value": ""
 		},
 		{
-			"id": "a5d7629a-6ae7-4314-8ecf-3d73bc6f51c3",
 			"key": "crudId",
 			"value": "asdasd"
+		},
+		{
+			"key": "dataIdentifier",
+			"value": "0",
+			"type": "string"
 		}
 	]
 }
