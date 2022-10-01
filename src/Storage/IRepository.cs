@@ -11,7 +11,7 @@ namespace Storage
     public interface IRepository<T> where T : IStorageItem
     {
         /// <summary>
-        ///     Retrieve a queryasble collection of <see cref="Resource" /> items using teh specified expression
+        ///     Retrieve a queryasble collection of <see cref="Resource" /> items using the specified expression
         /// </summary>
         /// <param name="query">The retireval expression</param>
         /// <param name="orderBy">An optional filtering order by</param>

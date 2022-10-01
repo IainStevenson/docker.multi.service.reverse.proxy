@@ -47,7 +47,7 @@ namespace Api.Domain.Storage.Get
             //var responseModel = _mapper.Map<Data.Model.Response.Resource>(resource);
 
             //var ifNoneMatch = await _requestHeadersProvider.IfNoneMatch(request.Headers);
-            if (request.IfNoneMatch.Any() && request.IfNoneMatch.Contains(resource.Etag))
+            if (request.ETags.Any() && request.ETags.Contains(resource.Etag))
             {
                 //response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
                 response.StatusCode = 304; //System.Net.HttpStatusCode.NotModified;

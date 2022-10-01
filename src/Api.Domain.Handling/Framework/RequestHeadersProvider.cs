@@ -1,53 +1,54 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-
 namespace Api.Domain.Handling.Framework
 {
     public class RequestHeadersProvider : IRequestHeadersProvider
     {
-
-
-        public Task<List<string>> IfMatch(IHeaderDictionary headers)
+        /// <inheritdoc/>
+        public List<string> IfHasEtagMatching(IHeaderDictionary headers)
         {
             var result = new List<string>();
-
             if (headers.ContainsKey(HeaderKeys.IfMatch))
             {
                 result.AddRange($"{headers[HeaderKeys.IfMatch]}".Split(',', StringSplitOptions.RemoveEmptyEntries));
             }
-            return Task.FromResult(result);
+            return result;
         }
 
-        public Task<List<string>> IfNoneMatch(IHeaderDictionary headers)
+        /// <inheritdoc/>
+        public List<string> IfDoesNotHaveEtagMatching(IHeaderDictionary headers)
         {
             var result = new List<string>();
             if (headers.ContainsKey(HeaderKeys.IfNoneMatch))
             {
-                result.AddRange($"{headers[HeaderKeys.IfNoneMatch]}".Split(',', StringSplitOptions.RemoveEmptyEntries));
+                result.AddRange($"{headers[HeaderKeys.IfNoneMatch]}".Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
             }
             result.Remove("*"); // illogical to exclude all, why bother calling!, Also POST via PUT NOT supported in this API
-            return Task.FromResult(result);
+            return result;
         }
 
-        public Task<DateTimeOffset?> IfModifiedSince(IHeaderDictionary headers)
+        /// <inheritdoc/>
+        public DateTimeOffset IfHasChangedSince(IHeaderDictionary headers, DateTimeOffset defaultValue)
         {
-            DateTimeOffset? result = null;
+            DateTimeOffset result = defaultValue;
             if (headers.ContainsKey(HeaderKeys.IfModifiedSince))
             {
-                result = DateTimeOffset.Parse($"{headers[HeaderKeys.IfModifiedSince]}");
+                var isValid = DateTimeOffset.TryParse(headers[HeaderKeys.IfModifiedSince].ToString(), out DateTimeOffset headerDate);
+                if (isValid) result = headerDate;
             }
-            return Task.FromResult(result);
+            return result;
         }
 
-
-        public Task<DateTimeOffset?> IfUnmodifiedSince(IHeaderDictionary headers)
+        /// <inheritdoc/>
+        public DateTimeOffset IfIsUnchangedSince(IHeaderDictionary headers, DateTimeOffset defaultValue)
         {
-            DateTimeOffset? result = null;
+            DateTimeOffset result = defaultValue;
             if (headers.ContainsKey(HeaderKeys.IfUnmodifiedSince))
             {
-                result = DateTimeOffset.Parse($"{headers[HeaderKeys.IfUnmodifiedSince]}");
+                var isValid = DateTimeOffset.TryParse(headers[HeaderKeys.IfUnmodifiedSince].ToString(), out DateTimeOffset headerDate);
+                if (isValid) result = headerDate;
             }
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

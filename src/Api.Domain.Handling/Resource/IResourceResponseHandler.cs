@@ -9,7 +9,8 @@ namespace Api.Domain.Handling.Resource
     public interface IResourceResponseHandler
     {
 
-        IActionResult Handle<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEntity;
-        IActionResult Handle<T>(ControllerBase controller, ResourceResponse resourceOutput) where T : IEntity;
+        IActionResult HandleMany<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>;
+        IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEntity;
+        IActionResult HandleNone(ControllerBase controller, ResourceResponse resourceOutput);
     }
 }

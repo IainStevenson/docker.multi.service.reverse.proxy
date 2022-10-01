@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Api.Domain.Handling.Resource;
+using Api.Domain.Handling.Resource.Delete;
 using Api.Domain.Storage.Delete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,15 +30,15 @@ namespace Api.Controllers
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Sending request.");
 
-            var unmodifiedSince = await _requestHeadersProvider.IfUnmodifiedSince(Request.Headers) ?? DateTimeOffset.MaxValue; // if none make unmodifiedever as default
-            var etags = await _requestHeadersProvider.IfMatch(Request.Headers);
+            var isUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MinValue); 
+            var etags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
             var request = new ResourceStorageDeleteRequest() {
                 Namespace = @namespace.ToLower(),
                 Id = id,
                 OwnerId = _ownerId,
                 RequestId = _requestId,        
-                UnmodifiedSince = unmodifiedSince,
+                IsUnchangedSince = isUnchangedSince,
                 Etags = etags
             };
 
@@ -52,7 +53,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}DELETE. Processing response.");
 
-            return _resourceResponseHandler.Handle(this, responseOutput);            
+            return _resourceResponseHandler.HandleNone(this, responseOutput);            
         }
     }
 }

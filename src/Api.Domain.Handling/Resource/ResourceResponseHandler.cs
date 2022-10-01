@@ -20,7 +20,7 @@ namespace Api.Domain.Handling.Resource
         /// <param name="resourceOutput">The output instance.</param>
         /// <returns>An <see cref="IActionResult"/> delegate.</returns>
         /// <exception cref="ArgumentOutOfRangeException"> Occurs when upstream processing presents Status codes not handled here.</exception>
-        public IActionResult Handle<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEntity
+        public IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEntity
         {
 
             _responseHeadersProvider.RemoveUnwantedHeaders(controller.HttpContext.Response.Headers);

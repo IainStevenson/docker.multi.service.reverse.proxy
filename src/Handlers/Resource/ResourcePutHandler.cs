@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Data.Model.Storage;
+﻿using Data.Model.Storage;
 using MediatR;
-using Response.Formatting;
 using Storage;
 using System;
 using System.Collections.Generic;

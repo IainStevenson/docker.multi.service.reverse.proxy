@@ -16,11 +16,11 @@ namespace Api.Domain.Storage.Delete
 
             var response = new ResourceStorageDeleteResponse() { };
 
-            Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r =>
-                               r.Id == request.Id
-                               && r.OwnerId == request.OwnerId
-                               && r.Namespace == request.Namespace
-                               )).FirstOrDefault();
+            Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
+                                                                                   && r.OwnerId == request.OwnerId
+                                                                                   && r.Namespace == request.Namespace
+                                                                                   && (r.Modified?? DateTimeOffset.MaxValue) > request.IsUnchangedSince
+                                                                                   )).FirstOrDefault();
 
 
             if (resource == null)
@@ -32,7 +32,7 @@ namespace Api.Domain.Storage.Delete
 
             // only proceed if resource is unmodified since or is one of the etags
             if (
-                    (resource.Modified.HasValue ? resource.Modified.Value <= request.UnmodifiedSince : resource.Created <= request.UnmodifiedSince) ||
+                    (resource.Modified.HasValue ? resource.Modified.Value <= request.IsUnchangedSince : resource.Created <= request.IsUnchangedSince) ||
                     request.Etags.Contains(resource.Etag)
                     )
             {
@@ -55,9 +55,9 @@ namespace Api.Domain.Storage.Delete
                 {
                     response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.Etags)}/r/n");
                 }
-                if (request.UnmodifiedSince != DateTimeOffset.MinValue)
+                if (request.IsUnchangedSince != DateTimeOffset.MinValue)
                 {
-                    response.RequestValidationErrors.Add($"The resource has been modified since {request.UnmodifiedSince}");
+                    response.RequestValidationErrors.Add($"The resource has been modified since {request.IsUnchangedSince}");
                 }
                 response.StatusCode = 412; //HttpStatusCode.PreconditionFailed;
                 return response;
