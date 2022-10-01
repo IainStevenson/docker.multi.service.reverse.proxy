@@ -52,7 +52,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}DELETE. Processing response.");
 
-            return _responseOutputHandler.Handle(this, responseOutput);            
+            return _resourceResponseHandler.Handle(this, responseOutput);            
         }
     }
 }

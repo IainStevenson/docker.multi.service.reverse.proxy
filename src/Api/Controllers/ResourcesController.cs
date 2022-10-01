@@ -41,11 +41,11 @@ namespace Api.Controllers
         /// <summary>
         /// Factory for response output creation
         /// </summary>
-        private readonly IResourceResponseFactory _resourceResponseOutputFactory;
+        private readonly IResourceResponseFactory _resourceResponseFactory;
         /// <summary>
         /// performs final handling of the request/response process.
         /// </summary>
-        private readonly IResourceResponseHandler _responseOutputHandler;
+        private readonly IResourceResponseHandler _resourceResponseHandler;
         /// <summary>
         /// Provides a service to process the incoming <see cref="HttpRequst.Headers"/>
         /// </summary>
@@ -65,8 +65,8 @@ namespace Api.Controllers
                 IResourceRequestFactory resourceRequestFactory, 
                 IRequestHeadersProvider requestHeadersProvider,
                 IResponseHeadersProvider responseHeadersProvider,
-                IResourceResponseFactory resourceResponseOutputFactory,
-                IResourceResponseHandler responseOutputHandler
+                IResourceResponseFactory resourceResponseFactory,
+                IResourceResponseHandler responseResponseHandler
             )
         {
             _logger = logger;
@@ -74,8 +74,8 @@ namespace Api.Controllers
             _resourceRequestFactory = resourceRequestFactory;
             _requestHeadersProvider= requestHeadersProvider;
             _responseHeadersProvider= responseHeadersProvider;
-            _resourceResponseOutputFactory = resourceResponseOutputFactory;
-            _responseOutputHandler = responseOutputHandler;
+            _resourceResponseFactory = resourceResponseFactory;
+            _resourceResponseHandler = responseResponseHandler;
         }
     }
 };

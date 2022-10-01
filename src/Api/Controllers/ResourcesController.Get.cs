@@ -50,7 +50,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:GET (One). Processing rsponse.");
 
-            return _responseOutputHandler.Handle(this, new Domain.Handling.Resource.ResourceResponse<object>());
+            return _resourceResponseHandler.Handle(this, new Domain.Handling.Resource.ResourceResponse<object>());
         }
 
 

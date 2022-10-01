@@ -81,7 +81,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Processing response output..");
 
-            ResourceResponsePostRequest resourceOutputRequest = _resourceResponseOutputFactory.CreateResourceOutputPostRequest(            
+            ResourceResponsePostRequest resourceOutputRequest = _resourceResponseFactory.CreateResourceOutputPostRequest(            
                 resourceResponse.Model,
                 (HttpStatusCode)resourceResponse.StatusCode,
                 Request.Scheme,
@@ -95,7 +95,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. returning output.");
 
-            return  _responseOutputHandler.Handle(this, resourceOutput);
+            return  _resourceResponseHandler.Handle(this, resourceOutput);
         }
     }
 }
