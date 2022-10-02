@@ -6,16 +6,6 @@ namespace Api.Domain.Storage.Delete
     {
 
         /// <summary>
-        /// Include the resource if its current ETag is within this collection.
-        /// </summary>
-        public List<string> Etags { get; set; } = new List<string>();
-
-        /// <summary>
-        /// Include the resource if it remains unchanged since the specified time.
-        /// </summary>
-        public DateTimeOffset IsUnchangedSince { get; set; } 
-
-        /// <summary>
         ///  Include teh resource if it has this identifier
         /// </summary>
         public Guid Id { get; set; } = Guid.Empty;
@@ -31,7 +21,15 @@ namespace Api.Domain.Storage.Delete
         /// Include the resource if it has this namespace.
         /// </summary>
         public string Namespace { get; set; } = "my";
+        /// <summary>
+        /// Include the resource if its current ETag is within this collection.
+        /// </summary>
+        public List<string> ETags { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Include the resource if it remains unchanged since the specified time.
+        /// </summary>
+        public DateTimeOffset IsUnchangedSince { get; set; } 
 
     }
-
 }

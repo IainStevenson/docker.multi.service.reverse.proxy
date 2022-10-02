@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Api.Domain.Handling.Resource;
 using Api.Domain.Handling.Resource.Delete;
@@ -28,30 +29,31 @@ namespace Api.Controllers
             [FromRoute] string @namespace,
             [FromRoute] Guid id)
         {
-            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Sending request.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Procesing delete request.");
 
             var isUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue); 
             var etags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
-            var request = new ResourceStorageDeleteRequest() {
-                Namespace = @namespace.ToLower(),
-                Id = id,
-                OwnerId = _ownerId,
-                RequestId = _requestId,        
-                IsUnchangedSince = isUnchangedSince,
-                Etags = etags
-            };
+            var resourceStorageDeleteRequest = _resourceRequestFactory.CreateResourceStorageDeleteRequest(@namespace,
+                                                                                                            id,
+                                                                                                            _ownerId,
+                                                                                                            _requestId,
+                                                                                                            isUnchangedSince,
+                                                                                                            etags);
 
-            var response = await _mediator.Send(request);
+            var resourceStorageDeleteResponse = await _mediator.Send(resourceStorageDeleteRequest);
 
-            ResourceResponseDeleteRequest outputRequest = new ResourceResponseDeleteRequest() { 
-                Headers = Request.Headers
-            };
+            _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing storage response.");
+            ResourceResponseDeleteRequest outputRequest = _resourceResponseFactory.CreateResourceResponseDeleteRequest(
+                                                                                        (HttpStatusCode)resourceStorageDeleteResponse.StatusCode,
+                                                                                        resourceStorageDeleteResponse.RequestValidationErrors
+                    
+                                                                                    );
 
-            ResourceResponse<Data.Model.Response.Resource> responseOutput = await _mediator.Send(outputRequest);
+            ResourceResponse responseOutput = await _mediator.Send(outputRequest);
 
 
-            _logger.LogTrace($"{nameof(ResourcesController)}DELETE. Processing response.");
+            _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Handling response.");
 
             return _resourceResponseHandler.HandleNone(this, responseOutput);            
         }

@@ -1,11 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace Api.Domain.Handling.Resource.Delete
 {
-    public class ResourceResponseDeleteRequest : IRequest<ResourceResponse<Data.Model.Response.Resource>>
+    public class ResourceResponseDeleteRequest : IRequest<ResourceResponse>
     {
-        public IHeaderDictionary? Headers { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public List<string> RequestValidationErrors { get; set; }
     }
 
 

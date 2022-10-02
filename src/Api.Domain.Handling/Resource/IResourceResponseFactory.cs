@@ -1,4 +1,5 @@
-﻿using Api.Domain.Handling.Resource.Get;
+﻿using Api.Domain.Handling.Resource.Delete;
+using Api.Domain.Handling.Resource.Get;
 using Api.Domain.Handling.Resource.Post;
 using Api.Domain.Handling.Resource.Put;
 using System.Net;
@@ -7,6 +8,8 @@ namespace Api.Domain.Handling.Resource
 {
     public interface IResourceResponseFactory
     {
+        ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(HttpStatusCode statusCode, List<string> requestValidationErrors);
+
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponseGetManyRequest"/> from the provided variables.
         /// </summary>

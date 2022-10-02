@@ -109,7 +109,7 @@ namespace Api.Controllers
 
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponseRequest);
 
-            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Processing response.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Handling response.");
 
             return  _resourceResponseHandler.HandleOne(this, resourceResponse);
         }

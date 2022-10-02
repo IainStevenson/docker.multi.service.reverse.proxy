@@ -19,7 +19,7 @@ namespace Api.Domain.Storage.Delete
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                    && r.OwnerId == request.OwnerId
                                                                                    && r.Namespace == request.Namespace
-                                                                                   && (r.Modified?? DateTimeOffset.MaxValue) > request.IsUnchangedSince
+                                                                                  // && (r.Modified?? DateTimeOffset.MaxValue.AddTicks(-20)) < request.IsUnchangedSince
                                                                                    )).FirstOrDefault();
 
 
@@ -33,7 +33,7 @@ namespace Api.Domain.Storage.Delete
             // only proceed if resource is unmodified since or is one of the etags
             if (
                     (resource.Modified.HasValue ? resource.Modified.Value <= request.IsUnchangedSince : resource.Created <= request.IsUnchangedSince) ||
-                    request.Etags.Contains(resource.Etag)
+                    request.ETags.Contains(resource.Etag)
                     )
             {
 
@@ -45,15 +45,15 @@ namespace Api.Domain.Storage.Delete
                 }
                 response.RequestValidationErrors.Add($"The resource deletion was attempted but did not happen. This indicates that it has gone already.");
 
-                response.StatusCode = 401; //HttpStatusCode.Gone;
+                response.StatusCode = 410; //HttpStatusCode.Gone;
                 return response;
             }
             else
             {
 
-                if (request.Etags.Any())
+                if (request.ETags.Any())
                 {
-                    response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.Etags)}/r/n");
+                    response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.ETags)}/r/n");
                 }
                 if (request.IsUnchangedSince != DateTimeOffset.MinValue)
                 {

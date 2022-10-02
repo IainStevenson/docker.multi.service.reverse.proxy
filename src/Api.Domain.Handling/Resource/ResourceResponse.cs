@@ -1,4 +1,5 @@
 ﻿using Data.Model.Response;
+using Microsoft.Extensions.Primitives;
 using System.Net;
 
 namespace Api.Domain.Handling.Resource
@@ -18,6 +19,8 @@ namespace Api.Domain.Handling.Resource
         /// </summary>        
         public IEnumerable<IApiLink>? Links { get; set; }
 
+        public IDictionary<string, StringValues>? Headers { get; set; }
         public string Etag { get; set; }
+        public List<string> RequestValidationErrors { get; set; }
     }
 }

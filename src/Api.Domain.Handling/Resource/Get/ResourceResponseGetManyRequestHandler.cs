@@ -22,6 +22,7 @@ namespace Api.Domain.Handling.Resource.Get
         public async Task<ResourceResponse<IEnumerable<Data.Model.Response.Resource>>> Handle(ResourceResponseGetManyRequest request, CancellationToken cancellationToken)
         {
             var response = new ResourceResponse<IEnumerable<Data.Model.Response.Resource>>();
+            response.StatusCode = request.StatusCode;
 
             IEnumerable<Data.Model.Storage.Resource> resources = new List<Data.Model.Storage.Resource>();
 
@@ -31,17 +32,15 @@ namespace Api.Domain.Handling.Resource.Get
                 response.Model = _mapper.Map<IEnumerable<Data.Model.Response.Resource>>(request.Model);
 
 
-                foreach (var item in response.Model)
-                {
-                    var systemKeys = new Dictionary<string, string>() { { "{id}", $"{item.Id}" } };
-                    response.Links = await _responseLinksProvider.BuildLinks(
-                                                                    request.Scheme,
-                                                                    request.Host,
-                                                                    request.PathBase.TrimEnd('/'),
-                                                                    request.Path.TrimEnd('/'),
-                                                                    systemKeys,
-                                                                    EmptyEntityList);
-                }
+
+                var systemKeys = new Dictionary<string, string>() { { "{id}", "{id}" } };
+                response.Links = await _responseLinksProvider.BuildLinks(
+                                                                request.Scheme,
+                                                                request.Host,
+                                                                request.PathBase.TrimEnd('/'),
+                                                                request.Path.TrimEnd('/'),
+                                                                systemKeys,
+                                                                EmptyEntityList);
             }
 
             return response;

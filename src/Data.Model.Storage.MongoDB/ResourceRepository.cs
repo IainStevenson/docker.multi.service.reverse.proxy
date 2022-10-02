@@ -152,7 +152,6 @@ namespace Data.Model.Storage.MongoDB
         {
             item.Modified = DateTimeOffset.UtcNow;
             item.Etag = $"{(ShortGuid)Guid.NewGuid()}";
-            item.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.Updated, item.Modified.Value ));
             return Task.FromResult(item);
 
         }

@@ -27,37 +27,30 @@ namespace Api.Domain.Handling.Resource.Post
         public async Task<ResourceResponse<Data.Model.Response.Resource>> Handle(ResourceResponsePostRequest request, CancellationToken cancellationToken)
         {
             var response = new ResourceResponse<Data.Model.Response.Resource>();
+            response.StatusCode = request.StatusCode;
 
-            var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" } };
 
-            var relatedEntities = EmptyEntityList;
-
-            Data.Model.Response.Resource responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
-
-            response.Links = await _responseLinksProvider.BuildLinks(
-                                                            request.Scheme,
-                                                            request.Host,
-                                                            request.PathBase.TrimEnd('/'),
-                                                            request.Path.TrimEnd('/'),
-                                                            systemKeys,
-                                                            relatedEntities);
-
-            if (!string.IsNullOrWhiteSpace(request.Keys))
+            if (request.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                responseModel = await _resourceModifier.CollapseContent(responseModel, 
-                        request.Keys.Split(',',StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+                Data.Model.Response.Resource responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
+                if (!string.IsNullOrWhiteSpace(request.Keys))
+                {
+                    responseModel = await _resourceModifier.CollapseContent(responseModel,
+                            request.Keys.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+                }
+                response.Model = responseModel;
+                response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
+                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" } };
+                response.Links = await _responseLinksProvider.BuildLinks(
+                                                                request.Scheme,
+                                                                request.Host,
+                                                                request.PathBase.TrimEnd('/'),
+                                                                request.Path.TrimEnd('/'),
+                                                                systemKeys,
+                                                                EmptyEntityList);
+
             }
 
-            response.Model = responseModel;
-            
-            response.StatusCode = request.StatusCode;
-            
-            response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
-            
-            var links = await _responseLinksProvider.BuildLinks(request.Scheme, request.Host, request.PathBase, request.Path, systemKeys, relatedEntities);
-            
-            response.Links = links.AsEnumerable();
-            
             return response;
         }
     }

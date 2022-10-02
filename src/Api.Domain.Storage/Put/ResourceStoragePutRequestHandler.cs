@@ -1,13 +1,12 @@
 ﻿using Data.Model.Storage;
 using MediatR;
 using Storage;
-using System.Net;
 
 namespace Api.Domain.Storage.Put
 {
     public class ResourceStoragePutRequestHandler : IRequestHandler<ResourceStoragePutRequest, ResourceStoragePutResponse>
     {
-        private readonly IRepository<Data.Model.Storage.Resource> _storage;
+        private readonly IRepository<Resource> _storage;
 
         public ResourceStoragePutRequestHandler(IRepository<Resource> storage)
         {
@@ -18,7 +17,7 @@ namespace Api.Domain.Storage.Put
         {
             var response = new ResourceStoragePutResponse() { };
 
-            Data.Model.Storage.Resource? existingResource = (await _storage.GetAsync(r => r.Id == request.Id
+            Resource? existingResource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                 && r.OwnerId == request.OwnerId
                                                                                 && r.Namespace == request.Namespace
                                                                                 )).FirstOrDefault();
@@ -39,13 +38,13 @@ namespace Api.Domain.Storage.Put
 
                 existingResource.Content = request.Content;
                 existingResource.Modified = DateTimeOffset.UtcNow;
-                existingResource.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.ChangeRequestIdentifier, request.RequestId));
-                existingResource.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.Updated, existingResource.Modified));
+                existingResource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.ChangeRequestIdentifier, Value = request.RequestId });
+                existingResource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.Updated, Value = existingResource.Modified });
 
                 if (!string.IsNullOrWhiteSpace(request.MoveTo))
                 {
                     existingResource.Namespace = request.MoveTo;
-                    existingResource.Metadata.Tags.Add(new Tuple<MetadataPropertyNames, object>(MetadataPropertyNames.NamespaceRename, existingResource.Namespace));
+                    existingResource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.NamespaceRename, Value = existingResource.Namespace });
                 }
 
                 existingResource = await _storage.UpdateAsync(existingResource);

@@ -12,9 +12,16 @@ namespace Data.Model.Storage
         {   
         }
         
-        [BsonRepresentation(BsonType.String)] public Guid RequestId { get; set; }      
-        public List< Tuple<MetadataPropertyNames, object>> Tags { get; set; } = new List<Tuple<MetadataPropertyNames, object>>();
+        [BsonRepresentation(BsonType.String)] 
+        public Guid RequestId { get; set; }      
+        public List< Tag> Tags { get; set; } = new List<Tag>();
         public long Index { get; set; }
+    }
+
+    public class Tag
+    {
+        public MetadataPropertyNames Name { get; set; }
+        public object Value { get; set; }
     }
 
     public enum MetadataPropertyNames
@@ -24,6 +31,7 @@ namespace Data.Model.Storage
         SortValue,
         ChangeRequestIdentifier,
         Updated,
-        NamespaceRename
+        NamespaceRename,
+        ChangeIdentifier
     }
 }

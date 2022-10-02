@@ -102,9 +102,9 @@ namespace Api
                     .AddNewtonsoftJson(options =>
                     {
                         // Use the default property (Pascal) casing
-                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                        options.SerializerSettings.Formatting = Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                        options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     })
                     .AddFluentValidation(config =>
                     {

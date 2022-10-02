@@ -8,7 +8,7 @@ namespace Data.Model.Storage
         /// <summary>
         ///     Provides flexible tag options for each derived type
         /// </summary>
-        List<Tuple<MetadataPropertyNames, object>> Tags { get; set; }
+        List<Tag> Tags { get; set; }
         long Index { get; set; }
     }
 }

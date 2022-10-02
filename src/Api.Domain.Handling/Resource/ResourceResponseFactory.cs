@@ -1,4 +1,5 @@
-﻿using Api.Domain.Handling.Resource.Get;
+﻿using Api.Domain.Handling.Resource.Delete;
+using Api.Domain.Handling.Resource.Get;
 using Api.Domain.Handling.Resource.Post;
 using Api.Domain.Handling.Resource.Put;
 using System.Net;
@@ -19,6 +20,15 @@ namespace Api.Domain.Handling.Resource
                 PathBase = pathBase,
                 Path = path,
                 Keys = keys
+            };
+        }
+
+        public ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(HttpStatusCode statusCode, List<string> requestValidationErrors)
+        {
+            return new ResourceResponseDeleteRequest()
+            {
+                StatusCode = statusCode,
+                RequestValidationErrors = requestValidationErrors
             };
         }
 

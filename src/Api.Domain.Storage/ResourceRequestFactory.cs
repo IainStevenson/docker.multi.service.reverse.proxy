@@ -1,4 +1,5 @@
-﻿using Api.Domain.Storage.Get;
+﻿using Api.Domain.Storage.Delete;
+using Api.Domain.Storage.Get;
 using Api.Domain.Storage.Post;
 using Api.Domain.Storage.Put;
 
@@ -15,6 +16,19 @@ namespace Api.Domain.Storage
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IfModifiedSince = ifModifiedSince, 
+                ETags = etags
+            };
+        }
+
+        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(string @namespace, Guid id, Guid ownerId, Guid requestId, DateTimeOffset isUnchangedSince, List<string> etags)
+        {
+            return new ResourceStorageDeleteRequest()
+            {
+                Id = id,
+                Namespace = @namespace.ToLower(),
+                OwnerId = ownerId,
+                RequestId = requestId,
+                IsUnchangedSince = isUnchangedSince,
                 ETags = etags
             };
         }

@@ -109,9 +109,9 @@ namespace Identity
                     .AddNewtonsoftJson(options =>
                     {
                         // Use the default property (Pascal) casing
-                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
-                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                        options.SerializerSettings.Formatting = Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+                        options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     })
                     ;
         }

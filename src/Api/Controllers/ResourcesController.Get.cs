@@ -100,6 +100,7 @@ namespace Api.Controllers
 
             ResourceStorageGetManyResponse resourceStorageGetManyResponse = await _mediator.Send(resourceStorageGetManyRequest);
 
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing storage response.");
             ResourceResponseGetManyRequest resourceResponseGetManyRequest = _resourceResponseFactory.CreateResourceResponseGetManyRequest(
                                                                                                           resourceStorageGetManyResponse.Model,
                                                                                                          (HttpStatusCode)resourceStorageGetManyResponse.StatusCode,
@@ -111,7 +112,7 @@ namespace Api.Controllers
 
             ResourceResponse<IEnumerable<Data.Model.Response.Resource>> resourceResponse = await _mediator.Send(resourceResponseGetManyRequest);
 
-            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing response.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Handling response.");
 
             return _resourceResponseHandler.HandleMany(this, resourceResponse);
 
