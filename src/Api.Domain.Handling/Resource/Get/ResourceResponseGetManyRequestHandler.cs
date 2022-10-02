@@ -30,17 +30,7 @@ namespace Api.Domain.Handling.Resource.Get
             {
 
                 response.Model = _mapper.Map<IEnumerable<Data.Model.Response.Resource>>(request.Model);
-
-
-
-                var systemKeys = new Dictionary<string, string>() { { "{id}", "{id}" }, { "{namespace}", request.Namespace } };
-                response.Links = await _responseLinksProvider.BuildLinks(
-                                                                request.Scheme,
-                                                                request.Host,
-                                                                request.PathBase.TrimEnd('/'),
-                                                                request.Path.TrimEnd('/'),
-                                                                systemKeys,
-                                                                EmptyEntityList);
+               
             }
 
             return response;
