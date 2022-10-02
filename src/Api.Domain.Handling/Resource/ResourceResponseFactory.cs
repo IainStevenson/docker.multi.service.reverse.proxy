@@ -33,59 +33,56 @@ namespace Api.Domain.Handling.Resource
         }
 
         /// <inheritdoc/>
-        public ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(IEnumerable<Data.Model.Storage.Resource> model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path)
+        public ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(
+                IEnumerable<Data.Model.Storage.Resource> model,
+                HttpStatusCode statusCode)
         {
             return new ResourceResponseGetManyRequest()
             {
                 Model = model,
                 StatusCode = statusCode,
-                Scheme = scheme,
-                Host = host,
-                PathBase = pathBase,
-                Path = path,
-
             };
         }
 
         /// <inheritdoc/>
-        public ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path)
+        public ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode)
         {
             return new ResourceResponseGetOneRequest()
             {
                 Model = model,
                 StatusCode = statusCode,
-                Scheme = scheme,
-                Host = host,
-                PathBase = pathBase,
-                Path = path,
+
+
             };
         }
 
         /// <inheritdoc/>
-        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
+        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string @namespace, string scheme, string host, string pathBase, string path, string keys)
         {
             return new ResourceResponsePostRequest()
             {
                 Model = model,
+                Namespace = @namespace.ToLower(),
                 StatusCode = statusCode,
                 Scheme = scheme,
                 Host = host,
-                PathBase = pathBase,
-                Path = path,
+                PathBase = pathBase.TrimEnd('/'),
+                Path = path.TrimEnd('/'),
                 Keys = keys
             };
         }
         /// <inheritdoc/>
-        public ResourceResponsePutRequest CreateResourceResponsePutRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
+        public ResourceResponsePutRequest CreateResourceResponsePutRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string @namespace, string scheme, string host, string pathBase, string path, string keys)
         {
             return new ResourceResponsePutRequest()
             {
                 Model = model,
+                Namespace = @namespace.ToLower(),
                 StatusCode = statusCode,
                 Scheme = scheme,
                 Host = host,
-                PathBase = pathBase,
-                Path = path,
+                PathBase = pathBase.TrimEnd('/'),
+                Path = path.TrimEnd('/'),
                 Keys = keys
             };
         }

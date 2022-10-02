@@ -67,6 +67,7 @@ namespace Api.Controllers
             ResourceResponsePutRequest resourceResponsePutRequest = _resourceResponseFactory.CreateResourceResponsePutRequest(
                                                                                            resourceStoragePutResponse.Model,
                                                                                           (HttpStatusCode)resourceStoragePutResponse.StatusCode,
+                                                                                           @namespace,
                                                                                           Request.Scheme,
                                                                                           Request.Host.Value,
                                                                                           Request.PathBase.Value,
@@ -74,6 +75,7 @@ namespace Api.Controllers
                                                                                           keys
                                                                                       );
 
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing response.");
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponsePutRequest);
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Handling response.");

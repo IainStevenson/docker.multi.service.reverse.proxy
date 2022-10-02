@@ -20,7 +20,7 @@ namespace Api.Domain.Handling.Resource
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
         /// <returns></returns>
-        ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(IEnumerable<Data.Model.Storage.Resource> model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path);
+        ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(IEnumerable<Data.Model.Storage.Resource> model, HttpStatusCode statusCode);
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponseGetOneRequest"/> from the provided variables.
         /// </summary>
@@ -31,7 +31,7 @@ namespace Api.Domain.Handling.Resource
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
         /// <returns></returns>
-        ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path);
+        ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode);
 
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponsePostRequest"/> from the provided variables.
@@ -47,6 +47,7 @@ namespace Api.Domain.Handling.Resource
         ResourceResponsePostRequest CreateResourceResponsePostRequest(
             Data.Model.Storage.Resource model,
             HttpStatusCode statusCode,
+            string @namespace,
             string scheme,
             string host,
             string pathBase,
@@ -64,8 +65,9 @@ namespace Api.Domain.Handling.Resource
         /// <param name="keys">The client provided keys</param>
         /// <returns>A new instance of <see cref="ResourceResponsePutRequest"/></returns>
         ResourceResponsePutRequest CreateResourceResponsePutRequest(
-            Data.Model.Storage.Resource model, 
+            Data.Model.Storage.Resource model,
             HttpStatusCode statusCode,
+            string @namespace,
             string scheme,
             string host,
             string pathBase,

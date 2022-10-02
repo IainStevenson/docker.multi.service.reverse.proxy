@@ -39,14 +39,14 @@ namespace Api.Domain.Handling.Resource.Put
                     responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
                 }
 
-                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" } };
+                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" }, { "{namespace}", request.Namespace } };
 
                 var relatedEntities = EmptyEntityList;
                 response.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
                                                                 request.Host,
-                                                                request.PathBase.TrimEnd('/'),
-                                                                request.Path.TrimEnd('/'),
+                                                                request.PathBase,
+                                                                request.Path,
                                                                 systemKeys,
                                                                 relatedEntities);
 

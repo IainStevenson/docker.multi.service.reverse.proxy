@@ -13,5 +13,4 @@ namespace Api.Domain.Storage.Post
             RuleFor(x => x.RequestId).NotEmpty();
         }
     }
-
 }

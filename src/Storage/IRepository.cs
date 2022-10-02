@@ -114,15 +114,15 @@ namespace Storage
     /// <summary>
     /// Provides a simple in memory dictinonary based storage repository for <see cref="WeatherForecast"/> instances.
     /// </summary>
-    public class InMemoryResourceRepository : IRepository<Data.Model.Storage.Resource>
+    public class InMemoryResourceRepository : IRepository<Resource>
     {
-        private readonly Dictionary<Guid, Data.Model.Storage.Resource> _storage;
-        public InMemoryResourceRepository(Dictionary<Guid, Data.Model.Storage.Resource> storage)
+        private readonly Dictionary<Guid, Resource> _storage;
+        public InMemoryResourceRepository(Dictionary<Guid, Resource> storage)
         {
             _storage = storage;
         }
 
-        public Task<Data.Model.Storage.Resource> CreateAsync(Data.Model.Storage.Resource item, CancellationToken cancellationToken)
+        public Task<Resource> CreateAsync(Resource item, CancellationToken cancellationToken)
         {
             item.Etag = Guid.NewGuid().ToString();
             item.Created = DateTimeOffset.UtcNow;
@@ -130,7 +130,7 @@ namespace Storage
             return Task.FromResult(item);
         }
 
-        public Task<IEnumerable<Data.Model.Storage.Resource>> CreateAsync(IEnumerable<Data.Model.Storage.Resource> items)
+        public Task<IEnumerable<Resource>> CreateAsync(IEnumerable<Resource> items)
         {
             foreach (var item in items)
             {
@@ -141,7 +141,7 @@ namespace Storage
             return Task.FromResult(items);
         }
 
-        public Task<long> DeleteAsync(Expression<Func<Data.Model.Storage.Resource, bool>> query)
+        public Task<long> DeleteAsync(Expression<Func<Resource, bool>> query)
         {
             var items = _storage.Values.AsQueryable().Where(query);
             long count = 0;
@@ -174,37 +174,37 @@ namespace Storage
             return Task.FromResult(count);
         }
 
-        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(Expression<Func<Data.Model.Storage.Resource, bool>> query, string orderBy, int skip = 0, int take = int.MaxValue)
+        public Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> query, string orderBy, int skip = 0, int take = int.MaxValue)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter, string orderBy, int skip = 0, int take = int.MaxValue)
+        public Task<IEnumerable<Resource>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter, string orderBy, int skip = 0, int take = int.MaxValue)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(Expression<Func<Data.Model.Storage.Resource, bool>> query)
+        public Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> query)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Data.Model.Storage.Resource>> GetAsync(IEnumerable<Guid> ids)
+        public Task<IEnumerable<Resource>> GetAsync(IEnumerable<Guid> ids)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Data.Model.Storage.Resource> GetAsync(Guid id)
+        public Task<Resource> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Data.Model.Storage.Resource> UpdateAsync(Data.Model.Storage.Resource item)
+        public Task<Resource> UpdateAsync(Resource item)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Data.Model.Storage.Resource>> UpdateAsync(IEnumerable<Data.Model.Storage.Resource> items)
+        public Task<IEnumerable<Resource>> UpdateAsync(IEnumerable<Resource> items)
         {
             throw new NotImplementedException();
         }

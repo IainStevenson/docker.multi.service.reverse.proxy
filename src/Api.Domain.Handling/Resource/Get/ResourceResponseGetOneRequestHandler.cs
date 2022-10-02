@@ -8,18 +8,16 @@ namespace Api.Domain.Handling.Resource.Get
     {
         private readonly IResponseHeadersProvider _responseHeadersProvider;
         private readonly IMapper _mapper;
-        private readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
-        private readonly IResponseLinksProvider _responseLinksProvider;
+      
 
         public ResourceResponseGetOneRequestHandler(
             IResponseHeadersProvider responseHeadersProvider,
             IMapper mapper,
-            IResponseLinksProvider responseLinksProvider
+            
             )
         {
             _responseHeadersProvider = responseHeadersProvider;
-            _mapper = mapper;
-            _responseLinksProvider = responseLinksProvider;
+            _mapper = mapper;            
         }
 
         public async Task<ResourceResponse<Data.Model.Response.Resource>> Handle(ResourceResponseGetOneRequest request, CancellationToken cancellationToken)

@@ -12,5 +12,6 @@ namespace Api.Domain.Handling.Resource.Post
         public string Path { get; set; }
         public string Keys { get; set; }
         public HttpStatusCode StatusCode { get; set; }
+        public string Namespace { get; set; }
     }
 }

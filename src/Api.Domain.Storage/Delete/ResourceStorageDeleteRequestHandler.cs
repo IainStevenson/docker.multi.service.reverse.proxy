@@ -19,7 +19,6 @@ namespace Api.Domain.Storage.Delete
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                    && r.OwnerId == request.OwnerId
                                                                                    && r.Namespace == request.Namespace
-                                                                                  // && (r.Modified?? DateTimeOffset.MaxValue.AddTicks(-20)) < request.IsUnchangedSince
                                                                                    )).FirstOrDefault();
 
 
@@ -32,7 +31,8 @@ namespace Api.Domain.Storage.Delete
 
             // only proceed if resource is unmodified since or is one of the etags
             if (
-                    (resource.Modified.HasValue ? resource.Modified.Value <= request.IsUnchangedSince : resource.Created <= request.IsUnchangedSince) ||
+                    (resource.Modified.HasValue ? resource.Modified.Value <= request.IsUnchangedSince : resource.Created <= request.IsUnchangedSince) 
+                    ||
                     request.ETags.Contains(resource.Etag)
                     )
             {
@@ -63,10 +63,5 @@ namespace Api.Domain.Storage.Delete
                 return response;
             }
         }
-
-
-
-
     }
-
 }

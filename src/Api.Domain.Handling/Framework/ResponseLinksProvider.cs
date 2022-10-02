@@ -23,9 +23,9 @@ namespace Api.Domain.Handling.Framework
             var rootPath = $"{scheme}://{host}{pathBase}{path}";
             // add the default and fixed HATEOS links for the entity
             links.Add(new ApiLink() { Rel = "self", Href = rootPath, Action = "post" });
-            links.Add(new ApiLink() { Rel = "self", Href = $"{rootPath}/{{id}}", Action = "put" });
-            links.Add(new ApiLink() { Rel = "self", Href = $"{rootPath}/{{id}}", Action = "get" });
-            links.Add(new ApiLink() { Rel = "self", Href = $"{rootPath}/{{id}}", Action = "delete" });
+            links.Add(new ApiLink() { Rel = "self", Href = $"{rootPath}/{{namespace}}/{{id}}", Action = "put" });
+            links.Add(new ApiLink() { Rel = "self", Href = $"{rootPath}/{{namespace}}/{{id}}", Action = "get" });
+            links.Add(new ApiLink() { Rel = "self", Href = $"{rootPath}/{{namespace}}/{{id}}", Action = "delete" });
 
             // Add any optional relationship verb liks
             foreach (var item in relatedEntities)

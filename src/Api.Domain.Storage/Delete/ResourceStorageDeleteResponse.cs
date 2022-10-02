@@ -5,5 +5,4 @@
         public int StatusCode { get;  set; } = 400;
         public List<string> RequestValidationErrors { get;  set; } = new List<string>();
     }
-
 }

@@ -34,7 +34,7 @@ namespace Api.Controllers
             var isUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue); 
             var etags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
-            var resourceStorageDeleteRequest = _resourceRequestFactory.CreateResourceStorageDeleteRequest(@namespace,
+            ResourceStorageDeleteRequest resourceStorageDeleteRequest = _resourceRequestFactory.CreateResourceStorageDeleteRequest(@namespace,
                                                                                                             id,
                                                                                                             _ownerId,
                                                                                                             _requestId,
@@ -44,12 +44,14 @@ namespace Api.Controllers
             var resourceStorageDeleteResponse = await _mediator.Send(resourceStorageDeleteRequest);
 
             _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing storage response.");
+
             ResourceResponseDeleteRequest outputRequest = _resourceResponseFactory.CreateResourceResponseDeleteRequest(
                                                                                         (HttpStatusCode)resourceStorageDeleteResponse.StatusCode,
                                                                                         resourceStorageDeleteResponse.RequestValidationErrors
                     
                                                                                     );
 
+            _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing response.");
             ResourceResponse responseOutput = await _mediator.Send(outputRequest);
 
 

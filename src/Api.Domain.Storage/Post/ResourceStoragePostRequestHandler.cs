@@ -7,11 +7,11 @@ namespace Api.Domain.Storage.Post
 {
     public class ResourceStoragePostRequestHandler : IRequestHandler<ResourceStoragePostRequest, ResourceStoragePostResponse>
     {
-        private readonly IRepository<Data.Model.Storage.Resource> _storage;
+        private readonly IRepository<Resource> _storage;
 
         private readonly AbstractValidator<ResourceStoragePostRequest> _validator;
         public ResourceStoragePostRequestHandler(
-            IRepository<Data.Model.Storage.Resource> storage,
+            IRepository<Resource> storage,
             ResourceStoragePostRequestValidator validator
             )
         {
@@ -26,7 +26,7 @@ namespace Api.Domain.Storage.Post
 
             if (validationResult.IsValid)
             {
-                var resource = new Data.Model.Storage.Resource()
+                var resource = new Resource()
                 {
                     Namespace = request.Namespace.ToLower(),
                     Content = request.Content,

@@ -18,7 +18,8 @@ namespace Api.Controllers
         /// GET: api/resources/{namespace}/{id:guid}
         /// </summary>
         /// <remarks>
-        /// Supports Headers: If-Modified-Since (which is interpreted as New or changed since), If-None-Match
+        /// Supports Headers: If-Modified-Since (which is interpreted as New or changed since), 
+        /// If-None-Match as in has been changed from the provided etag(s)
         /// </remarks>
         /// <param name="namespace">The storage namespace type of the resource.</param>
         /// <param name="id">The unique storage identifier of the resource.</param>
@@ -37,8 +38,8 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetOne)}. Processing request.");
 
-            var ifModifiedSince =  _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
-            var etags =  _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
+            var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
+            var etags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetOneRequest resourceGetOneRequest = _resourceRequestFactory.CreateResourceGetOneRequest(id,
                                                                                             @namespace,
@@ -51,11 +52,7 @@ namespace Api.Controllers
 
             ResourceResponseGetOneRequest resourceResponseGetOneRequest = _resourceResponseFactory.CreateResourceResponseGetOneRequest(
                                                                                             resourceStorageGetOneResponse.Model,
-                                                                                           (HttpStatusCode)resourceStorageGetOneResponse.StatusCode,
-                                                                                           Request.Scheme,
-                                                                                           Request.Host.Value,
-                                                                                           Request.PathBase.Value,
-                                                                                           Request.Path.Value
+                                                                                           (HttpStatusCode)resourceStorageGetOneResponse.StatusCode
                                                                                        );
 
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponseGetOneRequest);
@@ -88,14 +85,14 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing request.");
 
-            var ifModifiedSince =  _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
-            var etags =  _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
+            var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
+            var etags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetManyRequest resourceStorageGetManyRequest = _resourceRequestFactory.CreateResourceStorageGetManyRequest(
-                                                                                                            @namespace, 
-                                                                                                            _ownerId, 
-                                                                                                            _requestId, 
-                                                                                                            ifModifiedSince, 
+                                                                                                            @namespace,
+                                                                                                            _ownerId,
+                                                                                                            _requestId,
+                                                                                                            ifModifiedSince,
                                                                                                             etags);
 
             ResourceStorageGetManyResponse resourceStorageGetManyResponse = await _mediator.Send(resourceStorageGetManyRequest);
@@ -103,11 +100,7 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing storage response.");
             ResourceResponseGetManyRequest resourceResponseGetManyRequest = _resourceResponseFactory.CreateResourceResponseGetManyRequest(
                                                                                                           resourceStorageGetManyResponse.Model,
-                                                                                                         (HttpStatusCode)resourceStorageGetManyResponse.StatusCode,
-                                                                                                         Request.Scheme,
-                                                                                                         Request.Host.Value,
-                                                                                                         Request.PathBase.Value,
-                                                                                                         Request.Path.Value
+                                                                                                         (HttpStatusCode)resourceStorageGetManyResponse.StatusCode
                                                                                                      );
 
             ResourceResponse<IEnumerable<Data.Model.Response.Resource>> resourceResponse = await _mediator.Send(resourceResponseGetManyRequest);
