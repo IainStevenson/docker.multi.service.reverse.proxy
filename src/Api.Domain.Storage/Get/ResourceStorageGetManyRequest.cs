@@ -7,7 +7,6 @@ namespace Api.Domain.Storage.Get
         public string Namespace { get; set; }
         public Guid OwnerId { get; set; }
         public Guid RequestId { get; set; }
-
         public DateTimeOffset? IfModifiedSince { get; internal set; }
         public List<string> ETags { get; internal set; }
         public object Scheme { get; internal set; }
@@ -15,5 +14,4 @@ namespace Api.Domain.Storage.Get
         public string PathBase { get; internal set; }
         public string Path { get; internal set; }
     }
-
 }

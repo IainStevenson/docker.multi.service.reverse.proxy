@@ -39,7 +39,9 @@ namespace Api.Domain.Storage.Post
                         }
                     },
                 };
-                resource = await _storage.CreateAsync(resource, cancellationToken);               
+                resource = await _storage.CreateAsync(resource, cancellationToken);     
+                response.Model = resource;
+                response.StatusCode = 201 ; // System.Net.HttpStatusCode.Created;
             }
             else
             {                
