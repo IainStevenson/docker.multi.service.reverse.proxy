@@ -12,8 +12,7 @@ namespace Api.Domain.Handling.Resource.Get
 
         public ResourceResponseGetOneRequestHandler(
             IResponseHeadersProvider responseHeadersProvider,
-            IMapper mapper,
-            
+            IMapper mapper           
             )
         {
             _responseHeadersProvider = responseHeadersProvider;
