@@ -28,6 +28,10 @@ namespace Data.Model.Storage
         /// The client specified storage namespace for this resource. Note: resources can me moved wrt namespaces via put.
         /// </summary>
         [BsonSerializer(typeof(DynamicSerializer))] public dynamic Content { get; set; }
+
+        /// <summary>
+        /// The soft storage classification provided by the client.
+        /// </summary>
         public string Namespace { get; set; }
 
         /// <summary>
