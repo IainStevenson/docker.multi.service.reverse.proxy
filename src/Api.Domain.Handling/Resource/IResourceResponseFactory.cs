@@ -47,7 +47,6 @@ namespace Api.Domain.Handling.Resource
         ResourceResponsePostRequest CreateResourceResponsePostRequest(
             Data.Model.Storage.Resource model,
             HttpStatusCode statusCode,
-            string @namespace,
             string scheme,
             string host,
             string pathBase,

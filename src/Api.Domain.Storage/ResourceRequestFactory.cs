@@ -8,7 +8,7 @@ namespace Api.Domain.Storage
     public class ResourceRequestFactory : IResourceRequestFactory
     {
         ///  <inheritdoc/>
-        public ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid id, string @namespace, Guid ownerId, Guid requestId, DateTimeOffset? ifModifiedSince, List<string> etags)
+        public ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid id, string @namespace, Guid ownerId, Guid requestId, DateTimeOffset ifModifiedSince, List<string> etags)
         {
             return new ResourceStorageGetOneRequest() { 
                 Id = id, 
@@ -34,7 +34,7 @@ namespace Api.Domain.Storage
         }
 
         ///  <inheritdoc/>
-        public ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(string @namespace, Guid ownerId, Guid requestId, DateTimeOffset? ifModifiedSince, List<string> etags)
+        public ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(string @namespace, Guid ownerId, Guid requestId, DateTimeOffset ifModifiedSince, List<string> etags)
         {
             return new ResourceStorageGetManyRequest()
             {

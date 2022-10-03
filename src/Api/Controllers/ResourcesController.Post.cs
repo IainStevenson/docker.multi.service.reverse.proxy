@@ -100,7 +100,6 @@ namespace Api.Controllers
             ResourceResponsePostRequest resourceResponseRequest = _resourceResponseFactory.CreateResourceResponsePostRequest(            
                                                                                             resourceStoragePostResponse.Model,
                                                                                             (HttpStatusCode)resourceStoragePostResponse.StatusCode,
-                                                                                           @namespace,
                                                                                             Request.Scheme,
                                                                                             Request.Host.Value,
                                                                                             Request.PathBase.Value,

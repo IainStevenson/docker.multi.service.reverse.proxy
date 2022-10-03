@@ -39,6 +39,7 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetOne)}. Processing request.");
 
             var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
+            
             var etags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetOneRequest resourceGetOneRequest = _resourceRequestFactory.CreateResourceGetOneRequest(id,

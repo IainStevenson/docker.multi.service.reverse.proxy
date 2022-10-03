@@ -10,12 +10,10 @@ namespace Api.Domain.Handling.Resource.Post
         public ResourceRespnsePostRequestValidator()
         {
             RuleFor(rule => rule.Model).NotNull();
-            RuleFor(rule => rule.Scheme).NotNull();
-            RuleFor(rule => rule.Host).NotNull();
-            RuleFor(rule => rule.PathBase).NotNull();
-            RuleFor(rule => rule.Path).NotNull();
-            RuleFor(x => x.Namespace).NotNull(); 
-            RuleFor(x => x.Namespace).Matches("^(?:(?:((?![0-9_])[a-zA-Z0-9_]+)\\.?)+)(?<!\\.)$");
+            RuleFor(rule => rule.Scheme).NotEmpty();
+            RuleFor(rule => rule.Host).NotEmpty();
+            RuleFor(rule => rule.PathBase).NotEmpty();
+            RuleFor(rule => rule.Path).NotEmpty();
             RuleFor(rule => rule.StatusCode).Must(value => _acceptableCodes.Contains(value));
         }
     }

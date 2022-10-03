@@ -42,7 +42,7 @@ namespace Api.Domain.Handling.Resource.Post
 
             response.Model = responseModel;
             response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
-            var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" }, { "{namespace}", request.Namespace } };
+            var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" }};
             response.Links = await _responseLinksProvider.BuildLinks(
                                                             request.Scheme,
                                                             request.Host,

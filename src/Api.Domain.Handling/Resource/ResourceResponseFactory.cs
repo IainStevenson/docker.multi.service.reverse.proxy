@@ -9,19 +9,19 @@ namespace Api.Domain.Handling.Resource
     public class ResourceResponseFactory : IResourceResponseFactory
     {
         /// <inheritdoc/>
-        public ResourceResponsePostRequest CreateResourceOutputPostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
-        {
-            return new ResourceResponsePostRequest()
-            {
-                Model = model,
-                StatusCode = statusCode,
-                Scheme = scheme,
-                Host = host,
-                PathBase = pathBase,
-                Path = path,
-                Keys = keys
-            };
-        }
+        //public ResourceResponsePostRequest CreateResourceOutputPostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
+        //{
+        //    return new ResourceResponsePostRequest()
+        //    {
+        //        Model = model,
+        //        StatusCode = statusCode,
+        //        Scheme = scheme,
+        //        Host = host,
+        //        PathBase = pathBase,
+        //        Path = path,
+        //        Keys = keys
+        //    };
+        //}
 
         public ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(HttpStatusCode statusCode, List<string> requestValidationErrors)
         {
@@ -57,12 +57,11 @@ namespace Api.Domain.Handling.Resource
         }
 
         /// <inheritdoc/>
-        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string @namespace, string scheme, string host, string pathBase, string path, string keys)
+        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
         {
             return new ResourceResponsePostRequest()
             {
                 Model = model,
-                Namespace = @namespace.ToLower(),
                 StatusCode = statusCode,
                 Scheme = scheme,
                 Host = host,

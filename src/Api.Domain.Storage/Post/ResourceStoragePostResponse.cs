@@ -1,5 +1,8 @@
-﻿namespace Api.Domain.Storage.Post
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Api.Domain.Storage.Post
 {
+    [ExcludeFromCodeCoverage]
     public class ResourceStoragePostResponse
     {
         /// <summary>
