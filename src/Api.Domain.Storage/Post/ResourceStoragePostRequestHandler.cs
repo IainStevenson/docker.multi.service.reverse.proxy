@@ -8,12 +8,11 @@ namespace Api.Domain.Storage.Post
     public class ResourceStoragePostRequestHandler : IRequestHandler<ResourceStoragePostRequest, ResourceStoragePostResponse>
     {
         private readonly IRepository<Resource> _storage;
-
         private readonly AbstractValidator<ResourceStoragePostRequest> _validator;
-        public ResourceStoragePostRequestHandler(
-            IRepository<Resource> storage,
-            ResourceStoragePostRequestValidator validator
-            )
+        private const int BADREQUEST = 400;
+        private const int CREATED = 201;
+
+        public ResourceStoragePostRequestHandler(IRepository<Resource> storage, ResourceStoragePostRequestValidator validator)
         {
             _storage = storage;
             _validator = validator;
@@ -24,30 +23,30 @@ namespace Api.Domain.Storage.Post
 
             var validationResult = _validator.Validate(request);
 
-            if (validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
-                var resource = new Resource()
+                response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
+                response.StatusCode = BADREQUEST;
+            }
+
+            var resource = new Resource()
+            {
+                Namespace = request.Namespace.ToLower(),
+                Content = request.Content,
+                OwnerId = request.OwnerId,
+                Metadata = new StorageMetadata()
                 {
-                    Namespace = request.Namespace.ToLower(),
-                    Content = request.Content,
-                    OwnerId = request.OwnerId,
-                    Metadata = new StorageMetadata() { Tags = new List<Tag>() }
-                };
+                    Tags = new List<Tag>
+                            {
+                                new Tag() { Name = MetadataPropertyNames.OriginallyCreated, Value = DateTimeOffset.UtcNow },
+                                new Tag() { Name = MetadataPropertyNames.OriginalDataKeys, Value = request.Keys }
+                            }
+                }
+            };
 
-                resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.OriginallyCreated, Value = DateTimeOffset.UtcNow });
-                resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.OriginalDataKeys, Value = request.Keys });
-
-                resource = await _storage.CreateAsync(resource, cancellationToken);
-                response.Model = resource;
-                response.StatusCode = 201; // System.Net.HttpStatusCode.Created;
-            }
-            else
-            {
-                response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                response.StatusCode = 400; // System.Net.HttpStatusCode.BadRequest;
-            }
+            response.Model = await _storage.CreateAsync(resource, cancellationToken);
+            response.StatusCode = CREATED;
             return response;
         }
     }
-
 }

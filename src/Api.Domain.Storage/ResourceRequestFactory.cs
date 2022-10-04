@@ -8,7 +8,7 @@ namespace Api.Domain.Storage
     public class ResourceRequestFactory : IResourceRequestFactory
     {
         ///  <inheritdoc/>
-        public ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid id, string @namespace, Guid ownerId, Guid requestId, DateTimeOffset ifModifiedSince, List<string> etags)
+        public ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid id, string @namespace, Guid ownerId, Guid requestId, DateTimeOffset ifModifiedSince, List<string> notEtags)
         {
             return new ResourceStorageGetOneRequest() { 
                 Id = id, 
@@ -16,11 +16,11 @@ namespace Api.Domain.Storage
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IfModifiedSince = ifModifiedSince, 
-                ETags = etags
+                IfNotETags = notEtags
             };
         }
 
-        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(string @namespace, Guid id, Guid ownerId, Guid requestId, DateTimeOffset isUnchangedSince, List<string> etags)
+        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(string @namespace, Guid id, Guid ownerId, Guid requestId, DateTimeOffset isUnchangedSince, List<string> isEtags)
         {
             return new ResourceStorageDeleteRequest()
             {
@@ -29,12 +29,12 @@ namespace Api.Domain.Storage
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IsUnchangedSince = isUnchangedSince,
-                ETags = etags
+                IsETags = isEtags
             };
         }
 
         ///  <inheritdoc/>
-        public ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(string @namespace, Guid ownerId, Guid requestId, DateTimeOffset ifModifiedSince, List<string> etags)
+        public ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(string @namespace, Guid ownerId, Guid requestId, DateTimeOffset ifModifiedSince, List<string> notEtags)
         {
             return new ResourceStorageGetManyRequest()
             {
@@ -42,7 +42,7 @@ namespace Api.Domain.Storage
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IfModifiedSince = ifModifiedSince,
-                ETags = etags
+                IfNotETags = notEtags
             };
         }
         ///  <inheritdoc/>

@@ -18,7 +18,7 @@ namespace Api.Controllers
         /// GET: api/resources/{namespace}/{id:guid}
         /// </summary>
         /// <remarks>
-        /// Supports Headers: If-Modified-Since (which is interpreted as New or changed since), 
+        /// Supports Headers: If-Modified-Since (which is interpreted as is New or changed since), 
         /// If-None-Match as in has been changed from the provided etag(s)
         /// </remarks>
         /// <param name="namespace">The storage namespace type of the resource.</param>
@@ -40,14 +40,14 @@ namespace Api.Controllers
 
             var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
             
-            var etags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
+            var noneEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetOneRequest resourceGetOneRequest = _resourceRequestFactory.CreateResourceGetOneRequest(id,
                                                                                             @namespace,
                                                                                             _ownerId,
                                                                                             _requestId,
                                                                                             ifModifiedSince,
-                                                                                            etags);
+                                                                                            noneEtags);
 
             var resourceStorageGetOneResponse = await _mediator.Send(resourceGetOneRequest);
 
@@ -68,7 +68,9 @@ namespace Api.Controllers
         /// GET: api/resources/{namespace}
         /// </summary>
         /// <remarks>
-        /// Supports Headers: If-Modified-Since as a valid .NET datetime format (which is interpreted as New or changed since), If-None-Match providing a comma separated list of server generated 'ShortGuid' etags
+        /// Supports Headers: 
+        /// If-Modified-Since (which is interpreted as is New or changed since), 
+        /// If-None-Match as in has been changed from the provided etag(s)
         /// </remarks>
         /// <param name="namespace">The client elected storage namespace / type of the resource.</param>
         /// <param name="id">The server elected unique storage identifier of the already stored resource.</param>
@@ -87,14 +89,14 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing request.");
 
             var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
-            var etags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
+            var notEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetManyRequest resourceStorageGetManyRequest = _resourceRequestFactory.CreateResourceStorageGetManyRequest(
                                                                                                             @namespace,
                                                                                                             _ownerId,
                                                                                                             _requestId,
                                                                                                             ifModifiedSince,
-                                                                                                            etags);
+                                                                                                            notEtags);
 
             ResourceStorageGetManyResponse resourceStorageGetManyResponse = await _mediator.Send(resourceStorageGetManyRequest);
 

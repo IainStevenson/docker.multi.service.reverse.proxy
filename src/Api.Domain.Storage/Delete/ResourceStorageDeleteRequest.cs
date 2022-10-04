@@ -24,7 +24,7 @@ namespace Api.Domain.Storage.Delete
         /// <summary>
         /// Include the resource if its current ETag is within this collection.
         /// </summary>
-        public List<string> ETags { get; set; } = new List<string>();
+        public List<string> IsETags { get; set; } = new List<string>();
 
         /// <summary>
         /// Include the resource if it remains unchanged since the specified time.
