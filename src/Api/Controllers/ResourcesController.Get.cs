@@ -18,15 +18,18 @@ namespace Api.Controllers
         /// GET: api/resources/{namespace}/{id:guid}
         /// </summary>
         /// <remarks>
-        /// Supports Headers: If-Modified-Since (which is interpreted as is New or changed since), 
-        /// If-None-Match as in has been changed from the provided etag(s)
+        /// Supports Headers: 
+        ///     If-Modified-Since (which is interpreted as is New or changed since), 
+        ///     If-None-Match as in has been changed from the provided etag(s)
+        /// Both or either of the above may be true and therefore return the item. Otherwise a 404 NotFound will be returned.
         /// </remarks>
-        /// <param name="namespace">The storage namespace type of the resource.</param>
-        /// <param name="id">The unique storage identifier of the resource.</param>
+        /// <param name="namespace">The client controlled storage namespace type of the resource.</param>
+        /// <param name="id">The server controlled unique storage identifier of the resource.</param>
         /// <returns>
-        /// Status code 404 Not Found if the resource does not exist in that namespace.
-        /// Status code 200 and an instance of <see cref="Data.Model.Response.Resource"/> wrapping the <see cref="Data.Model.Storage.Resource"/> matching the resource identifier .
-        /// Status Code 304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
+        /// Status code 
+        ///     404 Not Found if the resource does not exist at all or exist in that namespace.
+        ///     200 and an instance of <see cref="Data.Model.Response.Resource"/> wrapping the <see cref="Data.Model.Storage.Resource"/> matching the resource identifier .
+        ///     304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
         [Route("{namespace}/{id:guid}")]
@@ -69,15 +72,17 @@ namespace Api.Controllers
         /// </summary>
         /// <remarks>
         /// Supports Headers: 
-        /// If-Modified-Since (which is interpreted as is New or changed since), 
-        /// If-None-Match as in has been changed from the provided etag(s)
+        ///     If-Modified-Since (which is interpreted as is New or changed since), 
+        ///     If-None-Match as in has been changed from the provided etag(s)
+        /// Both or either of the above may be true and therefore return the items. Otherwise a 404 NotFound will be returned.
         /// </remarks>
-        /// <param name="namespace">The client elected storage namespace / type of the resource.</param>
-        /// <param name="id">The server elected unique storage identifier of the already stored resource.</param>
+        /// <param name="namespace">The client controlled storage namespace type of the resource.</param>
+        /// <param name="id">The server controlled unique storage identifier of the resource.</param>
         /// <returns>
-        /// Status code 404 Not Found if the resource does not exist in that namespace.
-        /// Status code 200 and an instance of <see cref="Data.Model.Response.Resource"/> wrapping the <see cref="Data.Model.Storage.Resource"/> matching the resource identifier .
-        /// Status Code 304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
+        /// Status code:
+        ///     404 Not Found if the resource does not exist in that namespace.
+        ///     200 and an instance of <see cref="Data.Model.Response.Resource"/> wrapping the <see cref="Data.Model.Storage.Resource"/> matching the resource identifier .
+        ///     304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
         [Route("{namespace}")]
