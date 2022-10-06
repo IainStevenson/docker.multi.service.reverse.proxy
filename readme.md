@@ -2,17 +2,17 @@
 
 To document the research and development needed to produce and configure the following;
 
-A secured docker composed orchestration of a small set of micro services running on Linux containers and featuring;
+A secured `docker-compose`'d orchestration of a small set of micro services running on Linux containers featuring;
 
-* A secure Reverse Proxy (NGINX) fronting all services.
-* A secure store front-end Web site
-* A secure support front-end Web site
+* A secure Reverse Proxy (NGINX) guarding all other services.
+* A secure `store` front-end Web site
+* A secure `support` front-end Web site
 * A common security domain and single sign on front-end Web site and service
 	* (using Identity Server 4) allowing social identities and role based access
-* A secure front-end/back-end API service 
+* A secure front-end/back-end `API` service 
 	* WebApi with REST methods
 * A secure back-end common persistence server 
-	* using MongoDB with a common database and separate collections for each service
+	* using `MongoDB` with a common database and separate collections for each service
 	* its not a hard reconfigure to keep separate databases
 	* Data at rest is not yet encrypted
 
@@ -20,8 +20,8 @@ A secured docker composed orchestration of a small set of micro services running
 
 From a security perspective the primary objectives are;
 
-* Avoid having to use `localhost` as a domain name. 
- 	* `localhost` used in multi-service container configurations is worse than meaningless, suddenly it becomes a blocker. 
+* Avoid having to use `localhost` and multiple ports as part of the domain host. 
+ 	* `localhost` used in multi-service container configurations is worse than meaningless, suddenly it becomes a blocker.
  	* But without a certificate that supports `localhost` in development .NET services blow up on startup.
 * To have a dedicated authentication and authorization domain 
 * Implement FULL SSL for encryption in motion. 

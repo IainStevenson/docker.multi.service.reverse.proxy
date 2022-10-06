@@ -3,11 +3,12 @@
 		"_postman_id": "f7308fe5-ee6b-4ea4-b05e-4ab7a1087193",
 		"name": "local.myinfo.world",
 		"description": "A docker orchestration of multiple microservices behind a proxy uysing https and letsencrypt.\r\nAuthentication and authorisation are not included its a simple https scheme for transport security and endpoint validation",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1467123"
 	},
 	"item": [
 		{
-			"name": "Mvc",
+			"name": "Identity",
 			"item": [
 				{
 					"name": "Get Identity Server Well known openid configuration",
@@ -18,7 +19,17 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", () => {\r",
 									"  pm.response.to.have.status(200);\r",
-									"});"
+									"});\r",
+									"pm.collectionVariables.set(\"postCount\", 0)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"postCount\", 0)"
 								],
 								"type": "text/javascript"
 							}
@@ -40,7 +51,12 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Mvc",
+			"item": [
 				{
 					"name": "Test access to Support with /support/home/privacy",
 					"event": [
@@ -280,7 +296,8 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", () => {\r",
 									"  pm.response.to.have.status(200);\r",
-									"});"
+									"});\r",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -308,296 +325,700 @@
 			"name": "Api",
 			"item": [
 				{
-					"name": "POST Resource to the secured API",
-					"event": [
+					"name": "Resource",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);  \r",
-									"    \r",
-									"    var locationHeader = pm.response.headers.get(\"Location\");\r",
-									"    console.log(\"Location header: \", locationHeader)\r",
-									"\r",
-									"    var locationHeaderElements = locationHeader.split('/');\r",
-									"    console.log(\"Location header Elements: \", locationHeaderElements)\r",
-									"    console.log(\"# Location header Elements: \", locationHeaderElements.length)\r",
-									"\r",
-									"    var crudId = locationHeaderElements[locationHeaderElements.length-1];\r",
-									"\r",
-									"    console.log(\"Location header ID: \", crudId)\r",
-									"\r",
-									"    pm.environment.set('crudId', crudId);\r",
-									"\r",
-									"});\r",
-									"pm.test(\"Location header is present\", function () {\r",
-									"    pm.response.to.have.header(\"Location\");\r",
-									"});\r",
-									"// pm.test(\"Response time is less than 200ms\", function () {\r",
-									"//     pm.expect(pm.response.responseTime).to.be.below(200);\r",
-									"// });\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
+							"name": "CRUD",
+							"item": [
 								{
-									"key": "token",
-									"value": "{{currentAccessToken}}",
-									"type": "string"
+									"name": "POST is Created",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
+													"postCount ++;\r",
+													"\r",
+													"pm.collectionVariables.set(\"postCount\", postCount)\r",
+													"console.log(\"Post count: \", postCount)\r",
+													"\r",
+													"pm.test(\"Extract Last Values\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    console.log('lastId', jsonData.id);\r",
+													"    pm.collectionVariables.set('lastId', jsonData.id)\r",
+													"    console.log('lastETag', jsonData.etag);\r",
+													"    pm.collectionVariables.set('lastETag', jsonData.etag);\r",
+													"    console.log('lastModified', jsonData.created);\r",
+													"    pm.collectionVariables.set('lastModified', jsonData.created);\r",
+													"    console.log('lastContentKeys', jsonData.content);\r",
+													"    pm.collectionVariables.set('lastContentKeys', jsonData.content)\r",
+													"    console.log('lastKeyValue', jsonData.content.id);\r",
+													"    pm.collectionVariables.set('lastKeyValue', jsonData.content.id)\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);  \r",
+													"    \r",
+													"    var locationHeader = pm.response.headers.get(\"Location\");\r",
+													"    console.log(\"Location header: \", locationHeader)\r",
+													"\r",
+													"    var locationHeaderElements = locationHeader.split('/');\r",
+													"    console.log(\"Location header Elements: \", locationHeaderElements)\r",
+													"    console.log(\"# Location header Elements: \", locationHeaderElements.length)\r",
+													"\r",
+													"    var crudId = locationHeaderElements[locationHeaderElements.length-1];\r",
+													"\r",
+													"    console.log(\"Location header ID: \", crudId)\r",
+													"\r",
+													"    pm.environment.set('crudId', crudId);\r",
+													"\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Location header is present\", function () {\r",
+													"    pm.response.to.have.header(\"Location\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"var moment = require('moment');\r",
+													"pm.collectionVariables.set('beforeLastModified', moment().format(\"YYYY-MM-DDTHH:MM:SS\") )\r",
+													"\r",
+													"setTimeout(checkStatusCode, 1000);\r",
+													"    function checkStatusCode() {\r",
+													"         console.log('wait over');\r",
+													"    }"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"content-type": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\": {{$randomInt}}, \r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}?keys=id",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}"
+											],
+											"query": [
+												{
+													"key": "keys",
+													"value": "id"
+												}
+											]
+										}
+									},
+									"response": []
 								},
 								{
-									"key": "password",
-									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"temperatureC\": 37,\r\n    \"summary\": \"Balmy\"\r\n}"
-						},
-						"url": {
-							"raw": "{{baseUri}}/api/resources/WeatherForecast",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"api",
-								"resources",
-								"WeatherForecast"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET One Resource from the secured API",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{currentAccessToken}}",
-									"type": "string"
+									"name": "GET is OK by namespace and id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
 								},
 								{
-									"key": "password",
-									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/api/resources//WeatherForecast/{{crudId}}",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"api",
-								"resources",
-								"",
-								"WeatherForecast",
-								"{{crudId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET Many Resources from the secured API",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{currentAccessToken}}",
-									"type": "string"
+									"name": "GET is NotModified if-modified-since lastmodified",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 304\", function () {\r",
+													"    pm.response.to.have.status(304);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-Modified-Since",
+												"value": "{{lastModified}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
 								},
 								{
-									"key": "password",
-									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/api/resources//WeatherForecast",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"api",
-								"resources",
-								"",
-								"WeatherForecast"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PUT Resource to the secured API",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{currentAccessToken}}",
-									"type": "string"
+									"name": "GET is OK if-none-match oldetag",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "oldetag",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
 								},
 								{
-									"key": "password",
-									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\"\r\n}"
-						},
-						"url": {
-							"raw": "{{baseUri}}/api/resources/weatherforecast/{{crudId}}",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"api",
-								"resources",
-								"weatherforecast",
-								"{{crudId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DELETE Resource from the secured API",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 204\", function () {\r",
-									"    pm.response.to.have.status(204);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{currentAccessToken}}",
-									"type": "string"
+									"name": "GET is NotModified if-none-match last etag",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 304\", function () {\r",
+													"    pm.response.to.have.status(304);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "{{lastETag}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
 								},
 								{
-									"key": "password",
-									"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
-									"type": "string"
+									"name": "PUT is OK for update",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"content-type": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n     \"id\": {{lastKeyValue}}, \r\n     \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\",\r\n    \"status\": \"adjusted\"\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET is OK from namespace",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
+													"var maxPostCount = pm.collectionVariables.get(\"maxPostCount\");\r",
+													"if ( postCount < maxPostCount)\r",
+													"{\r",
+													"    console.log(\"Re-running POST\")\r",
+													"    postman.setNextRequest(\"POST is Created\");\r",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources//{{namespace}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"",
+												"{{namespace}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is PreConditionFailed on delete with wrong timestamp",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 412\", function () {\r",
+													"    pm.response.to.have.status(412);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-Unmodified-Since",
+												"value": "{{beforeLastModified}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is PreConditionFailed on delete with different etag",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 412\", function () {\r",
+													"    pm.response.to.have.status(412);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-Match",
+												"value": "badetag",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is NoContent on delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 204\", function () {\r",
+													"    pm.response.to.have.status(204);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is NotFound on re-delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {\r",
+													"    pm.response.to.have.status(404);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/api/resources/weatherforecast/{{crudId}}",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"api",
-								"resources",
-								"weatherforecast",
-								"{{crudId}}"
-							]
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
@@ -624,7 +1045,7 @@
 					"  header: 'Content-Type:application/x-www-form-urlencoded',",
 					"  body: {",
 					"    mode: 'application/json',",
-					"    raw: 'grant_type=client_credentials&scope=myInfo.Api&client_id=Command&client_secret=secret'",
+					"    raw: 'grant_type=client_credentials&scope=myApi&client_id=Command&client_secret=secret'",
 					"  }",
 					"};",
 					"",
@@ -641,9 +1062,10 @@
 					"getToken = true;",
 					"",
 					"if (getToken === true) {",
+					"    console.log('Requesting token...');",
 					"    pm.sendRequest(echoPostRequest, function (err, res) {",
 					"        if (err === null) {",
-					"            console.log('Saving the token and expiry date')",
+					"            console.log('Token recieved, saving the token and expiry date')",
 					"            var responseJson = res.json();",
 					"            pm.environment.set('currentAccessToken', responseJson.access_token)",
 					"    ",
@@ -671,19 +1093,60 @@
 	],
 	"variable": [
 		{
-			"id": "aa35d3ac-73ba-498d-a8c0-8f48e5cae513",
 			"key": "baseUri",
 			"value": "https://local.myinfo.world"
 		},
 		{
-			"id": "bca817e6-877b-4764-947d-65ce0c22ccce",
 			"key": "currentAccessToken",
 			"value": ""
 		},
 		{
-			"id": "a5d7629a-6ae7-4314-8ecf-3d73bc6f51c3",
-			"key": "crudId",
-			"value": "asdasd"
+			"key": "lastId",
+			"value": ""
+		},
+		{
+			"key": "dataIdentifier",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "postCount",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "lastModified",
+			"value": ""
+		},
+		{
+			"key": "lastETag",
+			"value": "123",
+			"type": "string"
+		},
+		{
+			"key": "lastContentKeys",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "lastKeyValue",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "namespace",
+			"value": "weatherforecast",
+			"type": "string"
+		},
+		{
+			"key": "beforeLastModified",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "maxPostCount",
+			"value": "1",
+			"type": "string"
 		}
 	]
 }

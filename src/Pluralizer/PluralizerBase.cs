@@ -7,7 +7,7 @@ namespace Pluralizer
     public abstract class PluralizerBase : IPluralize
     {
         protected readonly IList<ReplaceRule> _pluralRules = PluralRules.GetRules();
-        protected readonly IList<ReplaceRule> _singularRules = SingularRules.GetRules();
+        protected readonly IList<ReplaceRule> _singularRules = GetRules();
         protected readonly ICollection<string> _uncountables = Uncountables.GetUncountables();
         protected readonly IDictionary<string, string> _irregularPlurals = IrregularRules.GetIrregularPlurals();
         protected readonly IDictionary<string, string> _irregularSingles = IrregularRules.GetIrregularSingulars();

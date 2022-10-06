@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Threading.Tasks;
-using Handlers.Resource;
+using Api.Domain.Handling.Resource;
+using Api.Domain.Storage.Put;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Api.Domain.Handling.Resource.Put;
 
 namespace Api.Controllers
 {
@@ -36,41 +39,49 @@ namespace Api.Controllers
         /// </returns>
         [HttpPut()]
         [Route("{namespace}/{id:guid}")]
-        public async Task<IActionResult> Put(
-            [Required][FromRoute] string @namespace,
-            [Required][FromRoute] Guid id,
-            [FromBody] dynamic content,
-            [FromQuery] string keys,
-            [FromQuery] string moveto)
+        public async Task<IActionResult> Put([Required][FromRoute] string @namespace,
+                                            [Required][FromRoute] Guid id,
+                                            [FromBody] dynamic content,
+                                            [FromQuery] string keys,
+                                            [FromQuery] string moveto)
         {
-            _logger.LogTrace($"{nameof(ResourcesController)}:PUT. Sending request.");
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing request.");
 
-            var request = new ResourcePutRequest()
-            {
-                Namespace = @namespace.ToLower(),
-                Id = id,
-                Keys = keys,
-                MoveTo = moveto,
-                
-                Model = content,
 
-                
-                Headers = Request.Headers,
-                Query = Request.Query,
-                Scheme = Request.Scheme,
-                Host = Request.Host.Value,
-                PathBase = Request.PathBase.Value,
-                Path = Request.Path.Value,
-                
-                OwnerId = _ownerId,
-                RequestId = _requestId
-            };
+            var unmodifiedSince = _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue);
+            var etags = _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
-            var response = await _mediator.Send(request);
+            ResourceStoragePutRequest resourceStoragePutRequest = _resourceRequestFactory.CreateResourceStoragePutRequest(id,
+                                                                                        content,
+                                                                                        _ownerId,
+                                                                                        _requestId,
+                                                                                        keys,
+                                                                                        @namespace,
+                                                                                        moveto,
+                                                                                        unmodifiedSince,
+                                                                                        etags);
 
-            _logger.LogTrace($"{nameof(ResourcesController)}:PUT. Processing response.");
+            var resourceStoragePutResponse = await _mediator.Send(resourceStoragePutRequest);
 
-            return response.Handle(this);
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing storage response.");
+            ResourceResponsePutRequest resourceResponsePutRequest = _resourceResponseFactory.CreateResourceResponsePutRequest(
+                                                                                           resourceStoragePutResponse.Model,
+                                                                                          (HttpStatusCode)resourceStoragePutResponse.StatusCode,
+                                                                                           @namespace,
+                                                                                          Request.Scheme,
+                                                                                          Request.Host.Value,
+                                                                                          Request.PathBase.Value,
+                                                                                          Request.Path.Value,
+                                                                                          keys
+                                                                                      );
+
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing response.");
+            ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponsePutRequest);
+
+            _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Handling response.");
+
+            return _resourceResponseHandler.HandleOne(this, resourceResponse);
+
         }
     }
 }

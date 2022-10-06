@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Domain.Handling\Api.Domain.Handling.csproj" />
     <ProjectReference Include="..\Data.Dynamic\Data.Dynamic.csproj" />
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
     <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
-    <ProjectReference Include="..\Response.Formater\Response.Formater.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 

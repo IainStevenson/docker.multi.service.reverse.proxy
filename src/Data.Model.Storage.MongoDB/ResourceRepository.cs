@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Microsoft.Extensions.Logging;
 using Storage;
+using System.Threading;
 
 namespace Data.Model.Storage.MongoDB
 {
@@ -89,13 +90,13 @@ namespace Data.Model.Storage.MongoDB
             return await _mongoCollection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<Resource> CreateAsync(Resource item)
+        public async Task<Resource> CreateAsync(Resource item, CancellationToken cancellationToken)
         {
             item.Etag = $"{(ShortGuid)Guid.NewGuid()}";
             await _mongoCollection.InsertOneAsync(item, new InsertOneOptions
             {
                 BypassDocumentValidation = _byPassDocumentValidation
-            });
+            }, cancellationToken);
 
             return item;
         }
@@ -151,14 +152,6 @@ namespace Data.Model.Storage.MongoDB
         {
             item.Modified = DateTimeOffset.UtcNow;
             item.Etag = $"{(ShortGuid)Guid.NewGuid()}";
-            if (item.Metadata.Tags.ContainsKey("Modified"))
-            {
-                ((List<DateTimeOffset>)item.Metadata.Tags["Modified"]).Add(item.Modified.Value);
-            }
-            else
-            {
-                item.Metadata.Tags.Add("Modified", new List<DateTimeOffset>() { item.Modified.Value });
-            }
             return Task.FromResult(item);
 
         }

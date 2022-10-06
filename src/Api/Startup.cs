@@ -1,3 +1,8 @@
+using Api.Domain.Handling.Framework;
+using Api.Domain.Handling.Resource;
+using Api.Domain.Handling.Resource.Post;
+using Api.Domain.Storage;
+using Api.Domain.Storage.Post;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Logging;
@@ -16,7 +21,6 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Pluralizer;
-using Response.Formater;
 using Serilog;
 using Storage;
 using System;
@@ -88,25 +92,32 @@ namespace Api
             services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(excludedHeaders));
             services.AddSingleton<IPathResolver, PathResolver>();
             services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
-            services.AddSingleton<IResponseLinksProvider>((p) => new ResponseLinksProvider());
+            services.AddSingleton<IResponseLinksProvider,ResponseLinksProvider>();
             services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
             services.AddSingleton(x => mapper);
+            services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
+            services.AddSingleton<IResourceResponseFactory, ResourceResponseFactory>();
+            services.AddSingleton<IResourceResponseHandler, ResourceResponseHandler>();
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
                         // Use the default property (Pascal) casing
-                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
-                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                        options.SerializerSettings.Formatting = Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                        options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     })
                     .AddFluentValidation(config =>
                     {
-
+                        
                         config.AutomaticValidationEnabled = true;
-                        config.RegisterValidatorsFromAssemblyContaining<Handlers.RequestExceptionModel>();
+                        config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
+                        config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
                     });
 
-            services.AddMediatR(typeof(Handlers.Resource.ResourcePostHandler));
+            services.AddMediatR(new[] { 
+                typeof(ResourceStoragePostRequestHandler), 
+                typeof(ResourceResponsePostRequestHandler) } 
+            );
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>

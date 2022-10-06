@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyVersion>1.0.29.7690</AssemblyVersion>
     <FileVersion>1.0.29.7690</FileVersion>
     <UserSecretsId>5151c092-27d2-4f8a-a445-ea3ae9b6e786</UserSecretsId>
@@ -29,13 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Domain.Handling\Api.Domain.Handling.csproj" />
+    <ProjectReference Include="..\Api.Domain.Storage\Api.Domain.Storage.csproj" />
     <ProjectReference Include="..\Data.Model.Response\Data.Model.Response.csproj" />
     <ProjectReference Include="..\Data.Model.Storage.MongoDB\Data.Model.Storage.MongoDB.csproj" />
     <ProjectReference Include="..\Data.Model.Storage\Data.Model.Storage.csproj" />
-    <ProjectReference Include="..\Handlers\Handlers.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Pluralizer\Pluralizer.csproj" />
-    <ProjectReference Include="..\Response.Formater\Response.Formater.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 

@@ -4,6 +4,6 @@ namespace Data.Model.Response
 {
     public interface IApiLinks
     {
-        List<IApiLink> Links { get; set; }
+        IEnumerable<IApiLink> Links { get; set; }
     }
 }

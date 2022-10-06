@@ -15,7 +15,9 @@ namespace Data.Model.Storage
             _jsonSerializerSettings = new JsonSerializerSettings
             {
                 FloatFormatHandling = FloatFormatHandling.DefaultValue,
-                FloatParseHandling = FloatParseHandling.Double
+                FloatParseHandling = FloatParseHandling.Double,
+                Formatting = Formatting.Indented,
+                
             };
         }
 
@@ -24,7 +26,7 @@ namespace Data.Model.Storage
             var document = BsonDocumentSerializer.Instance.Deserialize(context);
             var writerSettings = new JsonWriterSettings
             {
-                OutputMode = JsonOutputMode.CanonicalExtendedJson,
+                OutputMode = JsonOutputMode.Shell,
                 Indent = true
             };
             var value = document.ToJson(writerSettings);

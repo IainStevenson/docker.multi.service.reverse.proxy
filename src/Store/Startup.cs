@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
@@ -43,9 +41,9 @@ namespace Store
                 .AddNewtonsoftJson(options =>
                     {
                         // Use the default property (Pascal) casing
-                        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
-                        options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                        options.SerializerSettings.Formatting = Formatting.Indented;
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+                        options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     });
 
             services.AddHttpClient(string.Empty);
