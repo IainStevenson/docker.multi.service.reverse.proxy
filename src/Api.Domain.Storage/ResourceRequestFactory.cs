@@ -29,7 +29,7 @@ namespace Api.Domain.Storage
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IsUnchangedSince = isUnchangedSince,
-                IsETags = isEtags
+                IsNotETags = isEtags
             };
         }
 

@@ -774,6 +774,137 @@
 									"response": []
 								},
 								{
+									"name": "DELETE is PreConditionFailed on delete with wrong timestamp",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 412\", function () {\r",
+													"    pm.response.to.have.status(412);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-Unmodified-Since",
+												"value": "{{beforeLastModified}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is PreConditionFailed on delete with different etag",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 412\", function () {\r",
+													"    pm.response.to.have.status(412);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-Match",
+												"value": "badetag",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "DELETE is NoContent on delete",
 									"event": [
 										{
@@ -782,6 +913,62 @@
 												"exec": [
 													"pm.test(\"Status code is 204\", function () {\r",
 													"    pm.response.to.have.status(204);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}",
+												"{{lastId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is NotFound on re-delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {\r",
+													"    pm.response.to.have.status(404);\r",
 													"});\r",
 													"\r",
 													""
@@ -958,7 +1145,7 @@
 		},
 		{
 			"key": "maxPostCount",
-			"value": "10",
+			"value": "1",
 			"type": "string"
 		}
 	]

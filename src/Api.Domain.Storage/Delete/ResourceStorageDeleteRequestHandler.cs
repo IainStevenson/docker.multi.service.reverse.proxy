@@ -40,7 +40,6 @@ namespace Api.Domain.Storage.Delete
                                                                                    && r.Namespace == request.Namespace
                                                                                    )).FirstOrDefault();
 
-
             if (resource == null)
             {
                 response.StatusCode = NOTFOUND;
@@ -49,38 +48,29 @@ namespace Api.Domain.Storage.Delete
 
 
             // only proceed if resource is unmodified since or is one of the etags
-            if (
-                    (resource.Modified.HasValue ? resource.Modified.Value <= request.IsUnchangedSince : resource.Created <= request.IsUnchangedSince) 
-                    ||
-                    request.IsETags.Contains(resource.Etag)
+            response.StatusCode = PRECONDITIONFAILED;
+
+            if ((resource.Modified.HasValue ?
+                        resource.Modified <= request.IsUnchangedSince :
+                        resource.Created <= request.IsUnchangedSince)
                     )
             {
-
-                var count = await _storage.DeleteAsync(request.Id);
-                if (count == 1)
-                {
-                    response.StatusCode = NOCONTENT;
-                    return response;
-                }
-                response.RequestValidationErrors.Add($"The resource deletion was attempted but did not happen. This indicates that it has gone already.");
-
-                response.StatusCode = ALREADYGONE;
+                response.RequestValidationErrors.Add($"Deletion failed, as the resource has been modified since {request.IsUnchangedSince}");
                 return response;
             }
-            else
+
+            if (request.IsNotETags.Any() && !request.IsNotETags.Contains(resource.Etag))
             {
-
-                if (request.IsETags.Any())
-                {
-                    response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.IsETags)}/r/n");
-                }
-                if (request.IsUnchangedSince != DateTimeOffset.MinValue)
-                {
-                    response.RequestValidationErrors.Add($"The resource has been modified since {request.IsUnchangedSince}");
-                }
-                response.StatusCode = PRECONDITIONFAILED;
+                response.RequestValidationErrors.Add($"Deletion failed, as the resource has None of the specified ETags {string.Join(',', request.IsNotETags)}/r/n");
                 return response;
+
             }
+
+            var count = await _storage.DeleteAsync(request.Id);
+            response.StatusCode = NOCONTENT;
+            return response;
+
         }
     }
 }
+

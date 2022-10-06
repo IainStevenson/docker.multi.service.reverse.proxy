@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace Api.Domain.Handling.Framework
 {
@@ -33,7 +34,10 @@ namespace Api.Domain.Handling.Framework
             DateTimeOffset result = defaultValue;
             if (headers.ContainsKey(HeaderKeys.IfModifiedSince))
             {
-                var isValid = DateTimeOffset.TryParse(headers[HeaderKeys.IfModifiedSince].ToString(), out DateTimeOffset headerDate);
+                var isValid = DateTimeOffset.TryParse(headers[HeaderKeys.IfModifiedSince].ToString(),
+                    CultureInfo.InvariantCulture.DateTimeFormat,
+                    DateTimeStyles.None,
+                     out DateTimeOffset headerDate);
                 if (isValid) result = headerDate;
             }
             return result;
@@ -45,7 +49,11 @@ namespace Api.Domain.Handling.Framework
             DateTimeOffset result = defaultValue;
             if (headers.ContainsKey(HeaderKeys.IfUnmodifiedSince))
             {
-                var isValid = DateTimeOffset.TryParse(headers[HeaderKeys.IfUnmodifiedSince].ToString(), out DateTimeOffset headerDate);
+                var isValid = DateTimeOffset.TryParse(
+                    headers[HeaderKeys.IfUnmodifiedSince].ToString(), 
+                    CultureInfo.InvariantCulture.DateTimeFormat,
+                    DateTimeStyles.None,
+                    out DateTimeOffset headerDate);
                 if (isValid) result = headerDate;
             }
             return result;
