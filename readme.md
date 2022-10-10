@@ -11,26 +11,28 @@ A secured `docker-compose`'d orchestration of a small set of micro services runn
 	* (using Identity Server 4) allowing social identities and role based access
 * A secure front-end/back-end `API` service 
 	* WebApi with REST methods
+	* Supporting If-* headers as appropriate for concurrency control
+	* Supporting HATEOS
 * A secure back-end common persistence server 
 	* using `MongoDB` with a common database and separate collections for each service
-	* its not a hard reconfigure to keep separate databases
+	* The ability to reconfigure to keep separate databases
 	* Data at rest is not yet encrypted
 
 # Security
 
 From a security perspective the primary objectives are;
 
-* Avoid having to use `localhost` and multiple ports as part of the domain host. 
- 	* `localhost` used in multi-service container configurations is worse than meaningless, suddenly it becomes a blocker.
- 	* But without a certificate that supports `localhost` in development .NET services blow up on startup.
 * To have a dedicated authentication and authorization domain 
 * Implement FULL SSL for encryption in motion. 
  	* implementation for all services in all environments.  
- 	* Implement encryption at rest as can be achieved with MongoDB
+ 	* Implement encryption at rest as can be achieved with community edition MongoDB
+* Avoid having to use `localhost` and multiple ports as part of the domain host. 
+ 	* `localhost` used in multi-service container configurations is worse than meaningless, relies on ports, then suddenly it becomes a blocker especially with respect to IdentityServer.
+ 	* Avoiding the issue that without a certificate that supports `localhost` in development .NET services blow up on startup.
 
 ## Opinion
 
-If you are asking WHY, then lets just say its long been my opinion, and objective, that you could and therefore should. This solution is working out the how that can be done in all environments.
+If you are asking WHY, then lets just say its long been my opinion, and objective, that you could, and therefore should have your setup the same in all environments. This solution is working out the how that can be done.
 
 # Networking
 
@@ -42,7 +44,7 @@ Its a docker controlled sub-net inside your machine, analogous to group of VM's 
 
 Even for such a small collection of services there are quite a number of moving parts involved that need configuring to get this up and running.
 
-Efforts have been made to limit this complexity but still there are currently about 2 dozen variables that need setting to get it up and running. 
+Efforts have been made to limit this complexity but still there are currently about 2 dozen variables that need setting. 
 
 Half a dozen of those are to do with MongoDB setup, and another half dozen to do with social login support (if you have them).
 
@@ -124,8 +126,6 @@ The overall intention of that is to provide a workable secure local environments
 
 Which is now taken care of by the setup steps above and the provided scripts.
 
-
-
 # Dependencies
 
 This solution was developed using:
@@ -134,11 +134,14 @@ This solution was developed using:
 Microsoft Visual Studio Professional 2019 Version 16.7.6
 Microsoft Visual Studio Professional 2019 Version 16.8.4
 Microsoft Visual Studio Professional 2019 Version 16.9.3
+Microsoft Visual Studio Professional 2022 Version 17.3.4
 Docker version 20.10.0
 Docker version 20.10.2
 Docker version 20.10.5
+Docker version 20.10.17
 git version 2.26.2.windows.1
 git version 2.30.0.windows.1
+git version 2.37.1.windows.1
 ```
 
 Optional tools and resources that were used to diagnose and fix problems include;
@@ -152,6 +155,7 @@ Docker documentation
 Postman V7.36.1
 Postman V8.0.3
 Postman V8.1.0
+Postman for Windows Version 10.0.20
 ```
 
 In the solution, container orchestration is enabled with Linux containers and docker-compose.
