@@ -1,3 +1,15 @@
+# Security
+
+From a security perspective the primary objectives are;
+
+* To have a dedicated authentication and authorization domain 
+* Implement FULL SSL for encryption in motion. 
+ 	* implementation for all services in all environments.  
+ 	* Implement encryption at rest as can be achieved with community edition MongoDB
+* Avoid having to use `localhost` and multiple ports as part of the domain host. 
+ 	* `localhost` used in multi-service container configurations is worse than meaningless, relies on ports, then suddenly it becomes a blocker especially with respect to IdentityServer.
+ 	* Avoiding the issue that without a certificate that supports `localhost` in development .NET services blow up on startup.
+
 # Identity, Identity Server and authorisation notes
 
 Identity server provides an authorisation domain specif to this set of micro services and allows integration with many social identity providers through OAUTH and OpenID.

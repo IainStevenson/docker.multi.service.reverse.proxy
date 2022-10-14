@@ -1,8 +1,12 @@
+# Networking
+
+Its a docker controlled sub-net inside your machine, analogous to group of VM's inside a VNET in the cloud with a public IP address leading only to the reverse proxy font end.
+
 # Network notes
 
-The docker subnet network is agnostic about its actual run time IP Addresses and this 
+The docker sub-net network is agnostic about its actual run time IP Addresses and this 
 solution leverages the automatic DNS feature of docker to provide 
-container-to-container communications through their deterministic hostnames.
+container-to-container communications through their deterministic host names.
 
 Container-to-container communications:
 * (A) are (mediated) proxied by the proxy service if addresses use the the main domain  ```local.myInfo.world``` and application base paths. e,g, https://local.myInfo.world/api
@@ -44,7 +48,7 @@ This diagram illustrates the host and docker network setup.
 `___________________________________________________________________________________________'
 ```
 
-All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the requried domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debuging from complaining about a localhost trusted certificate on startup.
+All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the required domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debugging from complaining about a localhost trusted certificate on startup.
 
 All transport is encrypted. 
 
@@ -52,13 +56,13 @@ Clearly here, network transmission performance is reduced over a Front end TLS a
 
 The decision here was to trade that performance drop for increased transport security on the basis that ```security should never be undermined by performance considerations```.
 
-Any inadvertent exposure of backend services to the outside world can therefore fall back on TLS. (Strength in depth)
+Any inadvertent exposure of back end services to the outside world can therefore fall back on TLS. (Strength in depth)
 
 Outside world can only access the proxy at local.myInfo.world where port 80 (http) forces a redirect to port 443 (https).
 
-The Proxy can access all backend services only on port 443
+The Proxy can access all back end services only on port 443
 
-All backend services can access all services via the Proxy via port 443 (https) or the mongoDB port 27017. Each service may access any other service directly by any other exposed port. 
+All back end services can access all services via the Proxy via port 443 (https) or the mongoDB port 27017. Each service may access any other service directly by any other exposed port. 
 
 Certificates provided for each service and each has the development root CA certificate available to trust those services certificates.
 
@@ -118,7 +122,7 @@ Support access via path    | https://local.myInfo.world/support is served direct
 
 ## Relative Url's
 
-URL inter_site redirects from myinfo.store container to  myinfo.support container and vis-a-versa work as expected and intra site urls using controller actions work as expected
+URL inter_site redirects from myinfo.store container to  myinfo.support container and vis-a-versa work as expected and intra-site urls using controller actions work as expected
 
 Example index.cshtml from Store shows a self referenceing controller action link and a standard domain relative ``` href="/support"``` link to the support site from the store;
 

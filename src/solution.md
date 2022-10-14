@@ -37,7 +37,7 @@ Testing
 ```
 
 ### Certificates
-Includes command scripts to generate a slef-signed root and hsot certificate to enable SSL.
+Includes command scripts to generate a self-signed root and host certificate to enable SSL.
 
 ### Infrastructure
 Provides Various libraries will be available for cross cutting concerns.

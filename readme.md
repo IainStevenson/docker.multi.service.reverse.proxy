@@ -1,8 +1,6 @@
 # Purpose
 
-To document the research and development needed to produce and configure the following;
-
-A secured `docker-compose`'d orchestration of a small set of micro services running on Linux containers featuring;
+To build a secure `docker-compose`'d orchestration of a decoupled set of micro services running on Linux containers featuring;
 
 * A secure Reverse Proxy (NGINX) guarding all other services.
 * A secure `store` front-end Web site
@@ -11,85 +9,69 @@ A secured `docker-compose`'d orchestration of a small set of micro services runn
 	* (using Identity Server 4) allowing social identities and role based access
 * A secure front-end/back-end `API` service 
 	* WebApi with REST methods
-	* Supporting If-* headers as appropriate for concurrency control
-	* Supporting HATEOS
+	* Supporting 
+	    * `If-*` headers as appropriate for concurrency control
+	    * HATEOS
+	    * `Swagger`
+	    * `versioning`
 * A secure back-end common persistence server 
 	* using `MongoDB` with a common database and separate collections for each service
 	* The ability to reconfigure to keep separate databases
 	* Data at rest is not yet encrypted
 
-# Security
-
-From a security perspective the primary objectives are;
-
-* To have a dedicated authentication and authorization domain 
-* Implement FULL SSL for encryption in motion. 
- 	* implementation for all services in all environments.  
- 	* Implement encryption at rest as can be achieved with community edition MongoDB
-* Avoid having to use `localhost` and multiple ports as part of the domain host. 
- 	* `localhost` used in multi-service container configurations is worse than meaningless, relies on ports, then suddenly it becomes a blocker especially with respect to IdentityServer.
- 	* Avoiding the issue that without a certificate that supports `localhost` in development .NET services blow up on startup.
-
-## Opinion
-
-If you are asking WHY, then lets just say its long been my opinion, and objective, that you could, and therefore should have your setup the same in all environments. This solution is working out the how that can be done.
-
-# Networking
-
-Its a docker controlled sub-net inside your machine, analogous to group of VM's inside a VNET in the cloud with a public IP address leading only to the reverse proxy font end.
-
-[network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
-
-# Reducing complexity
-
-Even for such a small collection of services there are quite a number of moving parts involved that need configuring to get this up and running.
-
-Efforts have been made to limit this complexity but still there are currently about 2 dozen variables that need setting. 
-
-Half a dozen of those are to do with MongoDB setup, and another half dozen to do with social login support (if you have them).
-
-Special Note: During development of this solution some local environment only credentials may appear in configuration files and the solution will be hardened later to secure all environment settings in the final V1 release, where the secrets will be entirely ephemeral and unrecorded in any files in the repository.
-
 # Getting started
 
-- Required: Install Visual Studio 2019 or above.
-- Required: Install Docker for windows
-- Required: Install git for windows in its default location.
-- Download this repository and load it into visual studio.
-	- If git is anywhere else, or you have OpenSSL somewhere else, or modify ```src/Certificates/gen-vars.cmd``` to specify where to find `openssl.exe` 
+- Required tooling: 
+    - Install Visual Studio 2019 or above. Currently 2022.
+    - Install Docker for windows
+    - Install git for windows in its default location.
+    - Download this repository and load it into visual studio.
+* If git is anywhere else, or you have OpenSSL somewhere else, or modify ```src/Certificates/gen-vars.cmd``` to specify where to find `openssl.exe` 
 - Set the startup to docker_compose using the right click menu on the solution to set startup project.
-- Edit your hosts file as described in 'DNS domain name' below. 
-	- Once that change is saved it is active immediately.
+- Edit your hosts file
+    - Add the following domain to the development environment private DNS by adding the following entry to your 
+```%SystemRoot%\system32\drivers\etc\hosts``` file using any suitable text editor run as administrator.  Once that change is saved it is active immediately.
+
+```
+127.0.0.1 local.myInfo.world
+```
+	
 - Install the self-signed domain trusted certificates to your development host, open a PowerShell, Terminal or command window in the ```src/Certificates``` folder.
 	- Generate and install a root certificate execute ```./gen-root.cmd``` and follow instructions \* 
 	- Generate default certificates for each micro service execute the ```gen-host.cmd``` and follow instructions.
-- This will have created the following empty folders to persist MongoDB data across container run-times, by  executing the ```src\SetupLocalDB.CMD```
+- This will have created the following empty folders to persist MongoDB data across container run-times on your development host, by  executing the ```src\SetupLocalDB.CMD```
+
 	```
 	%APPDATA%\MongoDb\Data
 	%APPDATA%\MongoDb\Logs
 	```
-- After generating the certificates run the ```user-secrets.cmd``` command script with parameters similar to these but for your own settings;
-	- parameters are: 
-		- action (SET|REMOVE)
-		- domain
-		- MONGO admin database
-		- MONGO admin user
-		- MONGO admin password
-		- MONGO connection string username
-		- MONGO connection string password
-		- Identity shared client id
-		- Identity shared client secret
-		- [optional] Google login client id
-		- [optional] Google login secret
-		- [optional] Microsoft login client id
-		- [optional] Microsoft login secret
-		- [optional] GitHub login client id
-		- [optional] GitHub login secret
-		
-	- Using your already generated Google/ Facebook / Microsoft or GitHub Client and secrets in this command will setup your Visual Studio user-secrets to work with your development configuration. ```./user-secrets set local.myinfo.world admin admin storage storagepass Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
-	- Note: ATM: if you use different database username and password it needs to also be reflected in ```src/.env``` and ```src/MongoDb/mongo-init.js``` settings.
-	- if you don't yet have a Google, Microsoft or GitHub external account sign in setup for your app then leave the optional parameters off and the identity server startup will not configure external authentication as an option and you can just use the test users. Find then in `Identity.Storage.SeedData`
-	- In google, Microsoft and GitHub developer consoles you will need to add in your allowed URL's as they would normally using the \*.domain They operate by redirect so they are picked up locally on the browser and still work according to the local development machine DNS via the hosts file.	
+-Execute ```user-secrets.cmd``` command script;
+
+```
+	parameters are: 
+		action (SET|REMOVE)
+		domain
+		MONGO admin database name
+		MONGO admin username
+		MONGO admin password
+		MONGO client connection string username
+		MONGO client connection string password
+		Identity shared client id
+		Identity shared client secret
+		[optional] Google login client id
+		[optional] Google login secret
+		[optional] Microsoft login client id
+		[optional] Microsoft login secret
+		[optional] GitHub login client id
+		[optional] GitHub login secret
+```		
+
+
+* Using your already generated Google/ Facebook / Microsoft or GitHub Client and secrets in this command will setup your Visual Studio user-secrets to work with your development configuration. ```./user-secrets set local.myinfo.world admin admin storage storagepass Mvc secret googleid googlesecret microsoftid microsoftsecret githubid githubsecret```
+* Note: ATM: if you use different database username and password it needs to also be reflected in ```src/.env``` and ```src/MongoDb/mongo-init.js``` settings.
+* if you don't yet have a Google, Microsoft or GitHub external account sign in setup for your app then leave the optional parameters off and the identity server startup will not configure external authentication as an option and you can just use the test users. Find then in `Identity.Storage.SeedData`
+* In google, Microsoft and GitHub developer consoles you will need to add in your allowed URL's as they would normally using the \*.domain They operate by redirect so they are picked up locally on the browser and still work according to the local development machine DNS via the hosts file.	
+
 - Press F5.
 	- If no browser appears, start one and navigate to https://local.myInfo.world and you will see the store site.
 	- Navigate around, when you click Weather Forecast you will need to login, if logging in locally then use username: bob Password: bob, or use available social logins.
@@ -97,131 +79,21 @@ Special Note: During development of this solution some local environment only cr
 
 \* I will convert this, side by side, as PowerShell later.
 
-## Patience and Frustration
+You can get more information about this solution and its journey at these locations.
 
-Depending on your network speed, the first build run may take a while if none of the docker layer dependencies are not already in your docker cache. 
-
-Subsequent re-builds will be quicker.
-
-If you get re-build issues, perform one or more visual studio build / clean solution runs and try again before checking anything else. 
-
-If in doubt use docker desktop to remove any failed container builds via the 'cleanup' button. I noted that sometimes the docker image does not pick up on subtle file changes that are not c# code to force an image rebuild.
-
-## DNS domain name
-
-Add the following domain to the development environment private DNS by adding the following entry to your 
-```%SystemRoot%\system32\drivers\etc\hosts``` file using any suitable text editor run as administrator.
-
-```
-127.0.0.1 local.myInfo.world
-```
-
-NOTE: This is my domain and already registered. Using it in your local development environment or other private environment will work, however should you deploy it to a public service then it wont as it will come to my services which are forked from this starter repository.
-
-You can easily change the domain by globally changing 'myinfo.world' to whatever you like. Note: just changing myInfo will cause problems with certificate names.
-
-Having set that domain name there is a need to generate configure and use self-signed certificates to help in departing from using ```localhost``` as a default domain.
-
-The overall intention of that is to provide a workable secure local environments via self-signed certificates, and use services like (lets encrypt)[https://letsencrypt.org/] to provide other sub domain certificates.
-
-Which is now taken care of by the setup steps above and the provided scripts.
-
-# Dependencies
-
-This solution was developed using:
-
-```
-Microsoft Visual Studio Professional 2019 Version 16.7.6
-Microsoft Visual Studio Professional 2019 Version 16.8.4
-Microsoft Visual Studio Professional 2019 Version 16.9.3
-Microsoft Visual Studio Professional 2022 Version 17.3.4
-Docker version 20.10.0
-Docker version 20.10.2
-Docker version 20.10.5
-Docker version 20.10.17
-git version 2.26.2.windows.1
-git version 2.30.0.windows.1
-git version 2.37.1.windows.1
-```
-
-Optional tools and resources that were used to diagnose and fix problems include;
-
-```
-Fiddler anywhere
-Docker desktop
-StackOverflow
-Nginx documentation
-Docker documentation
-Postman V7.36.1
-Postman V8.0.3
-Postman V8.1.0
-Postman for Windows Version 10.0.20
-```
-
-In the solution, container orchestration is enabled with Linux containers and docker-compose.
-
-The docker_compose project should be your preferred startup for solution debugging builds and runs.
+* <a href="src/solution.md" target="_blank">Solution structure and issues.</a>
+* <a href="src/certificates.md" target="_blank">SSL Self-Signed Certificates</a> 
+* <a href="src/identity.md" target="_blank">Identity Server</a>
+* <a href="src/Configuration.md" target="_blank">Configuration</a>
+* <a href="src/docker.md" target="_blank">Docker</a>
+* <a href="src/http.md" target="_blank">HTTP Url scheme</a>
+* <a href="src/issues.md" target="_blank">General issues and solutions</a>
+* <a href="src/linux.md" target="_blank">Linux for newbies</a>
+* <a href="src/network.md" target="_blank">The network topology of the solution</a>
+* <a href="src/oauth2.md" target="_blank">OAUTH2</a>
 
 
-# Local Networking Gotcha
-
-BEWARE: 
-
-The technique used here with a single NGINX reverse proxy listening on `localhost` (127.0.0.1) port 443 has consequences for other development projects on your development host.  You will not be able to simultaneously run http/s services from other hosting programs such as IIS Express or 
-self hosted programs in other VS projects due to port 443 and 80 already being bound/in use. 
-Conversely is that this solution will not work properly or at all if those ports are already in use elsewhere.
-
-## DNS  Domains
-
-This solution has a real domain name entry of ```myinfo.world```
-
-In keeping with usual DNS sub-domain conventions the following environment sub-domains will be set up as follows;
-
-| Sub domain         | Use                                    | 
-|--------------------|----------------------------------------|
-| local.myinfo.world | intended for developer isolation       |
-| dev.myinfo.world   | intended for developer collaboration   |
-| test.myinfo.world  | intended for tester collaboration      |
-| demo.myinfo.world  | intended for demonstration             |
-| myinfo.world       | for customer use                       |
-
-In each sub-domain the micro-services each use a DNS prefix of;
-
-- identity
-- api
-- store
-- support
-- mongo
-
-These example DNS host names are for the local top level domain and will be replicated for each of; local, test, demo
-
-- identity.local.myinfo.world
-- api.local.myinfo.world
-- store.local.myinfo.world
-- support.local.myinfo.world
-- mongo.local.myinfo.world
 
 
-# More Reading:
 
-Various markdown files are included focusing on different aspects of the development process;
 
-- [configuration](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/Configuration.md)
-- [certificates](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/certificates.md)
-- [docker](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/docker.md)
-- [http](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/http.md)
-- [identity](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/identity.md)
-- [linux](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/linux.md)
-- [network](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/network.md)
-- [solution](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/solution.md)
-- [issues document](https://github.com/IainStevenson/docker.multi.service.reverse.proxy/blob/master/src/issues.md)
-
-# Important
-
-When changing domain or product names casing is important
-
-- MongoDB: manage `mongo-init.js`, delete persisted mongo data : check %APPDATA%/MongoDb/Data
-- services : `appsettings.*.json`
-- Proxy: manage `Proxy/certificates.domain.conf`, `gen-host.cmd`, `user-secrets.cmd`
-
-A lot of effort has been expended on reducing the complexity of the configuration and its an ongoing exercise.
