@@ -42,12 +42,15 @@ namespace Api.Domain.Storage.Put
                 return response;
             }
 
-
-            if (
-                    !
-                    (existingResource.Modified.HasValue ?
-                    existingResource.Modified.Value <= request.UnmodifiedSince :
-                    existingResource.Created <= request.UnmodifiedSince) || (request.ETags.Contains(existingResource.Etag))
+            // put requests pass the last etag and last modified time to check its ok to update
+            // if either are not true then fail teh update with PRECONDITIONFAILED
+            if (                    
+                    (
+                        existingResource.Modified.HasValue ?
+                            existingResource.Modified.Value > request.UnmodifiedSince :
+                            existingResource.Created > request.UnmodifiedSince
+                        ) 
+                    || (request.ETags.Any() && !request.ETags.Contains(existingResource.Etag))
                     )
             {
                 if (request.ETags.Any())

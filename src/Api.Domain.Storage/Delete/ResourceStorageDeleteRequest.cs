@@ -28,8 +28,10 @@ namespace Api.Domain.Storage.Delete
 
         /// <summary>
         /// Include the resource if it remains unchanged since the specified time.
+        /// The default of <see cref="DateTimeOffset.MaxValue"/> indicates that it is not specified and 
+        /// therefore any record has been unmodified since that time.
         /// </summary>
-        public DateTimeOffset IsUnchangedSince { get; set; } 
+        public DateTimeOffset IsUnchangedSince { get; set; }  = DateTimeOffset.MaxValue;
 
     }
 }

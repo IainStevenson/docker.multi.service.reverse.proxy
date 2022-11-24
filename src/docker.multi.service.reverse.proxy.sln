@@ -110,7 +110,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Domain.Storage", "Api.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Domain.Handling", "Api.Domain.Handling\Api.Domain.Handling.csproj", "{0FE9DFC6-B0EA-41B3-912A-8B6DFE3978BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Domain.Storage.Tests", "Api.Domain.Storage.Tests\Api.Domain.Storage.Tests.csproj", "{975F1B23-C828-4669-8B07-3A830C457C2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Domain.Storage.Tests", "Api.Domain.Storage.Tests\Api.Domain.Storage.Tests.csproj", "{975F1B23-C828-4669-8B07-3A830C457C2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

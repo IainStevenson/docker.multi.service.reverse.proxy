@@ -351,6 +351,8 @@
 													"    pm.collectionVariables.set('lastETag', jsonData.etag);\r",
 													"    console.log('lastModified', jsonData.created);\r",
 													"    pm.collectionVariables.set('lastModified', jsonData.created);\r",
+													"    console.log('beforeLastModified', jsonData.created);\r",
+													"    pm.collectionVariables.set('beforeLastModified', jsonData.created);\r",
 													"    console.log('lastContentKeys', jsonData.content);\r",
 													"    pm.collectionVariables.set('lastContentKeys', jsonData.content)\r",
 													"    console.log('lastKeyValue', jsonData.content.id);\r",
@@ -387,13 +389,9 @@
 											"listen": "prerequest",
 											"script": {
 												"exec": [
-													"var moment = require('moment');\r",
-													"pm.collectionVariables.set('beforeLastModified', moment().format(\"YYYY-MM-DDTHH:MM:SS\") )\r",
-													"\r",
-													"setTimeout(checkStatusCode, 1000);\r",
-													"    function checkStatusCode() {\r",
-													"         console.log('wait over');\r",
-													"    }"
+													"const dateNow= new Date();\r",
+													"console.log('Time Now: setting beforeLastModified' , dateNow.toISOString());\r",
+													"pm.collectionVariables.set('beforeLastModified', dateNow.toISOString())"
 												],
 												"type": "text/javascript"
 											}
@@ -657,6 +655,31 @@
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
 													"\r",
+													"\r",
+													"pm.test(\"Extract Last Values\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    console.log('lastId', jsonData.id);\r",
+													"    pm.collectionVariables.set('lastId', jsonData.id)\r",
+													"    console.log('lastETag', jsonData.etag);\r",
+													"    pm.collectionVariables.set('lastETag', jsonData.etag);\r",
+													"    console.log('lastModified', jsonData.created);\r",
+													"    pm.collectionVariables.set('lastModified', jsonData.created);\r",
+													"    console.log('lastContentKeys', jsonData.content);\r",
+													"    pm.collectionVariables.set('lastContentKeys', jsonData.content)\r",
+													"    console.log('lastKeyValue', jsonData.content.id);\r",
+													"    pm.collectionVariables.set('lastKeyValue', jsonData.content.id)\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const dateNow= new Date();\r",
+													"console.log('Time Now: setting beforeLastModified' , dateNow.toISOString());\r",
+													"pm.collectionVariables.set('beforeLastModified', dateNow.toISOString())\r",
 													""
 												],
 												"type": "text/javascript"
@@ -905,7 +928,7 @@
 									"response": []
 								},
 								{
-									"name": "DELETE is NoContent on delete",
+									"name": "DELETE is NoContent on delete with Match eTag",
 									"event": [
 										{
 											"listen": "test",
@@ -942,6 +965,11 @@
 											{
 												"key": "Content-Type",
 												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "If-Match",
+												"value": "{{lastETag}}",
 												"type": "text"
 											}
 										],
@@ -1145,7 +1173,7 @@
 		},
 		{
 			"key": "maxPostCount",
-			"value": "1",
+			"value": "2",
 			"type": "string"
 		}
 	]

@@ -51,8 +51,8 @@ namespace Api.Domain.Storage.Delete
             response.StatusCode = PRECONDITIONFAILED;
 
             if ((resource.Modified.HasValue ?
-                        resource.Modified <= request.IsUnchangedSince :
-                        resource.Created <= request.IsUnchangedSince)
+                        resource.Modified > request.IsUnchangedSince :
+                        resource.Created > request.IsUnchangedSince)
                     )
             {
                 response.RequestValidationErrors.Add($"Deletion failed, as the resource has been modified since {request.IsUnchangedSince}");
