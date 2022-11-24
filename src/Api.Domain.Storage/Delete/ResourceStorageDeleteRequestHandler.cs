@@ -8,17 +8,15 @@ namespace Api.Domain.Storage.Delete
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly AbstractValidator<ResourceStorageDeleteRequest> _validator;
-        private const int BADREQUEST = 400;
-        private const int NOTFOUND = 404;
-        private const int ALREADYGONE = 410;
-        private const int PRECONDITIONFAILED = 412;
-        private const int NOCONTENT = 204;
+        private readonly ResourceStorageDeleteValidator _validatePreConditions;
+       
 
 
-        public ResourceStorageDeleteRequestHandler(IRepository<Data.Model.Storage.Resource> storage, ResourceStorageDeleteRequestValidator requestValidator)
+        public ResourceStorageDeleteRequestHandler(IRepository<Data.Model.Storage.Resource> storage, ResourceStorageDeleteRequestValidator requestValidator, ResourceStorageDeleteValidator validatePreConditions)
         {
             _storage = storage;
             _validator = requestValidator;
+            _validatePreConditions = validatePreConditions;
         }
 
         public async Task<ResourceStorageDeleteResponse> Handle(ResourceStorageDeleteRequest request, CancellationToken cancellationToken)
@@ -31,7 +29,7 @@ namespace Api.Domain.Storage.Delete
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                response.StatusCode = BADREQUEST;
+                response.StatusCode = StatusCodes.BADREQUEST;
             }
 
 
@@ -40,34 +38,15 @@ namespace Api.Domain.Storage.Delete
                                                                                    && r.Namespace == request.Namespace
                                                                                    )).FirstOrDefault();
 
-            if (resource == null)
+            (resource,response) = _validatePreConditions.Validate(resource, request, response);
+
+            if (response.StatusCode != StatusCodes.OK)
             {
-                response.StatusCode = NOTFOUND;
                 return response;
-            }
-
-
-            // only proceed if resource is unmodified since or is one of the etags
-            response.StatusCode = PRECONDITIONFAILED;
-
-            if ((resource.Modified.HasValue ?
-                        resource.Modified > request.IsUnchangedSince :
-                        resource.Created > request.IsUnchangedSince)
-                    )
-            {
-                response.RequestValidationErrors.Add($"Deletion failed, as the resource has been modified since {request.IsUnchangedSince}");
-                return response;
-            }
-
-            if (request.IsNotETags.Any() && !request.IsNotETags.Contains(resource.Etag))
-            {
-                response.RequestValidationErrors.Add($"Deletion failed, as the resource has None of the specified ETags {string.Join(',', request.IsNotETags)}/r/n");
-                return response;
-
             }
 
             var count = await _storage.DeleteAsync(request.Id);
-            response.StatusCode = NOCONTENT;
+            response.StatusCode = StatusCodes.NOCONTENT;
             return response;
 
         }

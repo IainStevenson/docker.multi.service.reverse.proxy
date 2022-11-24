@@ -35,19 +35,19 @@ namespace Api.Domain.Storage.Get
                                             r.Created < request.IfModifiedSince);
                 if (unmodifiedItems.Count() == resources.Count())
                 {
-                    response.StatusCode = 304; //System.Net.HttpStatusCode.NotModified;
+                    response.StatusCode = StatusCodes.NOTMODIFIED; 
                     return response;
                 }
 
                 var modifiedItems = resources.Where(r =>
                             r.Modified.HasValue ? r.Modified >= request.IfModifiedSince :
                             r.Created > request.IfModifiedSince);
-                response.StatusCode = 200; // System.Net.HttpStatusCode.OK;
+                response.StatusCode = StatusCodes.OK;
                 response.Model = modifiedItems;
                 return response;
             }
 
-            response.StatusCode = 404; // System.Net.HttpStatusCode.NotFound;
+            response.StatusCode = StatusCodes.NOTFOUND;
             return response;
 
         }

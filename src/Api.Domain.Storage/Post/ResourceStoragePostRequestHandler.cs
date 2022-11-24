@@ -9,8 +9,7 @@ namespace Api.Domain.Storage.Post
     {
         private readonly IRepository<Resource> _storage;
         private readonly AbstractValidator<ResourceStoragePostRequest> _validator;
-        private const int BADREQUEST = 400;
-        private const int CREATED = 201;
+       
 
         public ResourceStoragePostRequestHandler(IRepository<Resource> storage, ResourceStoragePostRequestValidator validator)
         {
@@ -26,7 +25,7 @@ namespace Api.Domain.Storage.Post
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
-                response.StatusCode = BADREQUEST;
+                response.StatusCode = StatusCodes.BADREQUEST;
             }
 
             var resource = new Resource()
@@ -45,7 +44,7 @@ namespace Api.Domain.Storage.Post
             };
 
             response.Model = await _storage.CreateAsync(resource, cancellationToken);
-            response.StatusCode = CREATED;
+            response.StatusCode = StatusCodes.CREATED;
             return response;
         }
     }

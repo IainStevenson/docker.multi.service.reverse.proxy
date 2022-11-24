@@ -9,11 +9,7 @@ namespace Api.Domain.Storage.Put
     {
         private readonly IRepository<Resource> _storage;
         private readonly AbstractValidator<ResourceStoragePutRequest> _requestValidator;
-        private const int BADREQUEST = 400;
-        private const int NOTFOUND = 404;
-        private const int UPDATED = 200;
-        private const int PRECONDITIONFAILED = 412;
-
+       
         public ResourceStoragePutRequestHandler(IRepository<Resource> storage, ResourceStoragePutRequestValidator requestValidator)
         {
             _storage = storage;
@@ -27,7 +23,7 @@ namespace Api.Domain.Storage.Put
             var validationResult = _requestValidator.Validate(request);
             if (!validationResult.IsValid)
             {
-                response.StatusCode = BADREQUEST;
+                response.StatusCode = StatusCodes.BADREQUEST;
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
                 return response;
             }
@@ -38,7 +34,7 @@ namespace Api.Domain.Storage.Put
                                                                                 )).FirstOrDefault();
             if (existingResource == null)
             {
-                response.StatusCode = NOTFOUND;
+                response.StatusCode = StatusCodes.NOTFOUND;
                 return response;
             }
 
@@ -61,7 +57,7 @@ namespace Api.Domain.Storage.Put
                 {
                     response.RequestValidationErrors.Add($"The resource has been modified since {request.UnmodifiedSince} and therefore has not been updated.");
                 }
-                response.StatusCode = PRECONDITIONFAILED;
+                response.StatusCode = StatusCodes.PRECONDITIONFAILED;
                 return response;
             }
 
@@ -77,7 +73,7 @@ namespace Api.Domain.Storage.Put
             }
             
             response.Model = await _storage.UpdateAsync(existingResource); ;
-            response.StatusCode = UPDATED;
+            response.StatusCode = StatusCodes.OK;
             return response;
         }
 

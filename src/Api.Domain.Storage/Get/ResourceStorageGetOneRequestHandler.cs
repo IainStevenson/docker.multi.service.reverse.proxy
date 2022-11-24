@@ -8,11 +8,7 @@ namespace Api.Domain.Storage.Get
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly AbstractValidator<ResourceStorageGetOneRequest> _requestValidator;
-        private const int BADREQUEST = 400;
-        private const int NOTFOUND = 404;
-        private const int NOTMODIFIED = 304;
-        private const int OK = 200;
-
+        
 
         public ResourceStorageGetOneRequestHandler(IRepository<Data.Model.Storage.Resource> storage, ResourceStorageGetOneRequestValidator requestValidator)
         {
@@ -29,7 +25,7 @@ namespace Api.Domain.Storage.Get
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
-                response.StatusCode = BADREQUEST;
+                response.StatusCode = StatusCodes.BADREQUEST;
             }
 
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
@@ -40,13 +36,13 @@ namespace Api.Domain.Storage.Get
 
             if (resource == null)
             {
-                response.StatusCode = NOTFOUND; 
+                response.StatusCode = StatusCodes.NOTFOUND; 
                 return response;
             }
 
             if (request.IfNotETags.Any() && request.IfNotETags.Contains(resource.Etag))
             {
-                response.StatusCode = NOTMODIFIED; 
+                response.StatusCode = StatusCodes.NOTMODIFIED; 
                 return response;
             }
 
@@ -56,12 +52,12 @@ namespace Api.Domain.Storage.Get
                                                         resource.Created > request.IfModifiedSince);
             if (resourceHasNotBeenModifiedSince)
             {
-                response.StatusCode = NOTMODIFIED;
+                response.StatusCode = StatusCodes.NOTMODIFIED;
                 return response;
             }
 
             response.Model = resource;
-            response.StatusCode = OK;
+            response.StatusCode = StatusCodes.OK;
             return response;
         }
     }
