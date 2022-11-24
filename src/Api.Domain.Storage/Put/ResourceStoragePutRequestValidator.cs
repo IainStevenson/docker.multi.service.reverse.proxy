@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Api.Domain.Storage.Delete;
+using FluentValidation;
 
 namespace Api.Domain.Storage.Put
 {
@@ -13,5 +14,4 @@ namespace Api.Domain.Storage.Put
             RuleFor(x => x.RequestId).NotEmpty();
         }
     }
-
 }

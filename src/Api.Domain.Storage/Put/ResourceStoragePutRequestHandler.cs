@@ -9,11 +9,14 @@ namespace Api.Domain.Storage.Put
     {
         private readonly IRepository<Resource> _storage;
         private readonly AbstractValidator<ResourceStoragePutRequest> _requestValidator;
-       
-        public ResourceStoragePutRequestHandler(IRepository<Resource> storage, ResourceStoragePutRequestValidator requestValidator)
+        private readonly ResourceStoragePutValidator _validatePreConditions;
+
+
+        public ResourceStoragePutRequestHandler(IRepository<Resource> storage, ResourceStoragePutRequestValidator requestValidator, ResourceStoragePutValidator validatePreConditions)
         {
             _storage = storage;
             _requestValidator = requestValidator;
+            _validatePreConditions = validatePreConditions;
         }
 
         public async Task<ResourceStoragePutResponse> Handle(ResourceStoragePutRequest request, CancellationToken cancellationToken)
@@ -32,32 +35,11 @@ namespace Api.Domain.Storage.Put
                                                                                 && r.OwnerId == request.OwnerId
                                                                                 && r.Namespace == request.Namespace
                                                                                 )).FirstOrDefault();
-            if (existingResource == null)
-            {
-                response.StatusCode = StatusCodes.NOTFOUND;
-                return response;
-            }
+         
+            (existingResource, response) = _validatePreConditions.Validate(existingResource, response);
 
-            // put requests pass the last etag and last modified time to check its ok to update
-            // if either are not true then fail teh update with PRECONDITIONFAILED
-            if (                    
-                    (
-                        existingResource.Modified.HasValue ?
-                            existingResource.Modified.Value > request.UnmodifiedSince :
-                            existingResource.Created > request.UnmodifiedSince
-                        ) 
-                    || (request.ETags.Any() && !request.ETags.Contains(existingResource.Etag))
-                    )
+            if (response.StatusCode != StatusCodes.OK)
             {
-                if (request.ETags.Any())
-                {
-                    response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.ETags)} and therefore has not been updated./r/n");
-                }
-                if (request.UnmodifiedSince != DateTimeOffset.MaxValue)
-                {
-                    response.RequestValidationErrors.Add($"The resource has been modified since {request.UnmodifiedSince} and therefore has not been updated.");
-                }
-                response.StatusCode = StatusCodes.PRECONDITIONFAILED;
                 return response;
             }
 
