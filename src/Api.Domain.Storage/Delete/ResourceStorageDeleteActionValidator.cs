@@ -2,18 +2,22 @@
 
 namespace Api.Domain.Storage.Delete
 {
-    public class ResourceStorageDeleteValidator 
+
+    /// <inheritdoc/>
+    public class ResourceStorageDeleteActionValidator : 
+        IResourceStorageActionValidator<ResourceStorageDeleteRequest, ResourceStorageDeleteResponse>
     {
-       
+        /// <inheritdoc/>
         public (Resource?, ResourceStorageDeleteResponse) Validate(Resource? resource, ResourceStorageDeleteRequest request, ResourceStorageDeleteResponse response)
         {
-            if (resource == null) {
+            if (resource == null)
+            {
                 response.StatusCode = StatusCodes.NOTFOUND;
                 response.RequestValidationErrors.Add($"Deletion failed, because the record identified by {request.Id} was not found.");
                 return (resource, response);
             }
 
-            
+
             if ((resource.Modified.HasValue ?
                         resource.Modified > request.IsUnchangedSince :
                         resource.Created > request.IsUnchangedSince)
@@ -21,6 +25,7 @@ namespace Api.Domain.Storage.Delete
             {
                 response.RequestValidationErrors.Add($"Deletion failed, because the resource has been modified since {request.IsUnchangedSince}");
                 response.StatusCode = StatusCodes.PRECONDITIONFAILED;
+                resource = null;
                 return (resource, response);
             }
 
@@ -28,6 +33,7 @@ namespace Api.Domain.Storage.Delete
             {
                 response.RequestValidationErrors.Add($"Deletion failed, as the resource has None of the specified ETags {string.Join(',', request.IsNotETags)}/r/n");
                 response.StatusCode = StatusCodes.PRECONDITIONFAILED;
+                resource = null;
                 return (resource, response);
 
             }

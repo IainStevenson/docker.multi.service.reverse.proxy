@@ -2,7 +2,10 @@ using Api.Domain.Handling.Framework;
 using Api.Domain.Handling.Resource;
 using Api.Domain.Handling.Resource.Post;
 using Api.Domain.Storage;
+using Api.Domain.Storage.Delete;
+using Api.Domain.Storage.Get;
 using Api.Domain.Storage.Post;
+using Api.Domain.Storage.Put;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Logging;
@@ -74,30 +77,20 @@ namespace Api
                             databaseName
                             );
             }
+
+            // POCO mapping
             IMapper mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Model.Storage.Resource, Data.Model.Response.Resource>();
             }).CreateMapper();
+
             // _configuration.Logging.Source
             services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
             {
                 options.LogSource = _configuration.RequestResponse.Source;
             });
-            services.AddHttpClient(string.Empty);
-            services.AddScoped(NewMongoClient);
-            services.AddScoped(NewResourceStorageClient);
-            services.AddCors();
-            services.AddDistributedMemoryCache();
-            services.AddSingleton<IRequestHeadersProvider>((services) => new RequestHeadersProvider());
-            services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(excludedHeaders));
-            services.AddSingleton<IPathResolver, PathResolver>();
-            services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
-            services.AddSingleton<IResponseLinksProvider,ResponseLinksProvider>();
-            services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
-            services.AddSingleton(x => mapper);
-            services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
-            services.AddSingleton<IResourceResponseFactory, ResourceResponseFactory>();
-            services.AddSingleton<IResourceResponseHandler, ResourceResponseHandler>();
+
+            // serialisation
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
@@ -105,20 +98,54 @@ namespace Api
                         options.SerializerSettings.Formatting = Formatting.Indented;
                         options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                         options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                    })
-                    .AddFluentValidation(config =>
-                    {
-                        
-                        config.AutomaticValidationEnabled = true;
-                        config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
-                        config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
                     });
 
-            services.AddMediatR(new[] { 
-                typeof(ResourceStoragePostRequestHandler), 
-                typeof(ResourceResponsePostRequestHandler) } 
+            services.AddHttpClient(string.Empty);
+            services.AddScoped(NewMongoClient);
+            services.AddScoped(NewResourceStorageClient);
+            services.AddCors();
+            services.AddDistributedMemoryCache();
+
+            // Http header management
+            services.AddSingleton<IRequestHeadersProvider>((services) => new RequestHeadersProvider());
+            services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(excludedHeaders));
+            
+            services.AddSingleton<IPathResolver, PathResolver>();
+            services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
+            
+            services.AddSingleton<IResponseLinksProvider, ResponseLinksProvider>();
+            
+            services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
+            
+            services.AddSingleton(x => mapper);
+            
+            // factories
+            services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
+            services.AddSingleton<IResourceResponseFactory, ResourceResponseFactory>();
+            
+            services.AddSingleton<IResourceResponseHandler, ResourceResponseHandler>();
+
+            // Verb action validation
+            services.AddSingleton<IResourceStorageActionValidator<ResourceStorageDeleteRequest, ResourceStorageDeleteResponse>, ResourceStorageDeleteActionValidator>();
+            services.AddSingleton<IResourceStorageActionValidator<ResourceStorageGetOneRequest, ResourceStorageGetOneResponse>, ResourceStorageGetOneActionValidator>();
+            services.AddSingleton<IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse>, ResourceStorageGetManyActionValidator>();
+            services.AddSingleton<IResourceStorageActionValidator<ResourceStoragePutRequest, ResourceStoragePutResponse>, ResourceStoragePutActionValidator>();
+
+            // request validation (Fluent)
+            services.AddFluentValidation(config =>
+            {
+
+                config.AutomaticValidationEnabled = true;
+                config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
+                config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
+            });
+
+            services.AddMediatR(new[] {
+                typeof(ResourceStoragePostRequestHandler),
+                typeof(ResourceResponsePostRequestHandler) }
             );
 
+            // securing the API
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>
                         {
@@ -145,7 +172,7 @@ namespace Api
                 options.AddPolicy(_configuration.Authorization.Policy.Name, policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim(_configuration.Authorization.Policy.ClaimName, _configuration.Authorization.Policy.ClaimValues.Split(',', StringSplitOptions.RemoveEmptyEntries)); 
+                    policy.RequireClaim(_configuration.Authorization.Policy.ClaimName, _configuration.Authorization.Policy.ClaimValues.Split(',', StringSplitOptions.RemoveEmptyEntries));
                 });
             });
         }
@@ -155,7 +182,7 @@ namespace Api
 
             ConfigureMongoDriver2IgnoreExtraElements();
 
-            app.UsePathBase(_configuration.Service.BasePath );
+            app.UsePathBase(_configuration.Service.BasePath);
 
             if (env.IsDevelopment())
             {
@@ -178,7 +205,7 @@ namespace Api
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = _configuration.Swagger.RoutePrefix;
-                c.SwaggerEndpoint(_configuration.Swagger.Endpoint, _configuration.Swagger.EndpointName); 
+                c.SwaggerEndpoint(_configuration.Swagger.Endpoint, _configuration.Swagger.EndpointName);
             });
 
             app.UseHttpsRedirection();

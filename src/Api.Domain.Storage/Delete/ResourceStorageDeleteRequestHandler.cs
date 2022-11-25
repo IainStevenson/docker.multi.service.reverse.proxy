@@ -7,16 +7,18 @@ namespace Api.Domain.Storage.Delete
     public class ResourceStorageDeleteRequestHandler : IRequestHandler<ResourceStorageDeleteRequest, ResourceStorageDeleteResponse>
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
-        private readonly AbstractValidator<ResourceStorageDeleteRequest> _validator;
-        private readonly ResourceStorageDeleteValidator _validatePreConditions;
+        private readonly AbstractValidator<ResourceStorageDeleteRequest> _requestValidator;
+        private readonly IResourceStorageActionValidator<ResourceStorageDeleteRequest, ResourceStorageDeleteResponse> _actionValidator;
        
 
 
-        public ResourceStorageDeleteRequestHandler(IRepository<Data.Model.Storage.Resource> storage, ResourceStorageDeleteRequestValidator requestValidator, ResourceStorageDeleteValidator validatePreConditions)
+        public ResourceStorageDeleteRequestHandler(IRepository<Data.Model.Storage.Resource> storage, 
+            ResourceStorageDeleteRequestValidator requestValidator, 
+            IResourceStorageActionValidator<ResourceStorageDeleteRequest, ResourceStorageDeleteResponse> actionValidator)
         {
             _storage = storage;
-            _validator = requestValidator;
-            _validatePreConditions = validatePreConditions;
+            _requestValidator = requestValidator;
+            _actionValidator = actionValidator;
         }
 
         public async Task<ResourceStorageDeleteResponse> Handle(ResourceStorageDeleteRequest request, CancellationToken cancellationToken)
@@ -24,7 +26,7 @@ namespace Api.Domain.Storage.Delete
 
             var response = new ResourceStorageDeleteResponse() { };
 
-            var validationResult = _validator.Validate(request);
+            var validationResult = _requestValidator.Validate(request);
 
             if (!validationResult.IsValid)
             {
@@ -38,9 +40,9 @@ namespace Api.Domain.Storage.Delete
                                                                                    && r.Namespace == request.Namespace
                                                                                    )).FirstOrDefault();
 
-            (resource,response) = _validatePreConditions.Validate(resource, request, response);
+            (resource,response) = _actionValidator.Validate(resource, request, response);
 
-            if (response.StatusCode != StatusCodes.OK)
+            if (resource == null)
             {
                 return response;
             }

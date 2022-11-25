@@ -9,21 +9,25 @@ namespace Api.Domain.Storage.Put
     {
         private readonly IRepository<Resource> _storage;
         private readonly AbstractValidator<ResourceStoragePutRequest> _requestValidator;
-        private readonly ResourceStoragePutValidator _validatePreConditions;
+        private readonly IResourceStorageActionValidator<ResourceStoragePutRequest, ResourceStoragePutResponse> _actionValidator;
 
 
-        public ResourceStoragePutRequestHandler(IRepository<Resource> storage, ResourceStoragePutRequestValidator requestValidator, ResourceStoragePutValidator validatePreConditions)
+        public ResourceStoragePutRequestHandler(IRepository<Resource> storage, 
+            ResourceStoragePutRequestValidator requestValidator,
+            IResourceStorageActionValidator<ResourceStoragePutRequest, ResourceStoragePutResponse> actionValidator)
         {
             _storage = storage;
             _requestValidator = requestValidator;
-            _validatePreConditions = validatePreConditions;
+            _actionValidator = actionValidator;
         }
 
         public async Task<ResourceStoragePutResponse> Handle(ResourceStoragePutRequest request, CancellationToken cancellationToken)
         {
 
             var response = new ResourceStoragePutResponse() { };
+            
             var validationResult = _requestValidator.Validate(request);
+
             if (!validationResult.IsValid)
             {
                 response.StatusCode = StatusCodes.BADREQUEST;
@@ -31,35 +35,32 @@ namespace Api.Domain.Storage.Put
                 return response;
             }
 
-            Resource? existingResource = (await _storage.GetAsync(r => r.Id == request.Id
+            Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                 && r.OwnerId == request.OwnerId
                                                                                 && r.Namespace == request.Namespace
                                                                                 )).FirstOrDefault();
          
-            (existingResource, response) = _validatePreConditions.Validate(existingResource, response);
+            (resource, response) = _actionValidator.Validate(resource,request, response);
 
-            if (response.StatusCode != StatusCodes.OK)
+            if (resource == null)
             {
                 return response;
             }
 
-            existingResource.Content = request.Content;
-            existingResource.Modified = DateTimeOffset.UtcNow;
-            existingResource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.ChangeRequestIdentifier, Value = request.RequestId });
-            existingResource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.Updated, Value = existingResource.Modified });
+            resource.Content = request.Content;
+            resource.Modified = DateTimeOffset.UtcNow;
+            resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.ChangeRequestIdentifier, Value = request.RequestId });
+            resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.Updated, Value = resource.Modified });
 
             if (!string.IsNullOrWhiteSpace(request.MoveTo))
             {
-                existingResource.Namespace = request.MoveTo;
-                existingResource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.NamespaceRename, Value = existingResource.Namespace });
+                resource.Namespace = request.MoveTo;
+                resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.NamespaceRename, Value = resource.Namespace });
             }
             
-            response.Model = await _storage.UpdateAsync(existingResource); ;
+            response.Model = await _storage.UpdateAsync(resource); ;
             response.StatusCode = StatusCodes.OK;
             return response;
         }
-
-
-
     }
 }

@@ -1,4 +1,4 @@
-﻿using Api.Domain.Storage.Delete;
+﻿using Api.Domain.Storage.Post;
 using FluentValidation;
 
 namespace Api.Domain.Storage.Put

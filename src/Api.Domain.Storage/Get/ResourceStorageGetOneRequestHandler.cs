@@ -8,12 +8,15 @@ namespace Api.Domain.Storage.Get
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly AbstractValidator<ResourceStorageGetOneRequest> _requestValidator;
-        
+        private readonly IResourceStorageActionValidator<ResourceStorageGetOneRequest, ResourceStorageGetOneResponse> _validatePreConditions;
 
-        public ResourceStorageGetOneRequestHandler(IRepository<Data.Model.Storage.Resource> storage, ResourceStorageGetOneRequestValidator requestValidator)
+        public ResourceStorageGetOneRequestHandler(IRepository<Data.Model.Storage.Resource> storage, 
+                ResourceStorageGetOneRequestValidator requestValidator, 
+                IResourceStorageActionValidator<ResourceStorageGetOneRequest, ResourceStorageGetOneResponse> validatePreConditions)
         {
             _storage = storage;
             _requestValidator = requestValidator;
+            _validatePreConditions = validatePreConditions;
         }
 
         public async Task<ResourceStorageGetOneResponse> Handle(ResourceStorageGetOneRequest request, CancellationToken cancellationToken)
@@ -34,27 +37,13 @@ namespace Api.Domain.Storage.Get
                                                                                 )).SingleOrDefault();
 
 
-            if (resource == null)
+            (resource, response) = _validatePreConditions.Validate(resource, request, response);
+
+            if (response.StatusCode != StatusCodes.OK)
             {
-                response.StatusCode = StatusCodes.NOTFOUND; 
                 return response;
             }
 
-            if (request.IfNotETags.Any() && request.IfNotETags.Contains(resource.Etag))
-            {
-                response.StatusCode = StatusCodes.NOTMODIFIED; 
-                return response;
-            }
-
-
-            var resourceHasNotBeenModifiedSince = !(resource.Modified.HasValue ?
-                                                        resource.Modified > request.IfModifiedSince :
-                                                        resource.Created > request.IfModifiedSince);
-            if (resourceHasNotBeenModifiedSince)
-            {
-                response.StatusCode = StatusCodes.NOTMODIFIED;
-                return response;
-            }
 
             response.Model = resource;
             response.StatusCode = StatusCodes.OK;

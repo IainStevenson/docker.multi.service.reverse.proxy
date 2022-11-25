@@ -6,13 +6,14 @@ namespace Api.Domain.Storage.Get
     public class ResourceStorageGetManyRequestHandler : IRequestHandler<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse>
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
-
+        private readonly IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> _validatePreConditions;
 
         public ResourceStorageGetManyRequestHandler(
-            IRepository<Data.Model.Storage.Resource> storage
-            )
+            IRepository<Data.Model.Storage.Resource> storage,
+            IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> preconditionValidator)
         {
             _storage = storage;
+            _validatePreConditions = preconditionValidator;
         }
 
 
@@ -27,27 +28,15 @@ namespace Api.Domain.Storage.Get
                     && r.Namespace == request.Namespace
                     );
 
-            if (resources.Any())
-            {
-                // if all of them are unmodified since then return none
-                var unmodifiedItems = resources.Where(r =>
-                                            r.Modified.HasValue ? r.Modified < request.IfModifiedSince :
-                                            r.Created < request.IfModifiedSince);
-                if (unmodifiedItems.Count() == resources.Count())
-                {
-                    response.StatusCode = StatusCodes.NOTMODIFIED; 
-                    return response;
-                }
+            (resources, response) = _validatePreConditions.Validate(resources, request, response);
 
-                var modifiedItems = resources.Where(r =>
-                            r.Modified.HasValue ? r.Modified >= request.IfModifiedSince :
-                            r.Created > request.IfModifiedSince);
-                response.StatusCode = StatusCodes.OK;
-                response.Model = modifiedItems;
+            if (response.StatusCode != StatusCodes.OK)
+            {
                 return response;
             }
 
-            response.StatusCode = StatusCodes.NOTFOUND;
+
+            response.StatusCode = StatusCodes.OK;
             return response;
 
         }
