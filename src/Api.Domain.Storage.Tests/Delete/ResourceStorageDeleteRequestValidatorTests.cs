@@ -26,13 +26,6 @@ namespace Api.Domain.Storage.Tests.Delete
                 OwnerId = Guid.NewGuid(),
                 RequestId = Guid.NewGuid(),
             };
-
-            // Rules are:
-            //RuleFor(x => x.Id).NotEmpty();
-            //RuleFor(x => x.Namespace).NotNull();
-            //RuleFor(x => x.Namespace).Matches("^(?:(?:((?![0-9_])[a-zA-Z0-9_]+)\\.?)+)(?<!\\.)$");
-            //RuleFor(x => x.OwnerId).NotEmpty();
-            //RuleFor(x => x.RequestId).NotEmpty();
         }
 
         [Test]
