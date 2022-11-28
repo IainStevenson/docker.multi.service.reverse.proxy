@@ -25,7 +25,7 @@ namespace Api.Domain.Storage.Post
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
-                response.StatusCode = StatusCodes.BADREQUEST;
+                response.StatusCode = HttpStatusCodes.BADREQUEST;
             }
 
             var resource = new Resource()
@@ -44,7 +44,7 @@ namespace Api.Domain.Storage.Post
             };
 
             response.Model = await _storage.CreateAsync(resource, cancellationToken);
-            response.StatusCode = StatusCodes.CREATED;
+            response.StatusCode = HttpStatusCodes.CREATED;
             return response;
         }
     }

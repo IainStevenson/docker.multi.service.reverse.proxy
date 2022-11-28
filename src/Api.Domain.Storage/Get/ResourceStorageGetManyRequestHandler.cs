@@ -30,13 +30,13 @@ namespace Api.Domain.Storage.Get
 
             (resources, response) = _validatePreConditions.Validate(resources, request, response);
 
-            if (response.StatusCode != StatusCodes.OK)
+            if (response.StatusCode != HttpStatusCodes.OK)
             {
                 return response;
             }
 
 
-            response.StatusCode = StatusCodes.OK;
+            response.StatusCode = HttpStatusCodes.OK;
             return response;
 
         }

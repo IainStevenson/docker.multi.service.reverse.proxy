@@ -1,8 +1,7 @@
 ﻿namespace Api.Domain.Storage.Delete
 {
-    public class ResourceStorageDeleteResponse
+    public class ResourceStorageDeleteResponse : ResourceStorageResponseBase
     {
-        public int StatusCode { get;  set; } = 400;
-        public List<string> RequestValidationErrors { get;  set; } = new List<string>();
+
     }
 }

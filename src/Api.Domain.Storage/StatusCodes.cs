@@ -3,15 +3,15 @@
     /// <summary>
     /// Public static class to abstract System.Net.Http.StatusCode
     /// </summary>
-    public static class StatusCodes
+    public enum HttpStatusCodes
     {
-        public const int OK  = 200;
-        public const int CREATED = 201;
-        public const int NOCONTENT = 204;
-        public const int NOTMODIFIED =304;
-        public const int BADREQUEST = 400;
-        public const int NOTFOUND = 404;
-        public const int ALREADYGONE = 410;
-        public const int PRECONDITIONFAILED = 412;
+        OK = 200,
+        CREATED = 201,
+        NOCONTENT = 204,
+        NOTMODIFIED = 304,
+        BADREQUEST = 400,
+        NOTFOUND = 404,
+        ALREADYGONE = 410,
+        PRECONDITIONFAILED = 412
     }
 }

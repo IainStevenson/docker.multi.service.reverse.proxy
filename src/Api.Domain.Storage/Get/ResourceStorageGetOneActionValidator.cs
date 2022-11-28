@@ -8,30 +8,51 @@ namespace Api.Domain.Storage.Get
         /// <inheritdoc/>
         public (Resource?, ResourceStorageGetOneResponse) Validate(Resource? resource, ResourceStorageGetOneRequest request, ResourceStorageGetOneResponse response)
         {
+            // to cope with concurrency the client can track either and or etag and last time modified to make a call for a single record
+            // that has changed since that state.
+            // so if the record retrieved by id/owner/namespace has moved on from that state then return it
+            // otherwise return notmodified.
+
+            // the since date and etag are to check if the resource remains nchanged and if so retur not modified
+            // otherwise return the new resource.
+            // if no resource found return not found
+            // if since date provided then if resource has NOT changed since then return notmodified
+            // if etag provided then if resource has that etag then return notmodified
+            // else return OK
+
             if (resource == null)
             {
-                response.StatusCode = StatusCodes.NOTFOUND;
+                response.StatusCode = HttpStatusCodes.NOTFOUND;
+                response.RequestValidationErrors.Add($"Get failed, because the record identified by {request.Id} was not found.");
                 return (resource, response);
             }
 
-            var resourceHasNotBeenModifiedSince = !(resource.Modified.HasValue ?
-                                                        resource.Modified > request.IfModifiedSince :
-                                                        resource.Created > request.IfModifiedSince);
-            if (resourceHasNotBeenModifiedSince)
+            var timeOfLastChange = (resource.Modified.HasValue ?
+                                            resource.Modified :
+                                            resource.Created );
+         
+            if (timeOfLastChange <= request.IfModifiedSince)
             {
-                response.StatusCode = StatusCodes.NOTMODIFIED;
+                response.StatusCode = HttpStatusCodes.NOTMODIFIED;
+                response.RequestValidationErrors.Add($"Get failed, because the record has not changed since {request.IfModifiedSince}.");
                 resource = null;
                 return (resource, response);
             }
 
-            if (request.IfNotETags.Any() && request.IfNotETags.Contains(resource.Etag))
+            if (ETagIsIn(resource.Etag, request.IfNotETags))
             {
-                response.StatusCode = StatusCodes.NOTMODIFIED;
+                response.StatusCode = HttpStatusCodes.NOTMODIFIED;
+                response.RequestValidationErrors.Add($"Get failed, because the record still has the eTag {request.IfNotETags.Aggregate(string.Empty, (current, next) => $"{current}{(current.Length == 0? "":",")}{next}")}.");
                 resource = null;
                 return (resource, response);
             }
-            response.StatusCode = StatusCodes.OK;
+            response.StatusCode = HttpStatusCodes.OK;
             return (resource, response);
+        }
+
+        private bool ETagIsIn(string eTag, List<string> eTags)
+        {
+            return  eTags.Any() &&  eTags.Contains(eTag);   
         }
     }
 

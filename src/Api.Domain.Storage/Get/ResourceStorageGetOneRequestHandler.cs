@@ -28,7 +28,7 @@ namespace Api.Domain.Storage.Get
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
-                response.StatusCode = StatusCodes.BADREQUEST;
+                response.StatusCode = HttpStatusCodes.BADREQUEST;
             }
 
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
@@ -39,14 +39,14 @@ namespace Api.Domain.Storage.Get
 
             (resource, response) = _validatePreConditions.Validate(resource, request, response);
 
-            if (response.StatusCode != StatusCodes.OK)
+            if (response.StatusCode != HttpStatusCodes.OK)
             {
                 return response;
             }
 
 
             response.Model = resource;
-            response.StatusCode = StatusCodes.OK;
+            response.StatusCode = HttpStatusCodes.OK;
             return response;
         }
     }

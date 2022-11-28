@@ -31,7 +31,7 @@ namespace Api.Domain.Storage.Delete
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                response.StatusCode = StatusCodes.BADREQUEST;
+                response.StatusCode = HttpStatusCodes.BADREQUEST;
             }
 
 
@@ -48,7 +48,7 @@ namespace Api.Domain.Storage.Delete
             }
 
             var count = await _storage.DeleteAsync(request.Id);
-            response.StatusCode = StatusCodes.NOCONTENT;
+            response.StatusCode = HttpStatusCodes.NOCONTENT;
             return response;
 
         }

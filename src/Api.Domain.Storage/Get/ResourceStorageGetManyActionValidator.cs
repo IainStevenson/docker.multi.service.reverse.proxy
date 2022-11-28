@@ -16,19 +16,19 @@ namespace Api.Domain.Storage.Get
                                             r.Created < request.IfModifiedSince);
                 if (unmodifiedItems.Count() == resources.Count())
                 {
-                    response.StatusCode = StatusCodes.NOTMODIFIED;
+                    response.StatusCode = HttpStatusCodes.NOTMODIFIED;
                     return (resources, response);
                 }
 
                 var modifiedItems = resources.Where(r =>
                             r.Modified.HasValue ? r.Modified >= request.IfModifiedSince :
                             r.Created > request.IfModifiedSince);
-                response.StatusCode = StatusCodes.OK;
+                response.StatusCode = HttpStatusCodes.OK;
                 response.Model = modifiedItems;
                 return (resources, response);
             }
 
-            response.StatusCode = StatusCodes.OK;
+            response.StatusCode = HttpStatusCodes.OK;
             return (resources, response);
         }
     }

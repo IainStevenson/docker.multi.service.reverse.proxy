@@ -30,7 +30,7 @@ namespace Api.Domain.Storage.Put
 
             if (!validationResult.IsValid)
             {
-                response.StatusCode = StatusCodes.BADREQUEST;
+                response.StatusCode = HttpStatusCodes.BADREQUEST;
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
                 return response;
             }
@@ -59,7 +59,7 @@ namespace Api.Domain.Storage.Put
             }
             
             response.Model = await _storage.UpdateAsync(resource); ;
-            response.StatusCode = StatusCodes.OK;
+            response.StatusCode = HttpStatusCodes.OK;
             return response;
         }
     }

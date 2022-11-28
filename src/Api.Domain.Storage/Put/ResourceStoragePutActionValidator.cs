@@ -10,10 +10,11 @@ namespace Api.Domain.Storage.Put
         {
             if (resource == null)
             {
-                response.StatusCode = StatusCodes.NOTFOUND;
+                response.StatusCode = HttpStatusCodes.NOTFOUND;
+                response.RequestValidationErrors.Add($"Modification failed, because the record identified by {request.Id} was not found.");
                 return (resource, response);
             }
-
+            // Msut not have changed since
             if (
                     resource.Modified.HasValue ?
                         resource.Modified.Value > request.UnmodifiedSince :
@@ -22,22 +23,23 @@ namespace Api.Domain.Storage.Put
                     )
             {
                 response.RequestValidationErrors.Add($"The resource has been modified since {request.UnmodifiedSince} and therefore has not been updated.");
-                response.StatusCode = StatusCodes.PRECONDITIONFAILED;
+                response.StatusCode = HttpStatusCodes.PRECONDITIONFAILED;
                 resource = null;
                 return (resource, response);
             }
-
+            // must have the ETAG
             if (
-                    request.ETags.Any() && !request.ETags.Contains(resource.Etag)
+                    request.ETags.Any()
+                    && !request.ETags.Contains(resource.Etag)
                 )
             {
                 response.RequestValidationErrors.Add($"The resource has None of the specified ETags {string.Join(',', request.ETags)} and therefore has not been updated./r/n");
-                response.StatusCode = StatusCodes.PRECONDITIONFAILED;
+                response.StatusCode = HttpStatusCodes.PRECONDITIONFAILED;
                 resource = null;
                 return (resource, response);
             }
-
-            response.StatusCode = StatusCodes.OK;
+            // has since and etag
+            response.StatusCode = HttpStatusCodes.OK;
             return (resource, response);
         }
     }
