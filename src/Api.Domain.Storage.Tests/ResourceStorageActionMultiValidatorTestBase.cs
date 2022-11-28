@@ -12,7 +12,7 @@ namespace Api.Domain.Storage.Tests
         protected TValidator Unit;
         protected TRequest Request;
         protected TResponse Response;
-        protected IEnumerable<Resource> Resources;
+        protected List<Resource> Models;
 
         [SetUp]
         public void Setup()
@@ -28,9 +28,9 @@ namespace Api.Domain.Storage.Tests
         /// </summary>
         /// <returns></returns>
 
-        protected (IEnumerable<Resource>, TResponse) Act()
+        protected (List<Resource>, TResponse) Act()
         {
-            return Unit.Validate(Resources, Request, Response);
+            return ((List<Resource>, TResponse))Unit.Validate(Models, Request, Response);
         }
 
         /// <summary>
@@ -40,19 +40,11 @@ namespace Api.Domain.Storage.Tests
         /// <param name="errorCount"></param>
         /// <param name="resourceIsProduced"></param>
 
-        protected void AssertTheResultsAreAsExpected(HttpStatusCodes statusCode, int errorCount, bool resourceIsProduced)
+        protected void AssertTheResultsAreAsExpected(HttpStatusCodes statusCode, int errorCount, int expectedItemCount)
         {
-            if (resourceIsProduced)
-            {
-                Assert.That(Resources, Is.Not.Empty);
-            }
-            else
-            {
-                Assert.That(Resources, Is.Empty);
-            }
-
             Assert.That(Response.StatusCode, Is.EqualTo(statusCode));
-            Assert.That(Response.RequestValidationErrors.Count, Is.EqualTo(errorCount));
+            Assert.That(Response.RequestValidationErrors, Has.Count.EqualTo(errorCount));
+            Assert.That(Models, Has.Count.EqualTo(expectedItemCount));          
         }
     }
 }

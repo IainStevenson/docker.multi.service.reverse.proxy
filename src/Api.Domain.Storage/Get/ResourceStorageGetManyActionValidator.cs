@@ -16,7 +16,8 @@ namespace Api.Domain.Storage.Get
                                             r.Created < request.IfModifiedSince);
                 if (unmodifiedItems.Count() == resources.Count())
                 {
-                    response.StatusCode = HttpStatusCodes.NOTMODIFIED;
+                    response.StatusCode = HttpStatusCodes.NOTMODIFIED;                    
+                    response.Model = new List<Resource>();
                     return (resources, response);
                 }
 
@@ -28,7 +29,7 @@ namespace Api.Domain.Storage.Get
                 return (resources, response);
             }
 
-            response.StatusCode = HttpStatusCodes.OK;
+            response.StatusCode = HttpStatusCodes.NOTFOUND;
             return (resources, response);
         }
     }

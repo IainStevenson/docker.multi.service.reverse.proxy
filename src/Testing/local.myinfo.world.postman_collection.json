@@ -490,14 +490,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
 											"host": [
 												"{{baseUri}}"
 											],
 											"path": [
 												"api",
 												"resources",
-												"",
 												"{{namespace}}",
 												"{{lastId}}"
 											]
@@ -535,14 +534,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
 											"host": [
 												"{{baseUri}}"
 											],
 											"path": [
 												"api",
 												"resources",
-												"",
 												"{{namespace}}",
 												"{{lastId}}"
 											]
@@ -582,14 +580,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
 											"host": [
 												"{{baseUri}}"
 											],
 											"path": [
 												"api",
 												"resources",
-												"",
 												"{{namespace}}",
 												"{{lastId}}"
 											]
@@ -629,14 +626,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUri}}/api/resources//{{namespace}}/{{lastId}}",
+											"raw": "{{baseUri}}/api/resources/{{namespace}}/{{lastId}}",
 											"host": [
 												"{{baseUri}}"
 											],
 											"path": [
 												"api",
 												"resources",
-												"",
 												"{{namespace}}",
 												"{{lastId}}"
 											]
@@ -782,14 +778,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUri}}/api/resources//{{namespace}}",
+											"raw": "{{baseUri}}/api/resources/{{namespace}}",
 											"host": [
 												"{{baseUri}}"
 											],
 											"path": [
 												"api",
 												"resources",
-												"",
 												"{{namespace}}"
 											]
 										}
