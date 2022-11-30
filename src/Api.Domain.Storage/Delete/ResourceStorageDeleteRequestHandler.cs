@@ -9,8 +9,6 @@ namespace Api.Domain.Storage.Delete
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly AbstractValidator<ResourceStorageDeleteRequest> _requestValidator;
         private readonly IResourceStorageActionValidator<ResourceStorageDeleteRequest, ResourceStorageDeleteResponse> _actionValidator;
-       
-
 
         public ResourceStorageDeleteRequestHandler(IRepository<Data.Model.Storage.Resource> storage, 
             ResourceStorageDeleteRequestValidator requestValidator, 
@@ -38,7 +36,7 @@ namespace Api.Domain.Storage.Delete
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                    && r.OwnerId == request.OwnerId
                                                                                    && r.Namespace == request.Namespace
-                                                                                   )).FirstOrDefault();
+                                                                                  , cancellationToken)).FirstOrDefault();
 
             (resource,response) = _actionValidator.Validate(resource, request, response);
 
@@ -47,7 +45,7 @@ namespace Api.Domain.Storage.Delete
                 return response;
             }
 
-            var count = await _storage.DeleteAsync(request.Id);
+            var count = await _storage.DeleteAsync(request.Id, cancellationToken);
             response.StatusCode = HttpStatusCodes.NOCONTENT;
             return response;
 

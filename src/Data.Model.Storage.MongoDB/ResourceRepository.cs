@@ -33,7 +33,7 @@ namespace Data.Model.Storage.MongoDB
         }
 
         public async Task<IEnumerable<Resource>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter,
-            string orderBy, int skip = 0, int take = int.MaxValue)
+            string orderBy, CancellationToken cancellationToken, int skip = 0, int take = int.MaxValue)
         {
             var sort = ApplySort<Resource>(orderBy);
 
@@ -59,7 +59,8 @@ namespace Data.Model.Storage.MongoDB
 
             return await result.ToListAsync();
         }
-        public async Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> filter, string orderBy,
+        public async Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> filter, string orderBy, 
+            CancellationToken cancellationToken,
             int skip = 0, int take = int.MaxValue)
         {
             var sort = ApplySort<Resource>(orderBy);
@@ -72,19 +73,19 @@ namespace Data.Model.Storage.MongoDB
             return await result.ToListAsync();
         }
 
-        public async Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> query)
+        public async Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> query, CancellationToken cancellationToken)
         {
             FilterDefinition<Resource> filter = new ExpressionFilterDefinition<Resource>(query);
-            return await _mongoCollection.Find(filter).ToListAsync();
+            return await _mongoCollection.FindSync(filter, null, cancellationToken).ToListAsync();
         }
 
-        public async Task<IEnumerable<Resource>> GetAsync(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<Resource>> GetAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
         {
             FilterDefinition<Resource> filter = new ExpressionFilterDefinition<Resource>(i => ids.Contains(i.Id));
             return (await _mongoCollection.FindAsync(filter)).ToList();
         }
 
-        public async Task<Resource> GetAsync(Guid id)
+        public async Task<Resource> GetAsync(Guid id, CancellationToken cancellationToken)
         {
             FilterDefinition<Resource> filter = new ExpressionFilterDefinition<Resource>(i => i.Id == id);
             return await _mongoCollection.Find(filter).FirstOrDefaultAsync();
@@ -100,7 +101,7 @@ namespace Data.Model.Storage.MongoDB
 
             return item;
         }
-        public async Task<IEnumerable<Resource>> CreateAsync(IEnumerable<Resource> items)
+        public async Task<IEnumerable<Resource>> CreateAsync(IEnumerable<Resource> items, CancellationToken cancellationToken)
         {
             var index = 0;
             foreach (var item in items)
@@ -113,26 +114,26 @@ namespace Data.Model.Storage.MongoDB
             return items;
         }
 
-        public async Task<long> DeleteAsync(Expression<Func<Resource, bool>> query)
+        public async Task<long> DeleteAsync(Expression<Func<Resource, bool>> query, CancellationToken cancellationToken)
         {
             var result = await _mongoCollection.DeleteManyAsync(query, new DeleteOptions { Collation = _collation });
             return result.IsAcknowledged ? result.DeletedCount : 0;
         }
 
-        public Task<long> DeleteAsync(Guid id)
+        public Task<long> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var result = _mongoCollection.DeleteOne(i => i.Id == id, new DeleteOptions { Collation = _collation });
             return Task.FromResult(result.IsAcknowledged ? result.DeletedCount : 0);
         }
 
-        public async Task<long> DeleteAsync(IEnumerable<Guid> ids)
+        public async Task<long> DeleteAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
         {
             var result = await _mongoCollection.DeleteManyAsync(item => ids.Contains(item.Id),
                 new DeleteOptions { Collation = _collation });
             return result.IsAcknowledged ? result.DeletedCount : 0;
         }
 
-        public async Task<long> DeleteAsync(Resource item)
+        public async Task<long> DeleteAsync(Resource item, CancellationToken cancellationToken)
         {
             var result =
                 await _mongoCollection.DeleteOneAsync(i => i.Id == item.Id, new DeleteOptions { Collation = _collation });
@@ -140,7 +141,7 @@ namespace Data.Model.Storage.MongoDB
         }
 
 
-        public async Task<Resource> UpdateAsync(Resource item)
+        public async Task<Resource> UpdateAsync(Resource item, CancellationToken cancellationToken)
         {
             item = await UpdateItemProperties(item);
             var result = await _mongoCollection.ReplaceOneAsync(resource => resource.Id == item.Id,
@@ -155,7 +156,7 @@ namespace Data.Model.Storage.MongoDB
             return Task.FromResult(item);
 
         }
-        public async Task<IEnumerable<Resource>> UpdateAsync(IEnumerable<Resource> items)
+        public async Task<IEnumerable<Resource>> UpdateAsync(IEnumerable<Resource> items, CancellationToken cancellationToken)
         {
 
             foreach (var item in items)

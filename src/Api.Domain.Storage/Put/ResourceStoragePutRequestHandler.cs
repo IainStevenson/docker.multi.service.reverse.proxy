@@ -36,9 +36,9 @@ namespace Api.Domain.Storage.Put
             }
 
             Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
-                                                                                && r.OwnerId == request.OwnerId
-                                                                                && r.Namespace == request.Namespace
-                                                                                )).FirstOrDefault();
+                                                                && r.OwnerId == request.OwnerId
+                                                                && r.Namespace == request.Namespace
+                                                                , cancellationToken)).FirstOrDefault();
          
             (resource, response) = _actionValidator.Validate(resource,request, response);
 
@@ -58,7 +58,7 @@ namespace Api.Domain.Storage.Put
                 resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.NamespaceRename, Value = resource.Namespace });
             }
             
-            response.Model = await _storage.UpdateAsync(resource); ;
+            response.Model = await _storage.UpdateAsync(resource, cancellationToken); ;
             response.StatusCode = HttpStatusCodes.OK;
             return response;
         }

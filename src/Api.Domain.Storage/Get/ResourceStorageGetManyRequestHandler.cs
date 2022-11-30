@@ -35,9 +35,9 @@ namespace Api.Domain.Storage.Get
             IEnumerable<Data.Model.Storage.Resource> resources = new List<Data.Model.Storage.Resource>();
 
             resources = await _storage.GetAsync(
-                    r => r.OwnerId == request.OwnerId
-                    && r.Namespace == request.Namespace
-                    );
+                                                    r => r.OwnerId == request.OwnerId
+                                                    && r.Namespace == request.Namespace
+                                                    , cancellationToken);
 
             (resources, response) = _validatePreConditions.Validate(resources, request, response);
 

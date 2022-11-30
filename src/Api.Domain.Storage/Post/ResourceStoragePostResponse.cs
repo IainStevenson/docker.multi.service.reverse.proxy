@@ -9,7 +9,7 @@ namespace Api.Domain.Storage.Post
         /// <summary>
         /// The desired payload model
         /// </summary>
-        public Data.Model.Storage.Resource Model { get; set; }
+        public Data.Model.Storage.Resource? Model { get; set; }
 
     }
 

@@ -1,7 +1,6 @@
 ﻿using Data.Model.Storage;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace Storage
         /// <param name="skip">An optional filtering skip value</param>
         /// <param name="take">An optional filtering take value</param>
         /// <returns>A Collection of retrieved <see cref="Resource" /></returns>
-        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> query, string orderBy, int skip = 0,
+        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> query, string orderBy, CancellationToken cancellationToken, int skip = 0,
             int take = int.MaxValue);
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace Storage
         /// <param name="take"></param>
         /// <returns></returns>
         Task<IEnumerable<T>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter,
-            string orderBy, int skip = 0,
+            string orderBy, CancellationToken cancellationToken, int skip = 0,
             int take = int.MaxValue);
 
         /// <summary>
@@ -39,14 +38,14 @@ namespace Storage
         /// </summary>
         /// <param name="query">The retireval expression</param>
         /// <returns>A Collection of retrieved <see cref="Resource" /></returns>
-        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> query);
+        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> query, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Retrieve a collection of <see cref="Resource" /> items using a collection of identifiers
         /// </summary>
         /// <param name="ids">The retireval identifiers</param>
         /// <returns>A Collection of retrieved <see cref="Resource" /></returns>
-        Task<IEnumerable<T>> GetAsync(IEnumerable<Guid> ids);
+        Task<IEnumerable<T>> GetAsync(IEnumerable<Guid> idss, CancellationToken cancellationToken);
 
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace Storage
         /// </summary>
         /// <param name="id">The <see cref="Resource" /> Id value</param>
         /// <returns>The existing Resource or Null</returns>
-        Task<T> GetAsync(Guid id);
+        Task<T> GetAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Stores a single <see cref="Resource" /> Item
@@ -70,28 +69,28 @@ namespace Storage
         /// <param name="items">the collection of <see cref="Resource" /> items to store.</param>
         /// <remarks>The <see cref="Resource" /> items are all upserted</remarks>
         /// <returns>The item collection with each item with an added Etag</returns>
-        Task<IEnumerable<T>> CreateAsync(IEnumerable<T> items);
+        Task<IEnumerable<T>> CreateAsync(IEnumerable<T> items, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Deletes none, one or more <see cref="Resource" /> items taht match the query
         /// </summary>
         /// <param name="query">The match expression</param>
         /// <returns>The number of deleted items</returns>
-        Task<long> DeleteAsync(Expression<Func<T, bool>> query);
+        Task<long> DeleteAsync(Expression<Func<T, bool>> query, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Deletes a single <see cref="Resource" /> by its Id value
         /// </summary>
         /// <param name="id">The <see cref="Resource" /> identifier value</param>
         /// <returns>The number of deleted items</returns>
-        Task<long> DeleteAsync(Guid id);
+        Task<long> DeleteAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Deletes a collection of <see cref="Resource" /> using a collection of  Id values
         /// </summary>
         /// <param name="ids">The collction of <see cref="Resource" /> identifier values</param>
         /// <returns>The number of deleted items</returns>
-        Task<long> DeleteAsync(IEnumerable<Guid> ids);
+        Task<long> DeleteAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Updates a single <see cref="Resource" /> Item
@@ -99,7 +98,7 @@ namespace Storage
         /// <param name="item">The item to store</param>
         /// <remarks>The <see cref="Resource" /> is upserted</remarks>
         /// <returns>The item with an added Etag (void)</returns>
-        Task<T> UpdateAsync(T item);
+        Task<T> UpdateAsync(T items, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Updates one or more <see cref="Resource" /> items
@@ -107,107 +106,6 @@ namespace Storage
         /// <param name="items">the collection of <see cref="Resource" /> items to store.</param>
         /// <remarks>The <see cref="Resource" /> items are all upserted</remarks>
         /// <returns>The item collection with each item with an added Etag</returns>
-        Task<IEnumerable<T>> UpdateAsync(IEnumerable<T> items);
-    }
-
-
-    /// <summary>
-    /// Provides a simple in memory dictinonary based storage repository for <see cref="WeatherForecast"/> instances.
-    /// </summary>
-    public class InMemoryResourceRepository : IRepository<Resource>
-    {
-        private readonly Dictionary<Guid, Resource> _storage;
-        public InMemoryResourceRepository(Dictionary<Guid, Resource> storage)
-        {
-            _storage = storage;
-        }
-
-        public Task<Resource> CreateAsync(Resource item, CancellationToken cancellationToken)
-        {
-            item.Etag = Guid.NewGuid().ToString();
-            item.Created = DateTimeOffset.UtcNow;
-            _storage.Add(item.Id, item);
-            return Task.FromResult(item);
-        }
-
-        public Task<IEnumerable<Resource>> CreateAsync(IEnumerable<Resource> items)
-        {
-            foreach (var item in items)
-            {
-                item.Etag = Guid.NewGuid().ToString();
-                item.Created = DateTimeOffset.UtcNow;
-                _storage.Add(item.Id, item);
-            }
-            return Task.FromResult(items);
-        }
-
-        public Task<long> DeleteAsync(Expression<Func<Resource, bool>> query)
-        {
-            var items = _storage.Values.AsQueryable().Where(query);
-            long count = 0;
-            foreach (var item in items)
-            {
-                _storage.Remove(item.Id);
-                count++;
-            }
-            return Task.FromResult(count);
-        }
-
-        public Task<long> DeleteAsync(Guid id)
-        {
-            if (_storage.ContainsKey(id))
-            {
-                _storage.Remove(id);
-                return Task.FromResult(1L);
-            }
-            return Task.FromResult(0L);
-        }
-
-        public Task<long> DeleteAsync(IEnumerable<Guid> ids)
-        {
-            long count = 0;
-            foreach (var id in ids)
-            {
-                _storage.Remove(id);
-                count++;
-            }
-            return Task.FromResult(count);
-        }
-
-        public Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> query, string orderBy, int skip = 0, int take = int.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Resource>> GetAsync(Guid ownerId, string namespaceFilter, Guid? resourceIdFilter, string orderBy, int skip = 0, int take = int.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Resource>> GetAsync(Expression<Func<Resource, bool>> query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Resource>> GetAsync(IEnumerable<Guid> ids)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Resource> GetAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Resource> UpdateAsync(Resource item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Resource>> UpdateAsync(IEnumerable<Resource> items)
-        {
-            throw new NotImplementedException();
-        }
-
+        Task<IEnumerable<T>> UpdateAsync(IEnumerable<T> items, CancellationToken cancellationToken);
     }
 }

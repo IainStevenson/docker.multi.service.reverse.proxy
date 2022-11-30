@@ -8,7 +8,7 @@ namespace Api.Domain.Handling.Resource.Delete
         {
 
             var response = new ResourceResponse();
-            //404 - ot found ,410 = gone ,204 deleted nocontent,
+            //404 - not found ,410 = gone ,204 deleted nocontent,
             response.StatusCode = request.StatusCode;
             if (request.StatusCode == System.Net.HttpStatusCode.Gone)
             {

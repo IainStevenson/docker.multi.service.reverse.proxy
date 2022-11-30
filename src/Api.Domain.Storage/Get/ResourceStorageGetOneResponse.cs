@@ -10,9 +10,9 @@ namespace Api.Domain.Storage.Get
         /// <summary>
         /// The desired payload model
         /// </summary>
-        public Data.Model.Storage.Resource Model { get; set; }
+        public Data.Model.Storage.Resource? Model { get; set; }
 
-        public IDictionary<string, StringValues> Headers { get; set; }
+        public IDictionary<string, StringValues> Headers { get; set; }  = new Dictionary<string, StringValues>();
     }
 
 }

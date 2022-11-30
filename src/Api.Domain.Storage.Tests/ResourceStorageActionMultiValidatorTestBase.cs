@@ -12,7 +12,7 @@ namespace Api.Domain.Storage.Tests
         protected TValidator Unit;
         protected TRequest Request;
         protected TResponse Response;
-        protected List<Resource> Models;
+        protected List<Resource> Models = new List<Resource>();
 
         [SetUp]
         public void Setup()

@@ -7,12 +7,14 @@ using Api.Domain.Storage.Get;
 using Api.Domain.Storage.Post;
 using Api.Domain.Storage.Put;
 using AutoMapper;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Logging;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -132,13 +134,16 @@ namespace Api
             services.AddSingleton<IResourceStorageActionValidator<ResourceStoragePutRequest, ResourceStoragePutResponse>, ResourceStoragePutActionValidator>();
 
             // request validation (Fluent)
-            services.AddFluentValidation(config =>
-            {
+            //services.AddFluentValidation(config =>
+            //{
 
-                config.AutomaticValidationEnabled = true;
-                config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
-                config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
-            });
+            //    config.AutomaticValidationEnabled = true;
+            //    config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
+            //    config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
+            //});
+            //services.AddFluentValidation();
+
+            services.AddValidatorsFromAssemblyContaining<ResourceStorageGetManyRequestValidator>();
 
             services.AddMediatR(new[] {
                 typeof(ResourceStoragePostRequestHandler),
