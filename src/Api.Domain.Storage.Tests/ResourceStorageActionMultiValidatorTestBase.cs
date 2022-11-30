@@ -20,7 +20,6 @@ namespace Api.Domain.Storage.Tests
             Unit = Activator.CreateInstance<TValidator>();
             Request = Activator.CreateInstance<TRequest>();
             Response = Activator.CreateInstance<TResponse>();
-
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Api.Domain.Storage.Tests
         {
             Assert.That(Response.StatusCode, Is.EqualTo(statusCode));
             Assert.That(Response.RequestValidationErrors, Has.Count.EqualTo(errorCount));
-            Assert.That(Models, Has.Count.EqualTo(expectedItemCount));          
+            Assert.That(Models, Has.Count.EqualTo(expectedItemCount));
         }
     }
 }
