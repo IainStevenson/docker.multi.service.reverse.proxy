@@ -25,7 +25,7 @@ namespace Api.Domain.Storage.Tests
         /// <summary>
         ///  Perform the test action
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A <see cref="Tuple{List{Resource}, TResponse}"/> instance of the validation results.</returns>
 
         protected (List<Resource>, TResponse) Act()
         {

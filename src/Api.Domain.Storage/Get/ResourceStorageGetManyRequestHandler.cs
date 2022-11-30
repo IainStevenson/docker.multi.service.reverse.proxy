@@ -8,11 +8,11 @@ namespace Api.Domain.Storage.Get
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> _validatePreConditions;
-        private readonly AbstractValidator<ResourceStorageGetManyRequest> _requestValidator;
+        private readonly ResourceStorageGetManyRequestValidator _requestValidator;
         public ResourceStorageGetManyRequestHandler(
             IRepository<Data.Model.Storage.Resource> storage,
             IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> preconditionValidator,
-            AbstractValidator<ResourceStorageGetManyRequest> requestValidator)
+            ResourceStorageGetManyRequestValidator requestValidator)
         {
             _storage = storage;
             _validatePreConditions = preconditionValidator;

@@ -141,14 +141,13 @@ namespace Api
             //    config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
             //    config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
             //});
-            //services.AddFluentValidation();
-
-            services.AddValidatorsFromAssemblyContaining<ResourceStorageGetManyRequestValidator>();
-
+            
             services.AddMediatR(new[] {
                 typeof(ResourceStoragePostRequestHandler),
                 typeof(ResourceResponsePostRequestHandler) }
             );
+
+            services.AddValidatorsFromAssemblyContaining<ResourceStorageGetManyRequestValidator>();
 
             // securing the API
             services.AddAuthentication("Bearer")
