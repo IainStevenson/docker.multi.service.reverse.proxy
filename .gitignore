@@ -356,3 +356,5 @@ healthchecksdb
 /src/Store/appsettings.active.json
 /src/Support/appsettings.active.json
 /src/*.setup.cmd
+/src/tools
+/src/.config

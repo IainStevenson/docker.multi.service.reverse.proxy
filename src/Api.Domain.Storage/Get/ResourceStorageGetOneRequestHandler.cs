@@ -39,7 +39,7 @@ namespace Api.Domain.Storage.Get
 
             (resource, response) = _validatePreConditions.Validate(resource, request, response);
 
-            if (response.StatusCode != HttpStatusCodes.OK)
+            if (resource == null)
             {
                 return response;
             }

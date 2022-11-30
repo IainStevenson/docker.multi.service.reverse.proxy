@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Api.Domain.Storage.Get
 {
+    [ExcludeFromCodeCoverage]
     public class ResourceStorageGetOneRequest : IRequest<ResourceStorageGetOneResponse>
     {
         public Guid Id { get; set; }      

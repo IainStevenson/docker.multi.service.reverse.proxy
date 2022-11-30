@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Api.Domain.Storage.Put
 {
+    [ExcludeFromCodeCoverage]
     public class ResourceStoragePutRequest : IRequest<ResourceStoragePutResponse>
     {        
         public Guid Id { get; set; }

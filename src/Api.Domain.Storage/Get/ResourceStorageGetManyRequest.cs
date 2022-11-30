@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Api.Domain.Storage.Get
 {
+    [ExcludeFromCodeCoverage]
     public class ResourceStorageGetManyRequest : IRequest<ResourceStorageGetManyResponse>
     {
         public string Namespace { get; set; }

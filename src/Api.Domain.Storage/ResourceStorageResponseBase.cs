@@ -1,5 +1,8 @@
-﻿namespace Api.Domain.Storage
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Api.Domain.Storage
 {
+    [ExcludeFromCodeCoverage]
     public class ResourceStorageResponseBase
     {
         /// <summary>

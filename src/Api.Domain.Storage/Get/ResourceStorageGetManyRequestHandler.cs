@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Storage;
 
 namespace Api.Domain.Storage.Get
@@ -7,19 +8,29 @@ namespace Api.Domain.Storage.Get
     {
         private readonly IRepository<Data.Model.Storage.Resource> _storage;
         private readonly IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> _validatePreConditions;
-
+        private readonly AbstractValidator<ResourceStorageGetManyRequest> _requestValidator;
         public ResourceStorageGetManyRequestHandler(
             IRepository<Data.Model.Storage.Resource> storage,
-            IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> preconditionValidator)
+            IResourceStorageActionMultiValidator<ResourceStorageGetManyRequest, ResourceStorageGetManyResponse> preconditionValidator,
+            AbstractValidator<ResourceStorageGetManyRequest> requestValidator)
         {
             _storage = storage;
             _validatePreConditions = preconditionValidator;
+            _requestValidator = requestValidator;
         }
 
 
         public async Task<ResourceStorageGetManyResponse> Handle(ResourceStorageGetManyRequest request, CancellationToken cancellationToken)
         {
             var response = new ResourceStorageGetManyResponse();
+
+            var validationResult = _requestValidator.Validate(request);
+
+            if (!validationResult.IsValid)
+            {
+                response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                response.StatusCode = HttpStatusCodes.BADREQUEST;
+            }
 
             IEnumerable<Data.Model.Storage.Resource> resources = new List<Data.Model.Storage.Resource>();
 
@@ -37,6 +48,7 @@ namespace Api.Domain.Storage.Get
 
 
             response.StatusCode = HttpStatusCodes.OK;
+            response.Model = resources;
             return response;
 
         }

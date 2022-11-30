@@ -20,6 +20,29 @@ To build a secure `docker-compose`'d orchestration of a decoupled set of micro s
 	* Data at rest is not yet encrypted
 
 # Getting started
+- Global setup
+
+```
+dotnet tool install --global altcover.global
+
+dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.12
+
+dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools --version 5.1.12
+
+dotnet new tool-manifest
+dotnet tool install dotnet-reportgenerator-globaltool --version 5.1.12
+```
+Then into each test project add
+```
+dotnet add package AltCover
+dotnet add package reportGenerator
+```
+and then run via
+
+```
+dotnet test /p:AltCover=true
+c:\ReportGenerator\ReportGenerator.exe -reports:coverage.xml -targetdir:./coverage
+```
 
 - Required tooling: 
     - Install Visual Studio 2019 or above. Currently 2022.
@@ -92,8 +115,11 @@ You can get more information about this solution and its journey at these locati
 * <a href="src/network.md" target="_blank">The network topology of the solution</a>
 * <a href="src/oauth2.md" target="_blank">OAUTH2</a>
 
+# Resources
 
+* [Alt Cover and ReportGenerator](https://www.hanselman.com/blog/altcover-and-reportgenerator-give-amazing-code-coverage-on-net-core)
 
+* [Setting up ReportGenerator](https://reportgenerator.io/usage)
 
 
 

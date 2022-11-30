@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Primitives;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Api.Domain.Storage.Get
 {
+    [ExcludeFromCodeCoverage]
     public class ResourceStorageGetOneResponse: ResourceStorageResponseBase
     {
        
