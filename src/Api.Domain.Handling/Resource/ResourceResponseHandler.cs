@@ -1,5 +1,6 @@
 ﻿using Api.Domain.Handling.Framework;
 using Data.Model;
+using Data.Model.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System.Net;
@@ -21,7 +22,7 @@ namespace Api.Domain.Handling.Resource
         /// <param name="resourceOutput">The output instance.</param>
         /// <returns>An <see cref="IActionResult"/> delegate.</returns>
         /// <exception cref="ArgumentOutOfRangeException"> Occurs when upstream processing presents Status codes not handled here.</exception>
-        public IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEntity
+        public IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IResponseItem
         {
 
             _responseHeadersProvider.RemoveUnwantedHeaders(controller.HttpContext.Response.Headers);
@@ -48,10 +49,14 @@ namespace Api.Domain.Handling.Resource
                     return controller.Ok(resourceOutput.Model);
 
                 case HttpStatusCode.Created:
-                    var uri = resourceOutput.Links?.Single(x => x.Action == "get" && x.Rel == "self")?.Href ?? "\\";
+                    var uri = resourceOutput.Links?.First(x => x.Action == "get")?.Href ?? "\\";
+
+                    resourceOutput.Model.Links =  resourceOutput.Links;
+
                     return controller.Created(uri, resourceOutput.Model);
 
                 case HttpStatusCode.NoContent:
+
                     return controller.NoContent();
 
                 case HttpStatusCode.NotFound:
@@ -107,13 +112,13 @@ namespace Api.Domain.Handling.Resource
                 case HttpStatusCode.OK:
                     return controller.Ok(resourceOutput.Model);
 
-               
+
                 case HttpStatusCode.NoContent:
                     return controller.NoContent();
-                
+
                 case HttpStatusCode.NotFound:
                     return controller.NotFound();
-                
+
                 case HttpStatusCode.Gone:
                     return controller.StatusCode((int)resourceOutput.StatusCode, resourceOutput.RequestValidationErrors);
 
@@ -121,7 +126,7 @@ namespace Api.Domain.Handling.Resource
                 case HttpStatusCode.Conflict:
                 case HttpStatusCode.PreconditionFailed:
                     return controller.StatusCode((int)resourceOutput.StatusCode);
-                
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(resourceOutput.StatusCode), $"The status code {resourceOutput.StatusCode} of the request output was not handled. This is a programming logic error");
             }
@@ -138,7 +143,7 @@ namespace Api.Domain.Handling.Resource
         {
             _responseHeadersProvider.RemoveUnwantedHeaders(controller.HttpContext.Response.Headers);
 
-            foreach (var h in resourceOutput.Headers?? (IDictionary<string , StringValues>)(new Dictionary<string, StringValues>()))
+            foreach (var h in resourceOutput.Headers ?? (IDictionary<string, StringValues>)(new Dictionary<string, StringValues>()))
             {
                 if (!controller.HttpContext.Response.Headers.ContainsKey(h.Key))
                 {

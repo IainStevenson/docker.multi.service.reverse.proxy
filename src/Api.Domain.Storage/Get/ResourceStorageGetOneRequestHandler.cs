@@ -30,11 +30,22 @@ namespace Api.Domain.Storage.Get
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
                 response.StatusCode = HttpStatusCodes.BADREQUEST;
             }
+            Data.Model.Storage.Resource? resource = null;
+            if (string.IsNullOrWhiteSpace(request.Namespace) )
+            {
+                resource = (await _storage.GetAsync(r => r.Id == request.Id
+                                                                                    && r.OwnerId == request.OwnerId
+                                                                                    , cancellationToken)).SingleOrDefault();
 
-            Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
-                                                                                && r.OwnerId == request.OwnerId
-                                                                                && r.Namespace == request.Namespace
-                                                                                , cancellationToken)).SingleOrDefault();
+            }
+            else
+            {
+                resource = (await _storage.GetAsync(r => r.Id == request.Id
+                                                                                    && r.OwnerId == request.OwnerId
+                                                                                    && r.Namespace == request.Namespace 
+                                                                                    , cancellationToken)).SingleOrDefault();
+
+            }
 
 
             (resource, response) = _validatePreConditions.Validate(resource, request, response);

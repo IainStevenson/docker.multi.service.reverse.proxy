@@ -15,7 +15,7 @@ namespace Api.Controllers
     public partial class ResourcesController
     {
         /// <summary>
-        /// GET: api/resources/{namespace}/{id:guid}
+        /// GET: api/resources/{id:guid}[/{namespace}]
         /// </summary>
         /// <remarks>
         /// Supports Headers: 
@@ -32,10 +32,10 @@ namespace Api.Controllers
         ///     304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
-        [Route("{namespace}/{id:guid}")]
+        [Route("{id:guid}/{*namespace}")]
         public async Task<IActionResult> GetOne(
-            [Required][FromRoute] string @namespace,
-            [Required][FromRoute] Guid id
+            [Required][FromRoute] Guid id,
+            [FromRoute] string @namespace
             )
         {
 
@@ -85,7 +85,7 @@ namespace Api.Controllers
         ///     304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
-        [Route("{namespace}")]
+        [Route("{*namespace}")]
         public async Task<IActionResult> GetMany(
             [Required][FromRoute] string @namespace
             )

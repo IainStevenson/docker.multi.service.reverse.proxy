@@ -6,6 +6,6 @@ namespace Api.Domain.Storage.Tests.RequestValidators
     public class ResourceStorageGetManyRequestValidatorTests :
         ResourceStorageRequstValidatorTestBase<ResourceStorageGetManyRequestValidator, ResourceStorageGetManyRequest>
     {
-        
+        // TODO:
     }
 }

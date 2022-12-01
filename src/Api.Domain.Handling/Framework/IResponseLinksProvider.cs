@@ -10,23 +10,39 @@ namespace Api.Domain.Handling.Framework
 
         /// <summary>
         /// Builds HEATEOS Links collection to the <see cref="ApiLinks"/> property.
-        /// Add the standard POST, GET, PUT And DELETE verbs actions and any additionally supplied sub collection links.
+        /// The Url schem is as follows
+        /// POST api/resources/weatherforecast creates a resource with a namespace of weatherforecast
+        /// POST api/resources/health/bloodpressure creates a resource with a namespace of health/bloodpressure
+        /// 
+        /// Example paramters
+        /// scheme = https
+        /// host = localhost
+        /// pathBase = api/
+        /// path = resources
+        /// namespace = health/bloodpressure
+        /// systemKey "1234"
+        /// 
+        /// Rel          Action  HRef
+        /// -------------------------------------------------------------------------
+        /// entity       post    https://loalhost/api/resources/health/bloodpressure
+        /// entity       list    https://loalhost/api/resources/health/bloodpressure
+        /// entity       get     https://loalhost/api/resources/1234/health/bloodpressure
+        /// entity       put     https://loalhost/api/resources/1234/health/bloodpressure
+        /// entity       delete  https://loalhost/api/resources/1234/health/bloodpressure
+        /// 
         /// </summary>
-        /// <param name="source">The source item to apply the links to</param>
         /// <param name="scheme">The HTTP Request Scheme</param>
         /// <param name="host">The Http Request Host</param>
         /// <param name="pathBase">The Http request path base (if used) for generating links</param>
         /// <param name="path">The Http request path for generating links</param>
-        /// <param name="systemKeys">Additional key information to finalise the link Urls</param>
-        /// <param name="relatedEntities">Additional and optional (sub-resource) verbs/actions/href's to apply to the outgoing response item</param>
-        /// <param name="ownerKeys">Removes all but the ownerKey properties from returned content, unless empty when all content is returned</param>
-        /// <returns>A reference to the modified source.</returns>
+        /// <param name="systemKey">Additional key information to finalise the link Urls</param>
+        /// <returns>A <see cref="List{IApiLink}"/> containg the necessary HATEOAS links.</returns>
         Task<List<IApiLink>> BuildLinks(
             string scheme,
             string host,
             string pathBase,
             string path,
-            IDictionary<string, string> systemKeys,
-            IDictionary<string, string> relatedEntities);
+            string @namespace,
+            string systemKey);
     }
 }

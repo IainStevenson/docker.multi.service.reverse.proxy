@@ -22,7 +22,7 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             "00000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000", 
-            "my.namespace", 
+            "my.name.space", 
             "01000000-0000-0000-0000-000000000000", 
             null, 
             false, "Id")] // has missing id
@@ -30,7 +30,7 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             "01000000-0000-0000-0000-000000000000", 
             "00000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000", 
-            "my.namespace", 
+            "my\\name\\space", 
             "01000000-0000-0000-0000-000000000000", 
             null, 
             false, "OwnerId")]// has missing ownerid
@@ -38,7 +38,7 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             "01000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000", 
             "00000000-0000-0000-0000-000000000000", 
-            "my.namespace", 
+            "my/name/space", 
             "01000000-0000-0000-0000-000000000000", 
             null, 
             false, "RequestId")] // has missing request id
@@ -46,10 +46,10 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             "01000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000",
             "01000000-0000-0000-0000-000000000000",
-            "my/namespace", 
+            "my namespace", 
             "01000000-0000-0000-0000-000000000000",
             null, 
-            false, "Namespace")]// has bad namespace
+            true, "")]// has bad namespace
 
         public void TestScenario(
             string Id,

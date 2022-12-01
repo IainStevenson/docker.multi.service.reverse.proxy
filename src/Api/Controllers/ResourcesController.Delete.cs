@@ -24,10 +24,10 @@ namespace Api.Controllers
         /// 412 PreConditionFailed
         /// 200 OK
         /// </returns>
-        [HttpDelete("{namespace}/{id:guid}")]
+        [HttpDelete("{id:guid}/{*namespace}")]
         public async Task<IActionResult> Delete(
-            [FromRoute] string @namespace,
-            [FromRoute] Guid id)
+            [FromRoute] Guid id,
+            [FromRoute] string @namespace)
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Procesing delete request.");
 

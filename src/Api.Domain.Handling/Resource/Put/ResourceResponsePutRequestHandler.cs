@@ -12,7 +12,6 @@ namespace Api.Domain.Handling.Resource.Put
         private readonly IMapper _mapper;
         private readonly IResponseLinksProvider _responseLinksProvider;
         private readonly IResponseHeadersProvider _responseHeadersProvider;
-        private static readonly Dictionary<string, string> EmptyEntityList = new Dictionary<string, string>() { };
         public ResourceResponsePutRequestHandler(
             IResourceContentModifier<Data.Model.Response.Resource> resourceModifier,
             IMapper mapper,
@@ -28,7 +27,11 @@ namespace Api.Domain.Handling.Resource.Put
 
         public async Task<ResourceResponse<Data.Model.Response.Resource>> Handle(ResourceResponsePutRequest request, CancellationToken cancellationToken)
         {
+
+            if (request.Model == null) throw new ArgumentNullException(nameof(request.Model));
+
             ResourceResponse<Data.Model.Response.Resource> response = new ResourceResponse<Data.Model.Response.Resource>();
+            
             response.StatusCode = request.StatusCode;
             if (request.StatusCode == HttpStatusCode.OK)
             {
@@ -39,16 +42,13 @@ namespace Api.Domain.Handling.Resource.Put
                     responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
                 }
 
-                var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" }, { "{namespace}", request.Namespace } };
-
-                var relatedEntities = EmptyEntityList;
                 response.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
                                                                 request.Host,
                                                                 request.PathBase,
                                                                 request.Path,
-                                                                systemKeys,
-                                                                relatedEntities);
+                                                                request.Namespace,
+                                                                $"{request.Model.Id}");
 
                 response.Model = responseModel;
                 response.Headers = _responseHeadersProvider.AddHeadersFromItem(response.Model);

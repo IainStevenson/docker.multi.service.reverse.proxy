@@ -74,7 +74,7 @@ namespace Api.Controllers
         /// 
         /// </remarks>
         [HttpPost]
-        [Route("{namespace}")]
+        [Route("{*namespace}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -104,6 +104,7 @@ namespace Api.Controllers
                                                                                             Request.Host.Value,
                                                                                             Request.PathBase.Value,
                                                                                             Request.Path.Value,
+                                                                                            @namespace,
                                                                                             keys
                                                                                         );
 

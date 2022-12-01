@@ -1,4 +1,5 @@
 ﻿using Data.Model;
+using Data.Model.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Domain.Handling.Resource
@@ -10,7 +11,7 @@ namespace Api.Domain.Handling.Resource
     {
 
         IActionResult HandleMany<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>;
-        IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEntity;
+        IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IResponseItem;
         IActionResult HandleNone(ControllerBase controller, ResourceResponse resourceOutput);
     }
 }

@@ -12,6 +12,7 @@ namespace Api.Domain.Handling.Resource.Post
         public string Host { get; set; } = string.Empty;
         public string PathBase { get; set; } = string.Empty;
         public string Path { get; set; } = string.Empty;
+        public string Namespace { get; set; } = string.Empty;
         public string Keys { get; set; } = string.Empty;
         public HttpStatusCode StatusCode { get; set; }
     }

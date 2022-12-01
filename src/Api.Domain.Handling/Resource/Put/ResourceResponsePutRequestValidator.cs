@@ -10,10 +10,11 @@ namespace Api.Domain.Handling.Resource.Put
         };
         public ResourceResponsePutRequestValidator()
         {
-            RuleFor(x => x.Scheme).NotNull();
-            RuleFor(x => x.Host).NotNull();
-            RuleFor(x => x.PathBase).NotNull();
-            RuleFor(x => x.Path).NotNull();
+            RuleFor(x => x.Scheme).NotEmpty();
+            RuleFor(x => x.Host).NotEmpty();
+            RuleFor(x => x.PathBase).NotEmpty();
+            RuleFor(x => x.Path).NotEmpty();
+            RuleFor(x => x.Namespace).NotEmpty();
             RuleFor(rule => rule.StatusCode).Must(value => _acceptableCodes.Contains(value));
         }
     }

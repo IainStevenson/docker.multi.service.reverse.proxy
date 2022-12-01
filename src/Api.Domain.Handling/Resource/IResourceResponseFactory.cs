@@ -42,6 +42,7 @@ namespace Api.Domain.Handling.Resource
         /// <param name="host">The processing host.</param>
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
+        /// <param name="@namespace">The path element of the call taht represents the namespace.</param>
         /// <param name="keys">The client provided keys</param>
         /// <returns>A new instance of <see cref="ResourceResponsePostRequest"/></returns>
         ResourceResponsePostRequest CreateResourceResponsePostRequest(
@@ -51,6 +52,7 @@ namespace Api.Domain.Handling.Resource
             string host,
             string pathBase,
             string path,
+            string @namespace,
             string keys);
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponsePutRequest"/> from the provided variables.

@@ -1,14 +1,16 @@
 ﻿using CSharpVitamins;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Data.Model.Response
 {
     /// <summary>
     /// A client side wrapper around stored content.
     /// </summary>
-    public class Resource : IResource, IResponseEntity
+    public class Resource : IResource, IResponseItem
     {
-        
+
         /// <summary>
         /// The ETag of this vesion of the ressource used for cache control anc concurrency checking
         /// </summary>
@@ -33,5 +35,7 @@ namespace Data.Model.Response
         /// The UTC date and time of last modification.
         /// </summary>
         public DateTimeOffset? Modified { get; set; }
+
+        public IEnumerable<IApiLink> Links { get; set; }
     }
 }

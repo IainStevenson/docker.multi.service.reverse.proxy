@@ -7,7 +7,7 @@ namespace Api.Domain.Handling.Resource.Post
     public class ResourceResponsePostRequestHandler : IRequestHandler<ResourceResponsePostRequest, ResourceResponse<Data.Model.Response.Resource>>
     {
         private readonly IMapper _mapper;
-        private readonly Dictionary<string, string> EmptyEntityList = new() { };
+
         private readonly IResponseLinksProvider _responseLinksProvider;
         private readonly IResourceContentModifier<Data.Model.Response.Resource> _resourceModifier;
         private readonly IResponseHeadersProvider _responseHeadersProvider;
@@ -26,6 +26,7 @@ namespace Api.Domain.Handling.Resource.Post
         }
         public async Task<ResourceResponse<Data.Model.Response.Resource>> Handle(ResourceResponsePostRequest request, CancellationToken cancellationToken)
         {
+
             var response = new ResourceResponse<Data.Model.Response.Resource>();
             response.StatusCode = request.StatusCode;
 
@@ -42,14 +43,15 @@ namespace Api.Domain.Handling.Resource.Post
 
             response.Model = responseModel;
             response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);
-            var systemKeys = new Dictionary<string, string>() { { "{id}", $"{request.Model.Id}" }};
+
             response.Links = await _responseLinksProvider.BuildLinks(
                                                             request.Scheme,
                                                             request.Host,
                                                             request.PathBase,
                                                             request.Path,
-                                                            systemKeys,
-                                                            EmptyEntityList);
+                                                            request.Namespace,
+                                                            $"{request.Model.Id}"
+                                                            );
 
 
 

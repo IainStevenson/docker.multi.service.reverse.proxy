@@ -57,7 +57,8 @@ namespace Api.Domain.Handling.Resource
         }
 
         /// <inheritdoc/>
-        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
+        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, 
+            HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string @namespace, string keys)
         {
             return new ResourceResponsePostRequest()
             {
@@ -67,6 +68,7 @@ namespace Api.Domain.Handling.Resource
                 Host = host,
                 PathBase = pathBase.TrimEnd('/'),
                 Path = path.TrimEnd('/'),
+                Namespace= @namespace,
                 Keys = keys
             };
         }

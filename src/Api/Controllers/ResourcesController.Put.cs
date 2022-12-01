@@ -14,7 +14,7 @@ namespace Api.Controllers
     public partial class ResourcesController
     {
         /// <summary>
-        /// Action verb PUT: api/Resource/{namespace}/{id:guid}[?moveto=newnamespace[&keys=id1[&keys=id2...]]]
+        /// Action verb PUT: api/Resource/{id:guid}/{namespace}[?moveto=newnamespace[&keys=id1[&keys=id2...]]]
         /// </summary>
         /// <remarks>
         /// Updates an existing resource, and or, optionally moves its namespace. 
@@ -38,9 +38,10 @@ namespace Api.Controllers
         /// 200 OK - Success - returns changed object
         /// </returns>
         [HttpPut()]
-        [Route("{namespace}/{id:guid}")]
-        public async Task<IActionResult> Put([Required][FromRoute] string @namespace,
+        [Route("{id:guid}/{*namespace}")]
+        public async Task<IActionResult> Put(
                                             [Required][FromRoute] Guid id,
+                                            [Required][FromRoute] string @namespace,
                                             [FromBody] dynamic content,
                                             [FromQuery] string keys,
                                             [FromQuery] string moveto)
