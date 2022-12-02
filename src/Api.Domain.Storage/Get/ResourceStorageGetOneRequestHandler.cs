@@ -28,10 +28,10 @@ namespace Api.Domain.Storage.Get
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
-                response.StatusCode = HttpStatusCodes.BADREQUEST;
+                response.StatusCode = ApiDomainStatusCodes.BADREQUEST;
             }
             Data.Model.Storage.Resource? resource = null;
-            if (string.IsNullOrWhiteSpace(request.Namespace) )
+            if (string.IsNullOrWhiteSpace(request.ContentNamespace) )
             {
                 resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                     && r.OwnerId == request.OwnerId
@@ -42,7 +42,7 @@ namespace Api.Domain.Storage.Get
             {
                 resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                     && r.OwnerId == request.OwnerId
-                                                                                    && r.Namespace == request.Namespace 
+                                                                                    && r.Namespace == request.ContentNamespace 
                                                                                     , cancellationToken)).SingleOrDefault();
 
             }
@@ -57,7 +57,7 @@ namespace Api.Domain.Storage.Get
 
 
             response.Model = resource;
-            response.StatusCode = HttpStatusCodes.OK;
+            response.StatusCode = ApiDomainStatusCodes.OK;
             return response;
         }
     }

@@ -11,9 +11,10 @@ namespace Api.Domain.Storage.Tests.RequestValidators
         [Test]
         [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my.namespace", "01000000-0000-0000-0000-000000000000", null, true, "")]
         [TestCase("00000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my.namespace", "01000000-0000-0000-0000-000000000000", null, false, "Id")]
-        [TestCase("01000000-0000-0000-0000-000000000000", "00000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my\namespace", "01000000-0000-0000-0000-000000000000", null, false, "OwnerId")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "00000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my/name/space", "01000000-0000-0000-0000-000000000000", null, false, "OwnerId")]
         [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "00000000-0000-0000-0000-000000000000", "my/namespace", "01000000-0000-0000-0000-000000000000", null, false, "RequestId")]
-        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my~namespace", "01000000-0000-0000-0000-000000000000", null, true, "")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my~name~space", "01000000-0000-0000-0000-000000000000", null, false, "ContentNamespace")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my~name\\space", "01000000-0000-0000-0000-000000000000", null, false, "ContentNamespace")]
 
         public void TestScenario(
              string Id,
@@ -32,7 +33,7 @@ namespace Api.Domain.Storage.Tests.RequestValidators
                 Id = new Guid(Id),
                 OwnerId = new Guid(OwnerId),
                 RequestId = new Guid(RequestId),
-                Namespace = Namespace,
+                ContentNamespace = Namespace,
                 IfNotETags = IfNotETags == null ? new List<string>() : IfNotETags.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
                 IfModifiedSince = IfModifiedSince == null ? DateTimeOffset.MinValue : DateTimeOffset.Parse(IfModifiedSince)
             };

@@ -30,7 +30,7 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             "01000000-0000-0000-0000-000000000000", 
             "00000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000", 
-            "my\\name\\space", 
+            "my/name/space", 
             "01000000-0000-0000-0000-000000000000", 
             null, 
             false, "OwnerId")]// has missing ownerid
@@ -46,10 +46,10 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             "01000000-0000-0000-0000-000000000000", 
             "01000000-0000-0000-0000-000000000000",
             "01000000-0000-0000-0000-000000000000",
-            "my namespace", 
+            "my\\name\\space", 
             "01000000-0000-0000-0000-000000000000",
             null, 
-            true, "")]// has bad namespace
+            false, "ContentNamespace")]// has bad ContentNamespace
 
         public void TestScenario(
             string Id,
@@ -68,7 +68,7 @@ namespace Api.Domain.Storage.Tests.RequestValidators
                 Id = new Guid(Id),
                 OwnerId = new Guid(OwnerId),
                 RequestId = new Guid(RequestId),
-                Namespace = Namespace,
+                ContentNamespace = Namespace,
                 IsNotETags = IsNotETags == null ? new List<string>() : IsNotETags.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
                 IsUnchangedSince = IsUnchangedSince == null ? DateTimeOffset.MaxValue : DateTimeOffset.Parse(IsUnchangedSince)
             };

@@ -30,14 +30,14 @@ namespace Api.Domain.Storage.Put
 
             if (!validationResult.IsValid)
             {
-                response.StatusCode = HttpStatusCodes.BADREQUEST;
+                response.StatusCode = ApiDomainStatusCodes.BADREQUEST;
                 response.RequestValidationErrors = validationResult.Errors.Select(x => $"{x.PropertyName}\t{x.ErrorCode}\t{x.ErrorMessage}").ToList();
                 return response;
             }
 
             Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                 && r.OwnerId == request.OwnerId
-                                                                && r.Namespace == request.Namespace
+                                                                && r.Namespace == request.ContentNamespace
                                                                 , cancellationToken)).FirstOrDefault();
          
             (resource, response) = _actionValidator.Validate(resource,request, response);
@@ -59,7 +59,7 @@ namespace Api.Domain.Storage.Put
             }
             
             response.Model = await _storage.UpdateAsync(resource, cancellationToken); ;
-            response.StatusCode = HttpStatusCodes.OK;
+            response.StatusCode = ApiDomainStatusCodes.OK;
             return response;
         }
     }

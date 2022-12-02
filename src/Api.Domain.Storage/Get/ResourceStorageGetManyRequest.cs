@@ -6,7 +6,7 @@ namespace Api.Domain.Storage.Get
     [ExcludeFromCodeCoverage]
     public class ResourceStorageGetManyRequest : IRequest<ResourceStorageGetManyResponse>
     {
-        public string Namespace { get; set; } = "my";
+        public string ContentNamespace { get; set; } = "my";
         public Guid OwnerId { get; set; }
         public Guid RequestId { get; set; }
         public DateTimeOffset IfModifiedSince { get;  set; }

@@ -17,11 +17,11 @@ namespace Api.Controllers
         /// <summary>
         /// Implements a client side POST : api/resources/{namespace}[?keys=id1[&keys=id2...] to store a client side resource, and return the newly created , location URL, etag and other creation information.
         /// </summary>
-        /// <param name="namespace">The required resource storage namespace, an optionally dotted string folder semantic for the client to declare a data type and provides a means of type aggregation. 
+        /// <param name="clientContentNamespace">The required resource storage namespace, an optionally dotted string folder semantic for the client to declare a data type and provides a means of type aggregation. 
         /// The dotted string format is validated and any deviance will result in a return status code of 400-BadRequest.
         /// Namesapce must follow the .NET rules for Namespaces.
         /// </param>
-        /// <param name="keys">
+        /// <param name="clientContentKeys">
         /// This option reduces return response bandwidth. 
         /// An optional list of Content object key property names. These are used to selectively return content in the response in the <see cref="Data.Model.Response.Resource"/> content property. All properties are stored but only these key properties are returned if they are provided in the post call and exist in the content. See <see cref="Response.Formater.ResourceContentModifier"/> for details.
         /// if keys are provided, they must ALL occur as first level (non nested) properties in the content and then only 
@@ -29,7 +29,7 @@ namespace Api.Controllers
         /// If no keys are provided the whole content is returned in the <see cref="Data.Model.Response.Resource"/>.
         /// If any keys provided are missing from the content, the whole content is returned in the <see cref="Data.Model.Response.Resource"/>.
         /// </param>
-        /// <param name="content">The client supplied resource Content value. This 'is' the resource to the client.</param>
+        /// <param name="clientContent">The client supplied resource Content value. This 'is' the resource to the client.</param>
         /// <returns>
         /// 401 Unauthorised if a valid unexpired bearer token is not presented.
         /// 400 BadRequest if any parameters are invalid.
@@ -74,22 +74,22 @@ namespace Api.Controllers
         /// 
         /// </remarks>
         [HttpPost]
-        [Route("{*namespace}")]
+        [Route("{*clientContentNamespace}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(
-            [Required][FromRoute] string @namespace,
-            [FromQuery] string keys,
-            [Required][FromBody] dynamic content
+            [Required][FromRoute] string clientContentNamespace,
+            [FromQuery] string clientContentKeys,
+            [Required][FromBody] dynamic clientContent
             )
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Post)}. Processing request...");
 
             ResourceStoragePostRequest resourceStoragePostRequest = _resourceRequestFactory.CreateResourceStoragePostRequest(
-                                                                            @namespace,
-                                                                            content,
-                                                                            keys,
+                                                                            clientContentNamespace,
+                                                                            clientContent,
+                                                                            clientContentKeys,
                                                                             _ownerId,
                                                                             _requestId);
 
@@ -104,8 +104,8 @@ namespace Api.Controllers
                                                                                             Request.Host.Value,
                                                                                             Request.PathBase.Value,
                                                                                             Request.Path.Value,
-                                                                                            @namespace,
-                                                                                            keys
+                                                                                            clientContentNamespace,
+                                                                                            clientContentKeys
                                                                                         );
 
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponseRequest);

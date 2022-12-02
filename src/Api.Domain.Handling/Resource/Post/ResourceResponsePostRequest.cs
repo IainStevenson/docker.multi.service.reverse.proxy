@@ -4,10 +4,14 @@ using System.Net;
 
 namespace Api.Domain.Handling.Resource.Post
 {
+    /// <summary>
+    /// Defines the POST request data to fulfill a service response.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class ResourceResponsePostRequest : IRequest<ResourceResponse<Data.Model.Response.Resource>>
     {
         public Data.Model.Storage.Resource? Model { get; set; }
+        public List<string> RequestValidationErrors { get; set; } = new List<string>();
         public string Scheme { get; set; } = string.Empty;
         public string Host { get; set; } = string.Empty;
         public string PathBase { get; set; } = string.Empty;

@@ -22,7 +22,7 @@ namespace Api.Domain.Storage.Get
 
             if (resource == null)
             {
-                response.StatusCode = HttpStatusCodes.NOTFOUND;
+                response.StatusCode = ApiDomainStatusCodes.NOTFOUND;
                 response.RequestValidationErrors.Add($"Get failed, because the record identified by {request.Id} was not found.");
                 return (resource, response);
             }
@@ -33,7 +33,7 @@ namespace Api.Domain.Storage.Get
          
             if (timeOfLastChange <= request.IfModifiedSince)
             {
-                response.StatusCode = HttpStatusCodes.NOTMODIFIED;
+                response.StatusCode = ApiDomainStatusCodes.NOTMODIFIED;
                 response.RequestValidationErrors.Add($"Get failed, because the record has not changed since {request.IfModifiedSince}.");
                 resource = null;
                 return (resource, response);
@@ -41,12 +41,12 @@ namespace Api.Domain.Storage.Get
 
             if (ETagIsIn(resource.Etag, request.IfNotETags))
             {
-                response.StatusCode = HttpStatusCodes.NOTMODIFIED;
+                response.StatusCode = ApiDomainStatusCodes.NOTMODIFIED;
                 response.RequestValidationErrors.Add($"Get failed, because the record still has the eTag {request.IfNotETags.Aggregate(string.Empty, (current, next) => $"{current}{(current.Length == 0? "":",")}{next}")}.");
                 resource = null;
                 return (resource, response);
             }
-            response.StatusCode = HttpStatusCodes.OK;
+            response.StatusCode = ApiDomainStatusCodes.OK;
             return (resource, response);
         }
 

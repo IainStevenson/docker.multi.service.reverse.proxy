@@ -29,7 +29,7 @@ namespace Api.Domain.Handling.Resource.Post
 
             var response = new ResourceResponse<Data.Model.Response.Resource>();
             response.StatusCode = request.StatusCode;
-
+            response.RequestValidationErrors = request.RequestValidationErrors;
 
             if (request.StatusCode != System.Net.HttpStatusCode.Created) return response;
 

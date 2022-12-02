@@ -45,14 +45,13 @@ namespace Api.Domain.Handling.Resource
         }
 
         /// <inheritdoc/>
-        public ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode)
+        public ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, List<string> responseValidationErrors)
         {
             return new ResourceResponseGetOneRequest()
             {
                 Model = model,
                 StatusCode = statusCode,
-
-
+                RequestValidationErrors= responseValidationErrors
             };
         }
 

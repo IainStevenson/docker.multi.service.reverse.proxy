@@ -29,25 +29,25 @@ namespace Api.Domain.Storage.Get
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                response.StatusCode = HttpStatusCodes.BADREQUEST;
+                response.StatusCode = ApiDomainStatusCodes.BADREQUEST;
             }
 
             IEnumerable<Data.Model.Storage.Resource> resources = new List<Data.Model.Storage.Resource>();
 
             resources = await _storage.GetAsync(
                                                     r => r.OwnerId == request.OwnerId
-                                                    && r.Namespace == request.Namespace
+                                                    && r.Namespace == request.ContentNamespace
                                                     , cancellationToken);
 
             (resources, response) = _validatePreConditions.Validate(resources, request, response);
 
-            if (response.StatusCode != HttpStatusCodes.OK)
+            if (response.StatusCode != ApiDomainStatusCodes.OK)
             {
                 return response;
             }
 
 
-            response.StatusCode = HttpStatusCodes.OK;
+            response.StatusCode = ApiDomainStatusCodes.OK;
             response.Model = resources;
             return response;
 

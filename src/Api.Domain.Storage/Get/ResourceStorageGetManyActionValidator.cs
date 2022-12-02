@@ -16,7 +16,7 @@ namespace Api.Domain.Storage.Get
                                             r.Created <= request.IfModifiedSince);
                 if (unmodifiedItems.Count() == resources.Count())
                 {
-                    response.StatusCode = HttpStatusCodes.NOTMODIFIED;
+                    response.StatusCode = ApiDomainStatusCodes.NOTMODIFIED;
                     response.RequestValidationErrors.Add($"Get failed, because no records were not found modified since {request.IfModifiedSince:o}.");
                     return (new List<Resource>(), response);
                 }
@@ -24,12 +24,12 @@ namespace Api.Domain.Storage.Get
                 var modifiedItems = resources.Where(r =>
                             r.Modified.HasValue ? r.Modified > request.IfModifiedSince :
                             r.Created > request.IfModifiedSince).ToList();
-                response.StatusCode = HttpStatusCodes.OK;
+                response.StatusCode = ApiDomainStatusCodes.OK;
                 
                 return (modifiedItems, response);
             }
 
-            response.StatusCode = HttpStatusCodes.NOTFOUND;
+            response.StatusCode = ApiDomainStatusCodes.NOTFOUND;
             response.RequestValidationErrors.Add($"Get failed, because no records were not found.");
             return (resources, response);
         }

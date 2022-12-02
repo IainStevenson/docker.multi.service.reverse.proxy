@@ -13,7 +13,7 @@ namespace Api.Domain.Storage
             return new ResourceStorageGetOneRequest()
             {
                 Id = id,
-                Namespace = @namespace ?? "".ToLower(),
+                ContentNamespace = @namespace ?? "".ToLower(),
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IfModifiedSince = ifModifiedSince,
@@ -21,12 +21,12 @@ namespace Api.Domain.Storage
             };
         }
 
-        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(string @namespace, Guid id, Guid ownerId, Guid requestId, DateTimeOffset isUnchangedSince, List<string> isEtags)
+        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(Guid id, string @namespace, Guid ownerId, Guid requestId, DateTimeOffset isUnchangedSince, List<string> isEtags)
         {
             return new ResourceStorageDeleteRequest()
             {
                 Id = id,
-                Namespace = @namespace ?? "".ToLower(),
+                ContentNamespace = @namespace ?? "".ToLower(),
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IsUnchangedSince = isUnchangedSince,
@@ -39,7 +39,7 @@ namespace Api.Domain.Storage
         {
             return new ResourceStorageGetManyRequest()
             {
-                Namespace = @namespace ?? "".ToLower(),
+                ContentNamespace = @namespace ?? "".ToLower(),
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IfModifiedSince = ifModifiedSince,
@@ -47,13 +47,18 @@ namespace Api.Domain.Storage
             };
         }
         ///  <inheritdoc/>
-        public ResourceStoragePostRequest CreateResourceStoragePostRequest(string @namespace, dynamic content, string keys, Guid ownerId, Guid requestId)
+        public ResourceStoragePostRequest CreateResourceStoragePostRequest(
+            string clientContentNamespace, 
+            dynamic content, 
+            string keys, 
+            Guid ownerId, 
+            Guid requestId)
         {
             return new ResourceStoragePostRequest()
             {
-                Namespace = @namespace ?? "".ToLower(),
+                ContentNamespace = clientContentNamespace ?? "".ToLower(),
                 Content = content,
-                Keys = keys,
+                ContentKeys = keys,
                 OwnerId = ownerId,
                 RequestId = requestId
             };
@@ -64,7 +69,7 @@ namespace Api.Domain.Storage
             return new ResourceStoragePutRequest()
             {
                 Id = id,
-                Namespace = @namespace ?? "".ToLower(),
+                ContentNamespace = @namespace ?? "".ToLower(),
                 Content = content,
                 Keys = keys,
                 OwnerId = ownerId,
@@ -72,12 +77,12 @@ namespace Api.Domain.Storage
             };
         }
 
-        public ResourceStoragePutRequest CreateResourceStoragePutRequest(Guid id, dynamic content, Guid ownerId, Guid requestId, string keys, string @namespace, string moveto, DateTimeOffset unmodifiedSince, List<string> etags)
+        public ResourceStoragePutRequest CreateResourceStoragePutRequest(Guid id, string @namespace, dynamic content, Guid ownerId, Guid requestId, string keys, string moveto, DateTimeOffset unmodifiedSince, List<string> etags)
         {
             return new ResourceStoragePutRequest()
             {
                 Id = id,
-                Namespace = @namespace ?? "".ToLower(),
+                ContentNamespace = @namespace ?? "".ToLower(),
                 Content = content,
                 Keys = keys,
                 OwnerId = ownerId,

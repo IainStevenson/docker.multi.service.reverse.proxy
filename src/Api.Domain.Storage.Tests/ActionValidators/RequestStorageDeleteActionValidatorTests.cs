@@ -8,19 +8,19 @@ namespace Api.Domain.Storage.Tests.ActionValidators
         ResourceStorageActionValidatorTestBase<ResourceStorageDeleteActionValidator, ResourceStorageDeleteRequest, ResourceStorageDeleteResponse>
     {
 
-        [TestCase(false, false, false, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(false, false, true, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(false, true, false, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(false, true, true, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(true, true, false, HttpStatusCodes.PRECONDITIONFAILED, 1, false)]
-        [TestCase(true, false, true, HttpStatusCodes.PRECONDITIONFAILED, 1, false)]
-        [TestCase(true, true, true, HttpStatusCodes.PRECONDITIONFAILED, 1, false)]
-        [TestCase(true, false, false, HttpStatusCodes.OK, 0, true)]
+        [TestCase(false, false, false, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(false, false, true, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(false, true, false, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(false, true, true, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(true, true, false, ApiDomainStatusCodes.PRECONDITIONFAILED, 1, false)]
+        [TestCase(true, false, true, ApiDomainStatusCodes.PRECONDITIONFAILED, 1, false)]
+        [TestCase(true, true, true, ApiDomainStatusCodes.PRECONDITIONFAILED, 1, false)]
+        [TestCase(true, false, false, ApiDomainStatusCodes.OK, 0, true)]
         public void TestScenario(
                                     bool resourceExists, 
                                     bool IfUnchangedSince, 
                                     bool ifNotETags, 
-                                    HttpStatusCodes statusCodeToExpect, 
+                                    ApiDomainStatusCodes statusCodeToExpect, 
                                     int errorCountToExepct,
                                     bool resourceIsProduced
             )
@@ -48,7 +48,7 @@ namespace Api.Domain.Storage.Tests.ActionValidators
                 Id = Model?.Id ?? Guid.NewGuid(),
                 IsNotETags = ifNotEtagsList,
                 IsUnchangedSince = isUnchangedSinceDateTime,
-                Namespace = "my",
+                ContentNamespace = "my",
                 OwnerId = Guid.NewGuid(),
                 RequestId = Guid.NewGuid()
 

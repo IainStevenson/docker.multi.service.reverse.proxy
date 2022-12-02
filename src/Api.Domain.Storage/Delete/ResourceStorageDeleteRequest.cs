@@ -22,7 +22,7 @@ namespace Api.Domain.Storage.Delete
         /// <summary>
         /// Include the resource if it has this namespace.
         /// </summary>
-        public string Namespace { get; set; } = "my";
+        public string ContentNamespace { get; set; } = "my";
         /// <summary>
         /// Include the resource if its current ETag is within this collection.
         /// </summary>

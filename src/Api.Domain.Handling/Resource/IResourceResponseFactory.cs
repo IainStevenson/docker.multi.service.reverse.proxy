@@ -31,7 +31,7 @@ namespace Api.Domain.Handling.Resource
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
         /// <returns></returns>
-        ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode);
+        ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, List<string> requestValidationErrors);
 
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponsePostRequest"/> from the provided variables.

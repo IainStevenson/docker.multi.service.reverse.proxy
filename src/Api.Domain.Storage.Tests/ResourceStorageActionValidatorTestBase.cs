@@ -41,7 +41,7 @@ namespace Api.Domain.Storage.Tests
         /// <param name="errorCount"></param>
         /// <param name="resourceIsProduced"></param>
 
-        protected void AssertTheResultsAreAsExpected(HttpStatusCodes statusCode, int errorCount, bool modelAvailableAfterValidation)
+        protected void AssertTheResultsAreAsExpected(ApiDomainStatusCodes statusCode, int errorCount, bool modelAvailableAfterValidation)
         {
             if (modelAvailableAfterValidation)
             {

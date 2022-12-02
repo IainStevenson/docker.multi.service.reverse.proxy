@@ -23,7 +23,7 @@ namespace Api.Controllers
         /// <param name="id">
         /// The resource identifier. Identifies the record that must match the if-* qualifiers.
         /// </param>
-        /// <param name="namespace">
+        /// <param name="clientContentNamespace">
         /// The resource storage namespace, if provided this overwrites the existing namespace for the resource.
         /// </param>
         /// <param name="content">
@@ -41,7 +41,7 @@ namespace Api.Controllers
         [Route("{id:guid}/{*namespace}")]
         public async Task<IActionResult> Put(
                                             [Required][FromRoute] Guid id,
-                                            [Required][FromRoute] string @namespace,
+                                            [Required][FromRoute] string clientContentNamespace,
                                             [FromBody] dynamic content,
                                             [FromQuery] string keys,
                                             [FromQuery] string moveto)
@@ -53,11 +53,11 @@ namespace Api.Controllers
             var etags = _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
             ResourceStoragePutRequest resourceStoragePutRequest = _resourceRequestFactory.CreateResourceStoragePutRequest(id,
+                                                                                        clientContentNamespace,
                                                                                         content,
                                                                                         _ownerId,
                                                                                         _requestId,
                                                                                         keys,
-                                                                                        @namespace,
                                                                                         moveto,
                                                                                         unmodifiedSince,
                                                                                         etags);
@@ -68,7 +68,7 @@ namespace Api.Controllers
             ResourceResponsePutRequest resourceResponsePutRequest = _resourceResponseFactory.CreateResourceResponsePutRequest(
                                                                                            resourceStoragePutResponse.Model,
                                                                                           (HttpStatusCode)resourceStoragePutResponse.StatusCode,
-                                                                                           @namespace,
+                                                                                           clientContentNamespace,
                                                                                           Request.Scheme,
                                                                                           Request.Host.Value,
                                                                                           Request.PathBase.Value,

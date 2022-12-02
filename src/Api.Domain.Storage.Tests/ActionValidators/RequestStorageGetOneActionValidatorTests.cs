@@ -8,19 +8,19 @@ namespace Api.Domain.Storage.Tests.ActionValidators
        ResourceStorageActionValidatorTestBase<ResourceStorageGetOneActionValidator, ResourceStorageGetOneRequest, ResourceStorageGetOneResponse>
     {
 
-        [TestCase(false, false, false, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(false, false, true, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(false, true, false, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(false, true, true, HttpStatusCodes.NOTFOUND, 1, false)]
-        [TestCase(true, true, false, HttpStatusCodes.NOTMODIFIED, 1, false)]
-        [TestCase(true, false, true, HttpStatusCodes.NOTMODIFIED, 1, false)]
-        [TestCase(true, true, true, HttpStatusCodes.NOTMODIFIED, 1, false)]
-        [TestCase(true, false, false, HttpStatusCodes.OK, 0, true)]
+        [TestCase(false, false, false, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(false, false, true, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(false, true, false, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(false, true, true, ApiDomainStatusCodes.NOTFOUND, 1, false)]
+        [TestCase(true, true, false, ApiDomainStatusCodes.NOTMODIFIED, 1, false)]
+        [TestCase(true, false, true, ApiDomainStatusCodes.NOTMODIFIED, 1, false)]
+        [TestCase(true, true, true, ApiDomainStatusCodes.NOTMODIFIED, 1, false)]
+        [TestCase(true, false, false, ApiDomainStatusCodes.OK, 0, true)]
         public void TestScenario(
                                            bool makeSureResourceExists,
                                            bool ignoreUnlessHasChangedByDate,
                                            bool ignoreUnlessHasChangedByETag,
-                                           HttpStatusCodes statusCodeToExpect,
+                                           ApiDomainStatusCodes statusCodeToExpect,
                                            int errorCountToExepct,
                                            bool modelAvailableAfterValidation
                    )
@@ -51,7 +51,7 @@ namespace Api.Domain.Storage.Tests.ActionValidators
                 Id = Model?.Id ?? Guid.NewGuid(),
                 IfNotETags = ignoreUnlessChangedFromEtag,
                 IfModifiedSince = ignoreUnlessChangedSinceDateTime,
-                Namespace = "my",
+                ContentNamespace = "my",
                 OwnerId = Guid.NewGuid(),
                 RequestId = Guid.NewGuid()
 

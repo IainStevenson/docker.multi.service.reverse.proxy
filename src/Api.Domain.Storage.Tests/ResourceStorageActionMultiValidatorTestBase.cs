@@ -39,7 +39,7 @@ namespace Api.Domain.Storage.Tests
         /// <param name="errorCount"></param>
         /// <param name="resourceIsProduced"></param>
 
-        protected void AssertTheResultsAreAsExpected(HttpStatusCodes statusCode, int errorCount, int expectedItemCount)
+        protected void AssertTheResultsAreAsExpected(ApiDomainStatusCodes statusCode, int errorCount, int expectedItemCount)
         {
             Assert.That(Response.StatusCode, Is.EqualTo(statusCode));
             Assert.That(Response.RequestValidationErrors, Has.Count.EqualTo(errorCount));

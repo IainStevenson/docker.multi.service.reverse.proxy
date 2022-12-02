@@ -12,7 +12,7 @@ namespace Api.Domain.Storage.Delete
         {
             if (resource == null)
             {
-                response.StatusCode = HttpStatusCodes.NOTFOUND;
+                response.StatusCode = ApiDomainStatusCodes.NOTFOUND;
                 response.RequestValidationErrors.Add($"Deletion failed, because the record identified by {request.Id} was not found.");
                 return (resource, response);
             }
@@ -24,7 +24,7 @@ namespace Api.Domain.Storage.Delete
                     )
             {
                 response.RequestValidationErrors.Add($"Deletion failed, because the resource has been modified since {request.IsUnchangedSince}");
-                response.StatusCode = HttpStatusCodes.PRECONDITIONFAILED;
+                response.StatusCode = ApiDomainStatusCodes.PRECONDITIONFAILED;
                 resource = null;
                 return (resource, response);
             }
@@ -32,12 +32,12 @@ namespace Api.Domain.Storage.Delete
             if (request.IsNotETags.Any() && !request.IsNotETags.Contains(resource.Etag))
             {
                 response.RequestValidationErrors.Add($"Deletion failed, as the resource has None of the specified ETags {string.Join(',', request.IsNotETags)}/r/n");
-                response.StatusCode = HttpStatusCodes.PRECONDITIONFAILED;
+                response.StatusCode = ApiDomainStatusCodes.PRECONDITIONFAILED;
                 resource = null;
                 return (resource, response);
 
             }
-            response.StatusCode = HttpStatusCodes.OK; //assume ok to be modified as needed
+            response.StatusCode = ApiDomainStatusCodes.OK; //assume ok to be modified as needed
             return (resource, response);
         }
 

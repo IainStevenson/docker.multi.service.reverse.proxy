@@ -3,11 +3,11 @@ using System.Net;
 
 namespace Api.Domain.Handling.Resource.Post
 {
-    public class ResourceRespnsePostRequestValidator : AbstractValidator<ResourceResponsePostRequest>
+    public class ResourceResponsePostRequestValidator : AbstractValidator<ResourceResponsePostRequest>
     {
         private List<HttpStatusCode> _acceptableCodes = new List<HttpStatusCode>() { HttpStatusCode.BadRequest, HttpStatusCode.Created };
 
-        public ResourceRespnsePostRequestValidator()
+        public ResourceResponsePostRequestValidator()
         {
             RuleFor(rule => rule.Model).NotNull();
             RuleFor(rule => rule.Scheme).NotEmpty();

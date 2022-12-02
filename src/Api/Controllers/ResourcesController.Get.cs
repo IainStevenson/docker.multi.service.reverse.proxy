@@ -23,8 +23,8 @@ namespace Api.Controllers
         ///     If-None-Match as in has been changed from the provided etag(s)
         /// Both or either of the above may be true and therefore return the item. Otherwise a 404 NotFound will be returned.
         /// </remarks>
-        /// <param name="namespace">The client controlled storage namespace type of the resource.</param>
         /// <param name="id">The server controlled unique storage identifier of the resource.</param>
+        /// <param name="clientContentNamespace">The client controlled storage namespace type of the resource.</param>
         /// <returns>
         /// Status code 
         ///     404 Not Found if the resource does not exist at all or exist in that namespace.
@@ -32,31 +32,32 @@ namespace Api.Controllers
         ///     304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
-        [Route("{id:guid}/{*namespace}")]
+        [Route("{id:guid}/{*clientContentNamespace}")]
         public async Task<IActionResult> GetOne(
             [Required][FromRoute] Guid id,
-            [FromRoute] string @namespace
+            [FromRoute] string clientContentNamespace
             )
         {
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetOne)}. Processing request.");
 
-            var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
+            var onlyIfModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
             
-            var noneEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
+            var onlyIfDoesNotHaveEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetOneRequest resourceGetOneRequest = _resourceRequestFactory.CreateResourceGetOneRequest(id,
-                                                                                            @namespace,
+                                                                                            clientContentNamespace,
                                                                                             _ownerId,
                                                                                             _requestId,
-                                                                                            ifModifiedSince,
-                                                                                            noneEtags);
+                                                                                            onlyIfModifiedSince,
+                                                                                            onlyIfDoesNotHaveEtags);
 
             var resourceStorageGetOneResponse = await _mediator.Send(resourceGetOneRequest);
 
             ResourceResponseGetOneRequest resourceResponseGetOneRequest = _resourceResponseFactory.CreateResourceResponseGetOneRequest(
                                                                                             resourceStorageGetOneResponse.Model,
-                                                                                           (HttpStatusCode)resourceStorageGetOneResponse.StatusCode
+                                                                                           (HttpStatusCode)resourceStorageGetOneResponse.StatusCode,
+                                                                                           resourceStorageGetOneResponse.RequestValidationErrors
                                                                                        );
 
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponseGetOneRequest);
@@ -76,8 +77,7 @@ namespace Api.Controllers
         ///     If-None-Match as in has been changed from the provided etag(s)
         /// Both or either of the above may be true and therefore return the items. Otherwise a 404 NotFound will be returned.
         /// </remarks>
-        /// <param name="namespace">The client controlled storage namespace type of the resource.</param>
-        /// <param name="id">The server controlled unique storage identifier of the resource.</param>
+        /// <param name="clientContentNamespace">The client controlled storage namespace type of the resource.</param>
         /// <returns>
         /// Status code:
         ///     404 Not Found if the resource does not exist in that namespace.
@@ -85,9 +85,9 @@ namespace Api.Controllers
         ///     304 Unchanged if the resource was modified (via etag 'If-None-Match' check) or Modified Date 'If-Modified-Since' check
         /// </returns>
         [HttpGet]
-        [Route("{*namespace}")]
+        [Route("{*clientContentNamespace}")]
         public async Task<IActionResult> GetMany(
-            [Required][FromRoute] string @namespace
+            [Required][FromRoute] string clientContentNamespace
             )
         {
 
@@ -97,7 +97,7 @@ namespace Api.Controllers
             var notEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetManyRequest resourceStorageGetManyRequest = _resourceRequestFactory.CreateResourceStorageGetManyRequest(
-                                                                                                            @namespace,
+                                                                                                            clientContentNamespace,
                                                                                                             _ownerId,
                                                                                                             _requestId,
                                                                                                             ifModifiedSince,

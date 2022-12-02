@@ -12,16 +12,16 @@ namespace Api.Domain.Storage.Tests.ActionValidators
     public class RequestStorageGetManyActionValidatorTests :
      ResourceStorageActionMultiValidatorTestBase<ResourceStorageGetManyActionValidator, ResourceStorageGetManyRequest, ResourceStorageGetManyResponse>
     {
-        [TestCase(false, 0, HttpStatusCodes.NOTFOUND, 1, 0)]
-        [TestCase(false, 1, HttpStatusCodes.NOTFOUND, 1, 0)]
-        [TestCase(false, 2, HttpStatusCodes.NOTFOUND, 1, 0)]
-        [TestCase(true, 0, HttpStatusCodes.OK, 0, 2)]
-        [TestCase(true, 1, HttpStatusCodes.OK, 0, 1)]
-        [TestCase(true, 2, HttpStatusCodes.NOTMODIFIED, 1, 0)]
+        [TestCase(false, 0, ApiDomainStatusCodes.NOTFOUND, 1, 0)]
+        [TestCase(false, 1, ApiDomainStatusCodes.NOTFOUND, 1, 0)]
+        [TestCase(false, 2, ApiDomainStatusCodes.NOTFOUND, 1, 0)]
+        [TestCase(true, 0, ApiDomainStatusCodes.OK, 0, 2)]
+        [TestCase(true, 1, ApiDomainStatusCodes.OK, 0, 1)]
+        [TestCase(true, 2, ApiDomainStatusCodes.NOTMODIFIED, 1, 0)]
         public void TestScenario(
                                 bool provideExistingItems,
                                 int applyChangedSinceTimestamp,
-                                HttpStatusCodes statusCodeToExpect,
+                                ApiDomainStatusCodes statusCodeToExpect,
                                 int errorCountToExpect,
                                 int numberOfItemsExpected
                       )

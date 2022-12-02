@@ -11,9 +11,11 @@ namespace Api.Domain.Storage.Tests.RequestValidators
         [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my.namespace", "{\"id\": 1, \"data\":\"1234\"}", "id", true, "")]
         [TestCase("00000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my.namespace", "{\"id\": 1, \"data\":\"1234\"}", "id", false, "OwnerId")]
         [TestCase("01000000-0000-0000-0000-000000000000", "00000000-0000-0000-0000-000000000000", "my.namespace", "{\"id\": 1, \"data\":\"1234\"}", "id", false, "RequestId")]
-        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my~namespace", "{\"id\": 1, \"data\":\"1234\"}", "id", true, "")]
-        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my\\namespace", null, "id", false, "Content")]
-        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my/namespace", "{\"id\": 1, \"data\":\"1234\"}", "", true, "")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my/name/space", "{\"id\": 1, \"data\":\"1234\"}", "id", true, "")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my/name/space", null, "id", false, "Content")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my~name~space", "{\"id\": 1, \"data\":\"1234\"}", "", false, "ContentNamespace")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my name space", "{\"id\": 1, \"data\":\"1234\"}", "", false, "ContentNamespace")]
+        [TestCase("01000000-0000-0000-0000-000000000000", "01000000-0000-0000-0000-000000000000", "my\\name\\space", "{\"id\": 1, \"data\":\"1234\"}", "", false, "ContentNamespace")]
         public void TestScenario(
             string OwnerId,
             string RequestId,
@@ -29,9 +31,9 @@ namespace Api.Domain.Storage.Tests.RequestValidators
             {
                 OwnerId = new Guid(OwnerId),
                 RequestId = new Guid(RequestId),
-                Namespace = Namespace,
+                ContentNamespace = Namespace,
                 Content = content,
-                Keys = keys,
+                ContentKeys = keys,
             };
 
             // Act          

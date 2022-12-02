@@ -7,7 +7,7 @@ namespace Api.Domain.Storage.Get
     public class ResourceStorageGetOneRequest : IRequest<ResourceStorageGetOneResponse>
     {
         public Guid Id { get; set; } = Guid.Empty;
-        public string Namespace { get; set; } = "my";
+        public string ContentNamespace { get; set; } = "my";
         public Guid OwnerId { get; set; } = Guid.Empty;
         public Guid RequestId { get; set; } = Guid.Empty;
         public List<string> IfNotETags { get; set; } = new List<string>();

@@ -8,7 +8,7 @@ namespace Api.Domain.Storage
         /// <summary>
         /// Determines the handler action outcome
         /// </summary>
-        public HttpStatusCodes StatusCode { get; set; }
+        public ApiDomainStatusCodes StatusCode { get; set; }
 
 
         /// <summary>

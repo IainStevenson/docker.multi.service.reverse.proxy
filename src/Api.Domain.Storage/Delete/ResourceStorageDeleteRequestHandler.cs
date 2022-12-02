@@ -29,13 +29,13 @@ namespace Api.Domain.Storage.Delete
             if (!validationResult.IsValid)
             {
                 response.RequestValidationErrors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                response.StatusCode = HttpStatusCodes.BADREQUEST;
+                response.StatusCode = ApiDomainStatusCodes.BADREQUEST;
             }
 
 
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                    && r.OwnerId == request.OwnerId
-                                                                                   && r.Namespace == request.Namespace
+                                                                                   && r.Namespace == request.ContentNamespace
                                                                                   , cancellationToken)).FirstOrDefault();
 
             (resource,response) = _actionValidator.Validate(resource, request, response);
@@ -46,7 +46,7 @@ namespace Api.Domain.Storage.Delete
             }
 
             var count = await _storage.DeleteAsync(request.Id, cancellationToken);
-            response.StatusCode = HttpStatusCodes.NOCONTENT;
+            response.StatusCode = ApiDomainStatusCodes.NOCONTENT;
             return response;
 
         }

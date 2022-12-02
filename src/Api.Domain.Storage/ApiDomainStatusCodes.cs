@@ -1,9 +1,9 @@
 ﻿namespace Api.Domain.Storage
 {
     /// <summary>
-    /// Public static class to abstract System.Net.Http.StatusCode
+    /// Public static class to abstract System.Net.HttpStatusCode and remove dependency on System.Net
     /// </summary>
-    public enum HttpStatusCodes
+    public enum ApiDomainStatusCodes
     {
         OK = 200,
         CREATED = 201,

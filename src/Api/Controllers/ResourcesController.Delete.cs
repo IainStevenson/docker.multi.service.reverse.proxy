@@ -12,38 +12,40 @@ namespace Api.Controllers
     public partial class ResourcesController 
     {
         /// <summary>
-        /// DELETE: api/resources/{namespace}/{id}
+        /// DELETE: api/resources/{id}/{clientContentNamespace}
         /// </summary>
         /// <remarks>
         /// Supports Headers: If-Unmodified-Since, If-Match
         /// </remarks>
-        /// <param name="id">The identifier of the resource that is to be deleted.</param>
+        /// <param name="id">The system identifier of the resource that is to be deleted.</param>
+        /// <param name="clientContentNamespace">The client controlled namespace the resource should currently be in.</param>
         /// <returns>
         /// 400 BadRequest
         /// 404 NotFound
         /// 412 PreConditionFailed
         /// 200 OK
         /// </returns>
-        [HttpDelete("{id:guid}/{*namespace}")]
+        [HttpDelete("{id:guid}/{*clientContentNamespace}")]
         public async Task<IActionResult> Delete(
             [FromRoute] Guid id,
-            [FromRoute] string @namespace)
+            [FromRoute] string clientContentNamespace)
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Procesing delete request.");
 
-            var isUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue); 
-            var isEtags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
+            var onlyIfHasRemainedUnchangedSince =  _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue); 
+            var onlyIfIsOneOfTheseEtags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
-            ResourceStorageDeleteRequest resourceStorageDeleteRequest = _resourceRequestFactory.CreateResourceStorageDeleteRequest(@namespace,
-                                                                                                            id,
-                                                                                                            _ownerId,
-                                                                                                            _requestId,
-                                                                                                            isUnchangedSince,
-                                                                                                            isEtags);
+            ResourceStorageDeleteRequest resourceStorageDeleteRequest = _resourceRequestFactory.CreateResourceStorageDeleteRequest(
+                                    id,
+                                    clientContentNamespace,
+                                    _ownerId,
+                                    _requestId,
+                                    onlyIfHasRemainedUnchangedSince,
+                                    onlyIfIsOneOfTheseEtags);
 
-            var resourceStorageDeleteResponse = await _mediator.Send(resourceStorageDeleteRequest);
+            ResourceStorageDeleteResponse resourceStorageDeleteResponse = await _mediator.Send(resourceStorageDeleteRequest);
 
-            _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing storage response.");
+            _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing delete response.");
 
             ResourceResponseDeleteRequest outputRequest = _resourceResponseFactory.CreateResourceResponseDeleteRequest(
                                                                                         (HttpStatusCode)resourceStorageDeleteResponse.StatusCode,

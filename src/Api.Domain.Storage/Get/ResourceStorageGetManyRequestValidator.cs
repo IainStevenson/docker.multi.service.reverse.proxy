@@ -9,8 +9,8 @@ namespace Api.Domain.Storage.Get
         {
             RuleFor(r => r.IfModifiedSince).InclusiveBetween(DateTimeOffset.MinValue, DateTimeOffset.UtcNow);
 
-            RuleFor(x => x.Namespace).NotEmpty();
-            RuleFor(x => x.Namespace).Matches(@"^(?:(?:((?![0-9_])[a-zA-Z0-9_]+)[\.\/\\]?)+)(?<!\.)");
+            RuleFor(x => x.ContentNamespace).NotEmpty();
+            RuleFor(x => x.ContentNamespace).Matches(@"^(.+\..+)|(.+\/.+)$");
         }
     }
 
