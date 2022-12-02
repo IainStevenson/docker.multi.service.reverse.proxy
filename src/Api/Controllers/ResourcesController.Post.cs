@@ -17,13 +17,22 @@ namespace Api.Controllers
         /// <summary>
         /// Implements a client side POST : api/resources/{namespace}[?keys=id1[&keys=id2...] to store a client side resource, and return the newly created , location URL, etag and other creation information.
         /// </summary>
-        /// <param name="clientContentNamespace">The required resource storage namespace, an optionally dotted string folder semantic for the client to declare a data type and provides a means of type aggregation. 
-        /// The dotted string format is validated and any deviance will result in a return status code of 400-BadRequest.
-        /// Namesapce must follow the .NET rules for Namespaces.
+        /// <param name="clientContentNamespace">The required resource storage namespace, an optionally dotted or forward slash string folder semantic for the client to declare a data type and provides a means of type organisation. 
+        /// The string format is validated as dot or forward slash delimited and any deviance will result in a return status code of 400-BadRequest.
+        /// Namesapce should follow the .NET rules for Namespaces.  
+        /// Valid:
+        /// my.name.space
+        /// my/name/space
+        /// Invalid:
+        /// my\name\space
+        /// my-name-space
+        /// my name space
+        /// my~name~space
         /// </param>
         /// <param name="clientContentKeys">
-        /// This option reduces return response bandwidth. 
-        /// An optional list of Content object key property names. These are used to selectively return content in the response in the <see cref="Data.Model.Response.Resource"/> content property. All properties are stored but only these key properties are returned if they are provided in the post call and exist in the content. See <see cref="Response.Formater.ResourceContentModifier"/> for details.
+        /// This option reduces returned response bandwidth. 
+        /// An optional list of  <see cref="clientContent"/> object key property names. 
+        /// These are used to selectively return content in the response in the <see cref="Data.Model.Response.Resource"/> content property. All properties are stored but only these key properties are returned if they are provided in the post call and exist in the content. See <see cref="Response.Formater.ResourceContentModifier"/> for details.
         /// if keys are provided, they must ALL occur as first level (non nested) properties in the content and then only 
         /// those key values are returned in the content and are available for client-server synchronisation purposes. 
         /// If no keys are provided the whole content is returned in the <see cref="Data.Model.Response.Resource"/>.
@@ -34,7 +43,7 @@ namespace Api.Controllers
         /// 401 Unauthorised if a valid unexpired bearer token is not presented.
         /// 400 BadRequest if any parameters are invalid.
         /// 201 Created with response body content containing an instance of <see cref="Data.Model.Response.Resource"/> 
-        /// which is a wrapper around the client content enriched with storage identifier, ETag, time stamps, plus link information in exceess of the standard Location header info to provide a rich HATEOS compliance.
+        /// which is a wrapper around the client content enriched with storage identifier, ETag, time stamps, plus link information in exceess of the standard Location header info to provide a rich HATEOAS compliance.
         /// </returns>
         /// <example>
         /// 
@@ -48,30 +57,30 @@ namespace Api.Controllers
         ///     If keys are excluded the whole of the posted content is returned.
         ///     
         ///     A
-        ///     POST: {scheme}://{host}{pathBase}{path}?keys=id
+        ///     POST: {scheme}://{host}/api/resources/{clientContentNamespace}?keys=id
         ///     body: { id: 1,  forename: 'Milly', familyname: 'Millenium', dob: '2000-01-01T00:00:00' }
         ///     
         ///     B
-        ///     POST: {scheme}://{host}{pathBase}{path}
+        ///     POST: {scheme}://{host}/api/resources/{clientContentNamespace}
         ///     body: { id: 1,  forename: 'Milly', familyname: 'Millenium', dob: '2000-01-01T00:00:00' }
-        ///     
         /// </example>
         /// <remarks>
         /// A returns Code 201
-        /// Location header: {scheme}://{host}{pathBase}{path}/74A92E58-854B-4897-A78D-49BAAC26CAB1
+        /// Location header: {scheme}://{host}{pathBase}{path}/74A92E58-854B-4897-A78D-49BAAC26CAB1/{clientContentNamesapce}
         /// Body: { etag: "kljadlasldjsljd", content: { id: 1 } , resourceId: '74A92E58-854B-4897-A78D-49BAAC26CAB1' created: '2021-09-29 10:10:10.0000+01:00' }
         /// 
         /// B returns Code 201
-        /// Location header: {scheme}://{host}{pathBase}{path}/74A92E58-854B-4897-A78D-49BAAC26CAB1
+        /// Location header: {scheme}://{host}{pathBase}{path}/74A92E58-854B-4897-A78D-49BAAC26CAB1/{clientContentNamesapce}
         /// Body: { etag: "kljadlasldjsljd", content: { id: 1,  forename: 'Milly', familyname: 'Millenium', dob: '2000-01-01T00:00:00' } , resourceId: '74A92E58-854B-4897-A78D-49BAAC26CAB1' created: '2021-09-29 10:10:10.0000+01:00' }
         /// 
         /// This data allows clients to know for certain that its id of '1' is stored as resource id '74A92E58-854B-4897-A78D-49BAAC26CAB1' for faster retrieval at the location header address.
         /// Keeping a track of client primary key values and server primary key guid's at the client side is optional but recommended for performance reasons.
         /// 
         /// NOTE: It is down to the client to ensure that duplicate client side keys are not created within a any client declared namespace.
+        /// There is no application optimisation in the API. 
         /// the storage service does not police client side integrity rules. 
-        /// The service cares nothing about the content and has only enough knowledge, obtained through the keys declaration, to enable minimal future querying of stored content.
-        /// 
+        /// The service cares nothing about the content. 
+        /// It stores, retrieves, udpates (replaces) or deletes the content on the clietns behalf according to clietn instructions.
         /// </remarks>
         [HttpPost]
         [Route("{*clientContentNamespace}")]
