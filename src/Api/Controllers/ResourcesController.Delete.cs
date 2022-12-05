@@ -18,17 +18,17 @@ namespace Api.Controllers
         /// Supports Headers: If-Unmodified-Since, If-Match
         /// </remarks>
         /// <param name="id">The system identifier of the resource that is to be deleted.</param>
-        /// <param name="clientContentNamespace">The client controlled namespace the resource should currently be in.</param>
+        /// <param name="contentNamespace">The client controlled namespace the resource should currently be in.</param>
         /// <returns>
         /// 400 BadRequest
         /// 404 NotFound
         /// 412 PreConditionFailed
         /// 200 OK
         /// </returns>
-        [HttpDelete("{id:guid}/{*clientContentNamespace}")]
+        [HttpDelete("{id:guid}/{*contentNamespace}")]
         public async Task<IActionResult> Delete(
             [FromRoute] Guid id,
-            [FromRoute] string clientContentNamespace)
+            [FromRoute] string contentNamespace)
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Delete)}. Procesing delete request.");
 
@@ -36,10 +36,10 @@ namespace Api.Controllers
             var onlyIfIsOneOfTheseEtags =  _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
             ResourceStorageDeleteRequest resourceStorageDeleteRequest = _resourceRequestFactory.CreateResourceStorageDeleteRequest(
-                                    id,
-                                    clientContentNamespace,
                                     _ownerId,
                                     _requestId,
+                                    id,
+                                    contentNamespace,
                                     onlyIfHasRemainedUnchangedSince,
                                     onlyIfIsOneOfTheseEtags);
 
@@ -48,8 +48,9 @@ namespace Api.Controllers
             _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing delete response.");
 
             ResourceResponseDeleteRequest outputRequest = _resourceResponseFactory.CreateResourceResponseDeleteRequest(
-                                                                                        (HttpStatusCode)resourceStorageDeleteResponse.StatusCode,
-                                                                                        resourceStorageDeleteResponse.RequestValidationErrors
+                                
+                                                                (HttpStatusCode)resourceStorageDeleteResponse.StatusCode,
+                                                                resourceStorageDeleteResponse.RequestValidationErrors
                     
                                                                                     );
 
@@ -59,7 +60,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Handling response.");
 
-            return _resourceResponseHandler.HandleNone(this, responseOutput);            
+            return _resourceResponseHandler.HandleNone(this, this.HttpContext.Request.Headers, responseOutput);            
         }
     }
 }

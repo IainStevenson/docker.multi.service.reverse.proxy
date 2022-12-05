@@ -8,7 +8,7 @@ namespace Api.Domain.Handling.Resource
 {
     public interface IResourceResponseFactory
     {
-        ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(HttpStatusCode statusCode, List<string> requestValidationErrors);
+        ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(HttpStatusCode statusCode, List<string> responseValidationErrors);
 
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponseGetManyRequest"/> from the provided variables.
@@ -20,7 +20,13 @@ namespace Api.Domain.Handling.Resource
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
         /// <returns></returns>
-        ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(IEnumerable<Data.Model.Storage.Resource> model, HttpStatusCode statusCode);
+        ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(
+            IEnumerable<Data.Model.Storage.Resource> model, 
+            HttpStatusCode statusCode,
+            List<string> validationErrors
+
+            );
+
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponseGetOneRequest"/> from the provided variables.
         /// </summary>
@@ -31,7 +37,10 @@ namespace Api.Domain.Handling.Resource
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
         /// <returns></returns>
-        ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, List<string> requestValidationErrors);
+        ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(
+            Data.Model.Storage.Resource model, 
+            HttpStatusCode statusCode, 
+            List<string> requestValidationErrors);
 
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponsePostRequest"/> from the provided variables.
@@ -43,17 +52,19 @@ namespace Api.Domain.Handling.Resource
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
         /// <param name="@namespace">The path element of the call taht represents the namespace.</param>
-        /// <param name="keys">The client provided keys</param>
+        /// <param name="contentKeys">The client provided keys</param>
         /// <returns>A new instance of <see cref="ResourceResponsePostRequest"/></returns>
         ResourceResponsePostRequest CreateResourceResponsePostRequest(
             Data.Model.Storage.Resource model,
+            string contentNamespace,
+            string contentKeys,
             HttpStatusCode statusCode,
+            List<string> validationErrors,
             string scheme,
             string host,
             string pathBase,
-            string path,
-            string @namespace,
-            string keys);
+            string path);
+
         /// <summary>
         /// Create and return a new instance of <see cref="ResourceResponsePutRequest"/> from the provided variables.
         /// </summary>
@@ -63,16 +74,17 @@ namespace Api.Domain.Handling.Resource
         /// <param name="host">The processing host.</param>
         /// <param name="pathBase">The path base of the host.</param>
         /// <param name="path">The path element of the call.</param>
-        /// <param name="keys">The client provided keys</param>
+        /// <param name="contentKeys">The client provided keys</param>
         /// <returns>A new instance of <see cref="ResourceResponsePutRequest"/></returns>
         ResourceResponsePutRequest CreateResourceResponsePutRequest(
             Data.Model.Storage.Resource model,
+            string contentNamespace,
+            string contentKeys,
             HttpStatusCode statusCode,
-            string @namespace,
+            List<string> validationErrors,
             string scheme,
             string host,
             string pathBase,
-            string path,
-            string keys);
+            string path);
     }
 }

@@ -24,7 +24,9 @@ namespace Api.Domain.Storage.Put
         public async Task<ResourceStoragePutResponse> Handle(ResourceStoragePutRequest request, CancellationToken cancellationToken)
         {
 
-            var response = new ResourceStoragePutResponse() { };
+            var response = new ResourceStoragePutResponse() { 
+                ContentNamespace = request.ContentNamespace,  
+                ContentKeys = request.ContentKeys };
             
             var validationResult = _requestValidator.Validate(request);
 

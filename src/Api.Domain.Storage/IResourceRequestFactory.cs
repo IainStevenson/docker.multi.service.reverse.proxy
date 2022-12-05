@@ -10,10 +10,10 @@ namespace Api.Domain.Storage
     /// </summary>
     public interface IResourceRequestFactory
     {
-        ResourceStoragePostRequest CreateResourceStoragePostRequest(string clientContentNamespace, dynamic clientContent, string clientContentKeys, Guid ownerId, Guid requestId);
-        ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid id, string clientContentNamespace, Guid ownerId, Guid requestId, DateTimeOffset onlyIfModifiedSince,  List<string> onlyIfNotEtags);
-        ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(string clientContentNamespace, Guid ownerId, Guid requestId, DateTimeOffset onlyIfModifiedSince, List<string> onlyIfNotEtags);
-        ResourceStoragePutRequest CreateResourceStoragePutRequest(Guid id, string clientContentNamespace, dynamic content, Guid ownerId, Guid requestId, string keys, string moveto, DateTimeOffset unnlessModifiedSince, List<string> unlessNotOfEtags);
-        ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(Guid id, string clientContentNamespace, Guid ownerId, Guid requestId, DateTimeOffset unnlessModifiedSince, List<string> unlessNotOfEtags);
+        ResourceStoragePostRequest CreateResourceStoragePostRequest(Guid ownerId, Guid requestId, string contentNamespace, string contentKeys, dynamic content);
+        ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid ownerId, Guid requestId, Guid id, string contentNamespace, DateTimeOffset onlyIfModifiedSince, List<string> onlyIfNotEtags);
+        ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(Guid ownerId, Guid requestId, string contentNamespace, DateTimeOffset onlyIfModifiedSince, List<string> onlyIfNotEtags);
+        ResourceStoragePutRequest CreateResourceStoragePutRequest(Guid ownerId, Guid requestId, Guid id, string contentNamespace, string contentKkeys, dynamic content, string movetoNamespace, DateTimeOffset unnlessModifiedSince, List<string> unlessNotOfEtags);
+        ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(Guid ownerId, Guid requestId, Guid id, string contentNamespace, DateTimeOffset unnlessModifiedSince, List<string> unlessNotOfEtags);
     }
 }

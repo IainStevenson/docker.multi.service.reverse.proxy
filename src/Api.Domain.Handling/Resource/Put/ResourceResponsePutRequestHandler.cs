@@ -37,9 +37,9 @@ namespace Api.Domain.Handling.Resource.Put
             {
                 var responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
 
-                if (!string.IsNullOrWhiteSpace(request.Keys))
+                if (!string.IsNullOrWhiteSpace(request.ContentKeys))
                 {
-                    responseModel = await _resourceModifier.CollapseContent(responseModel, request.Keys.Split(','));
+                    responseModel = await _resourceModifier.CollapseContent(responseModel, request.ContentKeys.Split(','));
                 }
 
                 response.Links = await _responseLinksProvider.BuildLinks(
@@ -47,7 +47,7 @@ namespace Api.Domain.Handling.Resource.Put
                                                                 request.Host,
                                                                 request.PathBase,
                                                                 request.Path,
-                                                                request.Namespace,
+                                                                request.ContentNamespace,
                                                                 $"{request.Model.Id}");
 
                 response.Model = responseModel;

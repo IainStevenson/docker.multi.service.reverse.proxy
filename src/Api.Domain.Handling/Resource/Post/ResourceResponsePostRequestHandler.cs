@@ -35,10 +35,10 @@ namespace Api.Domain.Handling.Resource.Post
 
             Data.Model.Response.Resource responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
 
-            if (!string.IsNullOrWhiteSpace(request.Keys))
+            if (!string.IsNullOrWhiteSpace(request.ContentKeys))
             {
                 responseModel = await _resourceModifier.CollapseContent(responseModel,
-                        request.Keys.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+                        request.ContentKeys.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
             }
 
             response.Model = responseModel;
@@ -49,7 +49,7 @@ namespace Api.Domain.Handling.Resource.Post
                                                             request.Host,
                                                             request.PathBase,
                                                             request.Path,
-                                                            request.Namespace,
+                                                            request.ContentNamespace,
                                                             $"{request.Model.Id}"
                                                             );
 

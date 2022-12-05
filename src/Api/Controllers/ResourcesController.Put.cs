@@ -38,10 +38,10 @@ namespace Api.Controllers
         /// 200 OK - Success - returns changed object
         /// </returns>
         [HttpPut()]
-        [Route("{id:guid}/{*namespace}")]
+        [Route("{id:guid}/{*contentNamespace}")]
         public async Task<IActionResult> Put(
                                             [Required][FromRoute] Guid id,
-                                            [Required][FromRoute] string clientContentNamespace,
+                                            [Required][FromRoute] string contentNamespace,
                                             [FromBody] dynamic content,
                                             [FromQuery] string keys,
                                             [FromQuery] string moveto)
@@ -52,12 +52,12 @@ namespace Api.Controllers
             var unmodifiedSince = _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue);
             var etags = _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
-            ResourceStoragePutRequest resourceStoragePutRequest = _resourceRequestFactory.CreateResourceStoragePutRequest(id,
-                                                                                        clientContentNamespace,
-                                                                                        content,
-                                                                                        _ownerId,
+            ResourceStoragePutRequest resourceStoragePutRequest = _resourceRequestFactory.CreateResourceStoragePutRequest(_ownerId,
                                                                                         _requestId,
+                                                                                        id,
+                                                                                        contentNamespace,
                                                                                         keys,
+                                                                                        content,
                                                                                         moveto,
                                                                                         unmodifiedSince,
                                                                                         etags);
@@ -66,22 +66,23 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing storage response.");
             ResourceResponsePutRequest resourceResponsePutRequest = _resourceResponseFactory.CreateResourceResponsePutRequest(
-                                                                                           resourceStoragePutResponse.Model,
-                                                                                          (HttpStatusCode)resourceStoragePutResponse.StatusCode,
-                                                                                           clientContentNamespace,
-                                                                                          Request.Scheme,
-                                                                                          Request.Host.Value,
-                                                                                          Request.PathBase.Value,
-                                                                                          Request.Path.Value,
-                                                                                          keys
-                                                                                      );
+                                                                resourceStoragePutResponse.Model,
+                                                                resourceStoragePutResponse.ContentNamespace,
+                                                                resourceStoragePutResponse.ContentKeys,
+                                                                (HttpStatusCode)resourceStoragePutResponse.StatusCode,
+                                                                resourceStoragePutResponse.RequestValidationErrors,
+                                                                Request.Scheme,
+                                                                Request.Host.Value,
+                                                                Request.PathBase.Value,
+                                                                Request.Path.Value                                                               
+                                                                );
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing response.");
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponsePutRequest);
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Handling response.");
 
-            return _resourceResponseHandler.HandleOne(this, resourceResponse);
+            return _resourceResponseHandler.HandleOne(this, this.HttpContext.Request.Headers, resourceResponse);
 
         }
     }

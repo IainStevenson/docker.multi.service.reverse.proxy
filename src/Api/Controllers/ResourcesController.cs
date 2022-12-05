@@ -11,8 +11,12 @@ namespace Api.Controllers
     /// <summary>
     /// Manages the storage of client side, client defined JSON formatted content. 
     /// The content is stored keyed to a client specific dataset.
-    /// Providing a means of organising the content in virtual folders by means of a namespace concept.
-    /// Client specific datasets are keyed to a unique Owner Id providied by registration via the OATH authority for the API.
+    /// Providing a means of organising the content in virtual folders by means of a content namespace concept.
+    /// Client specific datasets are keyed to a unique Owner Id provided by registration via the OATH authority for the API.
+    /// Each resource has its own server dide identifier and metadata, the content is entirely client side controlled and provided and the service knows or cares little about its content.
+    /// The API is not designed to be apllication optimised for storage.
+    /// The API is designed to be almost entirely content agnostic and as a distributor and integrator of content.
+    /// The extent to which the APi is content aware is strictly via the optionally client provided contentKeys, which delcare which content property or properties are its key values.
     /// </summary>
     [ApiController]
     [Route("[controller]")]

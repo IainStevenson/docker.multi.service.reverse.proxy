@@ -8,9 +8,9 @@ namespace Api.Domain.Storage.Put
     {        
         public Guid Id { get; set; } = Guid.Empty;
         public string ContentNamespace { get; set; } = string.Empty;
+        public string ContentKeys { get; set; } = string.Empty;
         public Guid RequestId { get; set; } = Guid.Empty;
         public Guid OwnerId { get; set; } = Guid.Empty;
-        public string Keys { get; set; } = string.Empty;
         public string MoveTo { get; set; } = "my";
         public dynamic? Content { get; set; }
         public List<string> ETags {  get;set; } = new List<string>();

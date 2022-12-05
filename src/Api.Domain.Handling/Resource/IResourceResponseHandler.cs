@@ -1,5 +1,6 @@
 ﻿using Data.Model;
 using Data.Model.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Domain.Handling.Resource
@@ -10,8 +11,8 @@ namespace Api.Domain.Handling.Resource
     public interface IResourceResponseHandler
     {
 
-        IActionResult HandleMany<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>;
-        IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IResponseItem;
-        IActionResult HandleNone(ControllerBase controller, ResourceResponse resourceOutput);
+        IActionResult HandleMany<T>(ControllerBase controller, IHeaderDictionary headers, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>;
+        IActionResult HandleOne<T>(ControllerBase controller, IHeaderDictionary headers, ResourceResponse<T> resourceOutput) where T : IResponseItem;
+        IActionResult HandleNone(ControllerBase controller, IHeaderDictionary headers, ResourceResponse resourceOutput);
     }
 }

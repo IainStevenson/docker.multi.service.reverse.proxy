@@ -1,6 +1,7 @@
 ﻿using Api.Domain.Handling.Framework;
 using Data.Model;
 using Data.Model.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System.Net;
@@ -22,20 +23,22 @@ namespace Api.Domain.Handling.Resource
         /// <param name="resourceOutput">The output instance.</param>
         /// <returns>An <see cref="IActionResult"/> delegate.</returns>
         /// <exception cref="ArgumentOutOfRangeException"> Occurs when upstream processing presents Status codes not handled here.</exception>
-        public IActionResult HandleOne<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IResponseItem
+        public IActionResult HandleOne<T>(ControllerBase controller, IHeaderDictionary headers, ResourceResponse<T> resourceOutput) where T : IResponseItem
         {
+            if (controller == null) throw new ArgumentNullException(nameof(controller));
+            if (resourceOutput == null) throw new ArgumentNullException(nameof(resourceOutput));
 
-            _responseHeadersProvider.RemoveUnwantedHeaders(controller.HttpContext.Response.Headers);
+            _responseHeadersProvider.RemoveUnwantedHeaders(headers);
 
-            foreach (var h in resourceOutput.Headers ?? (IDictionary<string, StringValues>)(new Dictionary<string, StringValues>()))
+            foreach (var h in resourceOutput.Headers)
             {
-                if (!controller.HttpContext.Response.Headers.ContainsKey(h.Key))
+                if (!headers.ContainsKey(h.Key))
                 {
-                    controller.HttpContext.Response.Headers.Add(h.Key, h.Value);
+                    headers.Add(h.Key, h.Value);
                 }
                 else
                 {
-                    controller.HttpContext.Response.Headers[h.Key] = h.Value;
+                    headers[h.Key] = h.Value;
                 }
             }
 
@@ -49,10 +52,8 @@ namespace Api.Domain.Handling.Resource
                     return controller.Ok(resourceOutput.Model);
 
                 case HttpStatusCode.Created:
-                    var uri = resourceOutput.Links?.First(x => x.Action == "get")?.Href ?? "\\";
-
+                    var uri = resourceOutput.Links.First(x => x.Action == "get")?.Href ?? "\\";
                     resourceOutput.Model.Links =  resourceOutput.Links;
-
                     return controller.Created(uri, resourceOutput.Model);
 
                 case HttpStatusCode.NoContent:
@@ -87,19 +88,19 @@ namespace Api.Domain.Handling.Resource
         //    throw new NotImplementedException();
         //}
 
-        public IActionResult HandleMany<T>(ControllerBase controller, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>
+        public IActionResult HandleMany<T>(ControllerBase controller, IHeaderDictionary headers, ResourceResponse<T> resourceOutput) where T : IEnumerable<IEntity>
         {
-            _responseHeadersProvider.RemoveUnwantedHeaders(controller.HttpContext.Response.Headers);
+            _responseHeadersProvider.RemoveUnwantedHeaders(headers);
 
             foreach (var h in resourceOutput.Headers ?? (IDictionary<string, StringValues>)(new Dictionary<string, StringValues>()))
             {
-                if (!controller.HttpContext.Response.Headers.ContainsKey(h.Key))
+                if (!headers.ContainsKey(h.Key))
                 {
-                    controller.HttpContext.Response.Headers.Add(h.Key, h.Value);
+                    headers.Add(h.Key, h.Value);
                 }
                 else
                 {
-                    controller.HttpContext.Response.Headers[h.Key] = h.Value;
+                    headers[h.Key] = h.Value;
                 }
             }
 
@@ -139,19 +140,19 @@ namespace Api.Domain.Handling.Resource
         /// <returns>An <see cref="IActionResult"/> delegate.</returns>
         /// <exception cref="ArgumentOutOfRangeException"> Occurs when upstream processing presents Status codes not handled here.</exception>
         /// <summary>
-        public IActionResult HandleNone(ControllerBase controller, ResourceResponse resourceOutput)
+        public IActionResult HandleNone(ControllerBase controller, IHeaderDictionary headers, ResourceResponse resourceOutput)
         {
-            _responseHeadersProvider.RemoveUnwantedHeaders(controller.HttpContext.Response.Headers);
+            _responseHeadersProvider.RemoveUnwantedHeaders(headers);
 
             foreach (var h in resourceOutput.Headers ?? (IDictionary<string, StringValues>)(new Dictionary<string, StringValues>()))
             {
-                if (!controller.HttpContext.Response.Headers.ContainsKey(h.Key))
+                if (!headers.ContainsKey(h.Key))
                 {
-                    controller.HttpContext.Response.Headers.Add(h.Key, h.Value);
+                   headers.Add(h.Key, h.Value);
                 }
                 else
                 {
-                    controller.HttpContext.Response.Headers[h.Key] = h.Value;
+                    headers[h.Key] = h.Value;
                 }
             }
 

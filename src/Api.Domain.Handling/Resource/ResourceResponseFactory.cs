@@ -8,34 +8,23 @@ namespace Api.Domain.Handling.Resource
 {
     public class ResourceResponseFactory : IResourceResponseFactory
     {
-        /// <inheritdoc/>
-        //public ResourceResponsePostRequest CreateResourceOutputPostRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string keys)
-        //{
-        //    return new ResourceResponsePostRequest()
-        //    {
-        //        Model = model,
-        //        StatusCode = statusCode,
-        //        Scheme = scheme,
-        //        Host = host,
-        //        PathBase = pathBase,
-        //        Path = path,
-        //        Keys = keys
-        //    };
-        //}
-
-        public ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(HttpStatusCode statusCode, List<string> requestValidationErrors)
+        
+        public ResourceResponseDeleteRequest CreateResourceResponseDeleteRequest(
+            HttpStatusCode statusCode, 
+            List<string> responseValidationErrors)
         {
             return new ResourceResponseDeleteRequest()
             {
                 StatusCode = statusCode,
-                RequestValidationErrors = requestValidationErrors
+                RequestValidationErrors = responseValidationErrors
             };
         }
 
         /// <inheritdoc/>
         public ResourceResponseGetManyRequest CreateResourceResponseGetManyRequest(
                 IEnumerable<Data.Model.Storage.Resource> model,
-                HttpStatusCode statusCode)
+                HttpStatusCode statusCode, 
+                List<string> responseValidationErrors)
         {
             return new ResourceResponseGetManyRequest()
             {
@@ -45,7 +34,10 @@ namespace Api.Domain.Handling.Resource
         }
 
         /// <inheritdoc/>
-        public ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, List<string> responseValidationErrors)
+        public ResourceResponseGetOneRequest CreateResourceResponseGetOneRequest(
+            Data.Model.Storage.Resource model, 
+            HttpStatusCode statusCode, 
+            List<string> responseValidationErrors)
         {
             return new ResourceResponseGetOneRequest()
             {
@@ -56,8 +48,16 @@ namespace Api.Domain.Handling.Resource
         }
 
         /// <inheritdoc/>
-        public ResourceResponsePostRequest CreateResourceResponsePostRequest(Data.Model.Storage.Resource model, 
-            HttpStatusCode statusCode, string scheme, string host, string pathBase, string path, string @namespace, string keys)
+        public ResourceResponsePostRequest CreateResourceResponsePostRequest(
+            Data.Model.Storage.Resource model,
+            string contentNamespace,
+            string contentKeys,
+            HttpStatusCode statusCode,
+            List<string> responseValidationErrors,
+            string scheme,
+            string host,
+            string pathBase,
+            string path)
         {
             return new ResourceResponsePostRequest()
             {
@@ -67,23 +67,33 @@ namespace Api.Domain.Handling.Resource
                 Host = host,
                 PathBase = pathBase.TrimEnd('/'),
                 Path = path.TrimEnd('/'),
-                Namespace= @namespace,
-                Keys = keys
+                ContentNamespace= contentNamespace,
+                ContentKeys = contentKeys
             };
         }
         /// <inheritdoc/>
-        public ResourceResponsePutRequest CreateResourceResponsePutRequest(Data.Model.Storage.Resource model, HttpStatusCode statusCode, string @namespace, string scheme, string host, string pathBase, string path, string keys)
+        public ResourceResponsePutRequest CreateResourceResponsePutRequest(
+            Data.Model.Storage.Resource model,
+            string contentNamespace,
+            string contentKeys
+,
+            HttpStatusCode statusCode,
+            List<string> responseValidationErrors,
+            string scheme,
+            string host,
+            string pathBase,
+            string path)
         {
             return new ResourceResponsePutRequest()
             {
                 Model = model,
-                Namespace = @namespace.ToLower(),
+                ContentNamespace = contentNamespace.ToLower(),
+                ContentKeys = contentKeys,
                 StatusCode = statusCode,
                 Scheme = scheme,
                 Host = host,
                 PathBase = pathBase.TrimEnd('/'),
-                Path = path.TrimEnd('/'),
-                Keys = keys
+                Path = path.TrimEnd('/')
             };
         }
     }

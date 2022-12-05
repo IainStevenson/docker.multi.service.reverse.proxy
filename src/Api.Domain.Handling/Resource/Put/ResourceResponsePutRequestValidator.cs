@@ -14,7 +14,7 @@ namespace Api.Domain.Handling.Resource.Put
             RuleFor(x => x.Host).NotEmpty();
             RuleFor(x => x.PathBase).NotEmpty();
             RuleFor(x => x.Path).NotEmpty();
-            RuleFor(x => x.Namespace).NotEmpty();
+            RuleFor(x => x.ContentNamespace).NotEmpty();
             RuleFor(rule => rule.StatusCode).Must(value => _acceptableCodes.Contains(value));
         }
     }
