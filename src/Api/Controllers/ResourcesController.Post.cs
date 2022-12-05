@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Api.Domain.Handling.Resource;
@@ -119,7 +120,8 @@ namespace Api.Controllers
                                                                             Request.Scheme,
                                                                             Request.Host.Value,
                                                                             Request.PathBase.Value,
-                                                                            Request.Path.Value);
+                                                                            $"/{Request.RouteValues["controller"]}".ToLower()
+                                                                            );
 
             ResourceResponse<Data.Model.Response.Resource> resourceResponse = await _mediator.Send(resourceResponseRequest);
 

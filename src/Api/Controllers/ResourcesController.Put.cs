@@ -74,7 +74,7 @@ namespace Api.Controllers
                                                                 Request.Scheme,
                                                                 Request.Host.Value,
                                                                 Request.PathBase.Value,
-                                                                Request.Path.Value                                                               
+                                                                $"/{Request.RouteValues["controller"]}".ToLower()
                                                                 );
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing response.");

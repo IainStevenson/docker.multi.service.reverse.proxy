@@ -62,13 +62,13 @@ namespace Api.Domain.Handling.Resource
             return new ResourceResponsePostRequest()
             {
                 Model = model,
+                ContentNamespace= contentNamespace,
+                ContentKeys = contentKeys,
                 StatusCode = statusCode,
                 Scheme = scheme,
                 Host = host,
                 PathBase = pathBase.TrimEnd('/'),
-                Path = path.TrimEnd('/'),
-                ContentNamespace= contentNamespace,
-                ContentKeys = contentKeys
+                Path = path.TrimEnd('/')
             };
         }
         /// <inheritdoc/>

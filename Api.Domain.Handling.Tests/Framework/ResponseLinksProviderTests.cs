@@ -19,7 +19,7 @@ namespace Api.Domain.Handling.Tests.Framework
         private string host = "localhost";
         private string pathBase = "/api";
         private string path = "/resources";
-        private string @namespace = "health/measurements/bloodpressure";
+        private string contentNamespace = "health/measurements/bloodpressure";
         private List<string> parentLinkActions;
 
         [SetUp]
@@ -36,7 +36,7 @@ namespace Api.Domain.Handling.Tests.Framework
             // Arrange 
             // as per setup
 
-            var actual = await _unit.BuildLinks(scheme, host, pathBase, path, @namespace, $"{id}");
+            var actual = await _unit.BuildLinks(scheme, host, pathBase, path, contentNamespace, $"{id}");
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(actual, Newtonsoft.Json.Formatting.Indented);
             Console.WriteLine(json);

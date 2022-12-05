@@ -42,7 +42,7 @@ namespace Api.Domain.Handling.Framework
             string host,
             string pathBase,
             string path,
-            string @namespace,
+            string contentNamespace,
             string systemKey);
     }
 }
