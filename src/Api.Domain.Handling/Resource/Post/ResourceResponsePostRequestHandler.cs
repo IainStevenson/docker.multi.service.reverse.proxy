@@ -35,11 +35,8 @@ namespace Api.Domain.Handling.Resource.Post
 
             Data.Model.Response.Resource responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
 
-            if (!string.IsNullOrWhiteSpace(request.ContentKeys))
-            {
-                responseModel = await _resourceModifier.CollapseContent(responseModel,
-                        request.ContentKeys.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
-            }
+            
+            responseModel = await _resourceModifier.CollapseContent(responseModel, request.ContentKeys);            
 
             response.Model = responseModel;
             response.Headers = _responseHeadersProvider.AddHeadersFromItem(responseModel);

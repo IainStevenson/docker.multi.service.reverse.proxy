@@ -1,6 +1,5 @@
 ﻿using Api.Domain.Handling.Framework;
 using AutoMapper;
-using FluentValidation.Results;
 using MediatR;
 using System.Net;
 
@@ -24,23 +23,20 @@ namespace Api.Domain.Handling.Resource.Put
             _responseHeadersProvider = responseHeadersProvider;
         }
 
-
         public async Task<ResourceResponse<Data.Model.Response.Resource>> Handle(ResourceResponsePutRequest request, CancellationToken cancellationToken)
         {
 
             if (request.Model == null) throw new ArgumentNullException(nameof(request.Model));
 
             ResourceResponse<Data.Model.Response.Resource> response = new ResourceResponse<Data.Model.Response.Resource>();
-            
+
             response.StatusCode = request.StatusCode;
+
             if (request.StatusCode == HttpStatusCode.OK)
             {
                 var responseModel = _mapper.Map<Data.Model.Response.Resource>(request.Model);
 
-                if (!string.IsNullOrWhiteSpace(request.ContentKeys))
-                {
-                    responseModel = await _resourceModifier.CollapseContent(responseModel, request.ContentKeys.Split(','));
-                }
+                responseModel = await _resourceModifier.CollapseContent(responseModel, request.ContentKeys);
 
                 response.Links = await _responseLinksProvider.BuildLinks(
                                                                 request.Scheme,
@@ -48,7 +44,8 @@ namespace Api.Domain.Handling.Resource.Put
                                                                 request.PathBase,
                                                                 request.Path,
                                                                 request.ContentNamespace,
-                                                                $"{request.Model.Id}");
+                                                                $"{request.Model.Id}"
+                                                                );
 
                 response.Model = responseModel;
                 response.Headers = _responseHeadersProvider.AddHeadersFromItem(response.Model);
@@ -56,6 +53,4 @@ namespace Api.Domain.Handling.Resource.Put
             return response;
         }
     }
-
-
 }

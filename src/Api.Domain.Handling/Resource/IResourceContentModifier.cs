@@ -15,6 +15,6 @@ namespace Api.Domain.Handling.Resource
         /// <param name="source">The Resource instance.</param>
         /// <param name="propertyNames">The property names to be retained</param>
         /// <returns>The modified resource.</returns>
-        Task<T> CollapseContent(T source, IEnumerable<string> propertyNames);
+        Task<T> CollapseContent(T source, string contentKeys);
     }
 }

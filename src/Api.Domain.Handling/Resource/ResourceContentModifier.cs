@@ -5,8 +5,16 @@ namespace Api.Domain.Handling.Resource
 {
     public class ResourceContentModifier<T> : IResourceContentModifier<T> where T : IResource
     {
-        public Task<T> CollapseContent(T source, IEnumerable<string> ownerKeys)
+        public Task<T> CollapseContent(T source, string contentKeys)
         {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            if (string.IsNullOrWhiteSpace(contentKeys))
+            {
+                return Task.FromResult(source);
+            }
+
+            var ownerKeys  = contentKeys.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             // optionally remove the current content
             if (ownerKeys.Any())
