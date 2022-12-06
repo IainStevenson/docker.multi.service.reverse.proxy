@@ -41,6 +41,8 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetOne)}. Processing request.");
 
+            var ifIsDeleted = _requestHeadersProvider.IfIsDeleted(Request.Headers);
+            
             var onlyIfModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
 
             var onlyIfDoesNotHaveEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
@@ -51,7 +53,8 @@ namespace Api.Controllers
                                                                         id,
                                                                         contentNamespace,
                                                                         onlyIfModifiedSince,
-                                                                        onlyIfDoesNotHaveEtags);
+                                                                        onlyIfDoesNotHaveEtags,
+                                                                        ifIsDeleted);
 
             var resourceStorageGetOneResponse = await _mediator.Send(resourceGetOneRequest);
 
@@ -93,7 +96,7 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing request.");
 
-            
+            var ifIsDeleted = _requestHeadersProvider.IfIsDeleted(Request.Headers);
 
             var onlyIfModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
 
@@ -104,7 +107,8 @@ namespace Api.Controllers
                                                                         _requestId,
                                                                         contentNamespace,
                                                                         onlyIfModifiedSince,
-                                                                        onlyIfnotEtags);
+                                                                        onlyIfnotEtags,
+                                                                        ifIsDeleted);
 
             ResourceStorageGetManyResponse resourceStorageGetManyResponse = await _mediator.Send(resourceStorageGetManyRequest);
 

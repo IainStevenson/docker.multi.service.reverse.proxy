@@ -48,7 +48,7 @@ namespace Api.Controllers
         {
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(Put)}. Processing request.");
 
-
+            var ifIsDeleted = _requestHeadersProvider.IfIsDeleted(Request.Headers);
             var unmodifiedSince = _requestHeadersProvider.IfIsUnchangedSince(Request.Headers, DateTimeOffset.MaxValue);
             var etags = _requestHeadersProvider.IfHasEtagMatching(Request.Headers);
 
@@ -60,7 +60,8 @@ namespace Api.Controllers
                                                                                         content,
                                                                                         moveto,
                                                                                         unmodifiedSince,
-                                                                                        etags);
+                                                                                        etags,
+                                                                                        ifIsDeleted);
 
             var resourceStoragePutResponse = await _mediator.Send(resourceStoragePutRequest);
 

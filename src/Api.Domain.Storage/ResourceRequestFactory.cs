@@ -8,25 +8,39 @@ namespace Api.Domain.Storage
     public class ResourceRequestFactory : IResourceRequestFactory
     {
         ///  <inheritdoc/>
-        public ResourceStorageGetOneRequest CreateResourceGetOneRequest(Guid ownerId, Guid requestId, Guid id, string @namespace, DateTimeOffset ifModifiedSince, List<string> notEtags)
+        public ResourceStorageGetOneRequest CreateResourceGetOneRequest(
+            Guid ownerId, 
+            Guid requestId, 
+            Guid id, 
+            string contentNamespace, 
+            DateTimeOffset ifModifiedSince, 
+            List<string> notEtags, 
+            bool ifIsDeleted)
         {
             return new ResourceStorageGetOneRequest()
             {
-                Id = id,
-                ContentNamespace = @namespace ?? "".ToLower(),
                 OwnerId = ownerId,
                 RequestId = requestId,
+                Id = id,
+                ContentNamespace = contentNamespace ?? "".ToLower(),
                 IfModifiedSince = ifModifiedSince,
-                IfNotETags = notEtags
+                IfNotETags = notEtags,
+                IfIsDeleted = ifIsDeleted
             };
         }
 
-        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(Guid ownerId, Guid requestId, Guid id, string @namespace, DateTimeOffset isUnchangedSince, List<string> isEtags)
+        public ResourceStorageDeleteRequest CreateResourceStorageDeleteRequest(
+                Guid ownerId, 
+                Guid requestId, 
+                Guid id, 
+                string contentNamespace, 
+                DateTimeOffset isUnchangedSince, 
+                List<string> isEtags)
         {
             return new ResourceStorageDeleteRequest()
             {
                 Id = id,
-                ContentNamespace = @namespace ?? "".ToLower(),
+                ContentNamespace = contentNamespace ?? "".ToLower(),
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IsUnchangedSince = isUnchangedSince,
@@ -35,15 +49,22 @@ namespace Api.Domain.Storage
         }
 
         ///  <inheritdoc/>
-        public ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(Guid ownerId, Guid requestId, string @namespace, DateTimeOffset ifModifiedSince, List<string> notEtags)
+        public ResourceStorageGetManyRequest CreateResourceStorageGetManyRequest(
+                Guid ownerId, 
+                Guid requestId, 
+                string contentNamespace, 
+                DateTimeOffset ifModifiedSince, 
+                List<string> notEtags, 
+                bool ifIsDeleted)
         {
             return new ResourceStorageGetManyRequest()
             {
-                ContentNamespace = @namespace ?? "".ToLower(),
+                ContentNamespace = contentNamespace ?? "".ToLower(),
                 OwnerId = ownerId,
                 RequestId = requestId,
                 IfModifiedSince = ifModifiedSince,
-                IfNotETags = notEtags
+                IfNotETags = notEtags,
+                IfIsDelted = ifIsDeleted
             };
         }
         ///  <inheritdoc/>
@@ -63,34 +84,34 @@ namespace Api.Domain.Storage
                 RequestId = requestId
             };
         }
-        ///  <inheritdoc/>
-        public ResourceStoragePutRequest CreateResourceStoragePutRequest(Guid id, dynamic content, Guid ownerId, Guid requestId, string keys, string @namespace, string moveto, Task<DateTimeOffset?> unmodifiedSince, Task<List<string>> etags)
-        {
-            return new ResourceStoragePutRequest()
-            {
-                Id = id,
-                ContentNamespace = @namespace ?? "".ToLower(),
-                Content = content,
-                ContentKeys = keys,
-                OwnerId = ownerId,
-                RequestId = requestId
-            };
-        }
 
-        public ResourceStoragePutRequest CreateResourceStoragePutRequest(Guid ownerId, Guid requestId, Guid id, string @namespace, string keys, dynamic content, string moveto, DateTimeOffset unmodifiedSince, List<string> etags)
+        ///  <inheritdoc/>
+        public ResourceStoragePutRequest CreateResourceStoragePutRequest(
+            Guid ownerId, 
+            Guid requestId, 
+            Guid id, 
+            string contentNamespace, 
+            string contentKeys, 
+            dynamic content, 
+            string movetoNamespace, 
+            DateTimeOffset unnlessModifiedSince, 
+            List<string> unlessNotOfEtags, 
+            bool ifIsDeleted)
         {
             return new ResourceStoragePutRequest()
             {
-                Id = id,
-                ContentNamespace = @namespace ?? "".ToLower(),
-                Content = content,
-                ContentKeys = keys,
                 OwnerId = ownerId,
                 RequestId = requestId,
-                MoveTo = moveto,
-                UnmodifiedSince = unmodifiedSince,
-                ETags = etags
+                Id = id,
+                ContentNamespace = contentNamespace ?? "".ToLower(),
+                ContentKeys = contentKeys,
+                Content = content,
+                MoveTo = movetoNamespace,
+                UnmodifiedSince= unnlessModifiedSince,
+                ETags= unlessNotOfEtags,
+                IfIsDeleted = ifIsDeleted
             };
         }
+      
     }
 }

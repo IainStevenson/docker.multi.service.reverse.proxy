@@ -15,5 +15,6 @@ namespace Api.Domain.Storage.Put
         public dynamic? Content { get; set; }
         public List<string> ETags {  get;set; } = new List<string>();
         public DateTimeOffset UnmodifiedSince { get; set; } = DateTimeOffset.MaxValue;
+        public bool IfIsDeleted { get; internal set; }
     }
 }

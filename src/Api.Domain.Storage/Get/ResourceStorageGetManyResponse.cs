@@ -8,6 +8,6 @@ namespace Api.Domain.Storage.Get
         /// <summary>
         /// The desired payload model
         /// </summary>
-        public IEnumerable<Data.Model.Storage.Resource> Model { get; set; }       
+        public IEnumerable<Data.Model.Storage.Resource> Model { get; set; }   = new List<Data.Model.Storage.Resource>();
     }
 }

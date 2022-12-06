@@ -16,5 +16,6 @@ namespace Api.Domain.Storage.Get
         /// To exclude a get based on near past changes set this value to an appropriate point in time.
         /// </summary>
         public DateTimeOffset IfModifiedSince { get; set; }
+        public bool IfIsDeleted { get; internal set; }
     }
 }

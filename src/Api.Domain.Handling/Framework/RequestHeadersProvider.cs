@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
 namespace Api.Domain.Handling.Framework
@@ -57,6 +58,15 @@ namespace Api.Domain.Handling.Framework
                 if (isValid) result = headerDate;
             }
             return result;
+        }
+
+        public bool IfIsDeleted(IHeaderDictionary headers)
+        {
+            if (headers.ContainsKey(HeaderKeys.IfIsDeleted))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

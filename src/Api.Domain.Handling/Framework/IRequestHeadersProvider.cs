@@ -58,5 +58,12 @@ namespace Api.Domain.Handling.Framework
         /// An instance of <see cref="DateTimeOffset"/> which returns the provided default value if no header is found. 
         /// </returns>
         DateTimeOffset IfIsUnchangedSince(IHeaderDictionary headers, DateTimeOffset defaultValue);
+
+        /// <summary>
+        /// Used for soft deleteion control. If present will instruct to query for only deleted items
+        /// </summary>
+        /// <param name="headers"></param>
+        /// <returns>True if header is present else false</returns>
+        bool IfIsDeleted(IHeaderDictionary headers);
     }
 }
