@@ -1217,7 +1217,7 @@
 									"response": []
 								},
 								{
-									"name": "GET is OK from namespace",
+									"name": "GET many is OK from namespace",
 									"event": [
 										{
 											"listen": "test",
@@ -1227,6 +1227,13 @@
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
 													"\r",
+													"\r",
+													"pm.test(\"The body contains 1 or more items\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.length).to.not.eql(0);\r",
+													"});\r",
+													"\r",
+													"\r",
 													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
 													"var maxPostCount = pm.collectionVariables.get(\"maxPostCount\");\r",
 													"\r",
@@ -1234,7 +1241,8 @@
 													"{\r",
 													"    console.log(\"Re-running initial POST\")\r",
 													"    postman.setNextRequest(\"POST is Created\");\r",
-													"}"
+													"}\r",
+													""
 												],
 												"type": "text/javascript"
 											}
