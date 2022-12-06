@@ -45,7 +45,8 @@ namespace Api.Controllers
 
             var onlyIfDoesNotHaveEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
-            ResourceStorageGetOneRequest resourceGetOneRequest = _resourceRequestFactory.CreateResourceGetOneRequest(_ownerId,
+            ResourceStorageGetOneRequest resourceGetOneRequest = _resourceRequestFactory.CreateResourceGetOneRequest(
+                                                                        _ownerId,
                                                                         _requestId,
                                                                         id,
                                                                         contentNamespace,
@@ -92,19 +93,21 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing request.");
 
-            var ifModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
-            var notEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
+            var onlyIfModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
+
+            var onlyIfnotEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);
 
             ResourceStorageGetManyRequest resourceStorageGetManyRequest = _resourceRequestFactory.CreateResourceStorageGetManyRequest(
                                                                         _ownerId,
                                                                         _requestId,
                                                                         contentNamespace,
-                                                                        ifModifiedSince,
-                                                                        notEtags);
+                                                                        onlyIfModifiedSince,
+                                                                        onlyIfnotEtags);
 
             ResourceStorageGetManyResponse resourceStorageGetManyResponse = await _mediator.Send(resourceStorageGetManyRequest);
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing storage response.");
+
             ResourceResponseGetManyRequest resourceResponseGetManyRequest = _resourceResponseFactory.CreateResourceResponseGetManyRequest(
                                                                         resourceStorageGetManyResponse.Model,
                                                                         (HttpStatusCode)resourceStorageGetManyResponse.StatusCode,

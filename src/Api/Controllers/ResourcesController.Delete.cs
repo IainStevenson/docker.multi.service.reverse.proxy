@@ -47,11 +47,9 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing delete response.");
 
-            ResourceResponseDeleteRequest outputRequest = _resourceResponseFactory.CreateResourceResponseDeleteRequest(
-                                
+            ResourceResponseDeleteRequest outputRequest = _resourceResponseFactory.CreateResourceResponseDeleteRequest(                                
                                                                 (HttpStatusCode)resourceStorageDeleteResponse.StatusCode,
-                                                                resourceStorageDeleteResponse.RequestValidationErrors
-                    
+                                                                resourceStorageDeleteResponse.RequestValidationErrors                    
                                                                                     );
 
             _logger.LogTrace($"{nameof(ResourcesController)}{nameof(Delete)}. Processing response.");

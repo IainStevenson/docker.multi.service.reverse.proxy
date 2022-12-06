@@ -25,7 +25,7 @@ namespace Api.Controllers
         /// <summary>
         /// TODO: Replaced from AUTH token
         /// </summary>
-        private readonly Guid _ownerId = new Guid("00000000-0000-0000-0000-000000000001"); 
+        private readonly Guid _ownerId = new("00000000-0000-0000-0000-000000000001"); 
         /// <summary>
         /// Generated here per request
         /// </summary>
