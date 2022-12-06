@@ -30,7 +30,7 @@ namespace Api.Controllers
         /// my name space
         /// my~name~space
         /// </param>
-        /// <param name="contentKeys">
+        /// <param name="keys">
         /// This option reduces returned response bandwidth. 
         /// An optional list of  <see cref="clientContent"/> object key property names. 
         /// These are used to selectively return content in the response in the <see cref="Data.Model.Response.Resource"/> content property. All properties are stored but only these key properties are returned if they are provided in the post call and exist in the content. See <see cref="Response.Formater.ResourceContentModifier"/> for details.
@@ -94,7 +94,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(
                 [Required][FromRoute] string contentNamespace,
-                [FromQuery] string contentKeys,
+                [FromQuery] string keys,
                 [Required][FromBody] dynamic content
             )
         {
@@ -104,7 +104,7 @@ namespace Api.Controllers
                                                                             _ownerId,
                                                                             _requestId,
                                                                             contentNamespace,
-                                                                            contentKeys,
+                                                                            keys,
                                                                             content);
 
             ResourceStoragePostResponse resourceStoragePostResponse = await _mediator.Send(resourceStoragePostRequest);
@@ -114,7 +114,7 @@ namespace Api.Controllers
             ResourceResponsePostRequest resourceResponseRequest = _resourceResponseFactory.CreateResourceResponsePostRequest(
                                                                             resourceStoragePostResponse.Model,
                                                                             contentNamespace,
-                                                                            contentKeys,
+                                                                            keys,
                                                                             (HttpStatusCode)resourceStoragePostResponse.StatusCode,
                                                                             resourceStoragePostResponse.RequestValidationErrors,
                                                                             Request.Scheme,
