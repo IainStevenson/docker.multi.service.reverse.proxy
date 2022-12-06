@@ -331,18 +331,12 @@
 							"name": "CRUD",
 							"item": [
 								{
-									"name": "POST is Created",
+									"name": "POST is Created for HATEOAS",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
-													"postCount ++;\r",
-													"\r",
-													"pm.collectionVariables.set(\"postCount\", postCount)\r",
-													"console.log(\"Post count: \", postCount)\r",
-													"\r",
 													"var jsonData = pm.response.json();\r",
 													"    \r",
 													"console.log(\"Recieved Body: \",jsonData)\r",
@@ -518,6 +512,56 @@
 									"response": []
 								},
 								{
+									"name": "GET is OK from HATEOAS get Url",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{lastListUrl}}",
+											"host": [
+												"{{lastListUrl}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "GET is OK byHATEOAS Get Url",
 									"event": [
 										{
@@ -560,6 +604,280 @@
 											"raw": "{{lastGetUrl}}",
 											"host": [
 												"{{lastGetUrl}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PUT is OK via HATEOAS PUT Url",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"Extract Last Values\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.collectionVariables.set('lastId', jsonData.id)\r",
+													"    pm.collectionVariables.set('lastETag', jsonData.etag);\r",
+													"    pm.collectionVariables.set('lastModified', jsonData.created);\r",
+													"    pm.collectionVariables.set('lastContentKeys', jsonData.content)\r",
+													"    pm.collectionVariables.set('lastKeyValue', jsonData.content.id)    \r",
+													"    \r",
+													"    console.log('lastId', jsonData.id);\r",
+													"    console.log('lastETag', jsonData.etag);\r",
+													"    console.log('lastModified', jsonData.created);\r",
+													"    console.log('lastContentKeys', jsonData.content);\r",
+													"    console.log('lastKeyValue', jsonData.content.id);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const dateNow= new Date();\r",
+													"console.log('Time Now: setting beforeLastModified' , dateNow.toISOString());\r",
+													"pm.collectionVariables.set('beforeLastModified', dateNow.toISOString())\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"content-type": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n     \"id\": {{lastKeyValue}}, \r\n     \"systolic\": 137,\r\n    \"diastolic\": 95,\r\n    \"pulse\": 102\r\n}"
+										},
+										"url": {
+											"raw": "{{lastPutUrl}}",
+											"host": [
+												"{{lastPutUrl}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE is NoContent on HATEOS delete url",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 204\", function () {\r",
+													"    pm.response.to.have.status(204);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{lastDeleteUrl}}",
+											"host": [
+												"{{lastDeleteUrl}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "POST is Created",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
+													"postCount ++;\r",
+													"\r",
+													"pm.collectionVariables.set(\"postCount\", postCount)\r",
+													"console.log(\"Post count: \", postCount)\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"    \r",
+													"console.log(\"Recieved Body: \",jsonData)\r",
+													"\r",
+													"\r",
+													"pm.test(\"Extract Last Values\", function () {\r",
+													"    pm.collectionVariables.set('lastId', jsonData.id)\r",
+													"    pm.collectionVariables.set('lastETag', jsonData.etag);\r",
+													"    pm.collectionVariables.set('lastModified', jsonData.created);\r",
+													"    pm.collectionVariables.set('beforeLastModified', jsonData.created);\r",
+													"    pm.collectionVariables.set('lastContentKeys', jsonData.content)\r",
+													"    pm.collectionVariables.set('lastKeyValue', jsonData.content.id)\r",
+													"\r",
+													"    console.log('lastId', jsonData.id);\r",
+													"    console.log('lastETag', jsonData.etag);\r",
+													"    console.log('lastModified', jsonData.created);\r",
+													"    console.log('beforeLastModified', jsonData.created);\r",
+													"    console.log('lastContentKeys', jsonData.content);\r",
+													"    console.log('lastKeyValue', jsonData.content.id);\r",
+													"\r",
+													"\r",
+													"    pm.collectionVariables.set('lastPostUrl', jsonData.links[0].href);\r",
+													"    pm.collectionVariables.set('lastListUrl', jsonData.links[1].href);\r",
+													"    pm.collectionVariables.set('lastGetUrl', jsonData.links[2].href);\r",
+													"    pm.collectionVariables.set('lastPutUrl', jsonData.links[3].href);\r",
+													"    pm.collectionVariables.set('lastDeleteUrl', jsonData.links[4].href);\r",
+													"\r",
+													"    console.log('lastPostUrl', pm.collectionVariables.get('lastPostUrl'));\r",
+													"    console.log('lastListUrl',pm.collectionVariables.get('lastListUrl'));\r",
+													"    console.log('lastGetUrl',pm.collectionVariables.get('lastGetUrl'));\r",
+													"    console.log('lastPutUrl',pm.collectionVariables.get('lastPutUrl'));\r",
+													"    console.log('lastDeleteUrl',pm.collectionVariables.get('lastDeleteUrl'));\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);      \r",
+													"});\r",
+													"\r",
+													"pm.test(\"Location header is present\", function () {\r",
+													"    pm.response.to.have.header(\"Location\");\r",
+													"\r",
+													"    var locationHeader = pm.response.headers.get(\"Location\");\r",
+													"    console.log(\"Location header: \", locationHeader)\r",
+													"    pm.collectionVariables.set(\"lastLocationHeader\", locationHeader);\r",
+													"\r",
+													"    var locationHeaderElements = locationHeader.split('/');\r",
+													"    console.log(\"Location header Elements: \", locationHeaderElements)\r",
+													"    console.log(\"# Location header Elements: \", locationHeaderElements.length)\r",
+													"\r",
+													"    var crudId = locationHeaderElements[5];\r",
+													"\r",
+													"    console.log(\"Location header ID: \", crudId)\r",
+													"\r",
+													"    pm.collectionVariables.set('lastId', crudId);\r",
+													"\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const dateNow= new Date();\r",
+													"console.log('Time Now: setting beforeLastModified' , dateNow.toISOString());\r",
+													"pm.collectionVariables.set('beforeLastModified', dateNow.toISOString())"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"content-type": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{currentAccessToken}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\": {{$randomInt}}, \r\n    \"systolic\": 137,\r\n    \"diastolic\": 95,\r\n    \"pulse\": 100\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUri}}/api/resources/{{namespace}}?keys=id",
+											"host": [
+												"{{baseUri}}"
+											],
+											"path": [
+												"api",
+												"resources",
+												"{{namespace}}"
+											],
+											"query": [
+												{
+													"key": "keys",
+													"value": "id"
+												}
 											]
 										}
 									},
@@ -881,7 +1199,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n     \"id\": {{lastKeyValue}}, \r\n     \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\",\r\n    \"status\": \"adjusted\"\r\n}"
+											"raw": "{\r\n     \"id\": {{lastKeyValue}}, \r\n    \"systolic\": 137,\r\n    \"diastolic\": 95,\r\n    \"pulse\": 101\r\n}"
 										},
 										"url": {
 											"raw": "{{baseUri}}/api/resources/{{lastId}}/{{namespace}}",
@@ -893,91 +1211,6 @@
 												"resources",
 												"{{lastId}}",
 												"{{namespace}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PUT is OK via HATEOAS PUT Url",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"\r",
-													"pm.test(\"Extract Last Values\", function () {\r",
-													"    var jsonData = pm.response.json();\r",
-													"    pm.collectionVariables.set('lastId', jsonData.id)\r",
-													"    pm.collectionVariables.set('lastETag', jsonData.etag);\r",
-													"    pm.collectionVariables.set('lastModified', jsonData.created);\r",
-													"    pm.collectionVariables.set('lastContentKeys', jsonData.content)\r",
-													"    pm.collectionVariables.set('lastKeyValue', jsonData.content.id)    \r",
-													"    \r",
-													"    console.log('lastId', jsonData.id);\r",
-													"    console.log('lastETag', jsonData.etag);\r",
-													"    console.log('lastModified', jsonData.created);\r",
-													"    console.log('lastContentKeys', jsonData.content);\r",
-													"    console.log('lastKeyValue', jsonData.content.id);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													"const dateNow= new Date();\r",
-													"console.log('Time Now: setting beforeLastModified' , dateNow.toISOString());\r",
-													"pm.collectionVariables.set('beforeLastModified', dateNow.toISOString())\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disabledSystemHeaders": {
-											"content-type": true
-										}
-									},
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{currentAccessToken}}",
-													"type": "string"
-												},
-												{
-													"key": "password",
-													"value": "{{currentAccessToken}}.eyJuYmYiOjE2MDgwMjY0OTgsImV4cCI6MTYwODAzMDA5OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2lkZW50aXR5IiwiYXVkIjoibWlDb25zZW50LkFwaSIsImNsaWVudF9pZCI6IjM2ODQ0QTZCLUEyM0UtNEY2OS1CNDU2LTQzQzFFOTVFOUVGMSIsInN1YiI6IjgwOWJmNDE3LTNkNWQtNDJlMi04OTAzLThlNzljYmUwYzEyYiIsImF1dGhfdGltZSI6MTYwODAyNjQ5NywiaWRwIjoibG9jYWwiLCJlbWFpbCI6InNkay5hbGljZUBtaUNvbnNlbnQuY29tIiwic2NvcGUiOlsibWlDb25zZW50LkFwaSJdLCJhbXIiOlsicHdkIl19.P1KxhAHZPwrWYCb9LjDQEv_ZteQPd1VDjWIkyWB0cOg9rK3uJ75ovLlcUqdJGuImjVVFaFp3eAFR5AqND8N1yqN1wg4MCa8IkN7YKv-KN5QnqtTLC3u81vj0xEKzfa_tXZirxEnv9N4Uz_Tw_-6nfPFT5qQcPXATq7Y_F51dp9sUoywcFEQdaQ6FeSAbKN7B86OEOE5kpbayCE6q7zk6-f_AwNcF1SOROXG8GHAUjPnw_pGg4nsbmvsFIQWk3fW9hgDJ3QsH94VLIuXVr_tEIah65iLbaq1wJUt-zUzyJcAEs8WpJE-rX15OE87IZn1ITHmL-xc14dAMCBxoW-hVQw",
-													"type": "string"
-												}
-											]
-										},
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n     \"id\": {{lastKeyValue}}, \r\n     \"temperatureC\": 38,\r\n    \"summary\": \"Balmy\",\r\n    \"status\": \"adjusted\"\r\n}"
-										},
-										"url": {
-											"raw": "{{lastPutUrl}}",
-											"host": [
-												"{{lastPutUrl}}"
 											]
 										}
 									},
@@ -996,9 +1229,10 @@
 													"\r",
 													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
 													"var maxPostCount = pm.collectionVariables.get(\"maxPostCount\");\r",
+													"\r",
 													"if ( postCount < maxPostCount)\r",
 													"{\r",
-													"    console.log(\"Re-running POST\")\r",
+													"    console.log(\"Re-running initial POST\")\r",
 													"    postman.setNextRequest(\"POST is Created\");\r",
 													"}"
 												],
@@ -1427,7 +1661,7 @@
 		},
 		{
 			"key": "maxPostCount",
-			"value": "2",
+			"value": "10",
 			"type": "string"
 		},
 		{
