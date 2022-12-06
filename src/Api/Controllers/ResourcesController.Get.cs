@@ -93,6 +93,8 @@ namespace Api.Controllers
 
             _logger.LogTrace($"{nameof(ResourcesController)}:{nameof(GetMany)}. Processing request.");
 
+            
+
             var onlyIfModifiedSince = _requestHeadersProvider.IfHasChangedSince(Request.Headers, DateTimeOffset.MinValue);
 
             var onlyIfnotEtags = _requestHeadersProvider.IfDoesNotHaveEtagMatching(Request.Headers);

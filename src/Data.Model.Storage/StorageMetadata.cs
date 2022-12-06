@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Data.Model.Storage
 {
@@ -29,12 +30,20 @@ namespace Data.Model.Storage
 
     public enum MetadataPropertyNames
     {
-        OriginallyCreated ,
+        [Description("The DATETIMEOFFSET when created")]
+        OriginallyCreated,
+        [Description("The content keys noinated by the client")]
         OriginalDataKeys,
+        [Description("Change in sort value")]
         SortValue,
+        [Description("The identifier of the change request")]
         ChangeRequestIdentifier,
+        [Description("The DATETIMEOFFSET when updated")]
         Updated,
+        [Description("The new namesapce")]
         NamespaceRename,
-        
+        [Description("The DATETIMEOFFSET when deleted")]
+        Deleted
+
     }
 }

@@ -37,6 +37,7 @@ namespace Api.Domain.Storage.Get
             resources = await _storage.GetAsync(
                                                     r => r.OwnerId == request.OwnerId
                                                     && r.Namespace == request.ContentNamespace
+                                                    && r.Deleted == null
                                                     , cancellationToken);
 
             (resources, response) = _validatePreConditions.Validate(resources, request, response);

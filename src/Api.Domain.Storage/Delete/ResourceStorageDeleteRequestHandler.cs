@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Data.Model.Storage;
+using FluentValidation;
 using MediatR;
 using Storage;
 
@@ -36,6 +37,7 @@ namespace Api.Domain.Storage.Delete
             Data.Model.Storage.Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                                    && r.OwnerId == request.OwnerId
                                                                                    && r.Namespace == request.ContentNamespace
+                                                                                   && r.Deleted == null
                                                                                   , cancellationToken)).FirstOrDefault();
 
             (resource,response) = _actionValidator.Validate(resource, request, response);
@@ -45,7 +47,17 @@ namespace Api.Domain.Storage.Delete
                 return response;
             }
 
-            var count = await _storage.DeleteAsync(request.Id, cancellationToken);
+            // perform soft delete
+            // resource.Content = null; job will set content to null after grace period has expired.
+            // based on Deleted date
+            resource.Deleted = DateTimeOffset.UtcNow; 
+            // mark even in metadata
+            resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.ChangeRequestIdentifier, Value = request.RequestId });
+            resource.Metadata.Tags.Add(new Tag() { Name = MetadataPropertyNames.Deleted, Value = resource.Deleted });
+
+            await _storage.UpdateAsync(resource, cancellationToken);
+            // do not hard delete
+            //var count = await _storage.DeleteAsync(request.Id, cancellationToken);
             response.StatusCode = ApiDomainStatusCodes.NOCONTENT;
             return response;
 

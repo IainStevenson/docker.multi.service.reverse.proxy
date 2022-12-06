@@ -40,6 +40,7 @@ namespace Api.Domain.Storage.Put
             Resource? resource = (await _storage.GetAsync(r => r.Id == request.Id
                                                                 && r.OwnerId == request.OwnerId
                                                                 && r.Namespace == request.ContentNamespace
+                                                                && r.Deleted == null
                                                                 , cancellationToken)).FirstOrDefault();
          
             (resource, response) = _actionValidator.Validate(resource,request, response);

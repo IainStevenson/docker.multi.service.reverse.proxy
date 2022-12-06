@@ -46,7 +46,8 @@ namespace Data.Model.Storage
         /// The resource owner identifier.
         /// </summary>
         [BsonRepresentation(BsonType.String)] public Guid OwnerId { get; set; }
-        
+        /// <inheritdoc/>
+        [BsonRepresentation(BsonType.String)] public DateTimeOffset? Deleted { get; set; }
     }
 
 }
