@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Data.Model.Storage
 {
+    /// <summary>
+    /// This data is for internal system use, and can form a raw set of data for auditing.
+    /// </summary>
     public class StorageMetadata : IStorageMetadata
     {
 
@@ -32,6 +35,6 @@ namespace Data.Model.Storage
         ChangeRequestIdentifier,
         Updated,
         NamespaceRename,
-        ChangeIdentifier
+        
     }
 }

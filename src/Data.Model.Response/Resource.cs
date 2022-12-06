@@ -12,7 +12,7 @@ namespace Data.Model.Response
     {
 
         /// <summary>
-        /// The ETag of this vesion of the ressource used for cache control anc concurrency checking
+        /// The ETag of this vesion of the resource used for cache control and concurrency checking
         /// </summary>
         public string Etag { get; set; } = (ShortGuid)Guid.NewGuid().ToString();
         /// <summary>
