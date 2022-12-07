@@ -20,7 +20,7 @@
 									"pm.test(\"Status code is 200\", () => {\r",
 									"  pm.response.to.have.status(200);\r",
 									"});\r",
-									"pm.collectionVariables.set(\"postCount\", 0)"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -29,7 +29,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.collectionVariables.set(\"postCount\", 0)"
+									"pm.collectionVariables.set(\"actualPostCount\", 0)"
 								],
 								"type": "text/javascript"
 							}
@@ -49,273 +49,6 @@
 								"openid-configuration"
 							]
 						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Mvc",
-			"item": [
-				{
-					"name": "Test access to Support with /support/home/privacy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/support/home/privacy",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"support",
-								"home",
-								"privacy"
-							]
-						},
-						"description": "Test required  direct access to Container 2 (Support) (support) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Store by default",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/store",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"store"
-							]
-						},
-						"description": "Test required  direct access to Container 1 (Store) (store) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Store with /store",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/store",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"store"
-							]
-						},
-						"description": "Test required  direct access to Container 1 (Store) (store) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Store with /store/home",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/store/home",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"store",
-								"home"
-							]
-						},
-						"description": "Test required  direct access to Container 1 (Store) (store) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Store with /store/home/privacy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/store/home/privacy",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"store",
-								"home",
-								"privacy"
-							]
-						},
-						"description": "Test required  direct access to Container 1 (Store) (store) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Store with /store/weatherforecast redirects to login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Status code is 200\", () => {\r",
-									"    pm.response.text().includes(\"<title>IdentityServer4</title>\");\r",
-									"    pm.response.text().includes(\"<h1>Login</h1>\");\r",
-									"    \r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/store/weatherforecast",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"store",
-								"weatherforecast"
-							]
-						},
-						"description": "Test required  direct access to Container 1 (Store) (store) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Support with /support/home",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/support/home",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"support",
-								"home"
-							]
-						},
-						"description": "Test required  direct access to Container 2 (Support) (support) "
-					},
-					"response": []
-				},
-				{
-					"name": "Test access to Support with /support",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", () => {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUri}}/support",
-							"host": [
-								"{{baseUri}}"
-							],
-							"path": [
-								"support"
-							]
-						},
-						"description": "Test required  direct access to Container 2 (Support) (support) "
 					},
 					"response": []
 				}
@@ -751,11 +484,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
-													"postCount ++;\r",
+													"var actualPostCount = pm.collectionVariables.get(\"actualPostCount\");\r",
+													"actualPostCount ++;\r",
+													"pm.collectionVariables.set(\"actualPostCount\", actualPostCount)\r",
 													"\r",
-													"pm.collectionVariables.set(\"postCount\", postCount)\r",
-													"console.log(\"Post count: \", postCount)\r",
+													"console.log(\"Post count: \", actualPostCount)\r",
 													"\r",
 													"var jsonData = pm.response.json();\r",
 													"    \r",
@@ -1234,10 +967,10 @@
 													"});\r",
 													"\r",
 													"\r",
-													"var postCount = pm.collectionVariables.get(\"postCount\");\r",
+													"var actualPostCount = pm.collectionVariables.get(\"actualPostCount\");\r",
 													"var maxPostCount = pm.collectionVariables.get(\"maxPostCount\");\r",
 													"\r",
-													"if ( postCount < maxPostCount)\r",
+													"if ( actualPostCount < maxPostCount)\r",
 													"{\r",
 													"    console.log(\"Re-running initial POST\")\r",
 													"    postman.setNextRequest(\"POST is Created\");\r",
@@ -1539,6 +1272,273 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Mvc",
+			"item": [
+				{
+					"name": "Test access to Support with /support/home/privacy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/support/home/privacy",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"support",
+								"home",
+								"privacy"
+							]
+						},
+						"description": "Test required  direct access to Container 2 (Support) (support) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Store by default",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Store with /store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Store with /store/home",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/home",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"home"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Store with /store/home/privacy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/home/privacy",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"home",
+								"privacy"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Store with /store/weatherforecast redirects to login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.text().includes(\"<title>IdentityServer4</title>\");\r",
+									"    pm.response.text().includes(\"<h1>Login</h1>\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/store/weatherforecast",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"store",
+								"weatherforecast"
+							]
+						},
+						"description": "Test required  direct access to Container 1 (Store) (store) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Support with /support/home",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/support/home",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"support",
+								"home"
+							]
+						},
+						"description": "Test required  direct access to Container 2 (Support) (support) "
+					},
+					"response": []
+				},
+				{
+					"name": "Test access to Support with /support",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/support",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"support"
+							]
+						},
+						"description": "Test required  direct access to Container 2 (Support) (support) "
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {
@@ -1616,12 +1616,23 @@
 			"value": "https://local.myinfo.world"
 		},
 		{
+			"key": "namespace",
+			"value": "health/measurements/bloodpressure",
+			"type": "string"
+		},
+		{
 			"key": "currentAccessToken",
 			"value": ""
 		},
 		{
-			"key": "lastId",
-			"value": "ded1b09a-2ac8-4603-b2d7-5df697fac3d3"
+			"key": "actualPostCount",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "maxPostCount",
+			"value": "10",
+			"type": "string"
 		},
 		{
 			"key": "dataIdentifier",
@@ -1629,18 +1640,8 @@
 			"type": "string"
 		},
 		{
-			"key": "postCount",
-			"value": 5,
-			"type": "string"
-		},
-		{
 			"key": "lastModified",
 			"value": "2022-12-06T13:05:00.427159+00:00"
-		},
-		{
-			"key": "lastETag",
-			"value": "efIYYiWqCUKTVpdpYOSoEQ",
-			"type": "string"
 		},
 		{
 			"key": "lastContentKeys",
@@ -1658,24 +1659,23 @@
 			"type": "string"
 		},
 		{
-			"key": "namespace",
-			"value": "health/measurements/bloodpressure",
-			"type": "string"
-		},
-		{
 			"key": "beforeLastModified",
 			"value": "2022-12-06T13:05:00.427159+00:00",
-			"type": "string"
-		},
-		{
-			"key": "maxPostCount",
-			"value": "10",
 			"type": "string"
 		},
 		{
 			"key": "lastLocationHeader",
 			"value": "https://local.myinfo.world/api/resources/ded1b09a-2ac8-4603-b2d7-5df697fac3d3/health/measurements/bloodpressure",
 			"type": "string"
+		},
+		{
+			"key": "lastETag",
+			"value": "efIYYiWqCUKTVpdpYOSoEQ",
+			"type": "string"
+		},
+		{
+			"key": "lastId",
+			"value": "ded1b09a-2ac8-4603-b2d7-5df697fac3d3"
 		},
 		{
 			"key": "lastPostUrl",
