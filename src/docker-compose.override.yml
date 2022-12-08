@@ -57,3 +57,10 @@ services:
       #
       - ${APPDATA}/MongoDb/Data:/data/db 
       - ${APPDATA}/MongoDb/Logs:/var/log/mongodb
+
+  graph:
+    environment:
+      - e NEO4J_AUTH${NEO4J_CREDENTIALS}  
+    volumes:
+      - ${APPDATA}/GraphDb/Data:/data
+      - ${APPDATA}/GraphDb/Logs:/logs

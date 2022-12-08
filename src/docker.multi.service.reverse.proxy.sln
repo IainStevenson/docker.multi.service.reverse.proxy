@@ -112,7 +112,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Domain.Handling", "Api.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Domain.Storage.Tests", "Api.Domain.Storage.Tests\Api.Domain.Storage.Tests.csproj", "{975F1B23-C828-4669-8B07-3A830C457C2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Domain.Handling.Tests", "..\Api.Domain.Handling.Tests\Api.Domain.Handling.Tests.csproj", "{72466DB1-A045-4979-A516-9BCF574B0678}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Domain.Handling.Tests", "..\Api.Domain.Handling.Tests\Api.Domain.Handling.Tests.csproj", "{72466DB1-A045-4979-A516-9BCF574B0678}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GraphDB", "GraphDB", "{318059EA-675D-402E-99A2-F69B87A1FFED}"
+	ProjectSection(SolutionItems) = preProject
+		GraphDB\Dockerfile = GraphDB\Dockerfile
+		GraphDB\GraphDB.csproj = GraphDB\GraphDB.csproj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{04F6D790-545E-4201-A8D9-4C4D3E82E712}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache", "Cache", "{D38CAD03-A455-49E6-953A-C8D966CE58E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -236,6 +246,9 @@ Global
 		{0FE9DFC6-B0EA-41B3-912A-8B6DFE3978BE} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{975F1B23-C828-4669-8B07-3A830C457C2A} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 		{72466DB1-A045-4979-A516-9BCF574B0678} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{318059EA-675D-402E-99A2-F69B87A1FFED} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{04F6D790-545E-4201-A8D9-4C4D3E82E712} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
+		{D38CAD03-A455-49E6-953A-C8D966CE58E8} = {0D0FB6F3-247C-4100-A3DB-2B6D47BBB897}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C4A47CA-5E1F-4D9D-92C7-7634752BE4F8}

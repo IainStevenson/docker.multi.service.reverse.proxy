@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- Added as a FILE not a project and is therefore outside build scope of .NET but inside docker-compose -->
+  <!-- This added solely to allow adding ASP.NET Core user secrets mechainism to this project-->
+  <PropertyGroup>
+    <UserSecretsId>03B04ADE-3C83-4500-9C5F-C349B16D7FE2</UserSecretsId>
+  </PropertyGroup>
+</Project>
