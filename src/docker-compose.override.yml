@@ -60,7 +60,23 @@ services:
 
   graph:
     environment:
-      - e NEO4J_AUTH${NEO4J_CREDENTIALS}  
+      - NEO4J_AUTH${NEO4J_CREDENTIALS}
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_dbms_memory_pagecache_size=512m
+      - NEO4J_dbms_default__advertised__address=graph.${APP_DOMAIN}
+      - NEO4J_dbms_ssl_policy_bolt_enabled=true
+      - NEO4J_dbms_ssl_policy_bolt_base__directory=certificates/bolt
+      - NEO4J_dbms_ssl_policy_bolt_private__key=myHost.key
+      - NEO4J_dbms_ssl_policy_bolt_myHost__certificate=myHost.crt
+      - NEO4J_dbms_ssl_policy_bolt_client__auth=NONE
+      - NEO4J_dbms_connector_bolt_tls__level=REQUIRED
+      - NEO4J_dbms_connector_https_enabled=true
+      - NEO4J_dbms_ssl_policy_https_enabled=true
+      - NEO4J_dbms_ssl_policy_https_base__directory=certificates/https
+      - NEO4J_dbms_ssl_policy_https_myHost__key=myHost.key
+      - NEO4J_dbms_ssl_policy_https_myHost__certificate=myHost.crt
+      - NEO4J_dbms_ssl_policy_https_client__auth=NONE
     volumes:
       - ${APPDATA}/GraphDb/Data:/data
       - ${APPDATA}/GraphDb/Logs:/logs
+      - ${APPDATA}/GraphDb/ssl:/ssl

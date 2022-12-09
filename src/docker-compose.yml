@@ -97,7 +97,7 @@ services:
   graph:
     container_name: ${APP}.graph
     image: ${DOCKER_REGISTRY-}${APP}.graph:${TAG:-latest}
-    hostname: grpah.${APP_DOMAIN}
+    hostname: graph.${APP_DOMAIN}
     build:
       context: .
       dockerfile: GraphDB/Dockerfile

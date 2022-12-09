@@ -14,17 +14,15 @@ RUN update-ca-certificates
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Api/Api.csproj", "Api/"]
+COPY ["Api.Domain.Handling/Api.Domain.Handling.csproj", "Api.Domain.Handling/"]
 COPY ["Data.Model.Response/Data.Model.Response.csproj", "Data.Model.Response/"]
 COPY ["Data.Model/Data.Model.csproj", "Data.Model/"]
+COPY ["Data.Model.Storage/Data.Model.Storage.csproj", "Data.Model.Storage/"]
+COPY ["Api.Domain.Storage/Api.Domain.Storage.csproj", "Api.Domain.Storage/"]
+COPY ["Storage/Storage.csproj", "Storage/"]
 COPY ["Data.Model.Storage.MongoDB/Data.Model.Storage.MongoDB.csproj", "Data.Model.Storage.MongoDB/"]
 COPY ["Pluralizer/Pluralizer.csproj", "Pluralizer/"]
-COPY ["Storage/Storage.csproj", "Storage/"]
-COPY ["Data.Model.Storage/Data.Model.Storage.csproj", "Data.Model.Storage/"]
-COPY ["Handlers/Handlers.csproj", "Handlers/"]
-COPY ["Data.Dynamic/Data.Dynamic.csproj", "Data.Dynamic/"]
 COPY ["Logging/Logging.csproj", "Logging/"]
-COPY ["Response.Formatting/Response.Formatting.csproj", "Response.Formatting/"]
-COPY ["Resource.Handling/Resource.Handling.csproj", "Resource.Handling/"]
 RUN dotnet restore "Api/Api.csproj"
 COPY . .
 WORKDIR "/src/Api"

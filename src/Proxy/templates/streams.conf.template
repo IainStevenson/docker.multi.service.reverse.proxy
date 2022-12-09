@@ -11,4 +11,5 @@ stream {
     upstream stream_mongo_backend {
         server mongo.${PROXY_DOMAIN}:27017;
         }
+    
 }

@@ -10,8 +10,8 @@ CALL Gen-Vars.CMD
 :: Generate the default certificate with the necessary DNS entries
 ::
 :GenHostCert
-IF NOT EXIST ../myRootCA.pfx GOTO RunGenRoot
-IF EXIST ../myHost.pfx	 GOTO ConfigureSecrets
+IF NOT EXIST ..\myRootCA.pfx GOTO RunGenRoot
+IF EXIST ..\myHost.pfx	 GOTO ConfigureSecrets
 @ECHO -------------------------------------------------------------------------------
 @ECHO.
 @ECHO These settings will be applied (from domains.ext).
@@ -70,8 +70,9 @@ dotnet user-secrets --id  74a3b9d9-c004-4d94-b127-1bf998c57245 set Kestrel:Certi
 ::dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 remove Kestrel:Certificates:Default:Password
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Path /root/.aspnet/https/myHost.pfx
 dotnet user-secrets --id  15a33753-9d20-4889-817e-133e9eff1e83 set Kestrel:Certificates:Default:Password %PASSWORD%
+
 @ECHO.
-@ECHO Secrets configured.
+@ECHO ASP.NET Secrets configured.
 @ECHO.
 ::
 :: Deliver certificates and other files to the proxy folder for docker builds and the .NET core secrets folder
@@ -84,6 +85,43 @@ COPY /Y dhparam.pem ..\ > nul
 @ECHO.
 @ECHO Certificates delivered to build folders
 @ECHO.
+::
+:: Copy the certificates to support the Graph microservice.
+::
+
+@ECHO COPYing myHost.PFX to graph service SSL folders
+IF NOT EXIST %APPDATA%\graphdb\ssl\bolt\revoked MD %APPDATA%\graphdb\ssl\bolt\revoked
+IF NOT EXIST %APPDATA%\graphdb\ssl\https\revoked MD %APPDATA%\graphdb\ssl\https\revoked
+IF NOT EXIST %APPDATA%\graphdb\ssl\bolt\trusted MD %APPDATA%\graphdb\ssl\bolt\trusted
+IF NOT EXIST %APPDATA%\graphdb\ssl\https\trusted MD %APPDATA%\graphdb\ssl\https\trusted
+
+COPY /Y ..\myHost.key %APPDATA%\graphdb\ssl\bolt\myHost.key > nul
+COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\bolt\myHost.crt > nul
+COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\bolt\trusted\myHost.crt > nul
+COPY /Y ..\myHost.key %APPDATA%\graphdb\ssl\https\myHost.key > nul
+COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\https\myHost.crt > nul
+COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\https\trusted\myHost.crt > nul
+
+
+COPY /Y ..\myRootCA.key %APPDATA%\graphdb\ssl\bolt\trusted\myRootCA.key > nul
+COPY /Y ..\myRootCA.crt %APPDATA%\graphdb\ssl\bolt\trusted\myRootCA.crt > nul
+COPY /Y ..\myRootCA.key %APPDATA%\graphdb\ssl\https\trusted\myRootCA.key > nul
+COPY /Y ..\myRootCA.crt %APPDATA%\graphdb\ssl\https\trusted\myRootCA.crt > nul
+
+
+COPY /Y .\GraphDb\neo4j.conf %APPDATA%\graphdb\conf\neo4j.conf > nul
+
+
+
+
+
+
+IF NOT EXIST %APPDATA%\graphdb\ssl\bolt\myHost.pfx  GOTO InstallFailed
+
+@ECHO.
+@ECHO Certificates delivered to build folders
+@ECHO.
+
 GOTO Finish
 
 :InstallFailed
