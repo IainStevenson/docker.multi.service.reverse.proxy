@@ -6,15 +6,15 @@
 FROM neo4j:latest
 
 
-# Allow trust of certificates from other services
+# Allow trust of self-generated certificates to represent this host
 RUN apt-get update
-RUN apt-get install -y sudo
+#RUN apt-get install -y sudo
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 COPY myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
-RUN sudo chgrp -R 7474 $HOME/neo4j/ssl 
-RUN sudo chmod -R g+rx $HOME/neo4j/ssl
+#RUN sudo chgrp -R 7474 /var/lib/neo4j/ssl 
+#RUN sudo chmod -R g+rx /var/lib/neo4j/ssl
 #
 
 # NEO4J image has these

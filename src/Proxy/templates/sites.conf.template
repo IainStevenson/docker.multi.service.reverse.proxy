@@ -78,7 +78,7 @@ server {
     }
     
     location /graph/ {
-        proxy_pass   https://graph.${PROXY_DOMAIN}:7473/;
+        proxy_pass   http://graph.${PROXY_DOMAIN}:7474/browser/;
         proxy_set_header X-Real-IP  $remote_addr;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_redirect off;

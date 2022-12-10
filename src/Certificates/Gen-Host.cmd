@@ -90,26 +90,26 @@ COPY /Y dhparam.pem ..\ > nul
 ::
 
 @ECHO COPYing myHost.PFX to graph service SSL folders
-IF NOT EXIST %APPDATA%\graphdb\ssl\bolt\revoked MD %APPDATA%\graphdb\ssl\bolt\revoked
-IF NOT EXIST %APPDATA%\graphdb\ssl\https\revoked MD %APPDATA%\graphdb\ssl\https\revoked
-IF NOT EXIST %APPDATA%\graphdb\ssl\bolt\trusted MD %APPDATA%\graphdb\ssl\bolt\trusted
-IF NOT EXIST %APPDATA%\graphdb\ssl\https\trusted MD %APPDATA%\graphdb\ssl\https\trusted
+IF NOT EXIST ..\graphdb\certificates\bolt\revoked  MD ..\graphdb\certificates\bolt\revoked
+IF NOT EXIST ..\graphdb\certificates\https\revoked MD ..\graphdb\certificates\https\revoked
+IF NOT EXIST ..\graphdb\certificates\bolt\trusted  MD ..\graphdb\certificates\bolt\trusted
+IF NOT EXIST ..\graphdb\certificates\https\trusted MD ..\graphdb\certificates\https\trusted
 
-COPY /Y ..\myHost.key %APPDATA%\graphdb\ssl\bolt\myHost.key > nul
-COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\bolt\myHost.crt > nul
-COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\bolt\trusted\myHost.crt > nul
-COPY /Y ..\myHost.key %APPDATA%\graphdb\ssl\https\myHost.key > nul
-COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\https\myHost.crt > nul
-COPY /Y ..\myHost.crt %APPDATA%\graphdb\ssl\https\trusted\myHost.crt > nul
+COPY /Y ..\myHost.key ..\graphdb\certificates\bolt\private.key			> nul
+COPY /Y ..\myHost.crt ..\graphdb\certificates\bolt\public.crt			> nul
+COPY /Y ..\myHost.crt ..\graphdb\certificates\bolt\trusted\public.crt	> nul
+COPY /Y ..\myHost.key ..\graphdb\certificates\https\private.key			> nul
+COPY /Y ..\myHost.crt ..\graphdb\certificates\https\public.crt			> nul
+COPY /Y ..\myHost.crt ..\graphdb\certificates\https\trusted\public.crt	> nul
+
+:: handled via the docker file copy and ca-update-certificates
+::COPY /Y ..\myRootCA.key ..\graphdb\certificates\bolt\trusted\myRootCA.key > nul
+::COPY /Y ..\myRootCA.crt ..\graphdb\certificates\bolt\trusted\myRootCA.crt > nul
+::COPY /Y ..\myRootCA.key ..\graphdb\certificates\https\trusted\myRootCA.key > nul
+::COPY /Y ..\myRootCA.crt ..\graphdb\certificates\https\trusted\myRootCA.crt > nul
 
 
-COPY /Y ..\myRootCA.key %APPDATA%\graphdb\ssl\bolt\trusted\myRootCA.key > nul
-COPY /Y ..\myRootCA.crt %APPDATA%\graphdb\ssl\bolt\trusted\myRootCA.crt > nul
-COPY /Y ..\myRootCA.key %APPDATA%\graphdb\ssl\https\trusted\myRootCA.key > nul
-COPY /Y ..\myRootCA.crt %APPDATA%\graphdb\ssl\https\trusted\myRootCA.crt > nul
-
-
-COPY /Y .\GraphDb\neo4j.conf %APPDATA%\graphdb\conf\neo4j.conf > nul
+::COPY /Y ..\GraphDb\neo4j.conf ..\graphdb\conf\neo4j.conf > nul
 
 
 

@@ -64,19 +64,20 @@ services:
       - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
       - NEO4J_dbms_memory_pagecache_size=512m
       - NEO4J_dbms_default__advertised__address=graph.${APP_DOMAIN}
+      # WARNING: Some of these are or may be set within the neo4j.conf file 
       - NEO4J_dbms_ssl_policy_bolt_enabled=true
       - NEO4J_dbms_ssl_policy_bolt_base__directory=certificates/bolt
-      - NEO4J_dbms_ssl_policy_bolt_private__key=myHost.key
-      - NEO4J_dbms_ssl_policy_bolt_myHost__certificate=myHost.crt
+      - NEO4J_dbms_ssl_policy_bolt_private__key=private.key
+      - NEO4J_dbms_ssl_policy_bolt_myHost__certificate=public.crt
       - NEO4J_dbms_ssl_policy_bolt_client__auth=NONE
       - NEO4J_dbms_connector_bolt_tls__level=REQUIRED
       - NEO4J_dbms_connector_https_enabled=true
       - NEO4J_dbms_ssl_policy_https_enabled=true
       - NEO4J_dbms_ssl_policy_https_base__directory=certificates/https
-      - NEO4J_dbms_ssl_policy_https_myHost__key=myHost.key
-      - NEO4J_dbms_ssl_policy_https_myHost__certificate=myHost.crt
+      - NEO4J_dbms_ssl_policy_https_myHost__key=private.key
+      - NEO4J_dbms_ssl_policy_https_myHost__certificate=public.crt
       - NEO4J_dbms_ssl_policy_https_client__auth=NONE
     volumes:
       - ${APPDATA}/GraphDb/Data:/data
       - ${APPDATA}/GraphDb/Logs:/logs
-      - ${APPDATA}/GraphDb/ssl:/ssl
+      - ./GraphDb/certificates:/var/lib/neo4j/certificates

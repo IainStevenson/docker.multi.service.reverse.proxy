@@ -5,7 +5,7 @@ WORKDIR /app
 
 EXPOSE 443
 
-# Allow trust of certificates from other services
+# Allow trust of self-generated certificates to represent this host
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
