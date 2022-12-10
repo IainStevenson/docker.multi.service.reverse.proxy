@@ -358,3 +358,5 @@ healthchecksdb
 /src/*.setup.cmd
 /src/tools
 /src/.config
+/src/GraphDB/certificates
+/src/GraphDB/conf
