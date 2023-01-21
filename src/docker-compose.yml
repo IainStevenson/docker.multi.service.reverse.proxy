@@ -52,7 +52,9 @@ services:
     ports:
       - "80:80"
       - "443:443"   
-      - "27017:27017"       
+      - "27017:27017"      
+      - "7473:7473"
+      - "7687:7687"
     networks:
       - backend
 
@@ -96,16 +98,13 @@ services:
 
   graph:
     container_name: ${APP}.graph
-    image: ${DOCKER_REGISTRY-}${APP}.graph:${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}${APP}.graph:${TAG:-latest}    
+    #network_mode: "bridge"
     hostname: graph.${APP_DOMAIN}
     build:
       context: .
       dockerfile: GraphDB/Dockerfile
-    restart: always  
-    ports:
-      - "7474:7474"
-      - "7473:7473"
-      - "7687:7687"
+    restart: always    
     networks: 
       - backend
 

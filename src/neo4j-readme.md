@@ -86,3 +86,12 @@ COPY myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
 ```
 
+
+# Notes
+
+As self-signed and have a custom certification authority the root certificate must be placed in each container and the certificate authority updated in each build.
+
+myRootCA.crt/Key/PFX must be delivered as needed and the `update-ca-certificates` process executed. 
+
+This will also need to be catered for where intermediate certificates are required from any commercial provider.
+

@@ -4,6 +4,8 @@
 :: Note the Project secrets id's should be same for whoever runs this solution as they are set in the .csproj files
 ::
 @ECHO off
+COLOR o7
+
 setlocal
 CALL Gen-Vars.CMD
 ::
@@ -89,7 +91,7 @@ COPY /Y dhparam.pem ..\ > nul
 :: Copy the certificates to support the Graph microservice.
 ::
 
-@ECHO COPYing myHost.PFX to graph service SSL folders
+::@ECHO COPYing myHost.PFX to graph service SSL folders
 IF NOT EXIST ..\graphdb\certificates\bolt\revoked  MD ..\graphdb\certificates\bolt\revoked
 IF NOT EXIST ..\graphdb\certificates\https\revoked MD ..\graphdb\certificates\https\revoked
 IF NOT EXIST ..\graphdb\certificates\bolt\trusted  MD ..\graphdb\certificates\bolt\trusted
@@ -116,33 +118,44 @@ COPY /Y ..\myHost.crt ..\graphdb\certificates\https\trusted\public.crt	> nul
 
 
 
-IF NOT EXIST %APPDATA%\graphdb\ssl\bolt\myHost.pfx  GOTO InstallFailed
+IF NOT EXIST ..\graphdb\certificates\https\private.key  GOTO InstallFailed
 
 @ECHO.
-@ECHO Certificates delivered to build folders
+@ECHO Certificates delivered to GraphDB build folders
 @ECHO.
 
 GOTO Finish
 
 :InstallFailed
 @ECHO.
+@ECHO -----------------------------------------------------------------------------------------
+@ECHO.
+@ECHO WARNING: 
+@ECHO.
 @ECHO The ASP.NET https certificate was not delivered
 @ECHO Please fix this by copying the ''..\myHost.pfx'' file to ''%APPDATA%\ASP.NET\https''
+@ECHO -----------------------------------------------------------------------------------------
 @ECHO.
 
 
 GOTO Finish
 
 :RunGenRoot
+COLOR oc
 @ECHO.
+@ECHO -----------------------------------------------------------------------------------------
+@ECHO WARNING: 
 @ECHO The root certificate has not been created.
 @ECHO Please run Gen-Root.CMD first!
+@ECHO -----------------------------------------------------------------------------------------
 @ECHO.
 
 :Finish
 CALL ..\SetupLocalDB.cmd
 @ECHO.
+@ECHO -----------------------------------------------------------------------------------------
 @ECHO Job done, Set your startup project to docker-compose and start debugging.
+@ECHO -----------------------------------------------------------------------------------------
 @ECHO.
 endlocal
 @echo on
