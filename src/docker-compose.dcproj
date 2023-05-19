@@ -6,7 +6,7 @@
     <ProjectGuid>a2335a74-d681-439e-9a74-2f549e4b50af</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>https://local.myinfo.world</DockerServiceUrl>
-    <DockerServiceName>myInfo.proxy</DockerServiceName>
+    <DockerServiceName>proxy</DockerServiceName>
     <DockerComposeBuildArguments>
     </DockerComposeBuildArguments>
   </PropertyGroup>

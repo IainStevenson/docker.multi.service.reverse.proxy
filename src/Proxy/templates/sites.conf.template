@@ -78,14 +78,15 @@ server {
         proxy_set_header Host $host;
     }
     
-   location /graph {
-            proxy_pass https://graph.${PROXY_DOMAIN}:7473/;
+   location /graph/ {
+            proxy_pass https://graph.${PROXY_DOMAIN}:7473/browser;
             proxy_http_version 1.1;
             proxy_set_header Connection "";
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
+           
         }
 
     #error_page  404              /404.html;
@@ -96,6 +97,10 @@ server {
     location = /50x.html {
         root   /usr/share/nginx/html;
     }
+
+    location ~* \.(woff|jpg|jpeg|png|gif|ico|css|js)$ {
+    access_log off;
+  }
 }
 
  
