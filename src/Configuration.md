@@ -42,8 +42,8 @@ Copy host pfx certificates to %APPDATA%\ASP.NET\https folder
 
 # MongoDB persistence
 
-Create the %APPDATA%\MongoDb\Data folder
-Create the %APPDATA%\MongoDb\Data folder
+Create the %APPDATA%\dmsrp\MongoDb\Data folder
+Create the %APPDATA%\dmsrp\MongoDb\Data folder
 Create the src\MongoDb\mongo-init.js file
 
 # Proxy

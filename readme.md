@@ -39,11 +39,12 @@ To build a secure `docker-compose`'d orchestration of a decoupled set of micro s
 - Install the self-signed domain trusted certificates to your development host, open a PowerShell, Terminal or command window in the ```src/Certificates``` folder.
 	- Generate and install a root certificate execute ```./gen-root.cmd``` and follow instructions \* 
 	- Generate default certificates for each micro service execute the ```gen-host.cmd``` and follow instructions.
-- This will have created the following empty folders to persist MongoDB data across container run-times on your development host, by  executing the ```src\SetupLocalDB.CMD```
+- This will have created the following empty folders to persist MongoDB data across container run-times on your development host, by  
+- executing the ```src\SetupLocalDB.CMD```
 
 	```
-	%APPDATA%\MongoDb\Data
-	%APPDATA%\MongoDb\Logs
+	%APPDATA%\dmsrp\MongoDb\Data
+	%APPDATA%\dmsrp\MongoDb\Logs
 	```
 -Execute ```user-secrets.cmd``` command script;
 

@@ -23,7 +23,7 @@ namespace Identity.Storage
         public static IEnumerable<ApiResource> Apis =>
         new List<ApiResource>
         {
-            new ApiResource("myApi", "myApi") {
+            new ApiResource("myInfo.Api", "myInfo.Api") {
                 ApiSecrets = { new Secret("secret".Sha256()) { } },
                 UserClaims = {
                     JwtClaimTypes.Name,
@@ -31,7 +31,7 @@ namespace Identity.Storage
                 },
                 ShowInDiscoveryDocument = true,
                 Scopes = {
-                    "myApi"
+                    "myInfo.Api"
                 }
             }
         };
@@ -40,7 +40,7 @@ namespace Identity.Storage
         new List<ApiScope>
         {
             new ApiScope(
-                "myApi",
+                "myInfo.Api",
                 "myInfo API") {
                 ShowInDiscoveryDocument = true,
                 UserClaims = {
@@ -68,7 +68,7 @@ namespace Identity.Storage
                 },
 
                 // scopes that client has access to
-                AllowedScopes = { "myApi" }
+                AllowedScopes = { "myInfo.Api" }
             },
             // interactive ASP.NET Core MVC client
             new Client
@@ -97,7 +97,7 @@ namespace Identity.Storage
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "myApi"
+                        "myInfo.Api"
                     }
                 },
 
@@ -118,7 +118,7 @@ namespace Identity.Storage
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Email,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "myApi"
+                    "myInfo.Api"
                 }
             },
             new Client{
@@ -130,13 +130,13 @@ namespace Identity.Storage
                 RedirectUris = new [] {"https://oauth.pstmn.io/v1/callback" },
                 PostLogoutRedirectUris = new [] { "https://oauth.pstmn.io/v1/signout-callback-oidc"},
                 AllowedCorsOrigins= new [] { "https://oauth.pstmn.io/v1.com"},
-
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
                 //EnableLocalLogin = true,
                 AllowedScopes = new [] {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
-                    "myApi"
+                    "myInfo.Api"
                 },
                 ClientSecrets = new [] { new Secret("secret".Sha256())},
                 Enabled = true,
