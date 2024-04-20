@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyVersion>1.0.4.7651</AssemblyVersion>
     <FileVersion>1.0.5.7651</FileVersion>
   </PropertyGroup>

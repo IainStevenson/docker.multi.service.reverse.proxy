@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyVersion>1.0.17.7678</AssemblyVersion>
     <FileVersion>1.0.17.7678</FileVersion>
     <UserSecretsId>2d71d321-7620-49dc-afee-9e296f1e970c</UserSecretsId>
