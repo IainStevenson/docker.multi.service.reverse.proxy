@@ -25,24 +25,29 @@ namespace Support.Controllers
         }
         public async Task<IActionResult> Index()
         {
+
+            var response = await GetApiResources("weatherforecast");
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"API Call incorrect response {response.StatusCode}");
+                ViewBag.JsonData = new { StatusCode = response.StatusCode };
+            }
+            else
+            {
+                ViewBag.JsonData = await response.Content.ReadAsStringAsync();
+            }
+            return View();
+        }
+
+        private async Task<HttpResponseMessage> GetApiResources(string uri)
+        {
             using (var apiClient = _httpClientFactory.CreateClient())
             {
                 string accessToken = await HttpContext.GetTokenAsync("access_token");
-                //string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
                 apiClient.SetBearerToken(accessToken);
-                var apiUri = new Uri($"{_options.BaseUri}/weatherforecast");
-                var response = await apiClient.GetAsync(apiUri);
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"API Call incorrect response {response.StatusCode}");
-                }
-                else
-                {
-                    ViewBag.JsonData = await response.Content.ReadAsStringAsync();
-                }
+                var apiUri = new Uri($"{_options.BaseUri}/{uri}");
+                return await apiClient.GetAsync(apiUri);
             }
-
-            return View();
         }
     }
 }
