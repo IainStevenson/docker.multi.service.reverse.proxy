@@ -30,6 +30,8 @@ namespace Support
         public void ConfigureServices(IServiceCollection services)
         {
 
+            
+
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddOptions();
@@ -45,7 +47,10 @@ namespace Support
                         options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     });
 
-            services.AddHttpClient(string.Empty);
+            services.AddHttpClient(string.Empty, config => {
+
+                config.BaseAddress = new(_configuration.Service.BasePath);
+            });
 
             services.AddRequestResponseLoggingMiddlewareWithOptions(
                 options => { options.LogSource = _configuration.RequestResponse.Source; }
@@ -55,6 +60,7 @@ namespace Support
                 {
                     options.DefaultScheme = _configuration.Authentication.Scheme;
                     options.DefaultChallengeScheme = _configuration.Authentication.ChallengeScheme;
+                    
                 })
                 .AddCookie(_configuration.Authentication.Scheme)
                 .AddOpenIdConnect(_configuration.Authentication.ChallengeScheme, options =>

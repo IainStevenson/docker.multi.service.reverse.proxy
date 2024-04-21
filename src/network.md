@@ -15,7 +15,7 @@ Container-to-container communications:
 
 ## Network topology
 
-This diagram illustrates the host and docker network setup.
+This text diagram illustrates the host and docker network setup.
 
 ```
 .___________________________________________________________________________________________.
@@ -48,7 +48,10 @@ This diagram illustrates the host and docker network setup.
 `___________________________________________________________________________________________'
 ```
 
-All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the required domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debugging from complaining about a localhost trusted certificate on startup.
+This ![Image](Documentation/Network.jpg) shows it slightly more easily.
+
+
+All services are provided with a discrete service certificate with ```localhost```  as the CN  and all the required domain and sub-domains as SAN (Subject Alternative Names) names. The default of ```localhost``` stops ASP.NET debugging from complaining about a ``localhost`` trusted certificate on startup.
 
 All transport is encrypted. 
 

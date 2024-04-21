@@ -27,7 +27,7 @@ namespace Support
                     });
                 })               
                 .ConfigureWebHostDefaults(webBuilder =>
-                {
+                {                    
                     webBuilder.UseStartup<Startup>();
                 });
     }

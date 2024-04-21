@@ -46,7 +46,10 @@ namespace Store
                         options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     });
 
-            services.AddHttpClient(string.Empty);
+            services.AddHttpClient(string.Empty, config => {
+            
+                config.BaseAddress = new (_configuration.Service.BasePath );
+            });
 
             services.AddRequestResponseLoggingMiddlewareWithOptions(options =>
             { options.LogSource = _configuration.RequestResponse.Source; });
@@ -57,7 +60,7 @@ namespace Store
                 })
                 .AddCookie(_configuration.Authentication.Scheme)
                 .AddOpenIdConnect(_configuration.Authentication.ChallengeScheme, options =>
-                {
+                {                    
                     options.Authority = _configuration.Authentication.Authority;
                     options.RequireHttpsMetadata = _configuration.Authentication.RequireHttpsMetadata;
                     options.ClientId = _configuration.Authentication.ClientId;
