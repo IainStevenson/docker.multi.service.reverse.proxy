@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Pluralizer;
@@ -92,7 +93,7 @@ namespace Api
             services.AddSingleton<IResponseHeadersProvider>((services) => new ResponseHeadersProvider(excludedHeaders));
             services.AddSingleton<IPathResolver, PathResolver>();
             services.AddSingleton<IPluralize, Pluralizer.Pluralizer>();
-            services.AddSingleton<IResponseLinksProvider,ResponseLinksProvider>();
+            services.AddSingleton<IResponseLinksProvider, ResponseLinksProvider>();
             services.AddSingleton<IResourceContentModifier<Data.Model.Response.Resource>>((p) => new ResourceContentModifier<Data.Model.Response.Resource>());
             services.AddSingleton(x => mapper);
             services.AddSingleton<IResourceRequestFactory, ResourceRequestFactory>();
@@ -108,16 +109,20 @@ namespace Api
                     })
                     .AddFluentValidation(config =>
                     {
-                        
+
                         config.AutomaticValidationEnabled = true;
                         config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestValidator>();
                         config.RegisterValidatorsFromAssemblyContaining<ResourceStoragePostRequestHandler>();
                     });
 
-            services.AddMediatR(new[] { 
-                typeof(ResourceStoragePostRequestHandler), 
-                typeof(ResourceResponsePostRequestHandler) } 
-            );
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblies( new [] {typeof(ResourceStoragePostRequestHandler).Assembly ,                
+                    typeof( Api.Domain.Handling.Resource.ResourceResponseHandler).Assembly
+                });
+                
+
+            });
 
             services.AddAuthentication("Bearer")
                         .AddJwtBearer("Bearer", options =>
@@ -145,7 +150,7 @@ namespace Api
                 options.AddPolicy(_configuration.Authorization.Policy.Name, policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim(_configuration.Authorization.Policy.ClaimName, _configuration.Authorization.Policy.ClaimValues.Split(',', StringSplitOptions.RemoveEmptyEntries)); 
+                    policy.RequireClaim(_configuration.Authorization.Policy.ClaimName, _configuration.Authorization.Policy.ClaimValues.Split(',', StringSplitOptions.RemoveEmptyEntries));
                 });
             });
         }
@@ -155,7 +160,7 @@ namespace Api
 
             ConfigureMongoDriver2IgnoreExtraElements();
 
-            app.UsePathBase(_configuration.Service.BasePath );
+            app.UsePathBase(_configuration.Service.BasePath);
 
             if (env.IsDevelopment())
             {
@@ -178,7 +183,7 @@ namespace Api
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = _configuration.Swagger.RoutePrefix;
-                c.SwaggerEndpoint(_configuration.Swagger.Endpoint, _configuration.Swagger.EndpointName); 
+                c.SwaggerEndpoint(_configuration.Swagger.Endpoint, _configuration.Swagger.EndpointName);
             });
 
             app.UseHttpsRedirection();
@@ -218,6 +223,11 @@ namespace Api
                 cm.AutoMap();
                 cm.SetIgnoreExtraElements(true);
             });
+
+
+            var objectSerializer = new ObjectSerializer(type => ObjectSerializer.DefaultAllowedTypes(type)
+                    || type.FullName.StartsWith("Data.Model.Storage"));
+            BsonSerializer.RegisterSerializer(objectSerializer);
 
         }
     }
