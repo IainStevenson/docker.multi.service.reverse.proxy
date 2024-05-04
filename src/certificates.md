@@ -208,7 +208,7 @@ openssl x509 -req -days 365 -CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/priv
 
 This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key```
 
-NOTE: When using printf the back tick  “ “ disables the \n make sure its " "
+NOTE: When using printf the back tick  ï¿½ ï¿½ disables the \n make sure its " "
 
 The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:local.myInfo.world,DNS:*.local.myInfo.world"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
 
@@ -387,4 +387,11 @@ Select Place all certificates in the following store, click Browse, select 'Trus
 Click Next
 Click Finish.
 The certificate will be installed.
+
+
+# Useful resources
+
+https://stackoverflow.com/questions/77063237/how-to-configure-ssl-certificate-in-docker-container
+
+https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-7.0
 
