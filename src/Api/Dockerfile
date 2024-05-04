@@ -1,9 +1,9 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
 EXPOSE 443
+
 
 # Allow trust of certificates from other services
 RUN apt-get update
@@ -11,6 +11,8 @@ RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 COPY myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
+
+USER app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
