@@ -391,7 +391,108 @@ The certificate will be installed.
 
 # Useful resources
 
+.NET 8.0 has changed the ball game
+
+
 https://stackoverflow.com/questions/77063237/how-to-configure-ssl-certificate-in-docker-container
 
 https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-7.0
 
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/certauth?view=aspnetcore-8.0
+
+
+
+```
+# Generate Certificate using OpenSSL
+# Assume Git is installed, which includes OpenSSL client
+
+write-host "STARTING GEN CERTIFICATE"
+
+$outputFile = (Get-Item .).FullName
+write-host "Working Directory: " $outputFile
+
+# NOTE: single '' is used by powershell, versus "" used by OS
+$openssl = 'C:\Program Files\Git\usr\bin\openssl.exe'
+write-host "OpenSSL Executable: " $openssl
+
+# UPDATE THIS: step options: 1-7, CA, SR, ALL
+$step = 7
+
+# UPDATE THIS: hostname to generate certificate for
+$hostname = "service02"
+
+# local variables
+$caKey = "ca.key"
+$caCert = "ca.crt"
+$serverKey = "$hostname.key"
+$serverCsr = "$hostname.csr"
+$serverCert = "$hostname.crt"
+$serverPfx = "$hostname.pfx"
+
+# UPDATE THIS: certificate details
+$certSubj = '"/C=CA/ST=BritishColumbia/L=Vancouver/O=MyCo/OU=MyCo/CN=MyCo.local"'
+$certExt = '"subjectAltName=DNS:myco.local"'
+
+$serverSubj = "/C=CA/ST=BritishColumbia/L=Vancouver/O=MyCo/OU=MyCo/CN=$hostname.local"
+$serverExt = "subjectAltName=DNS:$hostname.local"
+
+# show settings
+if (($step -eq 0) -or ($step -eq "CA") -or ($step -eq "SR") -or ($step -eq "ALL"))
+{
+    write-host "Settings..."
+    write-host "step $step"
+    write-host $hostname
+    write-host $caKey $caCert
+    write-host $serverKey $serverCsr $serverCert
+    write-host $serverExt
+    
+# TEST command will execute
+    #& $openssl
+    #& $openssl help
+}
+
+# Generate CA private key
+if (($step -eq 1) -or ($step -eq "CA") -or ($step -eq "ALL"))
+{
+    & $openssl genrsa -out $caKey 4096
+}
+
+# Generate CA certificate
+if (($step -eq 2) -or ($step -eq "CA") -or ($step -eq "ALL"))
+{
+    & $openssl req -x509 -new -nodes -days 365 -sha256 -key $caKey -out $caCert -subj "$certSubj" -addext "$certExt"
+}
+
+# Generate CSR for CA
+if (($step -eq 3) -or ($step -eq "CA") -or ($step -eq "ALL"))
+{
+    #& $openssl req -newkey rsa:4096 -keyout $caprivatekey -out cert.csr -sha256 -days 365 -nodes -subj "$certSubj" -addext "$certExt"
+}
+
+# Generate Server Private Key
+if (($step -eq 4) -or ($step -eq "SR") -or ($step -eq "ALL"))
+{
+    & $openssl genrsa -out $serverKey 4096
+}
+
+# Generate Server CSR
+if (($step -eq 5) -or ($step -eq "SR") -or ($step -eq "ALL"))
+{
+    & $openssl req -new -key $serverKey -out $serverCsr -sha256 -subj "$serverSubj" -addext "$serverExt"
+}
+
+# Generate Server SSL Certificate along with certificates serial
+if (($step -eq 6) -or ($step -eq "SR") -or ($step -eq "ALL"))
+{
+    & $openssl req -x509 -days 365 -sha256 -CA $caCert -CAkey $caKey -in $serverCsr -out $serverCert -addext $serverExt -copy_extensions copyall
+}
+
+# Generate Server PFX certificate
+if (($step -eq 7) -or ($step -eq "SR") -or ($step -eq "ALL"))
+{
+    write-host "Generating PFX certificate: you will be prompted to enter a password and confirm it"
+    & $openssl pkcs12 -export -in $serverCert -inkey $serverKey -out $serverPfx
+    # -certfile root?
+}
+
+```

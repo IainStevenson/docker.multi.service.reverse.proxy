@@ -13,6 +13,7 @@ RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 COPY myRootCA.crt /usr/local/share/ca-certificates/myRootCA.crt
 RUN update-ca-certificates
+#RUN chmod 755 /root/.aspnet/https/
 
 
 USER app
