@@ -208,7 +208,7 @@ openssl x509 -req -days 365 -CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/priv
 
 This signing command hooks it up to the previously created self-signed root CA via the ```-CA /etc/ssl/certs/myRootCA.pem -CAkey /etc/ssl/private/myRootCA.key```
 
-NOTE: When using printf the back tick  “ “ disables the \n make sure its " "
+NOTE: When using printf the back tick  ï¿½ ï¿½ disables the \n make sure its " "
 
 The '-extensions SAN -extfile <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:local.myInfo.world,DNS:*.local.myInfo.world"))' part ensures that the subjectAlterativeNames are being kept in the singed certificate. Otherwhise you will get a irreversable error in Google Chrome.
 
